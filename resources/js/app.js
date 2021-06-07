@@ -8,6 +8,9 @@ require('./bootstrap');
 import '../sass/app.scss'
 window.Vue = require('vue').default;
 
+import Gate from "./Gate";
+Vue.prototype.$gate = new Gate(window.user);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
