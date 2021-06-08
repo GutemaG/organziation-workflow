@@ -71,7 +71,7 @@
         </router-link>
       </li>
 
-      @can('isAdmin')
+      @can('is-admin')
         <li class="nav-item">
           <router-link to="/users" class="nav-link">
             <i class="fa fa-users nav-icon blue"></i>
@@ -80,7 +80,7 @@
         </li>
       @endcan
 
-      @can('isAdmin')
+      @can('is-admin')
       <li class="nav-item has-treeview">
         <a href="#" class="nav-link">
           <i class="nav-icon fas fa-cog green"></i>
