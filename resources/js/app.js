@@ -8,8 +8,32 @@ require('./bootstrap');
 import '../sass/app.scss'
 window.Vue = require('vue').default;
 
+const axios = require('axios').default;
+
 import Gate from "./Gate";
 Vue.prototype.$gate = new Gate(window.user);
+
+import VueProgressBar from 'vue-progressbar'
+Vue.use(VueProgressBar, {
+    color: 'rgb(143, 255, 199)',
+    failedColor: 'red',
+    height: '3px'
+  });
+
+import Swal from 'sweetalert2';
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    onOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
+window.Swal = Swal;
+window.Toast = Toast;
 
 /**
  * The following block of code may be used to automatically register your
@@ -30,6 +54,10 @@ import Vue from 'vue';
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+import BootstrapVue from 'bootstrap-vue';
+Vue.use(BootstrapVue);
+import Vuelidate from 'vuelidate';
+Vue.use(Vuelidate);
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 import routes from './routes';

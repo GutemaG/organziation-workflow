@@ -28,6 +28,9 @@
         "@fortawesome/fontawesome-free": "^5.15.3",
         "admin-lte": "^3.1.0",
         "bootstrap-vue": "^2.21.2",
-        "vue-router": "^3.5.1"
+        "sweetalert2": "^10.16.9",
+        "vue-progressbar": "^0.7.5",
+        "vue-router": "^3.5.1",
+        "vuelidate": "^0.7.6"
     }
 }
