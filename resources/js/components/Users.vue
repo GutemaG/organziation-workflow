@@ -40,21 +40,8 @@
       </b-col>
 
       <b-col lg="6" class="my-1">
-        <b-form-group
-          label="Initial sort"
-          label-for="initial-sort-select"
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          class="mb-0"
-        >
-          <b-form-select
-            id="initial-sort-select"
-            v-model="sortDirection"
-            :options="['asc', 'desc', 'last']"
-            size="sm"
-          ></b-form-select>
-        </b-form-group>
+        
+        <b-button>+Add User</b-button>
       </b-col>
 
       <b-col lg="6" class="my-1">
@@ -167,9 +154,9 @@
         >
           <i class="fa fa-edit">Edit</i>
         </b-button>
-        <b-button size="sm" @click="row.toggleDetails">
+        <!-- <b-button size="sm" @click="row.toggleDetails">
           {{ row.detailsShowing ? "Hide" : "Show" }} Details
-        </b-button>
+        </b-button> -->
         <b-button
           size="sm"
           @click="deleteUser(row.item)"
@@ -192,61 +179,8 @@
     </b-table>
 
     <!-- Info modal -->
-    <b-modal
-      id="edit-modal"
-      title="Edit"
-      ok-title="Update"
-      @ok="updateForm"
-      @hide="resetInfoModal"
-    >
-      <form ref="form" @submit.stop.prevent="handleSubmit">
-        <b-form-group id="user_name" label="Username" label-for="username-input">
-          <b-form-input
-            id="username-input"
-            v-model="selectedUser.user_name"
-            placeholder="Username"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group id="first_name" label="First Name" label-for="first_name-input">
-          <b-form-input
-            id="first_name-input"
-            v-model="selectedUser.first_name"
-            placeholder="enter first name"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group id="last_name" label="Last Name" label-for="last_name-input">
-          <b-form-input
-            id="last_name-input"
-            v-model="selectedUser.last_name"
-            placeholder="enter last name"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          id="email"
-          label="Email address:"
-          label-for="email-input"
-        >
-          <b-form-input
-            id="email-input"
-            v-model="selectedUser.email"
-            type="email"
-            placeholder="Enter email"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group id="phone" label="phone" label-for="phone-input">
-          <b-form-input
-            id="phone-input"
-            v-model="selectedUser.phone"
-            placeholder="phone(+251... or 09 )"
-            required
-          ></b-form-input>
-        </b-form-group>
-      </form>
-    </b-modal>
+      <user-modal :selectedUser="selectedUser"></user-modal>
+  
   </b-container>
 </template>
 
@@ -335,7 +269,7 @@ export default {
     this.$Progress.finish();
   },
   methods: {
-    ...mapActions(["fetchUsers"]),
+    ...mapActions(["fetchUsers", "removeUser"]),
 
     info(item, index, button) {
       this.infoModal.title = `Row index: ${index}`;
@@ -354,16 +288,8 @@ export default {
       }).then((result) => {
         // Send request to the server
         if (result.value) {
-          axios
-            .delete(`api/users/${item.id}`)
-            .then(() => {
-              Swal.fire("Deleted!", "User is removed", "success");
-              this.users = this.users.filter((user) => user.id !== item.id);
-              // this.fetchUser();
-            })
-            .catch((data) => {
-              Swal.fire("Failed!", data.message, "warning");
-            });
+          this.removeUser(item.id)
+          Swal.fire("Deleted!", "User is removed", "success");
         }
       });
     },
