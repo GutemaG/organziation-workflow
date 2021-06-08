@@ -129,7 +129,7 @@
       <b-col sm="7" md="6" class="my-1">
         <b-pagination
           v-model="currentPage"
-          :total-rows="totalRows"
+          :total-rows="userLength"
           :per-page="perPage"
           align="fill"
           size="sm"
@@ -252,10 +252,10 @@
 
 <script>
 import axios from "axios";
+import { mapGetters, mapActions } from 'vuex';
 export default {
   data() {
     return {
-      users: [],
       fields: [
         { key: "id", label: "Id", sortable: true, sortDirection: "desc" },
         {
@@ -314,6 +314,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['users']),
     sortOptions() {
       // Create an options list from our fields
       return this.fields
@@ -322,31 +323,20 @@ export default {
           return { text: f.label, value: f.key };
         });
     },
+    userLength(){
+      return this.users.length
+    }
   },
   mounted() {
-    // Set the initial number of items
-    //   this.totalRows = this.users.length
-    //   console.log(this.totalRows)
   },
   created() {
     this.$Progress.start();
-    this.fetchUser();
+    this.fetchUsers();
     this.$Progress.finish();
-    // this.totalRows = this.users.length
-    // console.log(this.totalRows)
   },
   methods: {
-    async fetchUser() {
-      console.log("Fetching User.....");
-      try {
-        let response = await axios.get("api/users");
-        // console.log()
-        this.users = response.data.users;
-        this.totalRows = this.users.length;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    ...mapActions(["fetchUsers"]),
+
     info(item, index, button) {
       this.infoModal.title = `Row index: ${index}`;
       this.infoModal.content = JSON.stringify(item, null, 2);
