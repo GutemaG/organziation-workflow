@@ -31,6 +31,7 @@ class UserFactory extends Factory
             'is_active' => true,
             'is_admin' => false,
             'email_verified_at' => now(),
+            'phone' => $this->faker->phoneNumber(),
             'password' => Hash::make('12345678'), // password
             'remember_token' => Str::random(10),
         ];

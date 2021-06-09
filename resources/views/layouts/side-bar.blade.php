@@ -66,7 +66,15 @@
         <router-link to="/products" class="nav-link">
           <i class="nav-icon fas fa-list orange"></i>
           <p>
-            Some Link
+            Bureau
+          </p>
+        </router-link>
+      </li>
+          <li class="nav-item">
+        <router-link to="/products" class="nav-link">
+          <i class="nav-icon fas fa-list orange"></i>
+          <p>
+            Request
           </p>
         </router-link>
       </li>

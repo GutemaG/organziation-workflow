@@ -24,8 +24,7 @@ class UserControllerFunctionality extends Controller
      */
     public function index()
     {
-        $users = User::where('is_admin', false)->where('is_active', true)
-            ->with(['permission'])->orderBy('user_name', 'asc')->get();
+        $users = User::where('is_admin', false)->with(['permission'])->orderBy('user_name', 'asc')->get();
         return [
             'status' => 200,
             'users' => empty($users) ? [] : $users->makeHidden(['email_verified_at', 'updated_at']),

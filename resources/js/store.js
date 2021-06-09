@@ -14,27 +14,23 @@ export default new Vuex.Store({
 
     actions: {
         async fetchUsers({ commit }) {
-            console.log("Fetching User.....");
             try {
                 let response = await axios.get("api/users");
                 commit("setUsers", response.data);
             } catch (error) {
-                console.log(error);
+                Swal.fire("Failed!", data.message, "warning");
             }
         },
         async removeUser({ commit }, id) {
-            console.log("Deleting User.....");
             try {
                 await axios.delete(`api/users/${id}`);
                 commit("deleteUser", id);
             } catch (error) {
                 Swal.fire("Failed!", data.message, "warning");
-                // console.log(error);
             }
         },
         async updateUser({ commit }, data) {
-			console.log(data)
-            axios
+            await axios
                 .put(`api/users/${data.id}`, {
                     ...data
                 })
@@ -42,8 +38,18 @@ export default new Vuex.Store({
                     console.log(response);
                 })
                 .catch(function(error) {
-                    console.log(error);
+                    Swal.fire("Failed!", data.message, "warning");
                 });
+        },
+        async addUser({ commit }, data){
+            axios.post('api/users', {
+                ...data
+            }).then(function(resp){
+                let user = resp.data.user
+                commit("addUser", user);
+            }).catch(function(error){
+                Swal.fire("Failed!", data.message, "warning");
+            })
         }
     },
 
@@ -53,6 +59,9 @@ export default new Vuex.Store({
         },
         deleteUser(state, id) {
             state.users = state.users.filter(user => user.id !== id);
+        },
+        addUser(state, user){
+            state.users.unshift(user);
         }
     }
 });

@@ -103,13 +103,11 @@ export default {
          ...this.selectedUser,
           ...permission,
       }
-    //   console.log(data.user_name)
       this.updateUser(data);
 
     },
     onSubmit(event) {
       event.preventDefault();
-      console.log("submitttion");
     },
     
   },

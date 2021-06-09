@@ -40,8 +40,16 @@
       </b-col>
 
       <b-col lg="6" class="my-1">
+        <b-button
+          size="sm"
+          @click="addUser"
+          class="mr-1"
+          variant="primary"
+        >
+          + Add
+        </b-button>
+
         
-        <b-button>+Add User</b-button>
       </b-col>
 
       <b-col lg="6" class="my-1">
@@ -140,6 +148,7 @@
       show-empty
       small
       @filtered="onFiltered"
+      striped
     >
       <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
@@ -180,7 +189,7 @@
 
     <!-- Info modal -->
       <user-modal :selectedUser="selectedUser"></user-modal>
-  
+      <add-user-modal></add-user-modal>
   </b-container>
 </template>
 
@@ -212,12 +221,6 @@ export default {
         },
         { key: "email", label: "email" },
         { key: "phone", label: "Phone", sortable: true, sortDirection: "desc" },
-        {
-          key: "age",
-          label: "Person age",
-          sortable: true,
-          class: "text-center",
-        },
         {
           key: "is_active",
           label: "Is Active",
@@ -277,6 +280,9 @@ export default {
       this.selectedUser = item;
       this.$root.$emit("bv::show::modal", "edit-modal", button);
     },
+     addUser() {
+      this.$root.$emit("bv::show::modal", "add-user-modal");
+    },
     deleteUser(item) {
       Swal.fire({
         title: "Are you sure?",
@@ -305,6 +311,7 @@ export default {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
     },
+    // TODO: update this function
     updateForm(event){
       event.preventDefault();
         axios.put(`api/users/${this.selectedUser.id}`, {
@@ -319,11 +326,9 @@ export default {
     },
     onSubmit(event) {
       event.preventDefault();
-      console.log("submitttion");
     },
     onReset(event) {
       event.preventDefault();
-      console.log("resting");
     },
   },
 };
