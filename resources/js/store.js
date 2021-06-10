@@ -35,7 +35,9 @@ export default new Vuex.Store({
                     ...data
                 })
                 .then(function(response) {
-                    console.log(response);
+                    Swal.fire("Success!", data.message, "success");
+                    let user = response.data.user;
+                    commit("updateUser",user, data.id)
                 })
                 .catch(function(error) {
                     Swal.fire("Failed!", data.message, "warning");
@@ -45,6 +47,7 @@ export default new Vuex.Store({
             axios.post('api/users', {
                 ...data
             }).then(function(resp){
+                Swal.fire("Success!", data.message, "success");
                 let user = resp.data.user
                 commit("addUser", user);
             }).catch(function(error){
@@ -62,6 +65,13 @@ export default new Vuex.Store({
         },
         addUser(state, user){
             state.users.unshift(user);
+        },
+        //TODO: update this
+        updateUser(state, user, id){
+            const index = state.users.findIndex((user) => user.id === id);
+            if(index !== -1){
+                state.users.splice(index, 1, user);
+            }
         }
     }
 });

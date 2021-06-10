@@ -2,11 +2,11 @@
      <b-modal
       id="edit-modal"
       title="Edit"
-      ok-title="Update"
-      @ok="updateForm"
-      @hide="resetModal"
+      ok-only
+      ok-title="Cancel"
+      ok-variant="danger"
     >
-      <form ref="form" @submit.stop.prevent="handleSubmit">
+      <form ref="form" @submit.stop.prevent="updateForm">
         <b-form-group id="user_name" label="Username" label-for="username-input">
           <b-form-input
             id="username-input"
@@ -52,33 +52,30 @@
             required
           ></b-form-input>
         </b-form-group>
+          <b-button
+            class="form-control"
+            type="submit"
+            variant="primary"
+            >UPDATE</b-button
+          >
+     
       </form>
     </b-modal>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 
 // TODO: modify using props of selectedUser, to reset
 export default {
-    props:["selectedUser"],
-   
+    props:{
+        selectedUser:{
+          type: Object,
+          required: true,
+        }
+    },
     methods: {
     ...mapActions(["updateUser"]),
-    info(item, index, button) {
-      this.selectedUser = item;
-      this.$root.$emit("bv::show::modal", "edit-modal", button);
-    },
-    resetModal() {
-        // this.selectedUser = {},
-     this.$root.$emit("bv::hide::modal", "edit-modal"); 
-    },
-    onFiltered(filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
-      this.totalRows = filteredItems.length;
-      this.currentPage = 1;
-    },
     updateForm(event){
-
       event.preventDefault()
       let permission = {
           delete_FAQ:0,
@@ -94,22 +91,14 @@ export default {
           delete_affair:0,
 
       }
-    //    user_name: this.selectedUser.user_name,
-    //       first_name: this.selectedUser.first_name,
-    //       last_name: this.selectedUser.last_name,
-    //       phone: this.selectedUser.phone,
-    //       email: this.selectedUser.email,
       const data = {
          ...this.selectedUser,
           ...permission,
       }
       this.updateUser(data);
+      this.$bvModal.hide("edit-modal");
+    },
 
-    },
-    onSubmit(event) {
-      event.preventDefault();
-    },
-    
   },
 }
 </script>

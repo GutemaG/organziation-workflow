@@ -150,9 +150,9 @@
       @filtered="onFiltered"
       striped
     >
-      <template #cell(name)="row">
+      <!-- <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
-      </template>
+      </template> -->
 
       <template #cell(actions)="row">
         <b-button
@@ -188,7 +188,7 @@
     </b-table>
 
     <!-- Info modal -->
-      <user-modal :selectedUser="selectedUser"></user-modal>
+      <edit-user-modal :selectedUser="selectedUser"></edit-user-modal>
       <add-user-modal></add-user-modal>
   </b-container>
 </template>
@@ -200,7 +200,6 @@ export default {
   data() {
     return {
       fields: [
-        { key: "id", label: "Id", sortable: true, sortDirection: "desc" },
         {
           key: "user_name",
           label: "Username",
@@ -242,11 +241,6 @@ export default {
       sortDirection: "asc",
       filter: null,
       filterOn: [],
-      infoModal: {
-        id: "info-modal",
-        title: "",
-        content: "",
-      },
       selectedUser: {},
     };
   },
@@ -275,8 +269,6 @@ export default {
     ...mapActions(["fetchUsers", "removeUser"]),
 
     info(item, index, button) {
-      this.infoModal.title = `Row index: ${index}`;
-      this.infoModal.content = JSON.stringify(item, null, 2);
       this.selectedUser = item;
       this.$root.$emit("bv::show::modal", "edit-modal", button);
     },
@@ -299,36 +291,11 @@ export default {
         }
       });
     },
-    resetModal() {
-      this.selectedUser = {};
-    },
-    resetInfoModal() {
-      this.infoModal.title = "";
-      this.infoModal.content = "";
-    },
+    
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
-    },
-    // TODO: update this function
-    updateForm(event){
-      event.preventDefault();
-        axios.put(`api/users/${this.selectedUser.id}`, {
-          ...this.selectedUser
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    },
-    onSubmit(event) {
-      event.preventDefault();
-    },
-    onReset(event) {
-      event.preventDefault();
     },
   },
 };
