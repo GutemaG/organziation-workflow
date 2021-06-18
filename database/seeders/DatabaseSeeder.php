@@ -17,14 +17,12 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
          \App\Models\User::factory()->create([
-         
+
             'user_name' => 'admin',
             'first_name' =>'birhanu',
             'last_name' => 'Gudisa',
             'email' => 'owgs@astu.com',
-            'is_active' => true,
-            'is_admin' => true,
-            'email_verified_at' => now(),
+            'type' => 'admin',
             'password' => Hash::make('laravel1234'), // password
             'remember_token' => Str::random(10),
          ]

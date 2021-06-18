@@ -1,10 +1,12 @@
 <?php
 
 
-namespace App\Http\Controllers\Api\Utilities;
+namespace App\Http\Controllers\Utilities;
 
 
+use App\Http\Controllers\Utilities\UserType;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 
 
@@ -20,20 +22,10 @@ class Validation
             'user_name' => 'required|string|max:255|unique:users',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'type' => ['required', 'string', Rule::in(UserType::getItTeamMember(), UserType::getStaff(), UserType::getReception())],
             'email' => 'nullable|string|email|max:255|unique:users',
-            'phone' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:255|unique:users',
             'password' => ['required', 'confirmed', 'string', Rules\Password::defaults()],
-            'delete_FAQ' => 'required|boolean',
-            'update_FAQ' => 'required|boolean',
-            'reply_request' => 'required|boolean',
-            'add_request_to_FAQ' => 'required|boolean',
-            'delete_request' => 'required|boolean',
-            'create_bureau' => 'required|boolean',
-            'update_bureau' => 'required|boolean',
-            'delete_bureau' => 'required|boolean',
-            'create_affair' => 'required|boolean',
-            'update_affair' => 'required|boolean',
-            'delete_affair' => 'required|boolean',
         ];
     }
 

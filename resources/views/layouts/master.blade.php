@@ -155,7 +155,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  
+
    @include('layouts.side-bar')
 
   <!-- Content Wrapper. Contains page content -->
@@ -181,7 +181,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Main content -->
     <router-view></router-view>
     <vue-progress-bar></vue-progress-bar>
- 
+
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
