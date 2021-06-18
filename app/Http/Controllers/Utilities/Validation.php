@@ -32,13 +32,11 @@ class Validation
     /**
      * return all necessary rules for validation user data updating
      *
+     * @param array $fields
      * @return array
      */
-    public static function update_rules(){
-        return collect(Validation::rules())->except('password')->map(function ($value, $key){
-            return str_replace('required', 'nullable', $value);
-        })->all();
-
+    public static function update_rules($fields=[]){
+        return collect(collect(Validation::rules()))->only($fields)->all();
     }
 
 }

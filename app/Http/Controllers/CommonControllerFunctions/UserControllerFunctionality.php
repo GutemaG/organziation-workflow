@@ -100,7 +100,7 @@ class UserControllerFunctionality
      */
     private static function validator($data, $update=false){
         if($update)
-            return Validator::make($data, Validation::update_rules());
+            return Validator::make($data, Validation::update_rules(array_keys($data)));
         return Validator::make($data, Validation::rules());
     }
 
@@ -172,17 +172,12 @@ class UserControllerFunctionality
      * @return array
      */
     private static function getUpdateFields(Request $request, User $user){
-        if(
-            $request->get('email') == $user->email &&
-            $request->get('user_name') == $user->user_name
-        )
-            return $request->only(Fields::except(['password_confirmation', 'email', 'user_name','phone']));
-        else if($request->get('email') == $user->email)
-            return $request->only(Fields::except(['password_confirmation', 'email','phone']));
-        else if($request->get('user_name') == $user->user_name)
-            return $request->only(Fields::except(['password_confirmation', 'user_name','phone']));
-        else
-            return $request->only(Fields::except(['password_confirmation']));
+        $fields = [];
+        foreach ($request->only(Fields::all()) as $key => $item){
+            if($request->get($key) != $user->getAttributeValue($key))
+                $fields[$key] = $item;
+        }
+        return $fields;
     }
 
 
