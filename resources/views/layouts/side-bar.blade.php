@@ -63,7 +63,7 @@
             </router-link>
           </li>
           <li class="nav-item">
-        <router-link to="/products" class="nav-link">
+        <router-link to="/bureaus" class="nav-link">
           <i class="nav-icon fas fa-list orange"></i>
           <p>
             Bureau
