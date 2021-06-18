@@ -26,9 +26,6 @@ class UserControllerFunctionality
      */
     public static function index($userType)
     {
-<<<<<<< HEAD
-        $users = User::where('is_admin', false)->with(['permission'])->orderBy('user_name', 'asc')->get();
-=======
         if($userType == UserType::getAdmin())
             $users = User::where('type', '!=', UserType::getAdmin())
                 ->orderBy('user_name', 'asc')->get();
@@ -40,7 +37,6 @@ class UserControllerFunctionality
                 'status' => 401,
                 'error' => 'Unauthorized.',
             ];
->>>>>>> master
         return [
             'status' => 200,
             'users' => empty($users) ? [] : $users->makeHidden(['updated_at']),
@@ -180,11 +176,11 @@ class UserControllerFunctionality
             $request->get('email') == $user->email &&
             $request->get('user_name') == $user->user_name
         )
-            return $request->only(Fields::except(['password_confirmation', 'email', 'user_name']));
+            return $request->only(Fields::except(['password_confirmation', 'email', 'user_name','phone']));
         else if($request->get('email') == $user->email)
-            return $request->only(Fields::except(['password_confirmation', 'email']));
+            return $request->only(Fields::except(['password_confirmation', 'email','phone']));
         else if($request->get('user_name') == $user->user_name)
-            return $request->only(Fields::except(['password_confirmation', 'user_name']));
+            return $request->only(Fields::except(['password_confirmation', 'user_name','phone']));
         else
             return $request->only(Fields::except(['password_confirmation']));
     }

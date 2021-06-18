@@ -221,10 +221,14 @@ export default {
         { key: "email", label: "email" },
         { key: "phone", label: "Phone", sortable: true, sortDirection: "desc" },
         {
-          key: "is_active",
-          label: "Is Active",
+          key: "type",
+          label: "Type",
           formatter: (value, key, item) => {
-            return value === "1" ? "Yes" : "No";
+            let newVal=''
+            if(value === 'it_team_member'){newVal = 'IT Team'}
+            if(value === 'reception'){newVal = 'Reception'}
+            if(value === 'staff'){newVal = 'Staff'}
+            return newVal;
           },
           sortable: true,
           sortByFormatted: true,

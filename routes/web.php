@@ -15,9 +15,9 @@ require __DIR__.'/auth.php';
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-//Route::middleware(['auth'])->prefix('api')->group(function (){
+Route::middleware(['auth'])->prefix('api')->group(function (){
     Route::resource('/users', \App\Http\Controllers\UserController::class);
-//});
+});
 
 
 Route::get('/{vue_capture?}', function () {
