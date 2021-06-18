@@ -50,7 +50,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('edit-user-modal', require('./components/user/EditModal.vue').default);
 Vue.component('add-user-modal', require('./components/user/AddUserModal.vue').default);
 
-import store from './vuex/store'
+import store from './store'
 import Vue from 'vue';
 
 import BootstrapVue from 'bootstrap-vue';
