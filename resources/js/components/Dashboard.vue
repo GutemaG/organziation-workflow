@@ -71,3 +71,9 @@
         }
     }
 </script>
+
+<style scoped>
+.content {
+  margin-top: 1%;
+}
+</style>

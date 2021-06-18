@@ -20,10 +20,9 @@ class CreateUsersTable extends Migration
             $table->string('last_name');
             $table->string('email')->unique()->nullable();
             $table->string('phone')->unique()->nullable();
-            $table->boolean('is_admin')->default(false);
-            $table->boolean('is_active')->default(true);
-            $table->timestamp('email_verified_at')->nullable();
+            $table->enum('type', ['admin', 'it_team_member', 'staff', 'reception']);
             $table->string('password');
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });

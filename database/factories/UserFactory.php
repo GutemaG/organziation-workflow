@@ -28,10 +28,15 @@ class UserFactory extends Factory
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->firstName(),
             'email' => $this->faker->unique()->safeEmail(),
+<<<<<<< HEAD
             'is_active' => true,
             'is_admin' => false,
             'email_verified_at' => now(),
             'phone' => $this->faker->phoneNumber(),
+=======
+            'phone' => Utility::getPhoneNumber(),
+            'type' => Utility::getUserType(),
+>>>>>>> master
             'password' => Hash::make('12345678'), // password
             'remember_token' => Str::random(10),
         ];
