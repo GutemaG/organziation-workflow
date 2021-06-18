@@ -54,10 +54,10 @@ class UserController extends Controller{
     }
 
     public function update(Request $request, $id){
-        if(Gate::allows('is-admin'))
+//        if(Gate::allows('is-admin'))
             return response()->json(UserControllerFunctionality::update($request, $id, UserType::getAdmin()));
-        elseif (Gate::allows('is-it-team-member'))
-            return response()->json(UserControllerFunctionality::update($request, $id, UserType::getItTeamMember()));
+//        elseif (Gate::allows('is-it-team-member'))
+//            return response()->json(UserControllerFunctionality::update($request, $id, UserType::getItTeamMember()));
 
         return response()->json([
             'status' => 401,
