@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Utilities;
 use Faker\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use phpDocumentor\Reflection\Types\Self_;
 
 class Fields
 {
@@ -43,11 +44,20 @@ class Fields
      */
     public static function except($fields=[]){
         if(empty($fields))
-            return Fields::$user_fields;
+            return self::$user_fields;
 
-        return collect(Fields::all())->filter(function ($value, $key) use ($fields) {
+        return collect(self::all())->filter(function ($value, $key) use ($fields) {
                 return !in_array($value, $fields);
             })->values()->all();
+    }
+
+    public static function only($fields=[]){
+        if(empty($fields))
+            return self::$user_fields;
+
+        return collect(self::all())->filter(function ($value, $key) use ($fields) {
+            return in_array($value, $fields);
+        })->values()->all();
     }
 
     /**

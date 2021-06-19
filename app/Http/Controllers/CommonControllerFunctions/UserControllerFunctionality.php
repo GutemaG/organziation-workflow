@@ -226,7 +226,7 @@ class UserControllerFunctionality
      */
     public static function update(Request $request, $id, $userType)
     {
-        $user = User::find($id);
+        $user = User::where('id', $id)->where('type', '!=', UserType::getAdmin())->first();
         if(empty($user))
             return [
                 'status' => 404,
@@ -253,7 +253,7 @@ class UserControllerFunctionality
             ];
 
         return [
-            'status' => 201,
+            'status' => 200,
             'user' => User::where('id', $user->id)
                 ->first()->makeHidden(['updated_at']),
         ];
@@ -271,8 +271,8 @@ class UserControllerFunctionality
         $user = User::where('id', $id)->where('type', '!=', UserType::getAdmin())->first();
         if(empty($user))
             return [
-                'status' => 404,
-                'error' => 'User doesn\'t exist.',
+                'status' => 400,
+                'error' => 'Bad request.',
             ];
 
         if($userType == UserType::getAdmin() && $user->type == UserType::getAdmin())
