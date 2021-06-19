@@ -10,7 +10,7 @@ export default {
         async fetchUsers({ commit }) {
             try {
                 let response = await axios.get("api/users");
-                commit("setUsers", response.data);
+                commit("SET_USERS", response.data);
             } catch (error) {
                 Swal.fire("Failed!", data.message, "warning");
             }
@@ -18,7 +18,7 @@ export default {
         async removeUser({ commit }, id) {
             try {
                 await axios.delete(`api/users/${id}`);
-                commit("deleteUser", id);
+                commit("DELETE_USER", id);
             } catch (error) {
                 Swal.fire("Failed!", data.message, "warning");
             }
@@ -32,7 +32,7 @@ export default {
                     if (resp.data.status === 200 || resp.data.status === 201) {
                         Swal.fire("Success!", data.message, "success");
                         let user = resp.data.user;
-                        commit("updateUser", user, data.id);
+                        commit("UPDATE_USER", user, data.id);
                     } else {
                         console.log(resp.data.error);
                     }
@@ -51,7 +51,7 @@ export default {
                     if (resp.data.status === 200 || resp.data.status === 201) {
                         Swal.fire("Success!", data.message, "success");
                         let user = resp.data.user;
-                        commit("addUser", user);
+                        commit("ADD_USER", user);
                     } else {
                         console.log(resp);
                     }
@@ -63,17 +63,17 @@ export default {
     },
 
     mutations: {
-        setUsers(state, data) {
+        SET_USERS(state, data) {
             state.users = data.users;
         },
-        deleteUser(state, id) {
+        DELETE_USER(state, id) {
             state.users = state.users.filter(user => user.id !== id);
         },
-        addUser(state, user) {
+        ADD_USER(state, user) {
             state.users.unshift(user);
         },
         //TODO: update this
-        updateUser(state, user, id) {
+        UPDATE_USER(state, user, id) {
             const index = state.users.findIndex(user => user.id === id);
             if (index !== -1) {
                 state.users.splice(index, 1, user);

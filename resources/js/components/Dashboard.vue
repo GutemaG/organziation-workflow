@@ -6,7 +6,6 @@
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Card title</h5>
-                {{-- <div id="app"></div> --}}
                  
                 <p class="card-text">
                   Some quick example text to build on the card title and make up the bulk of the card's
@@ -17,7 +16,6 @@
                 <a href="#" class="card-link">Another link</a>
               </div>
             </div>
-            @yield('content')
 
             <div class="card card-primary card-outline">
               <div class="card-body">

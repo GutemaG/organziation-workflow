@@ -49,6 +49,7 @@ window.Toast = Toast;
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('edit-user-modal', require('./components/user/EditModal.vue').default);
 Vue.component('add-user-modal', require('./components/user/AddUserModal.vue').default);
+Vue.component('home', require('./components/Home.vue').default);
 
 import store from './store'
 import Vue from 'vue';
