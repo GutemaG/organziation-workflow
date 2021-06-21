@@ -39,9 +39,9 @@ class Utility
         ];
     }
 
-    public static function getErrors($except){
-        return collect(self::errors())->filter(function ($value, $key) use ($except) {
-            return in_array($key, $except);
+    public static function getErrors(array $field){
+        return collect(self::errors())->filter(function ($value, $key) use ($field) {
+            return in_array($key, $field);
         })->all();
     }
 

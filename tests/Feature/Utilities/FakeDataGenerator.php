@@ -30,4 +30,11 @@ class FakeDataGenerator
             return in_array($key, $fields);
         })->all();
     }
+
+    public static function userDataExcept($fields=[]){
+        $data = self::userData();
+        return collect($data)->filter(function ($value, $key) use ($fields) {
+            return !in_array($key, $fields);
+        })->all();
+    }
 }
