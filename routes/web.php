@@ -17,6 +17,8 @@ require __DIR__.'/auth.php';
 
 Route::middleware(['auth'])->prefix('api')->group(function (){
     Route::resource('/users', \App\Http\Controllers\UserController::class);
+
+    Route::get('/account', [\App\Http\Controllers\AccountController::class, 'update']);
 });
 
 
