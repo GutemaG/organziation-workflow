@@ -39,6 +39,7 @@ class AccountTest extends TestCase
         $response->assertJson([
             'status' => 200,
         ]);
+        $this->assertDatabaseHas(User::class, $data);
     }
 
     private function assertWithInvalidData(User $user)
