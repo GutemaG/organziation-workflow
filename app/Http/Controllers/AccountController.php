@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Tests\Feature\Utilities\FakeDataGenerator;
 
 class AccountController extends Controller
 {
@@ -25,7 +24,7 @@ class AccountController extends Controller
         $fields =  self::getUpdateFields($request);
 //        $fields = FakeDataGenerator::userDataExcept(['password', 'password_confirmation', 'type']);
         $validator = Validator::make($fields, Validation::update_rules(array_keys($fields)));
-        if ($validator->failed()){
+        if ($validator->fails()){
             return [
                 'status' => 400,
                 'error' => $validator->errors(),
@@ -51,7 +50,6 @@ class AccountController extends Controller
                 ]
             ]);
         }
-        return $data;
     }
 
     private static function getUpdateFields(Request $request){
