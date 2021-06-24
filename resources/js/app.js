@@ -50,6 +50,8 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('edit-user-modal', require('./components/user/EditModal.vue').default);
 Vue.component('add-user-modal', require('./components/user/AddUserModal.vue').default);
 Vue.component('home', require('./components/Home.vue').default);
+Vue.component('add-bureau-modal', require('./components/bureau/AddBureauModal.vue').default);
+Vue.component('edit-bureau-modal', require('./components/bureau/EditBureauModal.vue').default);
 
 import store from './store'
 import Vue from 'vue';

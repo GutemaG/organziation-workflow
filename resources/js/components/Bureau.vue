@@ -147,12 +147,13 @@
     </b-table>
 
     <!-- Info modal -->
-      <!-- <edit-user-modal :selectedUser="selectedUser"></edit-user-modal> -->
-      <!-- <add-user-modal></add-user-modal> -->
+      <edit-bureau-modal :selectedBureau="selectedBureau"></edit-bureau-modal>
+      <add-bureau-modal></add-bureau-modal>
   </b-container>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   data() {
     return {
@@ -170,18 +171,24 @@ export default {
           sortDirection: "desc",
         },
         {
+          key: "building",
+          label: "Building",
+          sortable: true,
+          sortDirection: "desc",
+        },
+        {
+          key: "office_number",
+          label: "Office Number",
+          sortable: true,
+          sortDirection: "desc",
+        },
+        {
           key: "description",
           label: "Description",
           sortable: true,
           sortDirection: "desc",
         },
         { key: "actions", label: "Actions" },
-      ],
-      bureaus:[
-          { id: 1, name: 'Registeral', description:'This is bureau of something', },
-          { id: 2, name: 'Registeral', description:'This is bureau of something',},
-          { id: 3, name: 'Registeral', description:'This is bureau of something', },
-          { id: 4, name: 'Registeral', description:'This is bureau of something', },
       ],
       totalRows: 1,
       currentPage: 1,
@@ -192,9 +199,11 @@ export default {
       sortDirection: "asc",
       filter: null,
       filterOn: [],
+      selectedBureau:{},
     };
   },
   computed: {
+    ...mapGetters(['bureaus']),
     sortOptions() {
       // Create an options list from our fields
       return this.fields
@@ -204,17 +213,15 @@ export default {
         });
     },
   },
-  mounted() {
-  },
-  created() {
-  },
   methods: {
 
     info(item, index, button) {
-      console.log('edting for', item.id)
-    //   this.$root.$emit("bv::show::modal", "edit-modal", button);
+      // console.log(item)
+      this.selectedBureau = item;
+      this.$root.$emit("bv::show::modal", "edit-bureau-modal", button);
     },
     addBureau(){
+        this.$root.$emit("bv::show::modal", "add-bureau-modal");
         console.log('Creating bureau ...')
     },
     deleteBureau(){
