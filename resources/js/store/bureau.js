@@ -4,7 +4,7 @@ export default {
       bureaus:[
           { id: 1, name: 'Registeral', building:"B-361",office_number:"2",description:'This is bureau of something', },
           { id: 2, name: 'Unknown', building:"B-333",office_number:"3",description:'some office ',},
-          { id: 3, name: 'Dormitory', building:"B-371",office_number:"9",description:'Dormitory of stuent', },
+          { id: 3, name: 'Dormitory', building:"B-372",office_number:"9",description:'Dormitory of stuent', },
           { id: 4, name: 'ICT-Center', building:"B-529",office_number:"12",description:'ICT center', },
       ],
     },

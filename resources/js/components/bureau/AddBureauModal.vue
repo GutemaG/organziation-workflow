@@ -21,7 +21,7 @@
         <b-form-group id="building" label="Building" label-for="building">
           <b-form-select
             v-model="form.building"
-            :options="buildings"
+            :options="building_numbers"
             id="input-building"
           >
             <b-form-select-option value="" disabled
@@ -60,7 +60,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -82,6 +82,9 @@ export default {
         { value: "4", text: "4" },
       ],
     };
+  },
+  computed:{
+    ...mapGetters(['building_numbers']),
   },
   methods: {
     ...mapActions(["addBureau"]),

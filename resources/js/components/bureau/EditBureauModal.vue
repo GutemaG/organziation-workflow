@@ -18,7 +18,7 @@
       <b-form-group id="building" label="Building" label-for="building">
         <b-form-select
           v-model="selectedBureau.building"
-          :options="buildings"
+          :options="building_numbers"
           id="input-building"
         >
           <b-form-select-option value="" disabled
@@ -57,7 +57,7 @@
   </b-modal>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 // TODO: modify using props of selectedUser, to reset
 export default {
@@ -81,6 +81,9 @@ export default {
       ],
       }
 
+  },
+  computed:{
+    ...mapGetters(['building_numbers'])
   },
   methods: {
     ...mapActions(["updateBureau"]),
