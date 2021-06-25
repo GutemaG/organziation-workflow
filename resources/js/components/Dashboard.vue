@@ -1,132 +1,146 @@
 <template>
   <div class="dashboard">
-    <div class="content">
-      <div class="container-fluid">
-        <div class="header">
-          <h2>List Of Buildings</h2>
+    <div class="row">
+      <div class="col-8">
+        <div class="leftside">
+          <div class="header">
+            <h2>List Of Buildings</h2>
+          </div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Block</th>
+                <th scope="col">Added By</th>
+                <th scope="col">Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry the Bird</td>
+                <td>@twitter</td>
+                <td>@twitter</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="header">
+            <h2>List Of Affairs</h2>
+          </div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Block</th>
+                <th scope="col">Added By</th>
+                <th scope="col">Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry the Bird</td>
+                <td>@twitter</td>
+                <td>@twitter</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="header">
+            <h2>List Of bureaucracy</h2>
+          </div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Block</th>
+                <th scope="col">Added By</th>
+                <th scope="col">Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry the Bird</td>
+                <td>@twitter</td>
+                <td>@twitter</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Block</th>
-              <th scope="col">Added By</th>
-              <th scope="col">Location</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry the Bird</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="header">
-          <h2>List Of Affairs</h2>
-        </div>
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Block</th>
-              <th scope="col">Added By</th>
-              <th scope="col">Location</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry the Bird</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="header">
-          <h2>List Of bureaucracy</h2>
-        </div>
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Block</th>
-              <th scope="col">Added By</th>
-              <th scope="col">Location</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry the Bird</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
-    </div>
-    <div class="side-content">
-      <div class="container-fluid">
-        <div class="card card-primary card-outline">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-
-            <p class="card-text">
-              Some quick example text to build on the card title and make up the bulk of the card's
-              content.
-            </p>
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
+      <div class="col">
+        <div class="rightside">
+          <div class="card">
+            <div class="card-header text-white bg-dark text-center">
+              Todays Tasks
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">Lists of bureaucracy works involved</h5>
+              <p class="card-text">
+                <ul>
+                  <li>Lorem</li>
+                  <li>Lorem</li>
+                  <li>Lorem</li>
+                </ul>
+              </p>
+              <p class="card-text">
+                With supporting text below as a natural lead-in to additional content.
+              </p>
+              <div class="text-center">
+                <a href="#" class="btn btn-primary">Update</a>
+              </div>
+            </div>
+            <div class="card-footer text-muted text-center">
+              2 days ago
+            </div>
           </div>
         </div>
       </div>
@@ -146,19 +160,10 @@
   padding: 0%;
   margin-top: 1%;
 }
-
-.content {
-  width: 600px;
-  height: 100%;
-  left: 0;
-  right: 0;
+.row {
+  margin-left: 12px;
 }
-/* .side-content {
-  display: flex;
-  position: fixed;
-  justify-content: space-between;
-  margin-left: 600px;
-  width: calc(100% - 600px);
-  padding: 0.8rem 1.5rem;
-} */
+.leftside, .rightside {
+  width: 100%;
+}
 </style>
