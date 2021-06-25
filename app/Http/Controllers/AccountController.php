@@ -22,7 +22,6 @@ class AccountController extends Controller
 
     public function update(Request $request){User::withTrashed()->restore();
         $fields =  self::getUpdateFields($request);
-//        $fields = FakeDataGenerator::userDataExcept(['password', 'password_confirmation', 'type']);
         $validator = Validator::make($fields, Validation::update_rules(array_keys($fields)));
         if ($validator->fails()){
             return [

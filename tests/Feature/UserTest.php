@@ -488,6 +488,7 @@ class UserTest extends TestCase
                 ]);
             }
         }
+        $this->restoreDeletedUsers();
         $this->printSuccessMessage('destroy users by logging with admin');
     }
 
@@ -513,6 +514,14 @@ class UserTest extends TestCase
             }
         }
         $this->printSuccessMessage('destroy users by logging with it team member');
+
+        $this->restoreDeletedUsers();
+        $this->printSuccessMessage('restoring deleted users');
+    }
+
+    private function restoreDeletedUsers(){
+        User::withTrashed()->restore();
+        $this->printSuccessMessage('all users deleted restored');
     }
 
 }

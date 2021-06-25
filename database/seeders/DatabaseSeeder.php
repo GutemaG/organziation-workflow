@@ -1,6 +1,8 @@
 <?php
 
 namespace Database\Seeders;
+use App\Models\Building;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -16,7 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         \App\Models\User::factory()->create([
+         User::factory()->create([
 
             'user_name' => 'admin',
             'first_name' =>'birhanu',
@@ -27,6 +29,8 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
          ]
          );
-         \App\Models\User::factory(500)->create();
+         User::factory(500)->create();
+
+         Building::factory(100)->create();
     }
 }

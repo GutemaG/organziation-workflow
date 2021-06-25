@@ -27,6 +27,11 @@ class Fields
         'password_confirmation',
     ];
 
+    public static $building = [
+        'number',
+        'number_of_offices',
+    ];
+
     /**
      * returns all fields user fields
      *
@@ -73,4 +78,5 @@ class Fields
         $data = collect($data)->only(Fields::$user_fields)->all();
         return $data;
     }
+
 }

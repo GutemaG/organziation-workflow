@@ -39,4 +39,15 @@ class Validation
         return collect(collect(Validation::rules()))->only($fields)->all();
     }
 
+    public static function buildingRules(){
+        return [
+            'number' => 'required|string|max:10|unique:buildings',
+            'number_of_offices' => 'required|integer',
+        ];
+    }
+
+    public static function buildingUpdateRules($fields=[]){
+        return collect(collect(Validation::buildingRules()))->only($fields)->all();
+    }
+
 }
