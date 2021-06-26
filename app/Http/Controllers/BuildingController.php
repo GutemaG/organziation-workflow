@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Utilities\Validation;
+use App\Http\Controllers\Utilities\Rule;
 use App\Models\Building;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -51,7 +51,7 @@ class BuildingController extends Controller
             return  $result;
         else{
             $fields = $request->only(['number', 'number_of_offices']);
-            $validator = Validator::make($fields, Validation::buildingRules());
+            $validator = Validator::make($fields, Rule::building());
 
             if ($validator->fails()){
                 return response()->json([
@@ -122,7 +122,7 @@ class BuildingController extends Controller
                 ]);
             else{
                 $fields = $this->getUpdateFields($request, $building);
-                $validator = Validator::make($fields, Validation::buildingUpdateRules(array_keys($fields)));
+                $validator = Validator::make($fields, Rule::building(array_keys($fields)));
                 if ($validator->fails()){
                     return response()->json([
                         'status' => 400,

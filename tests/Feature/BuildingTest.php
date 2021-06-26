@@ -6,8 +6,6 @@ use App\Http\Controllers\Utilities\Fields;
 use App\Http\Controllers\Utilities\UserType;
 use App\Models\Building;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\Feature\Utilities\FakeDataGenerator;
 use Tests\Feature\Utilities\Utility;
@@ -131,7 +129,7 @@ class BuildingTest extends TestCase
                 return [$item => $item];
             })->collapse();
 
-            if (collect($fieldsMap)->has(Fields::$building)) {
+            if (collect($fieldsMap)->has(Fields::building())) {
                 $this->assertPostResponse($response, $building);
             } elseif (collect($fieldsMap)->has('number')) {
                 $response->assertJson([
@@ -191,7 +189,7 @@ class BuildingTest extends TestCase
                 return [$item => $item];
             })->collapse();
 
-            if (collect($fieldsMap)->has(Fields::$building)) {
+            if (collect($fieldsMap)->has(Fields::building())) {
                 $this->assertPostResponse($response, $building);
             } elseif (collect($fieldsMap)->has('number')) {
                 $response->assertJson([
@@ -219,7 +217,7 @@ class BuildingTest extends TestCase
         }
         $this->printSuccessMessage('store building; by logging with it team member');
     }
-
+//
     public function testShowForAdmin(){
         $this->actingAs($this->getUser(UserType::getAdmin()));
         $buildings = Building::orderBy('number_of_offices', 'asc')->limit(30)->get();

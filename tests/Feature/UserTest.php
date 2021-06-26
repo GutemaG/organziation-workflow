@@ -139,6 +139,7 @@ class UserTest extends TestCase
             ]
         ]);
 
+        $tableName = 'user';
         foreach (Utility::allCombinationOfUserData() as $fields){
             $user = FakeDataGenerator::userDataOnly($fields);
             $response = $this->post('/api/users', $user);
@@ -149,17 +150,17 @@ class UserTest extends TestCase
             if (collect($fieldsMap)->has(Fields::all())) {
                 $this->assertPostResponse($response, $user);
             }
-            elseif (collect($fieldsMap)->has(Fields::except(['email']))){
+            elseif (collect($fieldsMap)->has(Fields::except($tableName, ['email']))){
                 $this->assertPostResponse($response, $user);
             }
-            elseif (collect($fieldsMap)->has(Fields::except(['phone']))){
+            elseif (collect($fieldsMap)->has(Fields::except($tableName, ['phone']))){
                 $this->assertPostResponse($response, $user);
             }
-            elseif (collect($fieldsMap)->has(Fields::except(['email', 'phone']))){
+            elseif (collect($fieldsMap)->has(Fields::except($tableName, ['email', 'phone']))){
                $this->assertPostResponse($response, $user);
             }
             else{
-                $errors = Utility::getErrors(Fields::except($fields));
+                $errors = Utility::getErrors(Fields::except($tableName, $fields));
                 if(collect($fields)->contains('password') &&
                     ! collect($fields)->contains('password_confirmation')){
                     $errors['password'] = ["The password confirmation does not match."];
@@ -225,6 +226,7 @@ class UserTest extends TestCase
             ]
         ]);
 
+        $tableName = 'user';
         foreach (Utility::allCombinationOfUserData() as $fields){
             $user = FakeDataGenerator::userDataOnly($fields);
             $response = $this->post('/api/users', $user);
@@ -235,17 +237,17 @@ class UserTest extends TestCase
             if (collect($fieldsMap)->has(Fields::all())) {
                $this->assertPostResponse($response, $user, true);
             }
-            elseif (collect($fieldsMap)->has(Fields::except(['email']))){
+            elseif (collect($fieldsMap)->has(Fields::except($tableName, ['email']))){
                 $this->assertPostResponse($response, $user, true);
             }
-            elseif (collect($fieldsMap)->has(Fields::except(['phone']))){
+            elseif (collect($fieldsMap)->has(Fields::except($tableName, ['phone']))){
                 $this->assertPostResponse($response, $user, true);
             }
-            elseif (collect($fieldsMap)->has(Fields::except(['email', 'phone']))){
+            elseif (collect($fieldsMap)->has(Fields::except($tableName, ['email', 'phone']))){
                 $this->assertPostResponse($response, $user, true);
             }
             else{
-                $errors = Utility::getErrors(Fields::except($fields));
+                $errors = Utility::getErrors(Fields::except($tableName, $fields));
                 if(collect($fields)->contains('password') &&
                     ! collect($fields)->contains('password_confirmation')){
                     $errors['password'] = ["The password confirmation does not match."];

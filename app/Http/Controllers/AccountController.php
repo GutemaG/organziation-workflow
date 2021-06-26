@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Utilities\Fields;
-use App\Http\Controllers\Utilities\Validation;
+use App\Http\Controllers\Utilities\Rule;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +22,7 @@ class AccountController extends Controller
 
     public function update(Request $request){User::withTrashed()->restore();
         $fields =  self::getUpdateFields($request);
-        $validator = Validator::make($fields, Validation::update_rules(array_keys($fields)));
+        $validator = Validator::make($fields, Rule::update(array_keys($fields)));
         if ($validator->fails()){
             return [
                 'status' => 400,
