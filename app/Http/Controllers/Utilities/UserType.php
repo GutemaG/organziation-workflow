@@ -43,4 +43,13 @@ class UserType
         return UserType::$reception;
     }
 
+    public static function all(){
+        return [
+            self::$admin,
+            self::$it_team_member,
+            self::$staff,
+            self::$reception,
+        ];
+    }
+
 }
