@@ -22,6 +22,8 @@ Route::middleware(['auth'])->prefix('api')->group(function (){
 
     Route::resource('buildings', \App\Http\Controllers\BuildingController::class);
 
+//    Route::resource('bureaus', \App\Http\Controllers\BureauController::class);
+
 });
 
 

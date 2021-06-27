@@ -5,6 +5,8 @@ namespace Database\Factories;
 
 
 use App\Http\Controllers\Utilities\UserType;
+use App\Models\Building;
+use App\Models\Bureau;
 
 class Utility
 {
@@ -36,5 +38,31 @@ class Utility
         ];
 
         return $userTypes[array_rand($userTypes)];
+    }
+
+    public static function getLocation($latitude, $longitude){
+        $location = [
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+        ];
+        return json_encode($location);
+    }
+
+    public static function getBuildingNumberAndOfficeNumber() {
+        $buildings = Building::select(['id', 'number_of_offices'])->get();
+        $index = rand(1, count($buildings));
+        $building = $buildings[$index - 1];
+        return [
+            'building_number' => $building->id,
+            'office_number' => rand(1, $building->number_of_offices),
+        ];
+    }
+
+    public static function getBureauId() {
+        $bureaus = Bureau::select('id')->get();
+        $index = rand(0, count($bureaus) - 1);
+        if (empty($bureaus))
+            return null;
+        return $bureaus[$index]->id;
     }
 }
