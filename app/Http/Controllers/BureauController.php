@@ -15,14 +15,14 @@ class BureauController extends Controller
 {
     public function __construct()
     {
-//        if($this->middleware(function ($request, $next){
-//            if (auth()->check())
-//                return $next($request);
-//            return redirect()->route('login');
-//        }));
+        if($this->middleware(function ($request, $next){
+            if (auth()->check())
+                return $next($request);
+            return redirect()->route('login');
+        }));
     }
 
-    private function isAuthorized(){return false;
+    private function isAuthorized(){
         if (! Gate::any(['is-admin', 'is-it-team-member']))
             return response()->json([
                 'status' => 401,
@@ -46,32 +46,37 @@ class BureauController extends Controller
     }
 
     public function store(Request $request) {
-        $data = $request->only(Fields::bureau());
-        $validator = Validator::make($data, Rule::bureau());
-        if ($validator->fails())
-            return response()->json([
-                'status' => 400,
-                'error' => $validator->errors(),
-            ]);
-        else {
-            try {
-                DB::beginTransaction();
-                $validatedData = $validator->validated();
-                $bureau = auth()->user()->bureaus()->create($validatedData);
-                DB::commit();
-                return response()->json([
-                    'status' => 201,
-                    'bureau' => $bureau,
-                ]);
-            }
-            catch (\Exception $e) {
-                DB::rollBack();
+        $result = $this->isAuthorized();
+        if (! empty($result))
+            return  $result;
+        else{
+            $data = $request->only(Fields::bureau());
+            $validator = Validator::make($data, Rule::bureau());
+            if ($validator->fails())
                 return response()->json([
                     'status' => 400,
-                    'error' => [
-                        'error' => ['Something went wrong during creating bureau; please retry again.',],
-                    ]
+                    'error' => $validator->errors(),
                 ]);
+            else {
+                try {
+                    DB::beginTransaction();
+                    $validatedData = $validator->validated();
+                    $bureau = auth()->user()->bureaus()->create($validatedData);
+                    DB::commit();
+                    return response()->json([
+                        'status' => 201,
+                        'bureau' => $bureau,
+                    ]);
+                }
+                catch (\Exception $e) {
+                    DB::rollBack();
+                    return response()->json([
+                        'status' => 400,
+                        'error' => [
+                            'error' => ['Something went wrong during creating bureau; please retry again.',],
+                        ]
+                    ]);
+                }
             }
         }
     }
