@@ -7,6 +7,7 @@ namespace Database\Factories;
 use App\Http\Controllers\Utilities\UserType;
 use App\Models\Building;
 use App\Models\Bureau;
+use App\Models\User;
 
 class Utility
 {
@@ -49,11 +50,11 @@ class Utility
     }
 
     public static function getBuildingNumberAndOfficeNumber() {
-        $buildings = Building::select(['id', 'number_of_offices'])->get();
+        $buildings = Building::select(['number', 'number_of_offices'])->get();
         $index = rand(1, count($buildings));
         $building = $buildings[$index - 1];
         return [
-            'building_number' => $building->id,
+            'building_number' => $building->number,
             'office_number' => rand(1, $building->number_of_offices),
         ];
     }
@@ -64,5 +65,11 @@ class Utility
         if (empty($bureaus))
             return null;
         return $bureaus[$index]->id;
+    }
+
+    public static function getUserId() {
+        $users = User::select('id')->get();
+        $index = rand(0, count($users) - 1);
+        return $users[$index]->id;
     }
 }

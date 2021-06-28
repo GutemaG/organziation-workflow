@@ -37,6 +37,17 @@ class Rule
         ];
     }
 
+    public static function bureau() {
+        return [
+            'name' => 'required|string|max:255|unique:bureaus',
+            'description' => 'required|string',
+            'accountable_to' => ['nullable', 'integer', BaseRule::exists('users', 'id')],
+            'location' => 'nullable|string',
+            'building_number' => ['required', 'string', BaseRule::exists('buildings', 'number')],
+            'office_number' => 'required|string',
+        ];
+    }
+
     public static function get($table) {
         switch ($table){
             case 'user':
@@ -44,6 +55,9 @@ class Rule
                 break;
             case 'building':
                 return self::building();
+                break;
+            case 'bureau':
+                return self::bureau();
                 break;
             default:
                 return null;

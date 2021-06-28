@@ -15,15 +15,16 @@ class CreateBureausTable extends Migration
     {
         Schema::create('bureaus', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->string('name')->unique();
             $table->longText('description');
-            $table->unsignedBigInteger('building_number');
+            $table->string('building_number');
             $table->string('office_number');
             $table->json('location');
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('building_number')->references('id')->on('buildings') ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users') ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

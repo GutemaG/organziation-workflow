@@ -21,8 +21,9 @@ class BuildingFactory extends Factory
      */
     public function definition()
     {
+        $buildingNumber = $this->faker->unique()->buildingNumber;
         return [
-            'number' => $this->faker->unique()->buildingNumber,
+            'number' => "$buildingNumber",
             'number_of_offices' => $this->faker->numberBetween(100, 900),
         ];
     }

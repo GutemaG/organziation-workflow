@@ -30,12 +30,13 @@ class BureauFactory extends Factory
         $paragraph = implode($sentences);
 
         return [
+            'user_id' => Utility::getUserId(),
             'name' => $this->faker->unique()->name(),
             'description' => $paragraph,
             'accountable_to' => Utility::getBureauId(),
             'location' => Utility::getLocation($latitude, $longitude),
             'building_number' => $buildingNumber,
-            'office_number' => $officeNumber,
+            'office_number' => "$officeNumber",
         ];
     }
 }

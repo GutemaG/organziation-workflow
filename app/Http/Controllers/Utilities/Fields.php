@@ -34,6 +34,15 @@ class Fields
 //        'description',
     ];
 
+    private static $bureau = [
+        'name',
+        'description',
+        'accountable_to',
+        'location',
+        'building_number',
+        'office_number',
+    ];
+
     /**
      * @return string[]
      */
@@ -50,6 +59,10 @@ class Fields
         return self::$building;
     }
 
+    public static function bureau() {
+        return self::$bureau;
+    }
+
 
     public static function get($table) {
         switch ($table){
@@ -58,6 +71,9 @@ class Fields
                 break;
             case 'building':
                 return self::$building;
+                break;
+            case 'bureau':
+                return self::$bureau;
                 break;
             default:
                 return null;

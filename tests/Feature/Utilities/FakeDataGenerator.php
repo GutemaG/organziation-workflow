@@ -40,6 +40,26 @@ class FakeDataGenerator
         return $data;
     }
 
+    public static function bureauData() {
+        $faker = Factory::create();
+
+        $latitude = $faker->latitude();
+        $longitude = $faker->longitude();
+        $data = Utility::getBuildingNumberAndOfficeNumber();
+        $buildingNumber = $data['building_number'];
+        $officeNumber = $data['office_number'];
+        $sentences = $faker->sentences(rand(5, 16));
+        $paragraph = implode($sentences); dump($buildingNumber);
+        return [
+            'name' => $faker->unique()->name(),
+            'description' => $paragraph,
+            'accountable_to' => Utility::getBureauId(),
+            'location' => Utility::getLocation($latitude, $longitude),
+            'building_number' => $buildingNumber,
+            'office_number' => "$officeNumber",
+        ];
+    }
+
     public static function userDataOnly($fields=[]){
         $data = self::userData();
         return collect($data)->filter(function ($value, $key) use ($fields) {

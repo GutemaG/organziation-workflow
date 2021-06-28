@@ -217,7 +217,7 @@ class BuildingTest extends TestCase
         }
         $this->printSuccessMessage('store building; by logging with it team member');
     }
-//
+
     public function testShowForAdmin(){
         $this->actingAs($this->getUser(UserType::getAdmin()));
         $buildings = Building::orderBy('number_of_offices', 'asc')->limit(30)->get();
