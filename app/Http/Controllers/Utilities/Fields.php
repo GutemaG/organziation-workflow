@@ -113,6 +113,17 @@ class Fields
         })->values()->all();
     }
 
+    public static function allCombinationModelFields($table) {
+        $fields = self::get($table);
+        $results = array(array( ));
+
+        foreach ($fields as $element)
+            foreach ($results as $combination)
+                array_push($results, array_merge(array($element), $combination));
+
+        return $results;
+    }
+
     /**
      * return mapped array that only contains user field only.
      * which is ready to insert into or update user table

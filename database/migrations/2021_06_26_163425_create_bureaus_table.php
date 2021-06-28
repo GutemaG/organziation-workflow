@@ -20,7 +20,7 @@ class CreateBureausTable extends Migration
             $table->longText('description');
             $table->string('building_number');
             $table->string('office_number');
-            $table->json('location');
+            $table->json('location')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

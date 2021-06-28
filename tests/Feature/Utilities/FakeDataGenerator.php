@@ -49,7 +49,7 @@ class FakeDataGenerator
         $buildingNumber = $data['building_number'];
         $officeNumber = $data['office_number'];
         $sentences = $faker->sentences(rand(5, 16));
-        $paragraph = implode($sentences); dump($buildingNumber);
+        $paragraph = implode($sentences);
         return [
             'name' => $faker->unique()->name(),
             'description' => $paragraph,
@@ -58,6 +58,29 @@ class FakeDataGenerator
             'building_number' => $buildingNumber,
             'office_number' => "$officeNumber",
         ];
+    }
+
+    public static function get($table) {
+        switch ($table){
+            case 'user':
+                return self::userData();
+                break;
+            case 'building':
+                return self::buildingData();
+                break;
+            case 'bureau':
+                return self::bureauData();
+                break;
+            default:
+                return null;
+        }
+    }
+
+    public static function only($table, $fields=[]){
+        $data = self::get($table);
+        return collect($data)->filter(function ($value, $key) use ($fields) {
+            return in_array($key, $fields);
+        })->all();
     }
 
     public static function userDataOnly($fields=[]){

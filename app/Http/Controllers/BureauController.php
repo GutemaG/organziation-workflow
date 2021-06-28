@@ -73,7 +73,7 @@ class BureauController extends Controller
                     return response()->json([
                         'status' => 400,
                         'error' => [
-                            'error' => ['Something went wrong during creating bureau; please retry again.',],
+                            'error' => ['Something went wrong during creating bureau; please retry again.',$e->getMessage()],
                         ]
                     ]);
                 }
