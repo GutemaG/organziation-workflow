@@ -4,57 +4,27 @@
     <b-row>
       <b-col lg="6" class="my-1">
         <b-form-group
-          label="Sort"
-          label-for="sort-by-select"
+          label="Add"
+          label-for="addUser"
           label-cols-sm="3"
           label-align-sm="right"
           label-size="sm"
-          class="mb-0"
-          v-slot="{ ariaDescribedby }"
+          class="mb-3"
         >
-          <b-input-group size="sm">
-            <b-form-select
-              id="sort-by-select"
-              v-model="sortBy"
-              :options="sortOptions"
-              :aria-describedby="ariaDescribedby"
-              class="w-75"
-            >
-              <template #first>
-                <option value="">-- none --</option>
-              </template>
-            </b-form-select>
-
-            <b-form-select
-              v-model="sortDesc"
-              :disabled="!sortBy"
-              :aria-describedby="ariaDescribedby"
-              size="sm"
-              class="w-25"
-            >
-              <option :value="false">Asc</option>
-              <option :value="true">Desc</option>
-            </b-form-select>
-          </b-input-group>
+        <b-button
+          size="sm"
+          @click="addUser"
+          class="mr-1"
+          variant="primary"
+        >
+          + Add
+        </b-button>
         </b-form-group>
       </b-col>
 
       <b-col lg="6" class="my-1">
-        <b-form-group
-          label="Initial sort"
-          label-for="initial-sort-select"
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          class="mb-0"
-        >
-          <b-form-select
-            id="initial-sort-select"
-            v-model="sortDirection"
-            :options="['asc', 'desc', 'last']"
-            size="sm"
-          ></b-form-select>
-        </b-form-group>
+
+        
       </b-col>
 
       <b-col lg="6" class="my-1">
@@ -84,26 +54,6 @@
       </b-col>
 
       <b-col lg="6" class="my-1">
-        <b-form-group
-          v-model="sortDirection"
-          label="Filter On"
-          description="Leave all unchecked to filter on all data"
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          class="mb-0"
-          v-slot="{ ariaDescribedby }"
-        >
-          <b-form-checkbox-group
-            v-model="filterOn"
-            :aria-describedby="ariaDescribedby"
-            class="mt-1"
-          >
-            <b-form-checkbox value="name">Name</b-form-checkbox>
-            <b-form-checkbox value="age">Age</b-form-checkbox>
-            <b-form-checkbox value="isActive">Active</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
       </b-col>
 
       <b-col sm="5" md="6" class="my-1">
@@ -134,6 +84,10 @@
           align="fill"
           size="sm"
           class="my-0"
+          first-text="First"
+          prev-text="Prev"
+          next-text="Next"
+          last-text="Last"
         ></b-pagination>
       </b-col>
     </b-row>
@@ -153,10 +107,11 @@
       show-empty
       small
       @filtered="onFiltered"
+      striped
     >
-      <template #cell(name)="row">
+      <!-- <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
-      </template>
+      </template> -->
 
       <template #cell(actions)="row">
         <b-button
@@ -167,9 +122,9 @@
         >
           <i class="fa fa-edit">Edit</i>
         </b-button>
-        <b-button size="sm" @click="row.toggleDetails">
+        <!-- <b-button size="sm" @click="row.toggleDetails">
           {{ row.detailsShowing ? "Hide" : "Show" }} Details
-        </b-button>
+        </b-button> -->
         <b-button
           size="sm"
           @click="deleteUser(row.item)"
@@ -192,61 +147,8 @@
     </b-table>
 
     <!-- Info modal -->
-    <b-modal
-      id="edit-modal"
-      title="Edit"
-      ok-title="Update"
-      @ok="updateForm"
-      @hide="resetInfoModal"
-    >
-      <form ref="form" @submit.stop.prevent="handleSubmit">
-        <b-form-group id="user_name" label="Username" label-for="username-input">
-          <b-form-input
-            id="username-input"
-            v-model="selectedUser.user_name"
-            placeholder="Username"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group id="first_name" label="First Name" label-for="first_name-input">
-          <b-form-input
-            id="first_name-input"
-            v-model="selectedUser.first_name"
-            placeholder="enter first name"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group id="last_name" label="Last Name" label-for="last_name-input">
-          <b-form-input
-            id="last_name-input"
-            v-model="selectedUser.last_name"
-            placeholder="enter last name"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          id="email"
-          label="Email address:"
-          label-for="email-input"
-        >
-          <b-form-input
-            id="email-input"
-            v-model="selectedUser.email"
-            type="email"
-            placeholder="Enter email"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group id="phone" label="phone" label-for="phone-input">
-          <b-form-input
-            id="phone-input"
-            v-model="selectedUser.phone"
-            placeholder="phone(+251... or 09 )"
-            required
-          ></b-form-input>
-        </b-form-group>
-      </form>
-    </b-modal>
+      <edit-user-modal :selectedUser="selectedUser"></edit-user-modal>
+      <add-user-modal></add-user-modal>
   </b-container>
 </template>
 
@@ -257,7 +159,6 @@ export default {
   data() {
     return {
       fields: [
-        { key: "id", label: "Id", sortable: true, sortDirection: "desc" },
         {
           key: "user_name",
           label: "Username",
@@ -279,16 +180,14 @@ export default {
         { key: "email", label: "email" },
         { key: "phone", label: "Phone", sortable: true, sortDirection: "desc" },
         {
-          key: "age",
-          label: "Person age",
-          sortable: true,
-          class: "text-center",
-        },
-        {
-          key: "is_active",
-          label: "Is Active",
+          key: "type",
+          label: "Type",
           formatter: (value, key, item) => {
-            return value === "1" ? "Yes" : "No";
+            let newVal=''
+            if(value === 'it_team_member'){newVal = 'IT Team'}
+            if(value === 'reception'){newVal = 'Reception'}
+            if(value === 'staff'){newVal = 'Staff'}
+            return newVal;
           },
           sortable: true,
           sortByFormatted: true,
@@ -305,11 +204,6 @@ export default {
       sortDirection: "asc",
       filter: null,
       filterOn: [],
-      infoModal: {
-        id: "info-modal",
-        title: "",
-        content: "",
-      },
       selectedUser: {},
     };
   },
@@ -335,13 +229,14 @@ export default {
     this.$Progress.finish();
   },
   methods: {
-    ...mapActions(["fetchUsers"]),
+    ...mapActions(["fetchUsers", "removeUser"]),
 
     info(item, index, button) {
-      this.infoModal.title = `Row index: ${index}`;
-      this.infoModal.content = JSON.stringify(item, null, 2);
       this.selectedUser = item;
       this.$root.$emit("bv::show::modal", "edit-modal", button);
+    },
+     addUser() {
+      this.$root.$emit("bv::show::modal", "add-user-modal");
     },
     deleteUser(item) {
       Swal.fire({
@@ -354,50 +249,16 @@ export default {
       }).then((result) => {
         // Send request to the server
         if (result.value) {
-          axios
-            .delete(`api/users/${item.id}`)
-            .then(() => {
-              Swal.fire("Deleted!", "User is removed", "success");
-              this.users = this.users.filter((user) => user.id !== item.id);
-              // this.fetchUser();
-            })
-            .catch((data) => {
-              Swal.fire("Failed!", data.message, "warning");
-            });
+          this.removeUser(item.id)
+          Swal.fire("Deleted!", "User is removed", "success");
         }
       });
     },
-    resetModal() {
-      this.selectedUser = {};
-    },
-    resetInfoModal() {
-      this.infoModal.title = "";
-      this.infoModal.content = "";
-    },
+    
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
-    },
-    updateForm(event){
-      event.preventDefault();
-        axios.put(`api/users/${this.selectedUser.id}`, {
-          ...this.selectedUser
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    },
-    onSubmit(event) {
-      event.preventDefault();
-      console.log("submitttion");
-    },
-    onReset(event) {
-      event.preventDefault();
-      console.log("resting");
     },
   },
 };

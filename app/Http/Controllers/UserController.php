@@ -1,119 +1,79 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\CommonControllerFunctions\UserControllerFunctionality;
+use App\Http\Controllers\Utilities\UserType;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Validation\ValidationException;
 
-use App\Http\Controllers\CommonControllerFunctions\UserControllerFunctionality;
-use App\Models\User;
-
-
-class UserController extends UserControllerFunctionality
-{
+class UserController extends Controller{
     public function __construct()
     {
-        $this->middleware(function($request, $next){
-            if(! auth()->check())
-                return response()->redirectTo(route('login'));
-            return $next($request);
-        });
+//        if($this->middleware(function ($request, $next){
+//            if(auth()->check())
+//                return $next($request);
+//            return response()->redirectTo(route('login'));
+//        }));
     }
 
-    /**
-     * Display a listing of the It team members but not admin.
-     * It is only allowed for admin.
-     *
-     * @return JsonResponse
-     */
-    public function index()
-    {
-        // return Auth::user();
+    public function index(){
+        if(Gate::allows('is-admin'))
+            return response()->json(UserControllerFunctionality::index(UserType::getAdmin()));
+        elseif (Gate::allows('is-it-team-member'))
+            return response()->json(UserControllerFunctionality::index(UserType::getItTeamMember()));
 
-        if(! Gate::allows('is-admin'))
-            return response()->json([
-                'status' => 401,
-                'error' => 'Unauthorized.',
-                
-            ]);
-
-        return response()->json(parent::index());
+        return response()->json([
+            'status' => 401,
+            'error' => 'Unauthorized.',
+        ]);
     }
 
+    public function store(Request $request){
+        if(Gate::allows('is-admin'))
+            return response()->json(UserControllerFunctionality::store($request, UserType::getAdmin()));
+        elseif (Gate::allows('is-it-team-member'))
+            return response()->json(UserControllerFunctionality::store($request, UserType::getItTeamMember()));
 
-    /**
-     * Register new It team member and assign permission.
-     * It is only allowed for admin.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws ValidationException it will not throw validation Exception because it has been handled.
-     */
-    public function store(Request $request)
-    {
-        if(! Gate::allows('is-admin'))
-            return response()->json([
-                'status' => 401,
-                'error' => 'Unauthorized.',
-            ]);
-        return response()->json(parent::store($request));
+        return response()->json([
+            'status' => 401,
+            'error' => 'Unauthorized.',
+        ]);
     }
 
+    public function show($id){
+        if(Gate::allows('is-admin'))
+            return response()->json(UserControllerFunctionality::show($id, UserType::getAdmin()));
+        elseif (Gate::allows('is-it-team-member'))
+            return response()->json(UserControllerFunctionality::show($id, UserType::getItTeamMember()));
 
-    /**
-     * Display the specified It team member but not admin.
-     * It is only allowed for admin.
-     *
-     * @param $id
-     * @return JsonResponse
-     */
-    public function show($id)
-    {
-        if(! Gate::allows('is-admin'))
-            return response()->json([
-                'status' => 401,
-                'error' => 'Unauthorized.',
-            ]);
-
-        return response()->json(parent::show($id));
+        return response()->json([
+            'status' => 401,
+            'error' => 'Unauthorized.',
+        ]);
     }
 
+    public function update(Request $request, $id){
+//        if(Gate::allows('is-admin'))
+            return response()->json(UserControllerFunctionality::update($request, $id, UserType::getAdmin()));
+//        elseif (Gate::allows('is-it-team-member'))
+//            return response()->json(UserControllerFunctionality::update($request, $id, UserType::getItTeamMember()));
 
-    /**
-     * Update the specified It team member information and permission in storage.
-     * It is only allowed for admin.
-     *
-     * @param Request $request
-     * @param User $user
-     * @return JsonResponse
-     * @throws ValidationException
-     */
-    public function update(Request $request, User $user)
-    {
-        if(! Gate::allows('is-admin'))
-            return response()->json([
-                'status' => 401,
-                'error' => 'Unauthorized.',
-            ]);
-        return response()->json(parent::update($request, $user));
+        return response()->json([
+            'status' => 401,
+            'error' => 'Unauthorized.',
+        ]);
     }
 
-    /**
-     * Remove the specified user (precisely soft delete).
-     * It is only allowed for admin.
-     *
-     * @param $id
-     * @return JsonResponse
-     */
-    public function destroy($id)
-    {
-        if(! Gate::allows('is-admin'))
-            return response()->json([
-                'status' => 401,
-                'error' => 'Unauthorized.',
-            ]);
-        return response()->json(parent::destroy($id));
+    public function destroy($id){
+        if(Gate::allows('is-admin'))
+            return response()->json(UserControllerFunctionality::destroy($id, UserType::getAdmin()));
+        elseif (Gate::allows('is-it-team-member'))
+            return response()->json(UserControllerFunctionality::destroy($id, UserType::getItTeamMember()));
+
+        return response()->json([
+            'status' => 401,
+            'error' => 'Unauthorized.',
+        ]);
     }
 }
