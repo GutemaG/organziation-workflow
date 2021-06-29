@@ -47,6 +47,14 @@ window.Toast = Toast;
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('edit-user-modal', require('./components/user/EditModal.vue').default);
+Vue.component('add-user-modal', require('./components/user/AddUserModal.vue').default);
+Vue.component('home', require('./components/Home.vue').default);
+Vue.component('add-bureau-modal', require('./components/bureau/AddBureauModal.vue').default);
+Vue.component('edit-bureau-modal', require('./components/bureau/EditBureauModal.vue').default);
+Vue.component('add-building-modal', require('./components/building/AddBuildingModal.vue').default);
+Vue.component('edit-building-modal', require('./components/building/EditBuildingModal.vue').default);
+
 import store from './store'
 import Vue from 'vue';
 
