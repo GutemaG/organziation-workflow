@@ -19,7 +19,9 @@ Route::middleware(['auth'])->prefix('api')->group(function (){
     Route::resource('/users', \App\Http\Controllers\UserController::class);
 });
 
-
+Route::get('/affairs', function(){
+    return \App\Models\Affair::first();
+});
 Route::get('/{vue_capture?}', function () {
     return view('home');
 })->where('vue_capture', '[\/\w\.-]*')->middleware('auth');

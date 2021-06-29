@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        /*
          \App\Models\User::factory()->create([
 
             'user_name' => 'admin',
@@ -27,6 +28,17 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
          ]
          );
-         \App\Models\User::factory(500)->create();
+         \App\Models\User::factory(50)->create();
+         
+         \App\Models\Affair::factory(50)->create();
+         \App\Models\Procedure::factory(100)->create();
+         \App\Models\PreRequest::factory(200)->create();
+         */
+        \App\Models\PreRequest::factory()->create([
+            'affair_id'=>null,
+            'procedure_id'=>1,
+            'name' =>'go somewhere',
+            'description' =>' Description go somewhere'
+        ]);
     }
 }
