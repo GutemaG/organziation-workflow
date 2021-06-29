@@ -60,7 +60,7 @@ class Utility
     }
 
     public static function getBureauId() {
-        $bureaus = Bureau::select('id')->get();
+        $bureaus = Bureau::all('id');
         $index = rand(0, count($bureaus) - 1);
         if (empty($bureaus))
             return null;

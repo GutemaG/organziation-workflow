@@ -13,6 +13,7 @@ use Tests\Feature\Utilities\Error;
 use Tests\Feature\Utilities\FakeDataGenerator;
 use Tests\Feature\Utilities\Utility;
 use Tests\TestCase;
+use function Symfony\Component\String\b;
 
 class BureauTest extends TestCase
 {
@@ -126,90 +127,184 @@ class BureauTest extends TestCase
 //            )
 //        );
 //    }
+//
+//    public function testPostForAdmin(){
+//        $user = $this->getUser(UserType::getAdmin());
+//        $this->actingAs($user);
+//
+//        $bureau = FakeDataGenerator::bureauData();
+//        $response = $this->post($this->url, $bureau);
+//        $this->assertPostResponse($response, $bureau, $user->id);
+//
+//        foreach (Fields::allCombinationModelFields('bureau') as $fields) {
+//            $data = FakeDataGenerator::only('bureau', $fields);
+//            $response = $this->post($this->url, $data);
+//            $fieldsMap = collect($fields)->map(function ($item, $key) {
+//                return [$item => $item];
+//            })->collapse();
+//
+//            if (collect($fieldsMap)->has(Fields::except('bureau', ['location', 'accountable_to']))) {
+//                $this->assertPostResponse($response, $data, $user->id);
+//            }
+//            else{
+//                $error = Error::only('bureau', Fields::except('bureau', $fields));
+//                $response->assertJson([
+//                    'status' => 400,
+//                    'error' => $error,
+//                ]);
+//            }
+//        }
+//        $this->printSuccessMessage('store bureau; by logging with admin');
+//    }
+//
+//    public function testPostForItTeamMember(){
+//        $user = $this->getUser(UserType::getItTeamMember());
+//        $this->actingAs($user);
+//
+//        $bureau = FakeDataGenerator::bureauData();
+//        $response = $this->post($this->url, $bureau);
+//        $this->assertPostResponse($response, $bureau, $user->id);
+//
+//        foreach (Fields::allCombinationModelFields('bureau') as $fields) {
+//            $data = FakeDataGenerator::only('bureau', $fields);
+//            $response = $this->post($this->url, $data);
+//            $fieldsMap = collect($fields)->map(function ($item, $key) {
+//                return [$item => $item];
+//            })->collapse();
+//
+//            if (collect($fieldsMap)->has(Fields::except('bureau', ['location', 'accountable_to']))) {
+//                $this->assertPostResponse($response, $data, $user->id);
+//            }
+//            else{
+//                $error = Error::only('bureau', Fields::except('bureau', $fields));
+//                $response->assertJson([
+//                    'status' => 400,
+//                    'error' => $error,
+//                ]);
+//            }
+//        }
+//        $this->printSuccessMessage('store bureau; by logging with it team member.');
+//    }
+//
+//    private function assertPostResponse($response, $bureau, $user_id){
+//        $id = Bureau::where('name', $bureau['name'])->first()->id;
+//        $data = [
+//            'id' => $id,
+//            "name" => $bureau['name'],
+//            "office_number" => $bureau['office_number'],
+//            "building_number" => $bureau['building_number'],
+//            "description" => $bureau['description'],
+//            "user_id" => $user_id,
+//        ];
+//        $data = $this->getFullData($data, $bureau);
+//
+//        $response->assertStatus(200);
+//        $response->assertJson([
+//            'status' => 201,
+//            'bureau' => $data,
+//        ]);
+//    }
+//
+//    private function getFullData($data, $bureau) {
+//        if (array_key_exists('location', $bureau))
+//            $data['location'] = $bureau['location'];
+//        if (array_key_exists('accountable_to', $bureau))
+//            $data['accountable_to'] = $bureau['accountable_to'];
+//        return $data;
+//    }
 
-    public function testPostForAdmin(){
-        $user = $this->getUser(UserType::getAdmin());
-        $this->actingAs($user);
-
-        $bureau = FakeDataGenerator::bureauData();
-        $response = $this->post($this->url, $bureau);
-        $this->assertPostResponse($response, $bureau, $user->id);
-
-        foreach (Fields::allCombinationModelFields('bureau') as $fields) {
-            $data = FakeDataGenerator::only('bureau', $fields);
-            $response = $this->post($this->url, $data);
-            $fieldsMap = collect($fields)->map(function ($item, $key) {
-                return [$item => $item];
-            })->collapse();
-
-            if (collect($fieldsMap)->has(Fields::except('bureau', ['location', 'accountable_to']))) {
-                $this->assertPostResponse($response, $data, $user->id);
-            }
-            else{
-                $error = Error::only('bureau', Fields::except('bureau', $fields));
-                $response->assertJson([
-                    'status' => 400,
-                    'error' => $error,
-                ]);
-            }
-        }
-        $this->printSuccessMessage('store bureau; by logging with admin');
+    public function testUpdateForAdmin(){
+        $this->actingAs($this->getUser(UserType::getAdmin()));
+        $id = User::orderBy('id', 'desc')->first()->id + 1;
+        $response = $this->put($this->url . $id, []);
+        $response->assertStatus(200); dd($id);
+//        $response->assertJson([
+//            'status' => 400,
+//            'error' =>[
+//                'error' => ['Bad request.']
+//            ]
+//        ]);
+        $this->update(UserType::getAdmin());
+        $this->printSuccessMessage('update bureau; by logging with admin.');
     }
 
-    public function testPostForItTeamMember(){
-        $user = $this->getUser(UserType::getItTeamMember());
-        $this->actingAs($user);
-
-        $bureau = FakeDataGenerator::bureauData();
-        $response = $this->post($this->url, $bureau);
-        $this->assertPostResponse($response, $bureau, $user->id);
-
-        foreach (Fields::allCombinationModelFields('bureau') as $fields) {
-            $data = FakeDataGenerator::only('bureau', $fields);
-            $response = $this->post($this->url, $data);
-            $fieldsMap = collect($fields)->map(function ($item, $key) {
-                return [$item => $item];
-            })->collapse();
-
-            if (collect($fieldsMap)->has(Fields::except('bureau', ['location', 'accountable_to']))) {
-                $this->assertPostResponse($response, $data, $user->id);
-            }
-            else{
-                $error = Error::only('bureau', Fields::except('bureau', $fields));
-                $response->assertJson([
-                    'status' => 400,
-                    'error' => $error,
-                ]);
-            }
-        }
-        $this->printSuccessMessage('store bureau; by logging with it team member.');
+    public function testUpdateForItTeamMember(){
+        $this->update(UserType::getItTeamMember());
+        $this->printSuccessMessage('update bureau; by logging with it team member.');
     }
 
-    private function assertPostResponse($response, $bureau, $user_id){
-        $id = Bureau::where('name', $bureau['name'])->first()->id;
-        $data = [
-            'id' => $id,
-            "name" => $bureau['name'],
-            "office_number" => $bureau['office_number'],
-            "building_number" => $bureau['building_number'],
-            "description" => $bureau['description'],
-            "user_id" => $user_id,
-        ];
-        $data = $this->getFullData($data, $bureau);
+    private function update($userType) {
+        if ($userType == UserType::getAdmin())
+            $this->actingAs($this->getUser(UserType::getAdmin()));
+        else
+            $this->actingAs($this->getUser(UserType::getItTeamMember()));
 
+        $bureaus = Bureau::orderBy('name', 'asc')->limit(10)->get();
+        foreach ($bureaus as $bureau){
+            $data = FakeDataGenerator::bureauData();
+            $check = collect(Error::get('bureau'));
+            foreach ($data as $key => $value){
+                $response = $this->put($this->url . $bureau->id, [$key => '']);
+                $response->assertStatus(200);
+                if ($check->keys()->contains($key))
+                    $this->assertUpdate($response, $key);
+                else {
+                    $bureau = $this->assertUpdate($response, $key, '', $bureau);
+                }
+
+                $response = $this->put($this->url . $bureau->id, [$key => $value]);
+                $bureau = $this->assertUpdate($response, $key, $value, $bureau);
+            }
+        }
+    }
+
+    private function updateData($bureau, $key, $value) {
+        switch ($key){
+            case 'name':
+                $bureau->name = $value;
+                break;
+            case 'description':
+                $bureau->description = $value;
+                break;
+            case 'accountable_to':
+                $bureau->accountable_to = $value;
+                break;
+            case 'location':
+                $bureau->location = $value;
+                break;
+            case 'building_number':
+                $bureau->building_number = $value;
+                break;
+            case 'office_number':
+                $bureau->office_number = $value;
+                break;
+        }
+        return $bureau;
+    }
+
+    private function assertUpdate($response, $key, $value=null, $bureau=null){
         $response->assertStatus(200);
-        $response->assertJson([
-            'status' => 201,
-            'bureau' => $data,
-        ]);
-    }
-
-    private function getFullData($data, $bureau) {
-        if (array_key_exists('location', $bureau))
-            $data['location'] = $bureau['location'];
-        if (array_key_exists('accountable_to', $bureau))
-            $data['accountable_to'] = $bureau['accountable_to'];
-        return $data;
+        if (empty($bureau))
+            $response->assertJson([
+                'status' => 400,
+                'error' => Error::only('bureau', [$key]),
+            ]);
+        else {
+            $bureau = $this->updateData($bureau, $key, $value);
+            $response->assertJson([
+                'status' => 200,
+                'bureau' => [
+                    'id' => $bureau->id,
+                    'name' => $bureau->name,
+                    'description' => $bureau->description,
+                    'location' => $bureau->location,
+                    'office_number' => $bureau->office_number,
+                    'building_number' => $bureau->building_number,
+                    'accountable_to' => $bureau->accountable_to,
+                ]
+            ]);
+        }
+        return $bureau;
     }
 
 //    public function testShowForAdmin(){

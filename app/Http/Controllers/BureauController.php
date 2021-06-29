@@ -130,7 +130,7 @@ class BureauController extends Controller
                        $bureau->update($validatedData);
                        DB::commit();
                        return response()->json([
-                           'status' => 201,
+                           'status' => 200,
                            'bureau' => Bureau::find($bureau->id),
                        ]);
                    } catch (\Exception $e) {
