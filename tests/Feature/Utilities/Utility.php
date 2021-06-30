@@ -19,6 +19,18 @@ class Utility
         return $results;
     }
 
+    public static function allCombinationOfBuildingData() {
+        $array = ['number', 'number_of_offices'];
+        $results = array(array( ));
+
+        foreach ($array as $element)
+            foreach ($results as $combination)
+                array_push($results, array_merge(array($element), $combination));
+
+        return $results;
+    }
+
+
     private static function errors(){
         return[
             'user_name' => [

@@ -1,6 +1,9 @@
 <?php
 
 namespace Database\Seeders;
+use App\Models\Building;
+use App\Models\Bureau;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -16,8 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         \App\Models\User::factory()->create([
-
+         User::create([
             'user_name' => 'admin',
             'first_name' =>'birhanu',
             'last_name' => 'Gudisa',
@@ -25,8 +27,12 @@ class DatabaseSeeder extends Seeder
             'type' => 'admin',
             'password' => Hash::make('laravel1234'), // password
             'remember_token' => Str::random(10),
-         ]
-         );
-         \App\Models\User::factory(500)->create();
+         ]);
+
+         User::factory(500)->create();
+
+         Building::factory(100)->create();
+
+         Bureau::factory(800)->create();
     }
 }
