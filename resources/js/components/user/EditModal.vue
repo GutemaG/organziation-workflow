@@ -77,23 +77,8 @@ export default {
     ...mapActions(["updateUser"]),
     updateForm(event){
       event.preventDefault()
-      let permission = {
-          delete_FAQ:0,
-          update_FAQ:0,
-          reply_request:0,
-          add_request_to_FAQ:0,
-          delete_request:0,
-          create_bureau:0,
-          update_bureau:0,
-          delete_bureau:0,
-          create_affair:0,
-          update_affair:0,
-          delete_affair:0,
-
-      }
       const data = {
          ...this.selectedUser,
-          ...permission,
       }
       this.updateUser(data);
       this.$bvModal.hide("edit-modal");
