@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Utilities\Fields;
 use App\Http\Controllers\Utilities\Rule;
 use App\Models\Building;
 use Illuminate\Http\Request;
@@ -50,7 +51,7 @@ class BuildingController extends Controller
         if (! empty($result))
             return  $result;
         else{
-            $fields = $request->only(['number', 'number_of_offices']);
+            $fields = $request->only(Fields::building());
             $validator = Validator::make($fields, Rule::building());
 
             if ($validator->fails()){
@@ -122,7 +123,7 @@ class BuildingController extends Controller
                 ]);
             else{
                 $fields = $this->getUpdateFields($request, $building);
-                $validator = Validator::make($fields, Rule::building(array_keys($fields)));
+                $validator = Validator::make($fields, Rule::update('building', array_keys($fields)));
                 if ($validator->fails()){
                     return response()->json([
                         'status' => 400,
@@ -156,7 +157,7 @@ class BuildingController extends Controller
 
     private  function getUpdateFields(Request $request, Building $building){
         $fields = [];
-        foreach ($request->only(['number', 'number_of_offices']) as $key => $item){
+        foreach ($request->only(Fields::building()) as $key => $item){
             if($request->get($key) != $building->getAttributeValue($key))
                 $fields[$key] = $item;
         }

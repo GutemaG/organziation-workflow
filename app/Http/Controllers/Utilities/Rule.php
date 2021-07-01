@@ -4,7 +4,6 @@
 namespace App\Http\Controllers\Utilities;
 
 
-use App\Http\Controllers\Utilities\UserType;
 use Illuminate\Validation\Rule as BaseRule;
 use Illuminate\Validation\Rules;
 

@@ -28,10 +28,10 @@ class Fields
     ];
 
     private static $building = [
-//        'name',
+        'name',
         'number',
         'number_of_offices',
-//        'description',
+        'description',
     ];
 
     private static $bureau = [
