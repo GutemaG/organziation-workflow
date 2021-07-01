@@ -23,7 +23,7 @@
         <b-form-group label="Building Number" label-for="building-number-input">
           <b-form-input
             id="building-number-input"
-            v-model="form.building_number"
+            v-model="form.number"
             required
             placeholder="Building number 529, B-529"
           ></b-form-input>
@@ -63,7 +63,7 @@ export default {
     return {
       form: {
         name: "",
-        building_number: "",
+        number: "",
         number_of_offices: "",
         description: "",
       },
@@ -71,7 +71,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["addBureau"]),
+    ...mapActions(["addBuilding"]),
     checkFormValidity() {
       const valid = this.$refs.form.checkValidity();
       this.nameState = valid;
@@ -79,7 +79,7 @@ export default {
     },
     resetModal() {
       (this.form.name = ""),
-        (this.form.building_number= ""),
+        (this.form.number= ""),
         (this.form.number_of_offices = ""),
         (this.form.description = "");
     },
@@ -92,9 +92,9 @@ export default {
       const data = {
         ...this.form,
       };
-    //   this.addBureau(data)
-    console.log(data)
+      this.addBuilding(data)
       this.$bvModal.hide("add-building-modal");
+      console.log(data)
     },
   },
 };
