@@ -77,21 +77,21 @@ class BuildingTest extends TestCase
     }
 
     public function testStaffCanAccessUsers(){
-        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::getStaff());
+        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::staff());
         $this->printSuccessMessage('authenticated staff can access any buildings or can store buildings');
 
     }
 
     public function testReceptionCanAccessUsers(){
-        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::getReception());
+        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::reception());
         $this->printSuccessMessage('authenticated reception can access any buildings or can store buildings');
     }
 
     public function testIndex(){
-        $this->indexForAdminAndItTeamMember(UserType::getAdmin());
+        $this->indexForAdminAndItTeamMember(UserType::admin());
         $this->printSuccessMessage('list all buildings; by logging with admin');
 
-        $this->indexForAdminAndItTeamMember(UserType::getItTeamMember());
+        $this->indexForAdminAndItTeamMember(UserType::itTeam());
         $this->printSuccessMessage('list all buildings; by logging with it team member');
     }
 
@@ -117,20 +117,20 @@ class BuildingTest extends TestCase
     }
 
     public function testPostForAdmin(){
-        $this->store(UserType::getAdmin());
+        $this->store(UserType::admin());
         $this->printSuccessMessage('store building; by logging with admin');
     }
 
     public function testPostForItTeamMember(){
-        $this->store(UserType::getItTeamMember());
+        $this->store(UserType::itTeam());
         $this->printSuccessMessage('store building; by logging with it team member');
     }
 
     private function store($userType) {
-        if ($userType == UserType::getAdmin())
-            $this->actingAs($this->getUser(UserType::getAdmin()));
+        if ($userType == UserType::admin())
+            $this->actingAs($this->getUser(UserType::admin()));
         else
-            $this->actingAs($this->getUser(UserType::getItTeamMember()));
+            $this->actingAs($this->getUser(UserType::itTeam()));
 
         $building = FakeDataGenerator::buildingData();
         $response = $this->post('/api/buildings', $building);
@@ -185,7 +185,7 @@ class BuildingTest extends TestCase
     }
 
     public function testShowForAdmin(){
-        $this->actingAs($this->getUser(UserType::getAdmin()));
+        $this->actingAs($this->getUser(UserType::admin()));
         $buildings = Building::orderBy('number_of_offices', 'asc')->limit(30)->get();
 
         foreach ($buildings as $building){
@@ -200,7 +200,7 @@ class BuildingTest extends TestCase
     }
 
     public function testShowForItTeamMember(){
-        $this->actingAs($this->getUser(UserType::getItTeamMember()));
+        $this->actingAs($this->getUser(UserType::itTeam()));
         $buildings = Building::orderBy('number_of_offices', 'asc')->limit(30)->get();
 
         foreach ($buildings as $building){
@@ -242,8 +242,8 @@ class BuildingTest extends TestCase
         $buildings = Building::inRandomOrder()->limit(20)->get();
 
         foreach ($buildings as $building){
-            $this->updateWithInvalidValues($building, UserType::getAdmin());
-            $this->updateValidFieldsAndValues($building, UserType::getAdmin());
+            $this->updateWithInvalidValues($building, UserType::admin());
+            $this->updateValidFieldsAndValues($building, UserType::admin());
         }
         $this->printSuccessMessage('update building with invalid  and valid values; by logging with admin');
     }
@@ -252,18 +252,18 @@ class BuildingTest extends TestCase
         $buildings = Building::inRandomOrder()->limit(20)->get();
 
         foreach ($buildings as $building){
-            $this->updateWithInvalidValues($building, UserType::getAdmin());
-            $this->updateValidFieldsAndValues($building, UserType::getAdmin());
+            $this->updateWithInvalidValues($building, UserType::admin());
+            $this->updateValidFieldsAndValues($building, UserType::admin());
         }
         $this->printSuccessMessage('update building with invalid  and valid values; by logging with it team member');
     }
 
 
     private function updateValidFieldsAndValues($building, $type){
-        if($type == UserType::getAdmin())
-            $this->actingAs($this->getUser(UserType::getAdmin()));
+        if($type == UserType::admin())
+            $this->actingAs($this->getUser(UserType::admin()));
         else
-            $this->actingAs($this->getUser(UserType::getItTeamMember()));
+            $this->actingAs($this->getUser(UserType::itTeam()));
 
         $data = FakeDataGenerator::buildingData();
 
@@ -276,10 +276,10 @@ class BuildingTest extends TestCase
     }
 
     private function updateWithInvalidValues($building, $type){
-        if($type == UserType::getAdmin())
-            $this->actingAs($this->getUser(UserType::getAdmin()));
+        if($type == UserType::admin())
+            $this->actingAs($this->getUser(UserType::admin()));
         else
-            $this->actingAs($this->getUser(UserType::getItTeamMember()));
+            $this->actingAs($this->getUser(UserType::itTeam()));
 
         $response = $this->put('/api/buildings/' . $building->id, ['number' => '', 'number_of_offices' => '']);
         $this->assertUpdate(2, $response);
@@ -348,7 +348,7 @@ class BuildingTest extends TestCase
     }
 
     public function testDestroyForAdmin(){
-        $this->actingAs($this->getUser(UserType::getAdmin()));
+        $this->actingAs($this->getUser(UserType::admin()));
         $buildings = Building::orderBy('number_of_offices', 'asc')->limit(30)->get();
 
         foreach ($buildings as $building){
@@ -375,7 +375,7 @@ class BuildingTest extends TestCase
     }
 
     public function testDestroyForItTeamMember(){
-        $this->actingAs($this->getUser(UserType::getItTeamMember()));
+        $this->actingAs($this->getUser(UserType::itTeam()));
         $buildings = Building::orderBy('number_of_offices', 'asc')->limit(30)->get();
 
         foreach ($buildings as $building){

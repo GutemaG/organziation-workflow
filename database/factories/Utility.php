@@ -33,9 +33,9 @@ class Utility
      */
     public static function getUserType(){
         $userTypes = [
-            UserType::getItTeamMember(),
-            UserType::getReception(),
-            UserType::getStaff()
+            UserType::itTeam(),
+            UserType::reception(),
+            UserType::staff()
         ];
 
         return $userTypes[array_rand($userTypes)];

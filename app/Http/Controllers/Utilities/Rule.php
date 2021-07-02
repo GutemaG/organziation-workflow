@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Controllers\Utilities;
-
 
 use Illuminate\Validation\Rule as BaseRule;
 use Illuminate\Validation\Rules;
@@ -20,7 +18,7 @@ class Rule
             'user_name' => 'required|string|max:255|unique:users',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'type' => ['required', 'string', BaseRule::in(UserType::getItTeamMember(), UserType::getStaff(), UserType::getReception())],
+            'type' => ['required', 'string', BaseRule::in(UserType::itTeam(), UserType::staff(), UserType::reception())],
             'email' => 'nullable|string|email|max:255|unique:users',
             'phone' => 'nullable|string|max:255|unique:users',
             'password' => ['required', 'confirmed', 'string', Rules\Password::defaults()],

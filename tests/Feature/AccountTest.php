@@ -81,7 +81,7 @@ class AccountTest extends TestCase
     }
 
     private function restoreAdmin(){
-        User::where('type', UserType::getAdmin())->first()->update([
+        User::where('type', UserType::admin())->first()->update([
             'user_name' => 'admin',
             'first_name' =>'birhanu',
             'last_name' => 'Gudisa',

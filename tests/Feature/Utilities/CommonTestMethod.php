@@ -85,13 +85,13 @@ class CommonTestMethod extends TestCase
     }
 
     public static function testStaffCanAccessUsers($url, $modelName){
-       self::assertAllUrlsForStaffAndReceptionUsers(UserType::getStaff(), $url);
+       self::assertAllUrlsForStaffAndReceptionUsers(UserType::staff(), $url);
        self::printSuccessMessage('authenticated staff can access any buildings or can store ' . $modelName);
 
     }
 
     public static function testReceptionCanAccessUsers($url, $modelName){
-       self::assertAllUrlsForStaffAndReceptionUsers(UserType::getReception(), $url);
+       self::assertAllUrlsForStaffAndReceptionUsers(UserType::reception(), $url);
        self::printSuccessMessage('authenticated reception can access any buildings or can store ' . $modelName);
     }
 }
