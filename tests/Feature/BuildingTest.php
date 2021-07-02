@@ -136,7 +136,7 @@ class BuildingTest extends TestCase
         $response = $this->post('/api/buildings', $building);
         $this->assertPostResponse($response, $building);
 
-        foreach (Fields::allCombinationOfFields('building') as $fields) {
+        foreach (Fields::allCombinationOfFields(Building::class) as $fields) {
             $building = FakeDataGenerator::buildingDataOnly($fields);
             $response = $this->post('/api/buildings', $building);
             $fieldsMap = collect($fields)->map(function ($item, $key) {
@@ -243,7 +243,7 @@ class BuildingTest extends TestCase
 
         foreach ($buildings as $building){
             $this->updateWithInvalidValues($building, UserType::admin());
-            $this->updateValidFieldsAndValues($building, UserType::admin());
+            $this->updateWithValidValues($building, UserType::admin());
         }
         $this->printSuccessMessage('update building with invalid  and valid values; by logging with admin');
     }
@@ -252,14 +252,14 @@ class BuildingTest extends TestCase
         $buildings = Building::inRandomOrder()->limit(20)->get();
 
         foreach ($buildings as $building){
-            $this->updateWithInvalidValues($building, UserType::admin());
-            $this->updateValidFieldsAndValues($building, UserType::admin());
+            $this->updateWithInvalidValues($building, UserType::itTeam());
+            $this->updateWithValidValues($building, UserType::itTeam());
         }
         $this->printSuccessMessage('update building with invalid  and valid values; by logging with it team member');
     }
 
 
-    private function updateValidFieldsAndValues($building, $type){
+    private function updateWithValidValues($building, $type){
         if($type == UserType::admin())
             $this->actingAs($this->getUser(UserType::admin()));
         else

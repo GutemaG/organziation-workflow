@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Utilities\Fields;
-use App\Http\Controllers\Utilities\Rule;
-use App\Models\Building;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
+use App\Http\Controllers\Utilities\Fields;
+use App\Http\Controllers\Utilities\Rule;
+use App\Models\Building;
+
 class BuildingController extends Controller
 {
+    /**
+     * Check if user is authenticated if not redirect him/her to login page.
+     *
+     * BuildingController constructor.
+     */
     public function __construct()
     {
         if($this->middleware(function ($request, $next){
@@ -21,6 +27,12 @@ class BuildingController extends Controller
         }));
     }
 
+    /**
+     * check if authenticated user is admin or staff.
+     * if not return with unauthorized error message.
+     *
+     * @return \Illuminate\Http\JsonResponse|null
+     */
     private function isAuthorized(){
         if (! Gate::any(['is-admin', 'is-it-team-member']))
             return response()->json([
@@ -31,6 +43,11 @@ class BuildingController extends Controller
             return null;
     }
 
+    /**
+     * return a listing of the buildings.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         $result = $this->isAuthorized();
@@ -45,6 +62,12 @@ class BuildingController extends Controller
         }
     }
 
+    /**
+     * Store a newly created building in storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request)
     {
         $result = $this->isAuthorized();
@@ -85,6 +108,12 @@ class BuildingController extends Controller
         }
     }
 
+    /**
+     * Display the specified building.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show($id)
     {
         $result = $this->isAuthorized();
@@ -107,6 +136,13 @@ class BuildingController extends Controller
         }
     }
 
+    /**
+     * Update the specified building in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, $id)
     {
         $result = $this->isAuthorized();
@@ -123,7 +159,7 @@ class BuildingController extends Controller
                 ]);
             else{
                 $fields = $this->getUpdateFields($request, $building);
-                $validator = Validator::make($fields, Rule::only('building', array_keys($fields)));
+                $validator = Validator::make($fields, Rule::only(Building::class, array_keys($fields)));
                 if ($validator->fails()){
                     return response()->json([
                         'status' => 400,
@@ -155,6 +191,13 @@ class BuildingController extends Controller
         }
     }
 
+    /**
+     * Return only updated fields associated with their values.
+     *
+     * @param Request $request
+     * @param Building $building
+     * @return array
+     */
     private  function getUpdateFields(Request $request, Building $building){
         $fields = [];
         foreach ($request->only(Fields::building()) as $key => $item){
@@ -164,6 +207,12 @@ class BuildingController extends Controller
         return $fields;
     }
 
+    /**
+     * soft delete the specified building from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy($id)
     {
         $result = $this->isAuthorized();

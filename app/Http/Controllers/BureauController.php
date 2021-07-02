@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Validator;
 
 class BureauController extends Controller
 {
+    /**
+     * Check if user is authenticated if not redirect him/her to login page.
+     *
+     * BureauController constructor.
+     */
     public function __construct()
     {
         if($this->middleware(function ($request, $next){
@@ -22,6 +27,12 @@ class BureauController extends Controller
         }));
     }
 
+    /**
+     * check if authenticated user is admin or staff.
+     * if not return with unauthorized error message.
+     *
+     * @return \Illuminate\Http\JsonResponse|null
+     */
     private function isAuthorized(){
         if (! Gate::any(['is-admin', 'is-it-team-member']))
             return response()->json([
@@ -32,6 +43,11 @@ class BureauController extends Controller
             return null;
     }
 
+    /**
+     * return a listing of the bureaus.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index() {
         $result = $this->isAuthorized();
         if (! empty($result))
