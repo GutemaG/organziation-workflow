@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 use App\Http\Controllers\Utilities\Fields;
-use App\Http\Controllers\Utilities\Validation;
+use App\Http\Controllers\Utilities\Rule;
 use App\Models\User;
 
 class UserControllerFunctionality
@@ -54,7 +54,7 @@ class UserControllerFunctionality
      */
     public static function store(Request $request, $userType)
     {
-        $fields = $request->only(Fields::$user_fields);
+        $fields = $request->only(Fields::user());
         $validator = UserControllerFunctionality::validator($fields);
 
         if($validator->fails()){
@@ -67,14 +67,14 @@ class UserControllerFunctionality
         if($userType == UserType::getAdmin() && $fields['type'] == UserType::getAdmin())
             return [
               'status' => 400,
-              'error' => ['type' => 'You can\'t register user with admin privilege.']
+              'error' => ['type' => ['You can\'t register user with admin privilege.']]
             ];
         elseif ($userType == UserType::getItTeamMember() &&
             (in_array($fields['type'], [UserType::getItTeamMember(), UserType::getAdmin()]))
         )
             return [
                 'status' => 400,
-                'error' => ['type' => 'You can\'t register user with admin or It team member privilege.']
+                'error' => ['type' => ['You can\'t register user with admin or It team member privilege.']]
             ];
 
         $user = UserControllerFunctionality::save_user($validator->validated());
@@ -100,8 +100,8 @@ class UserControllerFunctionality
      */
     private static function validator($data, $update=false){
         if($update)
-            return Validator::make($data, Validation::update_rules(array_keys($data)));
-        return Validator::make($data, Validation::rules());
+            return Validator::make($data, Rule::update('user', array_keys($data)));
+        return Validator::make($data, Rule::user());
     }
 
 
@@ -154,7 +154,7 @@ class UserControllerFunctionality
         if(empty($user))
             return [
                 'status' => 404,
-                'error' => 'user doesn\'t exist',
+                'error' => 'Bad request.',
             ];
         return [
             'status' => 200,
@@ -173,7 +173,7 @@ class UserControllerFunctionality
      */
     private static function getUpdateFields(Request $request, User $user){
         $fields = [];
-        foreach ($request->only(Fields::all()) as $key => $item){
+        foreach ($request->only(Fields::except(['password', 'password_confirmation'])) as $key => $item){
             if($request->get($key) != $user->getAttributeValue($key))
                 $fields[$key] = $item;
         }
@@ -186,12 +186,12 @@ class UserControllerFunctionality
             if($user->type == UserType::getAdmin())
                 return [
                     'status' => 400,
-                    'error' => ['type' => 'You can\'t update user with admin privilege.']
+                    'error' => ['type' => ['You can\'t update user with admin privilege.']]
                 ];
             elseif($newUserType == UserType::getAdmin())
                 return [
                     'status' => 400,
-                    'error' => ['type' => 'You can\'t assassin user with admin privilege.']
+                    'error' => ['type' => ['You can\'t assassin user with admin privilege.']]
                 ];
             else
                 return null;
@@ -200,12 +200,12 @@ class UserControllerFunctionality
             if (in_array($user->type, [UserType::getItTeamMember(), UserType::getAdmin()]))
                 return [
                     'status' => 400,
-                    'error' => ['type' => 'You can\'t update user with admin or It team member privilege.']
+                    'error' => ['type' => ['You can\'t update user with admin or It team member privilege.']]
                 ];
             elseif(in_array($newUserType, [UserType::getItTeamMember(), UserType::getAdmin()]))
                 return [
                     'status' => 400,
-                    'error' => ['type' => 'You can\'t assassin user with admin or It team member privilege.']
+                    'error' => ['type' => ['You can\'t assassin user with admin or It team member privilege.']]
                 ];
             else
                 return null;
@@ -226,11 +226,11 @@ class UserControllerFunctionality
      */
     public static function update(Request $request, $id, $userType)
     {
-        $user = User::find($id);
+        $user = User::where('id', $id)->where('type', '!=', UserType::getAdmin())->first();
         if(empty($user))
             return [
-                'status' => 404,
-                'error' => 'User doesn\'t exist.',
+                'status' => 400,
+                'error' => 'Bad request.',
             ];
 
         $canBeUpdatedResult = UserControllerFunctionality::checkUserPrivilege($user, $userType, $request->get('type'));
@@ -253,7 +253,7 @@ class UserControllerFunctionality
             ];
 
         return [
-            'status' => 201,
+            'status' => 200,
             'user' => User::where('id', $user->id)
                 ->first()->makeHidden(['updated_at']),
         ];
@@ -271,8 +271,8 @@ class UserControllerFunctionality
         $user = User::where('id', $id)->where('type', '!=', UserType::getAdmin())->first();
         if(empty($user))
             return [
-                'status' => 404,
-                'error' => 'User doesn\'t exist.',
+                'status' => 400,
+                'error' => 'Bad request.',
             ];
 
         if($userType == UserType::getAdmin() && $user->type == UserType::getAdmin())
