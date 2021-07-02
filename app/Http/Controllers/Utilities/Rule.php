@@ -9,7 +9,7 @@ use Illuminate\Validation\Rules;
 class Rule
 {
     /**
-     * return all necessary rules for validation user registration
+     * return all necessary rules for validating user fields.
      *
      * @return array
      */
@@ -18,13 +18,18 @@ class Rule
             'user_name' => 'required|string|max:255|unique:users',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'type' => ['required', 'string', BaseRule::in(UserType::itTeam(), UserType::staff(), UserType::reception())],
+            'type' => ['required', 'string', BaseRule::in(UserType::exceptAdmin())],
             'email' => 'nullable|string|email|max:255|unique:users',
             'phone' => 'nullable|string|max:255|unique:users',
             'password' => ['required', 'confirmed', 'string', Rules\Password::defaults()],
         ];
     }
 
+    /**
+     * return all necessary rules for validating building fields.
+     *
+     * @return string[]
+     */
     public static function building(){
         return [
             'name' => 'nullable|string|max:255|unique:buildings',
@@ -34,6 +39,11 @@ class Rule
         ];
     }
 
+    /**
+     * return all necessary rules for validating bureau fields.
+     *
+     * @return array
+     */
     public static function bureau() {
         return [
             'name' => 'required|string|max:255|unique:bureaus',
@@ -45,8 +55,15 @@ class Rule
         ];
     }
 
-    public static function get($table) {
-        switch ($table){
+    /**
+     * return all necessary rules for validating fields of requested model.
+     * But you have to specify model name in small letter.
+     *
+     * @param $modelName
+     * @return array|string[]|null
+     */
+    public static function get($modelName) {
+        switch ($modelName){
             case 'user':
                 return self::user();
                 break;
@@ -61,9 +78,16 @@ class Rule
         }
     }
 
-
-    public static function update($table, $fields=[]){
-        $rules = self::get($table);
+    /**
+     * return only specified fields rules of requested model.
+     * But you have to specify model name in small letter.
+     *
+     * @param $modelName
+     * @param array $fields
+     * @return array
+     */
+    public static function only($modelName, array $fields){
+        $rules = self::get($modelName);
         return collect(collect($rules))->only($fields)->all();
     }
 }

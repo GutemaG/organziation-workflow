@@ -123,7 +123,7 @@ class BuildingController extends Controller
                 ]);
             else{
                 $fields = $this->getUpdateFields($request, $building);
-                $validator = Validator::make($fields, Rule::update('building', array_keys($fields)));
+                $validator = Validator::make($fields, Rule::only('building', array_keys($fields)));
                 if ($validator->fails()){
                     return response()->json([
                         'status' => 400,

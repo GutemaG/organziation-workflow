@@ -100,7 +100,7 @@ class UserControllerFunctionality
      */
     private static function validator($data, $update=false){
         if($update)
-            return Validator::make($data, Rule::update('user', array_keys($data)));
+            return Validator::make($data, Rule::only('user', array_keys($data)));
         return Validator::make($data, Rule::user());
     }
 

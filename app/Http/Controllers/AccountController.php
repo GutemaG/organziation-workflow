@@ -22,7 +22,7 @@ class AccountController extends Controller
 
     public function update(Request $request){User::withTrashed()->restore();
         $fields =  self::getUpdateFields($request);
-        $validator = Validator::make($fields, Rule::update(array_keys($fields)));
+        $validator = Validator::make($fields, Rule::only(array_keys($fields)));
         if ($validator->fails()){
             return [
                 'status' => 400,

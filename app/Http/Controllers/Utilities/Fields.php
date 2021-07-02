@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Utilities;
 
 use Illuminate\Support\Facades\Hash;
 
+
 class Fields
 {
     /**
@@ -78,7 +79,7 @@ class Fields
     }
 
     /**
-     * Getter method for any of the three variable ($user, $building and $bureau) variable.
+     * Getter method of fields for the requested model.
      * But you have to specify model name in small letter.
      *
      * @param $modelName

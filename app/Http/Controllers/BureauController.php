@@ -117,7 +117,7 @@ class BureauController extends Controller
                 ]);
             else {
                $data = $this->getUpdateData($request, $bureau);
-               $validator = Validator::make($data, Rule::update('bureau', array_keys($data)));
+               $validator = Validator::make($data, Rule::only('bureau', array_keys($data)));
                if ($validator->fails())
                    return response()->json([
                        'status' => 400,

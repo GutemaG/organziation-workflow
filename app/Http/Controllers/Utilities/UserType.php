@@ -56,10 +56,52 @@ class UserType
         return UserType::$reception;
     }
 
+    /**
+     * Get all user type.
+     *
+     * @return array
+     */
     public static function all(){
         return [
             self::$admin,
             self::$itTeam,
+            self::$staff,
+            self::$reception,
+        ];
+    }
+
+    /**
+     * Get all user type except admin.
+     *
+     * @return array
+     */
+    public static function exceptAdmin(){
+        return [
+            self::$itTeam,
+            self::$staff,
+            self::$reception,
+        ];
+    }
+
+    /**
+     * Get only major user type (admin and staff).
+     *
+     * @return array
+     */
+    public static function majors(){
+        return [
+            self::$admin,
+            self::$itTeam,
+        ];
+    }
+
+    /**
+     * Get only minor user type (staff and reception).
+     *
+     * @return array
+     */
+    public static function minors(){
+        return [
             self::$staff,
             self::$reception,
         ];
