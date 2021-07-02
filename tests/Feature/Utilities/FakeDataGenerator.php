@@ -5,37 +5,45 @@ namespace Tests\Feature\Utilities;
 
 
 use App\Models\Building;
+use App\Models\Bureau;
+use App\Models\User;
 use Database\Factories\Utility;
 use Faker\Factory;
-use Illuminate\Support\Str;
 
 class FakeDataGenerator
 {
     public static function userData(){
         $faker = Factory::create();
-        return [
-            'user_name' => $faker->unique()->name(),
-            'first_name' => $faker->name(),
-            'last_name' => $faker->name(),
+        $data = [
+            'user_name' => $faker->unique()->userName,
+            'first_name' => $faker->firstName,
+            'last_name' => $faker->lastName,
             'email' => $faker->unique()->safeEmail(),
             'phone' => Utility::getPhoneNumber(),
             'type' => Utility::getUserType(),
             'password' => '12345678',
             'password_confirmation' => '12345678',
         ];
+
+        while (! empty(User::where('user_name', $data['user_name'])->orWhere('email', $data['email'])->first())) {
+            $data['user_name'] = $faker->unique()->userName;
+            $data['email'] = $faker->unique()->safeEmail();
+        }
+        return $data;
     }
 
     public static function buildingData(){
         $faker = Factory::create();
         $data = [
+            'name' => implode($faker->unique()->words(rand(2,6))),
             'number' => $faker->unique()->buildingNumber,
             'number_of_offices' => $faker->numberBetween(100, 900),
+            'description' => $faker->paragraph(rand(6, 10)),
         ];
-        while (true){
-            if (empty(Building::where('number', $data['number'])->first()))
-                break;
-            else
-                $data['number'] = $faker->unique()->buildingNumber;
+
+        while (! empty(Building::where('name', $data['name'])->orWhere('number', $data['number'])->first())) {
+            $data['name'] = implode($faker->unique()->words(rand(2,6)));
+            $data['number'] = $faker->unique()->buildingNumber;
         }
         return $data;
     }
@@ -46,18 +54,19 @@ class FakeDataGenerator
         $latitude = $faker->latitude();
         $longitude = $faker->longitude();
         $data = Utility::getBuildingNumberAndOfficeNumber();
-        $buildingNumber = $data['building_number'];
-        $officeNumber = $data['office_number'];
-        $sentences = $faker->sentences(rand(5, 16));
-        $paragraph = implode($sentences);
-        return [
+        $data = [
             'name' => $faker->unique()->name(),
-            'description' => $paragraph,
+            'description' => $faker->paragraph(rand(5, 16)),
             'accountable_to' => Utility::getBureauId(),
             'location' => Utility::getLocation($latitude, $longitude),
-            'building_number' => $buildingNumber,
-            'office_number' => "$officeNumber",
+            'building_number' => $data['building_number'],
+            'office_number' => (string)$data['office_number'],
         ];
+
+        while (! empty(Bureau::where('name', $data['name'])->first())) {
+            $data['name'] = $faker->unique()->name();
+        }
+        return $data;
     }
 
     public static function get($table) {

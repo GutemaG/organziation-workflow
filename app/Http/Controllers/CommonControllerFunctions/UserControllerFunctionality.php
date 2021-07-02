@@ -26,11 +26,11 @@ class UserControllerFunctionality
      */
     public static function index($userType)
     {
-        if($userType == UserType::getAdmin())
-            $users = User::where('type', '!=', UserType::getAdmin())
+        if($userType == UserType::admin())
+            $users = User::where('type', '!=', UserType::admin())
                 ->orderBy('user_name', 'asc')->get();
-        elseif ($userType == UserType::getItTeamMember())
-            $users = User::whereIn('type', [UserType::getReception(), UserType::getStaff()])
+        elseif ($userType == UserType::itTeam())
+            $users = User::whereIn('type', [UserType::reception(), UserType::staff()])
                 ->orderBy('user_name', 'asc')->get();
         else
             return [
@@ -64,13 +64,13 @@ class UserControllerFunctionality
             ];
         }
 
-        if($userType == UserType::getAdmin() && $fields['type'] == UserType::getAdmin())
+        if($userType == UserType::admin() && $fields['type'] == UserType::admin())
             return [
               'status' => 400,
               'error' => ['type' => ['You can\'t register user with admin privilege.']]
             ];
-        elseif ($userType == UserType::getItTeamMember() &&
-            (in_array($fields['type'], [UserType::getItTeamMember(), UserType::getAdmin()]))
+        elseif ($userType == UserType::itTeam() &&
+            (in_array($fields['type'], [UserType::itTeam(), UserType::admin()]))
         )
             return [
                 'status' => 400,
@@ -100,7 +100,7 @@ class UserControllerFunctionality
      */
     private static function validator($data, $update=false){
         if($update)
-            return Validator::make($data, Rule::update('user', array_keys($data)));
+            return Validator::make($data, Rule::only('user', array_keys($data)));
         return Validator::make($data, Rule::user());
     }
 
@@ -116,10 +116,10 @@ class UserControllerFunctionality
         try{
             DB::beginTransaction();
             if($user){
-                $user->update(Fields::filter_user_fields($validator));
+                $user->update(Fields::filterUserFields($validator));
             }
             else{
-                $user = User::create(Fields::filter_user_fields($validator));
+                $user = User::create(Fields::filterUserFields($validator));
             }
             DB::commit();
             return $user;
@@ -140,10 +140,10 @@ class UserControllerFunctionality
      */
     public static function show($id, $userType)
     {
-        if($userType == UserType::getAdmin())
-            $user = User::where('id', $id)->where('type', '!=', UserType::getAdmin())->first();
-        elseif ($userType == UserType::getItTeamMember())
-            $user = User::where('id', $id)->whereIn('type', [UserType::getStaff(), UserType::getReception()])
+        if($userType == UserType::admin())
+            $user = User::where('id', $id)->where('type', '!=', UserType::admin())->first();
+        elseif ($userType == UserType::itTeam())
+            $user = User::where('id', $id)->whereIn('type', [UserType::staff(), UserType::reception()])
                 ->first();
         else
             return [
@@ -182,13 +182,13 @@ class UserControllerFunctionality
 
 
     private static function checkUserPrivilege(User $user, $userType, $newUserType){
-        if($userType == UserType::getAdmin())
-            if($user->type == UserType::getAdmin())
+        if($userType == UserType::admin())
+            if($user->type == UserType::admin())
                 return [
                     'status' => 400,
                     'error' => ['type' => ['You can\'t update user with admin privilege.']]
                 ];
-            elseif($newUserType == UserType::getAdmin())
+            elseif($newUserType == UserType::admin())
                 return [
                     'status' => 400,
                     'error' => ['type' => ['You can\'t assassin user with admin privilege.']]
@@ -196,13 +196,13 @@ class UserControllerFunctionality
             else
                 return null;
 
-        elseif ($userType == UserType::getItTeamMember())
-            if (in_array($user->type, [UserType::getItTeamMember(), UserType::getAdmin()]))
+        elseif ($userType == UserType::itTeam())
+            if (in_array($user->type, [UserType::itTeam(), UserType::admin()]))
                 return [
                     'status' => 400,
                     'error' => ['type' => ['You can\'t update user with admin or It team member privilege.']]
                 ];
-            elseif(in_array($newUserType, [UserType::getItTeamMember(), UserType::getAdmin()]))
+            elseif(in_array($newUserType, [UserType::itTeam(), UserType::admin()]))
                 return [
                     'status' => 400,
                     'error' => ['type' => ['You can\'t assassin user with admin or It team member privilege.']]
@@ -226,7 +226,7 @@ class UserControllerFunctionality
      */
     public static function update(Request $request, $id, $userType)
     {
-        $user = User::where('id', $id)->where('type', '!=', UserType::getAdmin())->first();
+        $user = User::where('id', $id)->where('type', '!=', UserType::admin())->first();
         if(empty($user))
             return [
                 'status' => 400,
@@ -268,20 +268,20 @@ class UserControllerFunctionality
      */
     public static function destroy($id, $userType)
     {
-        $user = User::where('id', $id)->where('type', '!=', UserType::getAdmin())->first();
+        $user = User::where('id', $id)->where('type', '!=', UserType::admin())->first();
         if(empty($user))
             return [
                 'status' => 400,
                 'error' => 'Bad request.',
             ];
 
-        if($userType == UserType::getAdmin() && $user->type == UserType::getAdmin())
+        if($userType == UserType::admin() && $user->type == UserType::admin())
             return [
                 'status' => 400,
                 'error' => 'Bad request.',
             ];
-        elseif ($userType == UserType::getItTeamMember() &&
-            in_array($user->type, [UserType::getItTeamMember(), UserType::getAdmin()])
+        elseif ($userType == UserType::itTeam() &&
+            in_array($user->type, [UserType::itTeam(), UserType::admin()])
         )
             return [
                 'status' => 400,

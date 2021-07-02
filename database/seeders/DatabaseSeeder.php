@@ -51,10 +51,11 @@ class DatabaseSeeder extends Seeder
 =======
          ]);
 
-         User::factory(500)->create();
+         User::factory(100)->create();
 
          Building::factory(100)->create();
 */
+
          Bureau::factory(200)->create();
 >>>>>>> master
     }

@@ -40,9 +40,9 @@ class Utility
      */
     public static function getUserType(){
         $userTypes = [
-            UserType::getItTeamMember(),
-            UserType::getReception(),
-            UserType::getStaff()
+            UserType::itTeam(),
+            UserType::reception(),
+            UserType::staff()
         ];
 
         return $userTypes[array_rand($userTypes)];
@@ -82,9 +82,7 @@ class Utility
     }
 
     public static function getBuildingNumberAndOfficeNumber() {
-        $buildings = Building::select(['number', 'number_of_offices'])->get();
-        $index = rand(1, count($buildings));
-        $building = $buildings[$index - 1];
+        $building = Building::inRandomOrder()->first();
         return [
             'building_number' => $building->number,
             'office_number' => rand(1, $building->number_of_offices),
@@ -93,16 +91,17 @@ class Utility
 
     public static function getBureauId() {
         $bureau = Bureau::inRandomOrder()->first();
+<<<<<<< HEAD
         // $index = rand(0, count($bureaus) - 1);
+=======
+>>>>>>> 6b7fba761e5fbb5d4ecf29612adc6d396aa487ff
         if (empty($bureau))
             return null;
         return $bureau->id;
     }
 
     public static function getUserId() {
-        $users = User::select('id')->get();
-        $index = rand(0, count($users) - 1);
-        return $users[$index]->id;
+        return User::inRandomOrder()->first()->id;
     }
 >>>>>>> master
 }
