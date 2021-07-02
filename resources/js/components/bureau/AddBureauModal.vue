@@ -18,32 +18,57 @@
             required
           ></b-form-input>
         </b-form-group>
-        <b-form-group id="building" label="Building" label-for="building">
+        <b-form-group id="building-number" label="Building" label-for="building-input">
           <b-form-select
-            v-model="form.building"
+            v-model="form.building_number"
             :options="building_numbers"
-            id="input-building"
+            id="building-input"
           >
             <b-form-select-option value="" disabled
               >Selecte Bureau Building Number</b-form-select-option
             >
           </b-form-select>
         </b-form-group>
-        <b-form-group
-          id="office-number"
-          label="Office Number"
-          label-for="input-office-number"
-        >
-          <b-form-select
+        <b-form-group label="Office Number" label-for="office-number-input">
+          <b-form-input
+            id="office-number-input"
             v-model="form.office_number"
-            :options="office_numbers"
-            id="input-office-number"
-          >
-            <b-form-select-option value="" disabled
-              >Selecte Bureau Office Number</b-form-select-option
-            >
-          </b-form-select>
+            required
+          ></b-form-input>
         </b-form-group>
+        <b-card bg-variant="light">
+          <b-form-group
+            label-cols-lg="3"
+            label="Location"
+            label-size="lg"
+            label-class="font-weight-bold pt-0"
+            class="mb-0"
+          >
+            <b-form-group
+              label="Latitude:"
+              label-for="latitude-input"
+              label-cols-sm="3"
+              label-align-sm="right"
+            >
+              <b-form-input
+                v-model="locationObj.latitude"
+                id="latitude-input"
+              ></b-form-input>
+            </b-form-group>
+
+            <b-form-group
+              label="Longitude:"
+              label-for="longitude-input"
+              label-cols-sm="3"
+              label-align-sm="right"
+            >
+              <b-form-input
+                v-model="locationObj.longitude"
+                id="longtitude-input"
+              ></b-form-input>
+            </b-form-group>
+          </b-form-group>
+        </b-card>
         <b-form-group
           id="description"
           label="Description"
@@ -64,30 +89,28 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
+       locationObj: {
+          latitude: "",
+          longitude: "",
+        },
       form: {
+        building_number:"",
         name: "",
-        building: "",
         office_number: "",
         description: "",
+        // location:"" ,
       },
       submitEnabled: true,
-      buildings: [
-        { value: "B-100", text: "B-100" },
-        { value: "B-361", text: "B-361" },
-        { value: "B-529", text: "B-529" },
-      ],
-      office_numbers: [
-        { value: "1", text: "1" },
-        { value: "2", text: "2" },
-        { value: "4", text: "4" },
-      ],
     };
   },
-  computed:{
-    ...mapGetters(['building_numbers']),
+  computed: {
+    ...mapGetters(["building_numbers"]),
+  },
+  created() {
+    this.fetchBuildings();
   },
   methods: {
-    ...mapActions(["addBureau"]),
+    ...mapActions(["addBureau", "fetchBuildings"]),
     checkFormValidity() {
       const valid = this.$refs.form.checkValidity();
       this.nameState = valid;
@@ -95,8 +118,6 @@ export default {
     },
     resetModal() {
       (this.form.name = ""),
-        (this.form.building = ""),
-        (this.form.office_number = ""),
         (this.form.description = "");
     },
     handleOk() {
@@ -107,27 +128,11 @@ export default {
     handleSubmit() {
       const data = {
         ...this.form,
+        location:JSON.stringify(this.locationObj)
       };
       this.addBureau(data);
       this.$bvModal.hide("add-bureau-modal");
     },
   },
 };
-/*
-        permission_options: [
-                { text: "Delete FAQ", value: "delete_FAQ" },
-                { text: "Update FAQ", value: "update_FAQ" },
-                { text: "Reply Request", value: "reply_request" },
-                { text: "Add request to FAQ", value: "add_request_to_FAQ" },
-                { text: "Delete Request", value: "delete_request" },
-                { text: "Create Bureau", value: "create_bureau" },
-                { text: "Update Bureau", value: "update_bureau" },
-                { text: "Delete Bureau", value: "delete_bureau" },
-                { text: "Create Affair", value: "create_affair" },
-                { text: "Update Affair", value: "update_affair" },
-                { text: "Delete Affair", value: "delete_affair" },
-
-            ],
-            perm: ['delete_FAQ', 'update_FAQ', 'reply_request', 'add_request_to_FAQ', 'delete_request', 'create_bureau', 'update_bureau', 'delete_bureau', 'create_affair', 'update_affair', 'delete_affair'],
-*/
 </script>

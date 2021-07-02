@@ -59,6 +59,10 @@ class Utility
 
     public static function getBureauId() {
         $bureau = Bureau::inRandomOrder()->first();
+<<<<<<< HEAD
+        // $index = rand(0, count($bureaus) - 1);
+=======
+>>>>>>> 6b7fba761e5fbb5d4ecf29612adc6d396aa487ff
         if (empty($bureau))
             return null;
         return $bureau->id;

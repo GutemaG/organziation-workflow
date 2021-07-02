@@ -19,7 +19,7 @@
       <b-form-group label="Building Number" label-for="building-number-input">
         <b-form-input
           id="building-number-input"
-          v-model="selectedBuilding.building_number"
+          v-model="selectedBuilding.number"
           required
           placeholder="Building number 529, B-529"
         ></b-form-input>
@@ -68,27 +68,18 @@ export default {
   },
   data() {
     return {
-      buildings: [
-        { value: "B-100", text: "B-100" },
-        { value: "B-361", text: "B-361" },
-        { value: "B-529", text: "B-529" },
-      ],
-      office_numbers: [
-        { value: "1", text: "1" },
-        { value: "2", text: "2" },
-        { value: "4", text: "4" },
-      ],
+      
     };
   },
   methods: {
-    ...mapActions(["updateBureau"]),
+    ...mapActions(["updateBuilding"]),
     updateForm(event) {
       event.preventDefault();
       const data = {
         ...this.selectedBuilding,
       };
-      this.updateBureau(data);
-      this.$bvModal.hide("edit-bureau-modal");
+      this.updateBuilding(data);
+      this.$bvModal.hide("edit-building-modal");
     },
   },
 };
