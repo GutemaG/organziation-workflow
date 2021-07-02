@@ -21,14 +21,19 @@ class Error
         ],
     ];
 
+    private static $building = [
+        'number_of_offices' => ['The number of offices field is required.'],
+        'number' => ['The number field is required.']
+    ];
+
     public static function get($table) {
         switch ($table){
 //            case 'user':
 //                return self::$user;
 //                break;
-//            case 'building':
-//                return self::$building;
-//                break;
+            case 'building':
+                return self::$building;
+                break;
             case 'bureau':
                 return self::$bureau;
                 break;
