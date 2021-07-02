@@ -35,6 +35,8 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'updated_at',
+        'deleted_at',
         'remember_token',
     ];
 
@@ -47,7 +49,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+<<<<<<< HEAD
     public function affairs(){
         return $this->hasMany(Affair::class);
+=======
+    public function bureaus() {
+        return $this->hasMany(Bureau::class);
+>>>>>>> master
     }
 }

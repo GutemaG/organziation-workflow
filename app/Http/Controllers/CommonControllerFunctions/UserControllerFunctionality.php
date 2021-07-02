@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 use App\Http\Controllers\Utilities\Fields;
-use App\Http\Controllers\Utilities\Validation;
+use App\Http\Controllers\Utilities\Rule;
 use App\Models\User;
 
 class UserControllerFunctionality
@@ -54,7 +54,7 @@ class UserControllerFunctionality
      */
     public static function store(Request $request, $userType)
     {
-        $fields = $request->only(Fields::$user_fields);
+        $fields = $request->only(Fields::user());
         $validator = UserControllerFunctionality::validator($fields);
 
         if($validator->fails()){
@@ -100,8 +100,8 @@ class UserControllerFunctionality
      */
     private static function validator($data, $update=false){
         if($update)
-            return Validator::make($data, Validation::update_rules(array_keys($data)));
-        return Validator::make($data, Validation::rules());
+            return Validator::make($data, Rule::update('user', array_keys($data)));
+        return Validator::make($data, Rule::user());
     }
 
 
@@ -173,7 +173,7 @@ class UserControllerFunctionality
      */
     private static function getUpdateFields(Request $request, User $user){
         $fields = [];
-        foreach ($request->only(Fields::all()) as $key => $item){
+        foreach ($request->only(Fields::except(['password', 'password_confirmation'])) as $key => $item){
             if($request->get($key) != $user->getAttributeValue($key))
                 $fields[$key] = $item;
         }

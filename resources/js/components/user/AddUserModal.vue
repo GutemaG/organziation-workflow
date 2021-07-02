@@ -177,21 +177,4 @@ export default {
     },
   },
 };
-/*
-        permission_options: [
-                { text: "Delete FAQ", value: "delete_FAQ" },
-                { text: "Update FAQ", value: "update_FAQ" },
-                { text: "Reply Request", value: "reply_request" },
-                { text: "Add request to FAQ", value: "add_request_to_FAQ" },
-                { text: "Delete Request", value: "delete_request" },
-                { text: "Create Bureau", value: "create_bureau" },
-                { text: "Update Bureau", value: "update_bureau" },
-                { text: "Delete Bureau", value: "delete_bureau" },
-                { text: "Create Affair", value: "create_affair" },
-                { text: "Update Affair", value: "update_affair" },
-                { text: "Delete Affair", value: "delete_affair" },
-
-            ],
-            perm: ['delete_FAQ', 'update_FAQ', 'reply_request', 'add_request_to_FAQ', 'delete_request', 'create_bureau', 'update_bureau', 'delete_bureau', 'create_affair', 'update_affair', 'delete_affair'],
-*/
 </script>

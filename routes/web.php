@@ -17,6 +17,13 @@ require __DIR__.'/auth.php';
 
 Route::middleware(['auth'])->prefix('api')->group(function (){
     Route::resource('/users', \App\Http\Controllers\UserController::class);
+
+    Route::post('/account', [\App\Http\Controllers\AccountController::class, 'update']);
+
+    Route::resource('buildings', \App\Http\Controllers\BuildingController::class);
+
+    Route::resource('bureaus', \App\Http\Controllers\BureauController::class);
+
 });
 Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
 Route::post('/affairs', '\App\Http\Controllers\AffairController@storej');
