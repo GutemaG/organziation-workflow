@@ -50,9 +50,7 @@ class Utility
     }
 
     public static function getBuildingNumberAndOfficeNumber() {
-        $buildings = Building::select(['number', 'number_of_offices'])->get();
-        $index = rand(1, count($buildings));
-        $building = $buildings[$index - 1];
+        $building = Building::inRandomOrder()->first();
         return [
             'building_number' => $building->number,
             'office_number' => rand(1, $building->number_of_offices),

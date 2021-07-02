@@ -61,6 +61,12 @@ class BureauController extends Controller
         }
     }
 
+    /**
+     * Store a newly created bureau in storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request) {
         $result = $this->isAuthorized();
         if (! empty($result))
@@ -97,6 +103,21 @@ class BureauController extends Controller
         }
     }
 
+    private function badRequestMessage() {
+        return [
+            'status' => 400,
+            'error' =>[
+                'error' => ['Bad request.']
+            ]
+        ];
+    }
+
+    /**
+     * Display the specified bureau.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show($id) {
         $result = $this->isAuthorized();
         if (! empty($result))
@@ -104,12 +125,7 @@ class BureauController extends Controller
         else {
             $bureau = Bureau::find($id);
             if (empty($bureau))
-                return response()->json([
-                    'status' => 400,
-                    'error' =>[
-                        'error' => ['Bureau doesn\'t exist.']
-                    ]
-                ]);
+                return response()->json($this->badRequestMessage());
             else
                 return response()->json([
                     'status' => 200,
@@ -118,6 +134,13 @@ class BureauController extends Controller
         }
     }
 
+    /**
+     * Update the specified bureau in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, $id) {
         $result = $this->isAuthorized();
         if (! empty($result))
@@ -125,15 +148,10 @@ class BureauController extends Controller
         else {
             $bureau = Bureau::find($id);
             if (empty($bureau))
-                return response()->json([
-                    'status' => 400,
-                    'error' =>[
-                        'error' => ['Bad request.']
-                    ]
-                ]);
+                return response()->json($this->badRequestMessage());
             else {
                $data = $this->getUpdateData($request, $bureau);
-               $validator = Validator::make($data, Rule::only('bureau', array_keys($data)));
+               $validator = Validator::make($data, Rule::only(Bureau::class, array_keys($data)));
                if ($validator->fails())
                    return response()->json([
                        'status' => 400,
@@ -163,6 +181,13 @@ class BureauController extends Controller
         }
     }
 
+    /**
+     * Return only updated fields associated with their values.
+     *
+     * @param Request $request
+     * @param Bureau $bureau
+     * @return array
+     */
     private  function getUpdateData(Request $request, Bureau $bureau){
         $data = [];
         foreach ($request->only(Fields::bureau()) as $key => $item){
@@ -172,6 +197,12 @@ class BureauController extends Controller
         return $data;
     }
 
+    /**
+     * soft delete the specified bureau from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy($id)
     {
         $result = $this->isAuthorized();
@@ -180,12 +211,7 @@ class BureauController extends Controller
         else{
             $bureau = Bureau::find($id);
             if (empty($bureau))
-                return response()->json([
-                    'status' => 400,
-                    'error' =>[
-                        'error' => ['Bureau doesn\'t exist.']
-                    ]
-                ]);
+                return response()->json($this->badRequestMessage());
             else{
                 $bureau->delete();
                 return response()->json([

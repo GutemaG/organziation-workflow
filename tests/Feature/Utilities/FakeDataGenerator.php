@@ -60,7 +60,7 @@ class FakeDataGenerator
             'accountable_to' => Utility::getBureauId(),
             'location' => Utility::getLocation($latitude, $longitude),
             'building_number' => $data['building_number'],
-            'office_number' => $data['office_number'],
+            'office_number' => (string)$data['office_number'],
         ];
 
         while (! empty(Bureau::where('name', $data['name'])->first())) {

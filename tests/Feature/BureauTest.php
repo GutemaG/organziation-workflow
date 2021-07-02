@@ -132,18 +132,18 @@ class BureauTest extends TestCase
         $response = $this->post($this->url, $bureau);
         $this->assertPostResponse($response, $bureau, $user->id);
 
-        foreach (Fields::allCombinationOfFields('bureau') as $fields) {
+        foreach (Fields::allCombinationOfFields(Bureau::class) as $fields) {
             $data = FakeDataGenerator::only('bureau', $fields);
             $response = $this->post($this->url, $data);
             $fieldsMap = collect($fields)->map(function ($item, $key) {
                 return [$item => $item];
             })->collapse();
 
-            if (collect($fieldsMap)->has(Fields::except('bureau', ['location', 'accountable_to']))) {
+            if (collect($fieldsMap)->has(Fields::except(Bureau::class, ['location', 'accountable_to']))) {
                 $this->assertPostResponse($response, $data, $user->id);
             }
             else{
-                $error = Error::only('bureau', Fields::except('bureau', $fields));
+                $error = Error::only('bureau', Fields::except(Bureau::class, $fields));
                 $response->assertJson([
                     'status' => 400,
                     'error' => $error,
@@ -161,18 +161,18 @@ class BureauTest extends TestCase
         $response = $this->post($this->url, $bureau);
         $this->assertPostResponse($response, $bureau, $user->id);
 
-        foreach (Fields::allCombinationOfFields('bureau') as $fields) {
+        foreach (Fields::allCombinationOfFields(Bureau::class) as $fields) {
             $data = FakeDataGenerator::only('bureau', $fields);
             $response = $this->post($this->url, $data);
             $fieldsMap = collect($fields)->map(function ($item, $key) {
                 return [$item => $item];
             })->collapse();
 
-            if (collect($fieldsMap)->has(Fields::except('bureau', ['location', 'accountable_to']))) {
+            if (collect($fieldsMap)->has(Fields::except(Bureau::class, ['location', 'accountable_to']))) {
                 $this->assertPostResponse($response, $data, $user->id);
             }
             else{
-                $error = Error::only('bureau', Fields::except('bureau', $fields));
+                $error = Error::only('bureau', Fields::except(Bureau::class, $fields));
                 $response->assertJson([
                     'status' => 400,
                     'error' => $error,
@@ -374,7 +374,7 @@ class BureauTest extends TestCase
             $response->assertJson([
                 'status' => 400,
                 'error' =>[
-                    'error' => ['Bureau doesn\'t exist.']
+                    'error' => ['Bad request.']
                 ]
             ]);
         }
@@ -414,7 +414,7 @@ class BureauTest extends TestCase
         $response->assertJson([
             'status' => 400,
             'error' =>[
-                'error' => ['Bureau doesn\'t exist.']
+                'error' => ['Bad request.']
             ]
         ]);
 
@@ -441,7 +441,7 @@ class BureauTest extends TestCase
         $response->assertJson([
             'status' => 400,
             'error' =>[
-                'error' => ['Bureau doesn\'t exist.']
+                'error' => ['Bad request.']
             ]
         ]);
 
