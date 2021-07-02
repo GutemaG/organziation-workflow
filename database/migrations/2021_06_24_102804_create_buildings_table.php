@@ -15,8 +15,10 @@ class CreateBuildingsTable extends Migration
     {
         Schema::create('buildings', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique()->nullable();
             $table->string('number')->unique();
             $table->integer('number_of_offices');
+            $table->longText('description')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

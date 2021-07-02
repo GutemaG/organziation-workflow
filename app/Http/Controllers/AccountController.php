@@ -34,7 +34,7 @@ class AccountController extends Controller
         try {
             $user = User::find(auth()->user()->getAuthIdentifier());
             DB::beginTransaction();
-            $user->update(Fields::filter_user_fields($data));
+            $user->update(Fields::filterUserFields($data));
             DB::commit();
             return response()->json([
                 'status' => 200,

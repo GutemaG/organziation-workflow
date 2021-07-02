@@ -1,18 +1,13 @@
 <?php
 
-
 namespace App\Http\Controllers\Utilities;
 
-
-use Faker\Factory;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use phpDocumentor\Reflection\Types\Self_;
 
 class Fields
 {
     /**
-     * only user data fields
+     * User model updatable fields.
      *
      * @var string[]
      */
@@ -27,13 +22,23 @@ class Fields
         'password_confirmation',
     ];
 
+    /**
+     * Building model updatable fields.
+     *
+     * @var string[]
+     */
     private static $building = [
-//        'name',
+        'name',
         'number',
         'number_of_offices',
-//        'description',
+        'description',
     ];
 
+    /**
+     * Bureau model updatable fields.
+     *
+     * @var string[]
+     */
     private static $bureau = [
         'name',
         'description',
@@ -44,6 +49,8 @@ class Fields
     ];
 
     /**
+     * Getter method for $user variable.
+     *
      * @return string[]
      */
     public static function user()
@@ -52,6 +59,8 @@ class Fields
     }
 
     /**
+     * Getter method for $building variable.
+     *
      * @return string[]
      */
     public static function building()
@@ -59,13 +68,24 @@ class Fields
         return self::$building;
     }
 
+    /**
+     * Getter method for $bureau variable.
+     *
+     * @return string[]
+     */
     public static function bureau() {
         return self::$bureau;
     }
 
-
-    public static function get($table) {
-        switch ($table){
+    /**
+     * Getter method for any of the three variable ($user, $building and $bureau) variable.
+     * But you have to specify model name in small letter.
+     *
+     * @param $modelName
+     * @return string[]|null
+     */
+    public static function get($modelName) {
+        switch ($modelName){
             case 'user':
                 return self::$user;
                 break;
@@ -80,19 +100,16 @@ class Fields
         }
     }
 
-
     /**
-     * returns all fields user fields
+     * Get except the specified fields of the requested model.
+     * But you have to specify model name in small letter.
      *
-     * @return array
+     * @param $modelName
+     * @param $fields
+     * @return array|string[]|null
      */
-    public static function all(){
-        return Fields::$user;
-    }
-
-
-    public static function except($table, $fields=[]){
-        $data = self::get($table);
+    public static function except($modelName, array $fields){
+        $data = self::get($modelName);
 
         if(empty($fields))
             return $data;
@@ -102,8 +119,16 @@ class Fields
             })->values()->all();
     }
 
-    public static function only($table, $fields=[]){
-        $data = self::get($table);
+    /**
+     * Get only the specified fields of the requested model.
+     * But you have to specify model name in small letter.
+     *
+     * @param $modelName
+     * @param $fields
+     * @return array|string[]|null
+     */
+    public static function only($modelName, array $fields){
+        $data = self::get($modelName);
 
         if(empty($fields))
             return $data;
@@ -113,8 +138,15 @@ class Fields
         })->values()->all();
     }
 
-    public static function allCombinationModelFields($table) {
-        $fields = self::get($table);
+    /**
+     * Get all combination of fields for the requested model.
+     * But you have to specify model name in small letter.
+     *
+     * @param $modelName
+     * @return array[]
+     */
+    public static function allCombinationOfFields($modelName) {
+        $fields = self::get($modelName);
         $results = array(array( ));
 
         foreach ($fields as $element)
@@ -126,15 +158,15 @@ class Fields
 
     /**
      * return mapped array that only contains user field only.
-     * which is ready to insert into or update user table
+     * which is ready to be inserted or updated into user table.
      *
      * @param array $data
      * @return array
      */
-    public static function filter_user_fields(array $data){
+    public static function filterUserFields(array $data){
         if(array_key_exists('password', $data))
             $data['password'] = Hash::make($data['password']);
-        $data = collect($data)->only(Fields::$user)->all();
+        $data = collect($data)->only(self::$user)->all();
         return $data;
     }
 

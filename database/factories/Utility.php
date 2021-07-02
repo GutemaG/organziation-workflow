@@ -60,16 +60,13 @@ class Utility
     }
 
     public static function getBureauId() {
-        $bureaus = Bureau::select('id')->get();
-        $index = rand(0, count($bureaus) - 1);
-        if (empty($bureaus))
+        $bureau = Bureau::inRandomOrder()->first();
+        if (empty($bureau))
             return null;
-        return $bureaus[$index]->id;
+        return $bureau->id;
     }
 
     public static function getUserId() {
-        $users = User::select('id')->get();
-        $index = rand(0, count($users) - 1);
-        return $users[$index]->id;
+        return User::inRandomOrder()->first()->id;
     }
 }

@@ -116,10 +116,10 @@ class UserControllerFunctionality
         try{
             DB::beginTransaction();
             if($user){
-                $user->update(Fields::filter_user_fields($validator));
+                $user->update(Fields::filterUserFields($validator));
             }
             else{
-                $user = User::create(Fields::filter_user_fields($validator));
+                $user = User::create(Fields::filterUserFields($validator));
             }
             DB::commit();
             return $user;

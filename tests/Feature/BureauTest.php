@@ -6,12 +6,9 @@ use App\Http\Controllers\Utilities\Fields;
 use App\Http\Controllers\Utilities\UserType;
 use App\Models\Bureau;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\Feature\Utilities\Error;
 use Tests\Feature\Utilities\FakeDataGenerator;
-use Tests\Feature\Utilities\Utility;
 use Tests\TestCase;
 
 class BureauTest extends TestCase
@@ -30,102 +27,102 @@ class BureauTest extends TestCase
         else
             return User::where('type', $type)->first();
     }
-//
-//    public function testUnauthenticatedUserCanAccess(){
-//        $response = $this->get($this->url);
-//        $this->checkResponseOfUnauthenticatedUser($response);
-//        $response = $this->post($this->url);
-//        $this->checkResponseOfUnauthenticatedUser($response);
-//
-//        $response = $this->get($this->url . '1/');
-//        $this->checkResponseOfUnauthenticatedUser($response);
-//
-//        $response = $this->put($this->url . '1/', []);
-//        $this->checkResponseOfUnauthenticatedUser($response);
-//
-//        $response = $this->delete($this->url . '1/');
-//        $this->checkResponseOfUnauthenticatedUser($response);
-//        $this->printSuccessMessage('unauthenticated user can access buildings or store buildings');
-//    }
-//
-//    private function checkResponseOfUnauthenticatedUser($response){
-//        $response->assertRedirect(route('login'));
-//        $response->assertStatus(302);
-//    }
-//
-//    private function assertUnauthorizedUser($response){
-//        $response->assertStatus(200);
-//        $response->assertJson([
-//            'status' => 401,
-//            'error' => 'Unauthorized.',
-//        ]);
-//    }
-//
-//    private function assertAllUrlsForStaffAndReceptionUsers($type){
-//        $this->actingAs($this->getUser($type));
-//        $response = $this->get($this->url);
-//        $this->assertUnauthorizedUser($response);
-//
-//        $response = $this->post($this->url, []);
-//        $this->assertUnauthorizedUser($response);
-//
-//        for ($i = 0; $i < 10; $i++){
-//            $bureaus = Bureau::orderBy('name', 'asc')->limit(10);
-//            foreach ($bureaus as $bureau){
-//                $response = $this->get($this->url . $bureau->id);
-//                $this->assertUnauthorizedUser($response);
-//
-//                $response = $this->put($this->url . $bureau->id, []);
-//                $this->assertUnauthorizedUser($response);
-//
-//                $response = $this->delete($this->url . $bureau->id);
-//                $this->assertUnauthorizedUser($response);
-//            }
-//        }
-//    }
-//
-//    public function testStaffCanAccessUsers(){
-//        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::getStaff());
-//        $this->printSuccessMessage('authenticated staff can access any buildings or can store buildings');
-//
-//    }
-//
-//    public function testReceptionCanAccessUsers(){
-//        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::getReception());
-//        $this->printSuccessMessage('authenticated reception can access any buildings or can store buildings');
-//    }
-//
-//    public function testIndex(){
-//        $this->indexForAdminAndItTeamMember(UserType::getAdmin());
-//        $this->printSuccessMessage('list all bureau; by logging with admin');
-//
-//        $this->indexForAdminAndItTeamMember(UserType::getItTeamMember());
-//        $this->printSuccessMessage('list all bureau; by logging with it team member');
-//    }
-//
-//    private function indexForAdminAndItTeamMember($type){
-//        $this->actingAs($this->getUser($type));
-//        $response = $this->get($this->url);
-//        $bureaus = Bureau::orderBy('name', 'asc')->get();
-//        $length = $bureaus->count();
-//        $bureau = $bureaus->first();
-//        $response->assertJson(fn (AssertableJson $json) =>
-//        $json->has('status')
-//            ->has('bureaus', $length, fn ($json) =>
-//            $json->where('id', $bureau->id)
-//                ->where('user_id', $bureau->user_id)
-//                ->where('name', $bureau->name)
-//                ->where('description', $bureau->description)
-//                ->where('location', $bureau->location)
-//                ->where('accountable_to', $bureau->accountable_to)
-//                ->where('building_number', $bureau->building_number)
-//                ->where('office_number', $bureau->office_number)
-//                ->has('created_at')
-//                ->missing('updated_at')
-//                ->missing('deleted_at')
-//            )
-//        );
-//    }
+
+    public function testUnauthenticatedUserCanAccess(){
+        $response = $this->get($this->url);
+        $this->checkResponseOfUnauthenticatedUser($response);
+        $response = $this->post($this->url);
+        $this->checkResponseOfUnauthenticatedUser($response);
+
+        $response = $this->get($this->url . '1/');
+        $this->checkResponseOfUnauthenticatedUser($response);
+
+        $response = $this->put($this->url . '1/', []);
+        $this->checkResponseOfUnauthenticatedUser($response);
+
+        $response = $this->delete($this->url . '1/');
+        $this->checkResponseOfUnauthenticatedUser($response);
+        $this->printSuccessMessage('unauthenticated user can access buildings or store buildings');
+    }
+
+    private function checkResponseOfUnauthenticatedUser($response){
+        $response->assertRedirect(route('login'));
+        $response->assertStatus(302);
+    }
+
+    private function assertUnauthorizedUser($response){
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => 401,
+            'error' => 'Unauthorized.',
+        ]);
+    }
+
+    private function assertAllUrlsForStaffAndReceptionUsers($type){
+        $this->actingAs($this->getUser($type));
+        $response = $this->get($this->url);
+        $this->assertUnauthorizedUser($response);
+
+        $response = $this->post($this->url, []);
+        $this->assertUnauthorizedUser($response);
+
+        for ($i = 0; $i < 10; $i++){
+            $bureaus = Bureau::orderBy('name', 'asc')->limit(10);
+            foreach ($bureaus as $bureau){
+                $response = $this->get($this->url . $bureau->id);
+                $this->assertUnauthorizedUser($response);
+
+                $response = $this->put($this->url . $bureau->id, []);
+                $this->assertUnauthorizedUser($response);
+
+                $response = $this->delete($this->url . $bureau->id);
+                $this->assertUnauthorizedUser($response);
+            }
+        }
+    }
+
+    public function testStaffCanAccessUsers(){
+        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::getStaff());
+        $this->printSuccessMessage('authenticated staff can access any buildings or can store buildings');
+
+    }
+
+    public function testReceptionCanAccessUsers(){
+        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::getReception());
+        $this->printSuccessMessage('authenticated reception can access any buildings or can store buildings');
+    }
+
+    public function testIndex(){
+        $this->indexForAdminAndItTeamMember(UserType::getAdmin());
+        $this->printSuccessMessage('list all bureau; by logging with admin');
+
+        $this->indexForAdminAndItTeamMember(UserType::getItTeamMember());
+        $this->printSuccessMessage('list all bureau; by logging with it team member');
+    }
+
+    private function indexForAdminAndItTeamMember($type){
+        $this->actingAs($this->getUser($type));
+        $response = $this->get($this->url);
+        $bureaus = Bureau::orderBy('name', 'asc')->get();
+        $length = $bureaus->count();
+        $bureau = $bureaus->first();
+        $response->assertJson(fn (AssertableJson $json) =>
+        $json->has('status')
+            ->has('bureaus', $length, fn ($json) =>
+            $json->where('id', $bureau->id)
+                ->where('user_id', $bureau->user_id)
+                ->where('name', $bureau->name)
+                ->where('description', $bureau->description)
+                ->where('location', $bureau->location)
+                ->where('accountable_to', $bureau->accountable_to)
+                ->where('building_number', $bureau->building_number)
+                ->where('office_number', $bureau->office_number)
+                ->has('created_at')
+                ->missing('updated_at')
+                ->missing('deleted_at')
+            )
+        );
+    }
 
     public function testPostForAdmin(){
         $user = $this->getUser(UserType::getAdmin());
@@ -135,7 +132,7 @@ class BureauTest extends TestCase
         $response = $this->post($this->url, $bureau);
         $this->assertPostResponse($response, $bureau, $user->id);
 
-        foreach (Fields::allCombinationModelFields('bureau') as $fields) {
+        foreach (Fields::allCombinationOfFields('bureau') as $fields) {
             $data = FakeDataGenerator::only('bureau', $fields);
             $response = $this->post($this->url, $data);
             $fieldsMap = collect($fields)->map(function ($item, $key) {
@@ -164,7 +161,7 @@ class BureauTest extends TestCase
         $response = $this->post($this->url, $bureau);
         $this->assertPostResponse($response, $bureau, $user->id);
 
-        foreach (Fields::allCombinationModelFields('bureau') as $fields) {
+        foreach (Fields::allCombinationOfFields('bureau') as $fields) {
             $data = FakeDataGenerator::only('bureau', $fields);
             $response = $this->post($this->url, $data);
             $fieldsMap = collect($fields)->map(function ($item, $key) {
@@ -212,120 +209,249 @@ class BureauTest extends TestCase
         return $data;
     }
 
-//    public function testShowForAdmin(){
-//        $this->actingAs($this->getUser(UserType::getAdmin()));
-//        $bureaus = Bureau::orderBy('building_number', 'asc')->limit(30)->get();
-//
-//        foreach ($bureaus as $bureau){
-//            $response = $this->get($this->url . $bureau->id);
-//            $this->assertShowForAdminAndItTeamMember($response, $bureau, true);
-//        }
-//
-//        $id = Bureau::orderBy('id', 'desc')->first()->id + 1;
-//        $response = $this->get($this->url . $id);
-//        $this->assertShowForAdminAndItTeamMember($response);
-//        $this->printSuccessMessage('show bureau; by logging with admin');
-//    }
-//
-//    public function testShowForItTeamMember(){
-//        $this->actingAs($this->getUser(UserType::getItTeamMember()));
-//        $bureaus = Bureau::orderBy('name', 'asc')->limit(30)->get();
-//
-//        foreach ($bureaus as $bureau){
-//            $response = $this->get($this->url . $bureau->id);
-//            $this->assertShowForAdminAndItTeamMember($response, $bureau, true);
-//        }
-//
-//        $id = Bureau::orderBy('id', 'desc')->first()->id + 1;
-//        $response = $this->get($this->url . $id);
-//        $this->assertShowForAdminAndItTeamMember($response);
-//        $this->printSuccessMessage('show bureau; by logging with it team member');
-//    }
-//
-//    private function assertShowForAdminAndItTeamMember($response, $bureau=null, $isValid=false){
-//        $response->assertStatus(200);
-//        if (! $isValid){
-//            $response->assertJson([
-//                'status' => 400,
-//                'error' =>[
-//                    'error' => ['Bureau doesn\'t exist.']
-//                ]
-//            ]);
-//        }
-//        else{
-//            $response->assertJson([
-//                'status' => 200,
-//                'bureau' =>  [
-//                    'id' => $bureau->id,
-//                    "name" => $bureau->name,
-//                    "description" => $bureau->description,
-//                    'user_id' => $bureau->user_id,
-//                    'location' => $bureau->location,
-//                    'building_number' => $bureau->building_number,
-//                    'office_number' => $bureau->office_number,
-//                    'accountable_to' => $bureau->accountable_to,
-//                ]
-//            ]);
-//        }
-//    }
-//
-//    public function testDestroyForAdmin(){
-//        $this->actingAs($this->getUser(UserType::getAdmin()));
-//        $buildings = Bureau::orderBy('name', 'asc')->limit(30)->get();
-//
-//        foreach ($buildings as $building){
-//            $response = $this->delete($this->url . $building->id);
-//
-//            $response->assertStatus(200);
-//            $response->assertJson([
-//                'status' => 200,
-//            ]);
-//        }
-//
-//        $id = Bureau::orderBy('id', 'desc')->first()->id + 1;
-//        $response = $this->delete($this->url . $id);
-//        $response->assertStatus(200);
-//        $response->assertJson([
-//            'status' => 400,
-//            'error' =>[
-//                'error' => ['Bureau doesn\'t exist.']
-//            ]
-//        ]);
-//
-//        $this->restoreDeletedBuildings();
-//        $this->printSuccessMessage('destroy bureau by logging with admin');
-//    }
-//
-//    public function testDestroyForItTeamMember(){
-//        $this->actingAs($this->getUser(UserType::getItTeamMember()));
-//        $bureaus = Bureau::orderBy('name', 'asc')->limit(30)->get();
-//
-//        foreach ($bureaus as $bureau){
-//            $response = $this->delete($this->url . $bureau->id);
-//
-//            $response->assertStatus(200);
-//            $response->assertJson([
-//                'status' => 200,
-//            ]);
-//        }
-//
-//        $id = Bureau::orderBy('id', 'desc')->first()->id + 1;
-//        $response = $this->delete($this->url . $id);
-//        $response->assertStatus(200);
-//        $response->assertJson([
-//            'status' => 400,
-//            'error' =>[
-//                'error' => ['Bureau doesn\'t exist.']
-//            ]
-//        ]);
-//
-//        $this->restoreDeletedBuildings();
-//        $this->printSuccessMessage('destroy bureau by logging with admin');
-//    }
-//
-//    private function restoreDeletedBuildings(){
-//        Bureau::withTrashed()->restore();
-//        $this->printSuccessMessage('all bureaus deleted restored');
-//
-//    }
+    public function testUpdateForAdmin(){
+        $this->updateWithIncorrectBuildingNumber(UserType::getAdmin());
+        $this->updateWithIncorrectAccountableTo(UserType::getAdmin());
+        $this->update(UserType::getAdmin());
+        $this->printSuccessMessage('update bureau; by logging with admin.');
+    }
+
+    public function testUpdateForItTeamMember(){
+        $this->updateWithIncorrectBuildingNumber(UserType::getItTeamMember());
+        $this->updateWithIncorrectAccountableTo(UserType::getItTeamMember());
+        $this->update(UserType::getItTeamMember());
+        $this->printSuccessMessage('update bureau; by logging with it team member.');
+    }
+
+    private function update($userType) {
+        if ($userType == UserType::getAdmin())
+            $this->actingAs($this->getUser(UserType::getAdmin()));
+        else
+            $this->actingAs($this->getUser(UserType::getItTeamMember()));
+
+        $bureaus = Bureau::orderBy('name', 'asc')->limit(10)->get();
+        foreach ($bureaus as $bureau){
+            $data = FakeDataGenerator::bureauData();
+            $check = collect(Error::get('bureau'));
+            foreach ($data as $key => $value){
+                $response = $this->put($this->url . $bureau->id, [$key => '']);
+                $response->assertStatus(200);
+                if ($check->keys()->contains($key))
+                    $this->assertUpdate($response, $key);
+                else {
+                    $bureau = $this->assertUpdate($response, $key, '', $bureau);
+                }
+
+                $response = $this->put($this->url . $bureau->id, [$key => $value]);
+                $bureau = $this->assertUpdate($response, $key, $value, $bureau);
+            }
+        }
+    }
+
+    private function updateData($bureau, $key, $value) {
+        switch ($key){
+            case 'name':
+                $bureau->name = $value;
+                break;
+            case 'description':
+                $bureau->description = $value;
+                break;
+            case 'accountable_to':
+                $bureau->accountable_to = $value;
+                break;
+            case 'location':
+                $bureau->location = $value;
+                break;
+            case 'building_number':
+                $bureau->building_number = $value;
+                break;
+            case 'office_number':
+                $bureau->office_number = $value;
+                break;
+        }
+        return $bureau;
+    }
+
+    private function assertUpdate($response, $key, $value=null, $bureau=null){
+        $response->assertStatus(200);
+        if (empty($bureau))
+            $response->assertJson([
+                'status' => 400,
+                'error' => Error::only('bureau', [$key]),
+            ]);
+        else {
+            $bureau = $this->updateData($bureau, $key, $value);
+            $response->assertJson([
+                'status' => 200,
+                'bureau' => [
+                    'id' => $bureau->id,
+                    'name' => $bureau->name,
+                    'description' => $bureau->description,
+                    'location' => $bureau->location,
+                    'office_number' => $bureau->office_number,
+                    'building_number' => $bureau->building_number,
+                    'accountable_to' => $bureau->accountable_to,
+                ]
+            ]);
+        }
+        return $bureau;
+    }
+
+    private function updateWithIncorrectAccountableTo($userType) {
+        if($userType == UserType::getAdmin())
+            $this->actingAs($this->getUser(UserType::getAdmin()));
+        else
+            $this->actingAs($this->getUser(UserType::getItTeamMember()));
+
+        $id = Bureau::orderBy('id', 'desc')->first()->id + 1;
+        $response = $this->put($this->url . ($id - 1), ['accountable_to' => $id]);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => 400,
+            'error' => [
+                'accountable_to' => ['The selected accountable to is invalid.']
+            ]
+        ]);
+        $response = $this->put($this->url . ($id - 1), ['accountable_to' => '$id']);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => 400,
+            'error' =>[
+                'accountable_to' => ['The accountable to must be an integer.']
+            ]
+        ]);
+    }
+
+    private function updateWithIncorrectBuildingNumber($userType) {
+        if($userType == UserType::getAdmin())
+            $this->actingAs($this->getUser(UserType::getAdmin()));
+        else
+            $this->actingAs($this->getUser(UserType::getItTeamMember()));
+        $id = Bureau::inRandomOrder()->first()->id;
+        $response = $this->put($this->url . $id, ['building_number' => 'slkfjskljfs']);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => 400,
+            'error' => [
+                'building_number' => ['The selected building number is invalid.']
+            ]
+        ]);
+    }
+
+    public function testShowForAdmin(){
+        $this->actingAs($this->getUser(UserType::getAdmin()));
+        $bureaus = Bureau::orderBy('building_number', 'asc')->limit(30)->get();
+
+        foreach ($bureaus as $bureau){
+            $response = $this->get($this->url . $bureau->id);
+            $this->assertShowForAdminAndItTeamMember($response, $bureau, true);
+        }
+
+        $id = Bureau::orderBy('id', 'desc')->first()->id + 1;
+        $response = $this->get($this->url . $id);
+        $this->assertShowForAdminAndItTeamMember($response);
+        $this->printSuccessMessage('show bureau; by logging with admin');
+    }
+
+    public function testShowForItTeamMember(){
+        $this->actingAs($this->getUser(UserType::getItTeamMember()));
+        $bureaus = Bureau::orderBy('name', 'asc')->limit(30)->get();
+
+        foreach ($bureaus as $bureau){
+            $response = $this->get($this->url . $bureau->id);
+            $this->assertShowForAdminAndItTeamMember($response, $bureau, true);
+        }
+
+        $id = Bureau::orderBy('id', 'desc')->first()->id + 1;
+        $response = $this->get($this->url . $id);
+        $this->assertShowForAdminAndItTeamMember($response);
+        $this->printSuccessMessage('show bureau; by logging with it team member');
+    }
+
+    private function assertShowForAdminAndItTeamMember($response, $bureau=null, $isValid=false){
+        $response->assertStatus(200);
+        if (! $isValid){
+            $response->assertJson([
+                'status' => 400,
+                'error' =>[
+                    'error' => ['Bureau doesn\'t exist.']
+                ]
+            ]);
+        }
+        else{
+            $response->assertJson([
+                'status' => 200,
+                'bureau' =>  [
+                    'id' => $bureau->id,
+                    "name" => $bureau->name,
+                    "description" => $bureau->description,
+                    'user_id' => $bureau->user_id,
+                    'location' => $bureau->location,
+                    'building_number' => $bureau->building_number,
+                    'office_number' => $bureau->office_number,
+                    'accountable_to' => $bureau->accountable_to,
+                ]
+            ]);
+        }
+    }
+
+    public function testDestroyForAdmin(){
+        $this->actingAs($this->getUser(UserType::getAdmin()));
+        $buildings = Bureau::orderBy('name', 'asc')->limit(30)->get();
+
+        foreach ($buildings as $building){
+            $response = $this->delete($this->url . $building->id);
+
+            $response->assertStatus(200);
+            $response->assertJson([
+                'status' => 200,
+            ]);
+        }
+
+        $id = Bureau::orderBy('id', 'desc')->first()->id + 1;
+        $response = $this->delete($this->url . $id);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => 400,
+            'error' =>[
+                'error' => ['Bureau doesn\'t exist.']
+            ]
+        ]);
+
+        $this->restoreDeletedBuildings();
+        $this->printSuccessMessage('destroy bureau by logging with admin');
+    }
+
+    public function testDestroyForItTeamMember(){
+        $this->actingAs($this->getUser(UserType::getItTeamMember()));
+        $bureaus = Bureau::orderBy('name', 'asc')->limit(30)->get();
+
+        foreach ($bureaus as $bureau){
+            $response = $this->delete($this->url . $bureau->id);
+
+            $response->assertStatus(200);
+            $response->assertJson([
+                'status' => 200,
+            ]);
+        }
+
+        $id = Bureau::orderBy('id', 'desc')->first()->id + 1;
+        $response = $this->delete($this->url . $id);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => 400,
+            'error' =>[
+                'error' => ['Bureau doesn\'t exist.']
+            ]
+        ]);
+
+        $this->restoreDeletedBuildings();
+        $this->printSuccessMessage('destroy bureau by logging with admin');
+    }
+
+    private function restoreDeletedBuildings(){
+        Bureau::withTrashed()->restore();
+        $this->printSuccessMessage('all bureaus deleted restored');
+
+    }
 }

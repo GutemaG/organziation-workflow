@@ -4,7 +4,6 @@
 namespace App\Http\Controllers\Utilities;
 
 
-use App\Http\Controllers\Utilities\UserType;
 use Illuminate\Validation\Rule as BaseRule;
 use Illuminate\Validation\Rules;
 
@@ -41,7 +40,7 @@ class Rule
         return [
             'name' => 'required|string|max:255|unique:bureaus',
             'description' => 'required|string',
-            'accountable_to' => ['nullable', 'integer', BaseRule::exists('users', 'id')],
+            'accountable_to' => ['nullable', 'integer', BaseRule::exists('bureaus', 'id')],
             'location' => 'nullable|string',
             'building_number' => ['required', 'string', BaseRule::exists('buildings', 'number')],
             'office_number' => 'required|string',
