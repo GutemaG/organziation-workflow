@@ -13,6 +13,8 @@ class Building extends Model
     protected $fillable = [
         'number',
         'number_of_offices',
+        'name',
+        'description',
     ];
 
     protected $hidden = [

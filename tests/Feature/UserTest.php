@@ -78,31 +78,31 @@ class UserTest extends TestCase
     }
 
     public function testStaffCanAccessUsers(){
-        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::getStaff());
+        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::staff());
         $this->printSuccessMessage('authenticated staff can access any user or can store user');
 
     }
 
     public function testReceptionCanAccessUsers(){
-        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::getReception());
+        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::reception());
         $this->printSuccessMessage('authenticated reception can access any user or can store user');
     }
 
     public function testIndex(){
-        $this->indexForAdminAndItTeamMember(UserType::getAdmin());
+        $this->indexForAdminAndItTeamMember(UserType::admin());
         $this->printSuccessMessage('list all users; by logging with admin');
 
-        $this->indexForAdminAndItTeamMember(UserType::getItTeamMember());
+        $this->indexForAdminAndItTeamMember(UserType::itTeam());
         $this->printSuccessMessage('list all users; by logging with it team member');
     }
 
     private function indexForAdminAndItTeamMember($type){
         $this->actingAs($this->getUser($type));
         $response = $this->get('/api/users/');
-        if($type == UserType::getAdmin())
-            $users = User::where('type', '!=', UserType::getAdmin())->orderBy('user_name', 'asc')->get();
+        if($type == UserType::admin())
+            $users = User::where('type', '!=', UserType::admin())->orderBy('user_name', 'asc')->get();
         else
-            $users = User::whereIn('type', [UserType::getStaff(), UserType::getReception()])->orderBy('user_name', 'asc')->get();
+            $users = User::whereIn('type', [UserType::staff(), UserType::reception()])->orderBy('user_name', 'asc')->get();
         $length = $users->count();
         $user = $users->first();
         $response->assertJson(fn (AssertableJson $json) =>
@@ -123,14 +123,14 @@ class UserTest extends TestCase
     }
 
     public function testPostForAdmin(){
-        $this->actingAs($this->getUser(UserType::getAdmin()));
+        $this->actingAs($this->getUser(UserType::admin()));
 
         $user = FakeDataGenerator::userData();
         $response = $this->post('/api/users', $user);
         $this->assertPostResponse($response, $user);
 
         $user = FakeDataGenerator::userData();
-        $user['type'] = UserType::getAdmin();
+        $user['type'] = UserType::admin();
         $response = $this->post('/api/users', $user);
         $response->assertStatus(200);
         $response->assertJson([
@@ -176,7 +176,7 @@ class UserTest extends TestCase
 
     private function assertPostResponse($response, $user=null, $isItTeam=false){
         if($isItTeam){
-            if($user['type'] === UserType::getItTeamMember()){
+            if($user['type'] === UserType::itTeam()){
                 $response->assertStatus(200);
                 $response->assertJson([
                     'status' => 400,
@@ -204,20 +204,20 @@ class UserTest extends TestCase
     }
 
     public function testPostForItTeamMember(){
-        $this->actingAs($this->getUser(UserType::getItTeamMember()));
+        $this->actingAs($this->getUser(UserType::itTeam()));
 
         $user = FakeDataGenerator::userData();
-        $user['type'] = UserType::getStaff();
+        $user['type'] = UserType::staff();
         $response = $this->post('/api/users', $user);
         $this->assertPostResponse($response, $user);
 
         $user = FakeDataGenerator::userData();
-        $user['type'] = UserType::getReception();
+        $user['type'] = UserType::reception();
         $response = $this->post('/api/users', $user);
         $this->assertPostResponse($response, $user);
 
         $user = FakeDataGenerator::userData();
-        $user['type'] = UserType::getAdmin();
+        $user['type'] = UserType::admin();
         $response = $this->post('/api/users', $user);
         $response->assertStatus(200);
         $response->assertJson([
@@ -262,13 +262,13 @@ class UserTest extends TestCase
     }
 
     public function testShowForAdmin(){
-        $this->actingAs($this->getUser(UserType::getAdmin()));
+        $this->actingAs($this->getUser(UserType::admin()));
         $users = $this->getAllTypeOfUsers();
 
         foreach ($users as $user){
             $response = $this->get('/api/users/' . $user->id);
 
-            if($user->type == UserType::getAdmin()){
+            if($user->type == UserType::admin()){
                 $this->assertShowForAdminAndItTeamMember($response);
             }
             else
@@ -278,13 +278,13 @@ class UserTest extends TestCase
     }
 
     public function testShowForItTeamMember(){
-        $this->actingAs($this->getUser(UserType::getItTeamMember()));
+        $this->actingAs($this->getUser(UserType::itTeam()));
         $users = $this->getAllTypeOfUsers();
 
         foreach ($users as $user){
             $response = $this->get('/api/users/' . $user->id);
 
-            if($user->type == UserType::getAdmin() || $user->type == UserType::getItTeamMember()){
+            if($user->type == UserType::admin() || $user->type == UserType::itTeam()){
                 $this->assertShowForAdminAndItTeamMember($response);
             }
             else
@@ -329,9 +329,9 @@ class UserTest extends TestCase
         $users = $this->getAllTypeOfUsers();
 
         foreach ($users as $user){
-            $this->updateWithInvalidEmailAndInvalidType($user, UserType::getAdmin());
+            $this->updateWithInvalidEmailAndInvalidType($user, UserType::admin());
             $this->printSuccessMessage('update users with invalid email and invalid type; by logging with admin');
-            $this->updateValidFieldsAndValues($user, UserType::getAdmin());
+            $this->updateValidFieldsAndValues($user, UserType::admin());
             $this->printSuccessMessage('update users with valid fields and values; by logging with admin');
         }
     }
@@ -340,24 +340,24 @@ class UserTest extends TestCase
         $users = $this->getAllTypeOfUsers();
 
         foreach ($users as $user){
-            $this->updateWithInvalidEmailAndInvalidType($user, UserType::getItTeamMember());
+            $this->updateWithInvalidEmailAndInvalidType($user, UserType::itTeam());
             $this->printSuccessMessage('update users with invalid email and invalid type; by logging with it team member');
-            $this->updateValidFieldsAndValues($user, UserType::getItTeamMember());
+            $this->updateValidFieldsAndValues($user, UserType::itTeam());
             $this->printSuccessMessage('update users with valid fields and values; by logging with it team member');
         }
     }
 
     private function updateValidFieldsAndValues($user, $type){
-        if($type == UserType::getAdmin())
-            $this->actingAs($this->getUser(UserType::getAdmin()));
+        if($type == UserType::admin())
+            $this->actingAs($this->getUser(UserType::admin()));
         else
-            $this->actingAs($this->getUser(UserType::getItTeamMember()));
+            $this->actingAs($this->getUser(UserType::itTeam()));
 
         $data = FakeDataGenerator::userDataExcept(['password_confirmation', 'password']);
         foreach ($data as $key => $value){
             $response = $this->put('/api/users/' . $user->id, [$key => '']);
             $response->assertStatus(200);
-            if($user->type == UserType::getAdmin()){
+            if($user->type == UserType::admin()){
                 $this->assertUpdate(1, $response);
             }
             elseif (in_array($key, ['phone', 'email'])){
@@ -369,7 +369,7 @@ class UserTest extends TestCase
 
             $response = $this->put('/api/users/' . $user->id, [$key => $value]);
             $response->assertStatus(200);
-            if($user->type == UserType::getAdmin()){
+            if($user->type == UserType::admin()){
                 $this->assertUpdate(1, $response);
             }
             else{
@@ -379,13 +379,13 @@ class UserTest extends TestCase
     }
 
     private function updateWithInvalidEmailAndInvalidType($user, $type){
-        if($type == UserType::getAdmin())
-            $this->actingAs($this->getUser(UserType::getAdmin()));
+        if($type == UserType::admin())
+            $this->actingAs($this->getUser(UserType::admin()));
         else
-            $this->actingAs($this->getUser(UserType::getItTeamMember()));
+            $this->actingAs($this->getUser(UserType::itTeam()));
 
         $response = $this->put('/api/users/' . $user->id, ['email' => 'test']);
-        if($user->type == UserType::getAdmin()){
+        if($user->type == UserType::admin()){
             $this->assertUpdate(1, $response);
         }
         else{
@@ -399,7 +399,7 @@ class UserTest extends TestCase
         }
 
         $response = $this->put('/api/users/' . $user->id, ['type' => 'admin']);
-        if($user->type == UserType::getAdmin()){
+        if($user->type == UserType::admin()){
             $this->assertUpdate(1, $response);
         }
         else{
@@ -470,13 +470,13 @@ class UserTest extends TestCase
     }
 
     public function testDestroyForAdmin(){
-        $this->actingAs($this->getUser(UserType::getAdmin()));
+        $this->actingAs($this->getUser(UserType::admin()));
         $users = $this->getAllTypeOfUsers();
 
         foreach ($users as $user){
             $response = $this->delete('/api/users/' . $user->id);
 
-            if($user->type == UserType::getAdmin()){
+            if($user->type == UserType::admin()){
                 $response->assertStatus(200);
                 $response->assertJson([
                     'status' => 400,
@@ -495,13 +495,13 @@ class UserTest extends TestCase
     }
 
     public function testDestroyForItTeamMember(){
-        $this->actingAs($this->getUser(UserType::getItTeamMember()));
+        $this->actingAs($this->getUser(UserType::itTeam()));
         $users = $this->getAllTypeOfUsers();
 
         foreach ($users as $user){
             $response = $this->delete('/api/users/' . $user->id);
 
-            if(in_array($user->type, [UserType::getAdmin(), UserType::getItTeamMember()])){
+            if(in_array($user->type, [UserType::admin(), UserType::itTeam()])){
                 $response->assertStatus(200);
                 $response->assertJson([
                     'status' => 400,

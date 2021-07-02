@@ -14,10 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Route::resource('/users', \App\Http\Controllers\UserController::class);
+//Route::post('/account', [\App\Http\Controllers\AccountController::class, 'update']);
+//Route::resource('buildings', \App\Http\Controllers\BuildingController::class);
+//Route::resource('bureaus', \App\Http\Controllers\BureauController::class);
+//Route::post('/account/change-password', [\App\Http\Controllers\AccountController::class, 'changePassword']);
+
 Route::resource('/users', \App\Http\Controllers\UserController::class);
-Route::get('/account', [\App\Http\Controllers\AccountController::class, 'update']);
-Route::resource('buildings', \App\Http\Controllers\BuildingController::class);
-Route::resource('bureaus', \App\Http\Controllers\BureauController::class);
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

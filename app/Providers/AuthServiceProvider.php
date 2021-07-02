@@ -27,19 +27,19 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('is-admin', function ($user){
-            return $user->type == UserType::getAdmin();
+            return $user->type == UserType::admin();
         });
 
         Gate::define('is-it-team-member', function ($user){
-            return $user->type == UserType::getItTeamMember();
+            return $user->type == UserType::itTeam();
         });
 
         Gate::define('is-staff', function ($user){
-            return $user->type == UserType::getStaff();
+            return $user->type == UserType::staff();
         });
 
         Gate::define('is-reception', function ($user){
-            return $user->type == UserType::getReception();
+            return $user->type == UserType::reception();
         });
     }
 }

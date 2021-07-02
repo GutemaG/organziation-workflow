@@ -19,7 +19,7 @@ class Utility
         return $results;
     }
 
-    public static function allCombinationOfBuildingData() {
+    public static function allCombinationOfData() {
         $array = ['number', 'number_of_offices'];
         $results = array(array( ));
 
@@ -57,16 +57,4 @@ class Utility
         })->all();
     }
 
-    public static function t(){
-        $user = FakeDataGenerator::userData();
-        $data = [
-            "user_name" => $user['user_name'],
-            "first_name" => $user['first_name'],
-            "last_name" => $user['last_name'],
-            "email" => $user['email'],
-            "phone" => $user['phone'],
-            'type' => $user['type'],
-        ];
-        return collect($data)->except('email')->all();
-    }
 }

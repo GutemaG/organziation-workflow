@@ -30,10 +30,11 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
          ]);
 
-         User::factory(500)->create();
+         User::factory(100)->create();
 
          Building::factory(100)->create();
 */
+
          Bureau::factory(200)->create();
     }
 }
