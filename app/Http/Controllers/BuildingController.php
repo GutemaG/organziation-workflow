@@ -20,12 +20,7 @@ class BuildingController extends Controller
      */
     public function __construct()
     {
-        if($this->middleware(function ($request, $next){
-            if(auth()->check())
-                return $next($request);
-            return response()->redirectTo(route('login'));
-        }));
-    }
+        $this->middleware('auth');    }
 
     /**
      * check if authenticated user is admin or staff.

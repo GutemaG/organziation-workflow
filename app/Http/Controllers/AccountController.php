@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules;
 
 use App\Http\Controllers\Utilities\Fields;
 use App\Http\Controllers\Utilities\Rule;
@@ -19,11 +21,7 @@ class AccountController extends Controller
      */
     public function __construct()
     {
-            if($this->middleware(function ($request, $next){
-                if(auth()->check())
-                    return $next($request);
-                return response()->redirectTo(route('login'));
-            }));
+        $this->middleware('auth');
     }
 
     /**
@@ -76,5 +74,58 @@ class AccountController extends Controller
                 $data[$key] = $item;
         }
         return $data;
+    }
+
+    /**
+     * Change password of authenticated user.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function changePassword(Request $request) {
+        $data = $request->only(['current_password', 'password', 'password_confirmation']);
+        $validator = Validator::make($data,
+            [
+                'current_password' =>  ['required', 'string'],
+                'password' =>  ['required', 'confirmed', 'string', Rules\Password::defaults()],
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => $validator->errors(),
+            ]);
+        }
+        if (! Hash::check($data['current_password'], auth()->user()->password))
+            return response()->json([
+                'status' => 400,
+                'error' => [
+                    'current_password' => ['The password you entered didn\'t match with current password.'],
+                ],
+            ]);
+
+        else {
+            try {
+                DB::beginTransaction();
+                auth()->user()->forceFill([
+                    'password' => Hash::make($data['password']),
+                ]);
+                DB::commit();
+                return response()->json([
+                    'status' => 200,
+                ]);
+            }
+            catch (\Exception $e) {
+                DB::rollBack();
+                return response()->json([
+                    'status' => 400,
+                    'error' => [
+                        'error' => ["Something went wrong during updating password."]
+                    ],
+                ]);
+            }
+        }
+
     }
 }

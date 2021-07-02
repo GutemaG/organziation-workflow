@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Utilities;
 
+use Illuminate\Validation\Rule as BaseRule;
+use Illuminate\Validation\Rules;
+
 use App\Models\Building;
 use App\Models\Bureau;
 use App\Models\User;
-use Illuminate\Validation\Rule as BaseRule;
-use Illuminate\Validation\Rules;
 
 
 class Rule
