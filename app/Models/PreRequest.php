@@ -13,6 +13,8 @@ class PreRequest extends Model
     
     protected $gurded = [];
 
+    protected $hidden = ['deleted_at','updated_at',];
+
     public function procedure(){
         return $this->belongsTo(Procedure::class);
     }

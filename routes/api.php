@@ -19,6 +19,7 @@ Route::get('/account', [\App\Http\Controllers\AccountController::class, 'update'
 Route::resource('buildings', \App\Http\Controllers\BuildingController::class);
 Route::resource('bureaus', \App\Http\Controllers\BureauController::class);
 
+Route::post('/affairs', '\App\Http\Controllers\AffairController@store');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

@@ -26,7 +26,7 @@ Route::middleware(['auth'])->prefix('api')->group(function (){
 
 });
 Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
-Route::post('/affairs', '\App\Http\Controllers\AffairController@storej');
+// Route::post('/affairs', '\App\Http\Controllers\AffairController@store');
 
 Route::get('/{vue_capture?}', function () {
     return view('home');

@@ -14,10 +14,7 @@ class Procedure extends Model
     protected $gurded = [];
     protected $with = ['preRequests'];
 
-    protected $hidden = [
-        'deleted_at',
-        'updated_at',
-    ];
+    protected $hidden = ['deleted_at','updated_at',];
 
     public function affair(){
         return $this->belongsTo(AFfair::class);

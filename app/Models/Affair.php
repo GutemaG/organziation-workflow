@@ -14,6 +14,8 @@ class Affair extends Model
 
     protected $gurded = [];
     protected $with = ['user','procedures'];
+    
+    protected $hidden = ['deleted_at', 'updated_at'];
 
     public function procedures(){
         return $this->hasMany(Procedure::class);
