@@ -6,6 +6,7 @@ namespace Tests\Feature\Utilities;
 
 use App\Models\Building;
 use App\Models\Bureau;
+use App\Models\User;
 use Database\Factories\Utility;
 use Faker\Factory;
 
@@ -24,7 +25,7 @@ class FakeDataGenerator
             'password_confirmation' => '12345678',
         ];
 
-        while (! empty(Building::where('user_name', $data['user_name'])->orWhere('email', $data['email'])->first())) {
+        while (! empty(User::where('user_name', $data['user_name'])->orWhere('email', $data['email'])->first())) {
             $data['user_name'] = $faker->unique()->userName;
             $data['email'] = $faker->unique()->safeEmail();
         }

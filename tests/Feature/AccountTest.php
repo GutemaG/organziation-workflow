@@ -2,10 +2,11 @@
 
 namespace Tests\Feature;
 
+use Tests\TestCase;
+
 use App\Http\Controllers\Utilities\UserType;
 use App\Models\User;
 use Tests\Feature\Utilities\FakeDataGenerator;
-use Tests\TestCase;
 
 class AccountTest extends TestCase
 {

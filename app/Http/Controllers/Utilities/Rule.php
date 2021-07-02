@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Utilities;
 
+use App\Models\Building;
+use App\Models\Bureau;
+use App\Models\User;
 use Illuminate\Validation\Rule as BaseRule;
 use Illuminate\Validation\Rules;
 
@@ -57,20 +60,19 @@ class Rule
 
     /**
      * return all necessary rules for validating fields of requested model.
-     * But you have to specify model name in small letter.
      *
      * @param $modelName
      * @return array|string[]|null
      */
     public static function get($modelName) {
         switch ($modelName){
-            case 'user':
+            case User::class:
                 return self::user();
                 break;
-            case 'building':
+            case Building::class:
                 return self::building();
                 break;
-            case 'bureau':
+            case Bureau::class:
                 return self::bureau();
                 break;
             default:
@@ -80,7 +82,6 @@ class Rule
 
     /**
      * return only specified fields rules of requested model.
-     * But you have to specify model name in small letter.
      *
      * @param $modelName
      * @param array $fields

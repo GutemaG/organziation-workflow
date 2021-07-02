@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Utilities;
 
+use App\Models\Building;
+use App\Models\Bureau;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -80,20 +83,19 @@ class Fields
 
     /**
      * Getter method of fields for the requested model.
-     * But you have to specify model name in small letter.
      *
      * @param $modelName
      * @return string[]|null
      */
     public static function get($modelName) {
         switch ($modelName){
-            case 'user':
+            case User::class:
                 return self::$user;
                 break;
-            case 'building':
+            case Building::class:
                 return self::$building;
                 break;
-            case 'bureau':
+            case Bureau::class:
                 return self::$bureau;
                 break;
             default:
@@ -103,7 +105,6 @@ class Fields
 
     /**
      * Get except the specified fields of the requested model.
-     * But you have to specify model name in small letter.
      *
      * @param $modelName
      * @param $fields
@@ -122,7 +123,6 @@ class Fields
 
     /**
      * Get only the specified fields of the requested model.
-     * But you have to specify model name in small letter.
      *
      * @param $modelName
      * @param $fields
@@ -141,7 +141,6 @@ class Fields
 
     /**
      * Get all combination of fields for the requested model.
-     * But you have to specify model name in small letter.
      *
      * @param $modelName
      * @return array[]
