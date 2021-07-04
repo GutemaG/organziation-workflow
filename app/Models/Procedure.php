@@ -11,7 +11,7 @@ class Procedure extends Model
 {
     use HasFactory, Notifiable, SoftDeletes;
     
-    protected $gurded = [];
+    protected $guarded = [];
     protected $with = ['preRequests'];
 
     protected $hidden = ['deleted_at','updated_at',];

@@ -11,7 +11,7 @@ class PreRequest extends Model
 {
     use HasFactory, SoftDeletes, Notifiable;
     
-    protected $gurded = [];
+    protected $guarded = [];
 
     protected $hidden = ['deleted_at','updated_at',];
 
