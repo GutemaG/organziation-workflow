@@ -6,6 +6,7 @@
     ok-only
     ok-title="Cancel"
     ok-variant="danger"
+    @ok="clearSelected"
   >
     <form ref="form" @submit.stop.prevent="updateForm">
       <b-form-group label="Name" label-for="bureau-name-input">
@@ -139,7 +140,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["updateBureau"]),
+    ...mapActions(["updateBureau", "resetBureau"]),
     updateForm(event) {
       event.preventDefault();
       let id = this.selectedBureau.id;
@@ -158,6 +159,11 @@ export default {
       this.updateBureau(data);
       this.$bvModal.hide("edit-bureau-modal");
     },
+    clearSelected(){
+      let id = this.selectedBureau;
+      // console.log(id);
+      this.resetBureau(id)
+    }
   },
 };
 </script>
