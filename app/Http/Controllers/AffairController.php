@@ -44,12 +44,18 @@ class AffairController extends Controller
             );
         }
         $request_affair = $request->only('affair');
+
+        // return $request_affair['affair'];
         $validation = $this->validateData($request_affair['affair']);
+        
 
         if ($validation->fails()) {
             return $validation->errors();
         }
         $validated_data = $validation->validated();
+        // return $request_affair['affair']['procedures'][0]['pre_request'];
+        // return $validated_data['procedures'][0];
+        
         try {
             DB::beginTransaction();
             //Todo: first find authenticated user
@@ -74,8 +80,9 @@ class AffairController extends Controller
                     'description' => $pro['description'],
                     'step' => $pro['step']
                 ]);
-                $pre_requests = $pro['pre_request'];
-                if(!empty($pro['pre_request'])){
+                // return $pro;
+                if(array_key_exists('pre_request', $pro)){
+                    $pre_requests = $pro['pre_request'];
                     foreach ($pre_requests as $pre_request) {
                         $procedure->preRequests()->create([
                             'name' => $pre_request['name'],
@@ -84,6 +91,10 @@ class AffairController extends Controller
                         ]);
                     }
                 }
+                else{
+                    continue;
+                }
+                // return $pre_requests;
                 
             
                 // return $pre_requests;
@@ -116,15 +127,27 @@ class AffairController extends Controller
         if(empty($affair)){
             return response()->json(['status'=>400, 'error'=>'Affair does not exist']);
         }
-
         $request_affair = $request->only('affair');
-        $validation = $this->validateData($request_affair['affair']);
-
+        if($affair->name == $request_affair['affair']['name']){
+            $validation = $this->validateData($request_affair['affair'],true);
+        }
+        else{
+            $validation = $this->validateData($request_affair['affair']);
+        }
         if ($validation->fails()) {
             return $validation->errors();
         }
         $validated_data = $validation->validated();
 
+        if(array_key_exists('name',$validated_data)){
+            // return $validated_data['name'];
+            $affair->update(['name'=>$validated_data['name'], 'description'=>$validated_data['description']]);
+        }
+        else{
+            // return 'not there';
+            $affair->update(['description'=>$validated_data['description']]);
+        }
+        return 'i am here';
         try {
             DB::beginTransaction();
             //Todo: first find authenticated user
@@ -171,11 +194,25 @@ class AffairController extends Controller
         }
         return $affair;
     }
-    
-    public function validateData($data)
+    public function show($id){
+        if(Gate::any(['is-admin', 'is-it-team-member'])){
+            return response()->json([
+                'status' =>401,
+                'error' => 'unauthorized'
+            ]);
+        }
+        $affair =  Affair::find($id);
+        if(empty($affair)){
+            return response()->json([
+                'status' =>400,
+                'error' => 'Affair is not found'
+            ]);
+        }
+        return $affair;
+    }
+    public function validateData($data, $is_updating=false)
     {
         $rule = [
-            'name' => 'required|unique:affairs|string',
             'description' => 'nullable|string',
             'procedures.*.name' => 'required|string',
             'procedures.*.description' => 'nullable|string',
@@ -184,6 +221,10 @@ class AffairController extends Controller
             'procedures.*.pre_request.*.description' => "nullable|string|",
             'procedures.*.pre_request.*.affair_id' => "nullable|integer|required_if: procedures.*.pre_request.*.name, ''",
         ];
+        if(!$is_updating){
+            $rule['name'] =  'required|unique:affairs|string';
+        }
+        // return $rule;
         return Validator::make($data, $rule);
     }
 
@@ -243,7 +284,7 @@ class AffairController extends Controller
             ]);
         }
         $affair = Affair::find($id);
-    //    Todo: Delete the rrelation ships 
+        //Todo: Delete the relation ships 
         if(empty($affair)){
             return response()->json([
                 'status' => 400,
