@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Bureau extends Model
+class OnlineRequestProcedure extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -16,12 +16,10 @@ class Bureau extends Model
      * @var string[]
      */
     protected $fillable = [
-        'name',
+        'online_request_id',
+        'responsible_bureau_id',
         'description',
-        'accountable_to',
-        'location',
-        'building_number',
-        'office_number',
+        'step_number',
     ];
 
     /**
@@ -35,20 +33,20 @@ class Bureau extends Model
     ];
 
     /**
-     * Get the bureau that owns the bureau.
+     * Get the online request that owns the online request procedure.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function accountableTo(){
-        return $this->belongsTo(Bureau::class);
+    public function OnlineRequest() {
+        return $this->belongsTo(OnlineRequest::class);
     }
 
     /**
-     * Get the user that owns the bureau.
+     * Get the user that owns the online request procedure.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function users() {
+        return $this->belongsToMany(User::class, 'online_request_procedure_users', 'procedure_id', 'user_id');
     }
 }

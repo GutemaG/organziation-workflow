@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Building extends Model
+class PrerequisiteLabel extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -16,10 +15,8 @@ class Building extends Model
      * @var string[]
      */
     protected $fillable = [
-        'number',
-        'number_of_offices',
-        'name',
-        'description',
+      'online_request_id',
+      'label',
     ];
 
     /**
@@ -28,7 +25,16 @@ class Building extends Model
      * @var string[]
      */
     protected $hidden = [
-        'updated_at',
         'deleted_at',
+        'updated_at',
     ];
+
+    /**
+     * Get the online request that owns the prerequisite labels.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function request() {
+        return $this->belongsTo(OnlineRequest::class);
+    }
 }

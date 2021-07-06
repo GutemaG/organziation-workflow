@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Bureau extends Model
+class OnlineRequest extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -16,12 +16,9 @@ class Bureau extends Model
      * @var string[]
      */
     protected $fillable = [
+        'user_id',
         'name',
         'description',
-        'accountable_to',
-        'location',
-        'building_number',
-        'office_number',
     ];
 
     /**
@@ -30,21 +27,30 @@ class Bureau extends Model
      * @var string[]
      */
     protected $hidden = [
-        'deleted_at',
-        'updated_at',
+      'deleted_at',
+      'updated_at',
     ];
 
     /**
-     * Get the bureau that owns the bureau.
+     * Get the procedures associated with the online request.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function accountableTo(){
-        return $this->belongsTo(Bureau::class);
+    public function onlineRequestProcedures() {
+        return $this->hasMany(OnlineRequestProcedure::class);
     }
 
     /**
-     * Get the user that owns the bureau.
+     * Get the prerequisite labels associated with the online request.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function prerequisiteLabels() {
+        return $this->hasMany(PrerequisiteLabel::class);
+    }
+
+    /**
+     * Get the user that owns the online request.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

@@ -7,7 +7,9 @@ namespace Database\Factories;
 use App\Http\Controllers\Utilities\UserType;
 use App\Models\Building;
 use App\Models\Bureau;
+use App\Models\OnlineRequest;
 use App\Models\User;
+use Ramsey\Uuid\Type\Integer;
 
 class Utility
 {
@@ -41,6 +43,13 @@ class Utility
         return $userTypes[array_rand($userTypes)];
     }
 
+    /**
+     * return json format of location by creating associative array of latitude and longitude.
+     *
+     * @param $latitude
+     * @param $longitude
+     * @return false|string
+     */
     public static function getLocation($latitude, $longitude){
         $location = [
             'latitude' => $latitude,
@@ -49,6 +58,11 @@ class Utility
         return json_encode($location);
     }
 
+    /**
+     * get random building and return associative array of its building number and its random office number.
+     *
+     * @return array
+     */
     public static function getBuildingNumberAndOfficeNumber() {
         $building = Building::inRandomOrder()->first();
         return [
@@ -57,18 +71,44 @@ class Utility
         ];
     }
 
+    /**
+     * return random bureau id.
+     *
+     * @return Integer|null
+     */
     public static function getBureauId() {
         $bureau = Bureau::inRandomOrder()->first();
-<<<<<<< HEAD
-        // $index = rand(0, count($bureaus) - 1);
-=======
->>>>>>> 6b7fba761e5fbb5d4ecf29612adc6d396aa487ff
         if (empty($bureau))
             return null;
         return $bureau->id;
     }
 
+    /**
+     * return user id.
+     *
+     * @return Integer
+     */
     public static function getUserId() {
         return User::inRandomOrder()->first()->id;
+    }
+
+    /**
+     * return online request id.
+     *
+     * @return Integer
+     */
+    public static function getOnlineRequestId() {
+        return OnlineRequest::inRandomOrder()->first()->id;
+    }
+
+    /**
+     * return random value form the given values.
+     *
+     * @param array $values
+     * @return mixed
+     */
+    public static function getRandomValue(array $values) {
+        $index = array_rand($values);
+        return $values[$index];
     }
 }
