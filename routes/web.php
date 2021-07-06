@@ -29,13 +29,15 @@ Route::middleware(['auth'])->prefix('api')->group(function (){
 
     Route::resource('/bureaus', \App\Http\Controllers\BureauController::class);
 
+//    Route::resource('/online-requests', \App\Http\Controllers\OnlineRequestController::class);
+
 });
 
 Route::get('/test/', function () {
 //    \App\Models\OnlineRequest::factory(20)->hasPrerequisiteLabels(rand(3,6))->create();
 });
 
-Route::get('/{vue_capture?}', function () {
-    return view('home');
-})->where('vue_capture', '[\/\w\.-]*')->middleware('auth');
+//Route::get('/{vue_capture?}', function () {
+//    return view('home');
+//})->where('vue_capture', '[\/\w\.-]*')->middleware('auth');
 

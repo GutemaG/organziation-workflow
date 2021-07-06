@@ -32,6 +32,16 @@ class OnlineRequest extends Model
     ];
 
     /**
+     * The relation that should be fetched in each query.
+     *
+     * @var string[]
+     */
+    protected $with = [
+        'onlineRequestProcedures',
+        'prerequisiteLabels',
+    ];
+
+    /**
      * Get the procedures associated with the online request.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

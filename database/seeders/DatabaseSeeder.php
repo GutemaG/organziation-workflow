@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\OnlineRequest::factory(20)
             ->has(\App\Models\PrerequisiteLabel::factory()->count(rand(1,5)))
             ->has(\App\Models\OnlineRequestProcedure::factory()
-                ->hasAttached(\App\Models\User::inRandomOrder()->first())
+                ->hasAttached(\App\Models\User::inRandomOrder()->limit(rand(1,5))->get())
                 ->count(rand(3,6)))
             ->create();
     }

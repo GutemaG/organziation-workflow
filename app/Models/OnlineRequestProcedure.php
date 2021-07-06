@@ -33,6 +33,15 @@ class OnlineRequestProcedure extends Model
     ];
 
     /**
+     * The relation that should be fetched in each query.
+     *
+     * @var string[]
+     */
+    protected $with = [
+        'users'
+    ];
+
+    /**
      * Get the online request that owns the online request procedure.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
