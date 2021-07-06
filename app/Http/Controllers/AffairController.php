@@ -25,14 +25,6 @@ class AffairController extends Controller
     {
         return Affair::first();
     }
-
-    /** 
-     * @param Request accept different json data 
-     *  that go to different to Models: Procedure, PreRequest
-     *  affair: id, user_id, name, description
-     *  procedures: id, affair_id, name, description, step
-     *  pre-request: id, procedure_id, affair_id, name, description
-     */
     public function store(Request $request)
     {
         if (Gate::any(['it-team-member', 'admin'])) {
@@ -45,7 +37,6 @@ class AffairController extends Controller
         }
         $request_affair = $request->only('affair');
 
-        // return $request_affair['affair'];
         $validation = $this->validateData($request_affair['affair']);
         
 
@@ -53,9 +44,6 @@ class AffairController extends Controller
             return $validation->errors();
         }
         $validated_data = $validation->validated();
-        // return $request_affair['affair']['procedures'][0]['pre_request'];
-        // return $validated_data['procedures'][0];
-        
         try {
             DB::beginTransaction();
             //Todo: first find authenticated user
@@ -94,10 +82,6 @@ class AffairController extends Controller
                 else{
                     continue;
                 }
-                // return $pre_requests;
-                
-            
-                // return $pre_requests;
             }
             DB::commit();
         } catch (\Exception $e) {
@@ -128,28 +112,27 @@ class AffairController extends Controller
             return response()->json(['status'=>400, 'error'=>'Affair does not exist']);
         }
         $request_affair = $request->only('affair');
-        if($affair->name == $request_affair['affair']['name']){
-            $validation = $this->validateData($request_affair['affair'],true);
+        // return $affair->name;
+        // return $request_affair['affair']['name'];
+        if($affair->name === $request_affair['affair']['name']){
+            $validation = $this->validateUpdateData($request_affair['affair'],true);
         }
         else{
-            $validation = $this->validateData($request_affair['affair']);
+            $validation = $this->validateUpdateData($request_affair['affair'],true);
         }
         if ($validation->fails()) {
             return $validation->errors();
         }
         $validated_data = $validation->validated();
-
-        if(array_key_exists('name',$validated_data)){
-            // return $validated_data['name'];
-            $affair->update(['name'=>$validated_data['name'], 'description'=>$validated_data['description']]);
-        }
-        else{
-            // return 'not there';
-            $affair->update(['description'=>$validated_data['description']]);
-        }
-        return 'i am here';
         try {
             DB::beginTransaction();
+            if(array_key_exists('name',$validated_data)){
+                $affair->update(['name'=>$validated_data['name'], 'description'=>$validated_data['description']]);
+            }
+            else{
+                $affair->update(['description'=>$validated_data['description']]);
+            }
+            // return $affair;
             //Todo: first find authenticated user
             /**
            $user = auth()->user();
@@ -159,26 +142,26 @@ class AffairController extends Controller
                 'user_id' => 2
             ]);
              */
-            $affair->update([
-                'name' => $validated_data['name'],
-                'description' => $validated_data['description'],
-                'user_id' => 2
-            ]);
             $procedures = $validated_data['procedures'];
             foreach ($procedures as $pro) {
-                $procedure = $affair->procedures()->update([
+                $procedure = Procedure::where('id', $pro['id'])->where('affair_id', $pro['affair_id'])->first();
+                $procedure->update([
                     'name' => $pro['name'],
                     'description' => $pro['description'],
                     'step' => $pro['step']
                 ]);
-                $pre_requests = $pro['pre_request'];
-                foreach ($pre_requests as $pre_request) {
-                    $procedure->preRequests()->update([
-                        'name' => $pre_request['name'],
-                        'description' => $pre_request['name'],
-                        'affair_id' => $pre_request['affair_id']
+                if(!array_key_exists('pre_requests', $pro)){
+                    continue;
+                }
+                // return $pro;
+                $pre_requests = $pro['pre_requests'];
+                foreach ($pre_requests as $pre) {
+                    $pre_request = PreRequest::where('id', $pre['id'])->where('procedure_id', $pre['procedure_id'])->first();
+                    $pre_request->update([
+                        'name' => $pre['name'],
+                        'description' => $pre['name'],
+                        'affair_id' => $pre['affair_id']
                     ]);
-                    // return $pre_request;
                 }
             }
             DB::commit();
@@ -192,7 +175,10 @@ class AffairController extends Controller
                 ],
             ]);
         }
-        return $affair;
+        return response()->json([
+            'status'=>200,
+            'Affair'=>Affair::find($affair->id)
+        ]);
     }
     public function show($id){
         if(Gate::any(['is-admin', 'is-it-team-member'])){
@@ -210,9 +196,10 @@ class AffairController extends Controller
         }
         return $affair;
     }
-    public function validateData($data, $is_updating=false)
+    public function validateData($data)
     {
         $rule = [
+            'name' => 'required|unique:affairs|string',
             'description' => 'nullable|string',
             'procedures.*.name' => 'required|string',
             'procedures.*.description' => 'nullable|string',
@@ -221,11 +208,27 @@ class AffairController extends Controller
             'procedures.*.pre_request.*.description' => "nullable|string|",
             'procedures.*.pre_request.*.affair_id' => "nullable|integer|required_if: procedures.*.pre_request.*.name, ''",
         ];
-        if(!$is_updating){
-            $rule['name'] =  'required|unique:affairs|string';
-        }
-        // return $rule;
         return Validator::make($data, $rule);
+    }
+    public function validateUpdateData($data, $is_name_the_same=false){
+        $update_rule = [
+            'description' => 'nullable|string',
+            'procedures.*.name' => 'required|string',
+            'procedures.*.description' => 'nullable|string',
+            'procedures.*.id' => 'required|integer',
+            'procedures.*.affair_id' => 'required|integer',
+            'procedures.*.step' => 'required|integer',
+            'procedures.*.pre_requests.*.id' => "required|integer",
+            'procedures.*.pre_requests.*.name' => "nullable|string|required_if:pre_request.affair_id,'!null'",
+            'procedures.*.pre_requests.*.description' => "nullable|string|",
+            'procedures.*.pre_requests.*.procedure_id' => "required|integer",
+            'procedures.*.pre_requests.*.affair_id' => "nullable|integer|required_if: procedures.*.pre_request.*.name, ''",
+        ];
+            if($is_name_the_same){
+                $update_rule['name'] =  'required|string';
+            }
+        return Validator::make($data, $update_rule);
+
     }
 
     public static function testing()
