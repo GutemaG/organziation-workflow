@@ -1,18 +1,19 @@
 <?php
 
-
 namespace App\Http\Controllers\Utilities;
 
-
-use App\Http\Controllers\Utilities\UserType;
 use Illuminate\Validation\Rule as BaseRule;
 use Illuminate\Validation\Rules;
+
+use App\Models\Building;
+use App\Models\Bureau;
+use App\Models\User;
 
 
 class Rule
 {
     /**
-     * return all necessary rules for validation user registration
+     * return all necessary rules for validating user fields.
      *
      * @return array
      */
@@ -21,13 +22,18 @@ class Rule
             'user_name' => 'required|string|max:255|unique:users',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'type' => ['required', 'string', BaseRule::in(UserType::getItTeamMember(), UserType::getStaff(), UserType::getReception())],
+            'type' => ['required', 'string', BaseRule::in(UserType::exceptAdmin())],
             'email' => 'nullable|string|email|max:255|unique:users',
             'phone' => 'nullable|string|max:255|unique:users',
             'password' => ['required', 'confirmed', 'string', Rules\Password::defaults()],
         ];
     }
 
+    /**
+     * return all necessary rules for validating building fields.
+     *
+     * @return string[]
+     */
     public static function building(){
         return [
             'name' => 'nullable|string|max:255|unique:buildings',
@@ -37,6 +43,11 @@ class Rule
         ];
     }
 
+    /**
+     * return all necessary rules for validating bureau fields.
+     *
+     * @return array
+     */
     public static function bureau() {
         return [
             'name' => 'required|string|max:255|unique:bureaus',
@@ -48,15 +59,21 @@ class Rule
         ];
     }
 
-    public static function get($table) {
-        switch ($table){
-            case 'user':
+    /**
+     * return all necessary rules for validating fields of requested model.
+     *
+     * @param $modelName
+     * @return array|string[]|null
+     */
+    public static function get($modelName) {
+        switch ($modelName){
+            case User::class:
                 return self::user();
                 break;
-            case 'building':
+            case Building::class:
                 return self::building();
                 break;
-            case 'bureau':
+            case Bureau::class:
                 return self::bureau();
                 break;
             default:
@@ -64,9 +81,15 @@ class Rule
         }
     }
 
-
-    public static function update($table, $fields=[]){
-        $rules = self::get($table);
+    /**
+     * return only specified fields rules of requested model.
+     *
+     * @param $modelName
+     * @param array $fields
+     * @return array
+     */
+    public static function only($modelName, array $fields){
+        $rules = self::get($modelName);
         return collect(collect($rules))->only($fields)->all();
     }
 }

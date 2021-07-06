@@ -18,9 +18,9 @@ class UserController extends Controller{
 
     public function index(){
         if(Gate::allows('is-admin'))
-            return response()->json(UserControllerFunctionality::index(UserType::getAdmin()));
+            return response()->json(UserControllerFunctionality::index(UserType::admin()));
         elseif (Gate::allows('is-it-team-member'))
-            return response()->json(UserControllerFunctionality::index(UserType::getItTeamMember()));
+            return response()->json(UserControllerFunctionality::index(UserType::itTeam()));
 
         return response()->json([
             'status' => 401,
@@ -30,9 +30,9 @@ class UserController extends Controller{
 
     public function store(Request $request){
         if(Gate::allows('is-admin'))
-            return response()->json(UserControllerFunctionality::store($request, UserType::getAdmin()));
+            return response()->json(UserControllerFunctionality::store($request, UserType::admin()));
         elseif (Gate::allows('is-it-team-member'))
-            return response()->json(UserControllerFunctionality::store($request, UserType::getItTeamMember()));
+            return response()->json(UserControllerFunctionality::store($request, UserType::itTeam()));
 
         return response()->json([
             'status' => 401,
@@ -42,9 +42,9 @@ class UserController extends Controller{
 
     public function show($id){
         if(Gate::allows('is-admin'))
-            return response()->json(UserControllerFunctionality::show($id, UserType::getAdmin()));
+            return response()->json(UserControllerFunctionality::show($id, UserType::admin()));
         elseif (Gate::allows('is-it-team-member'))
-            return response()->json(UserControllerFunctionality::show($id, UserType::getItTeamMember()));
+            return response()->json(UserControllerFunctionality::show($id, UserType::itTeam()));
 
         return response()->json([
             'status' => 401,
@@ -54,9 +54,9 @@ class UserController extends Controller{
 
     public function update(Request $request, $id){
         if(Gate::allows('is-admin'))
-            return response()->json(UserControllerFunctionality::update($request, $id, UserType::getAdmin()));
+            return response()->json(UserControllerFunctionality::update($request, $id, UserType::admin()));
         elseif (Gate::allows('is-it-team-member'))
-            return response()->json(UserControllerFunctionality::update($request, $id, UserType::getItTeamMember()));
+            return response()->json(UserControllerFunctionality::update($request, $id, UserType::itTeam()));
 
         return response()->json([
             'status' => 401,
@@ -66,9 +66,9 @@ class UserController extends Controller{
 
     public function destroy($id){
         if(Gate::allows('is-admin'))
-            return response()->json(UserControllerFunctionality::destroy($id, UserType::getAdmin()));
+            return response()->json(UserControllerFunctionality::destroy($id, UserType::admin()));
         elseif (Gate::allows('is-it-team-member'))
-            return response()->json(UserControllerFunctionality::destroy($id, UserType::getItTeamMember()));
+            return response()->json(UserControllerFunctionality::destroy($id, UserType::itTeam()));
 
         return response()->json([
             'status' => 401,

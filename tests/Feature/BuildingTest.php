@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Feature;
 
 use App\Http\Controllers\Utilities\Fields;
@@ -7,6 +6,7 @@ use App\Http\Controllers\Utilities\UserType;
 use App\Models\Building;
 use App\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Tests\Feature\Utilities\Error;
 use Tests\Feature\Utilities\FakeDataGenerator;
 use Tests\Feature\Utilities\Utility;
 use Tests\TestCase;
@@ -77,21 +77,21 @@ class BuildingTest extends TestCase
     }
 
     public function testStaffCanAccessUsers(){
-        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::getStaff());
+        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::staff());
         $this->printSuccessMessage('authenticated staff can access any buildings or can store buildings');
 
     }
 
     public function testReceptionCanAccessUsers(){
-        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::getReception());
+        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::reception());
         $this->printSuccessMessage('authenticated reception can access any buildings or can store buildings');
     }
 
     public function testIndex(){
-        $this->indexForAdminAndItTeamMember(UserType::getAdmin());
+        $this->indexForAdminAndItTeamMember(UserType::admin());
         $this->printSuccessMessage('list all buildings; by logging with admin');
 
-        $this->indexForAdminAndItTeamMember(UserType::getItTeamMember());
+        $this->indexForAdminAndItTeamMember(UserType::itTeam());
         $this->printSuccessMessage('list all buildings; by logging with it team member');
     }
 
@@ -106,6 +106,8 @@ class BuildingTest extends TestCase
             ->has('buildings', $length, fn ($json) =>
             $json->where('id', $building->id)
                 ->where('number', $building->number)
+                ->where('name', $building->name)
+                ->where('description', $building->description)
                 ->where('number_of_offices', $building->number_of_offices)
                 ->has('created_at')
                 ->missing('updated_at')
@@ -115,57 +117,65 @@ class BuildingTest extends TestCase
     }
 
     public function testPostForAdmin(){
-        $this->actingAs($this->getUser(UserType::getAdmin()));
+        $this->store(UserType::admin());
+        $this->printSuccessMessage('store building; by logging with admin');
+    }
+
+    public function testPostForItTeamMember(){
+        $this->store(UserType::itTeam());
+        $this->printSuccessMessage('store building; by logging with it team member');
+    }
+
+    private function store($userType) {
+        if ($userType == UserType::admin())
+            $this->actingAs($this->getUser(UserType::admin()));
+        else
+            $this->actingAs($this->getUser(UserType::itTeam()));
 
         $building = FakeDataGenerator::buildingData();
         $response = $this->post('/api/buildings', $building);
         $this->assertPostResponse($response, $building);
 
-
-        foreach (Utility::allCombinationOfBuildingData() as $fields) {
+        foreach (Fields::allCombinationOfFields(Building::class) as $fields) {
             $building = FakeDataGenerator::buildingDataOnly($fields);
             $response = $this->post('/api/buildings', $building);
             $fieldsMap = collect($fields)->map(function ($item, $key) {
                 return [$item => $item];
             })->collapse();
 
-            if (collect($fieldsMap)->has(Fields::building())) {
+            if (collect($fieldsMap)->has(['number', 'number_of_offices'])) {
                 $this->assertPostResponse($response, $building);
-            } elseif (collect($fieldsMap)->has('number')) {
+            }
+            else {
                 $response->assertJson([
                     'status' => 400,
-                    'error' => [
-                        'number_of_offices' => ['The number of offices field is required.']
-                    ],
-                ]);
-            } elseif (collect($fieldsMap)->has('number_of_offices')) {
-                $response->assertJson([
-                    'status' => 400,
-                    'error' => [
-                        'number' => ['The number field is required.']
-                    ],
-                ]);
-            } else{
-                $response->assertJson([
-                    'status' => 400,
-                    'error' => [
-                        'number_of_offices' => ['The number of offices field is required.'],
-                        'number' => ['The number field is required.']
-                    ],
+                    'error' => Error::except('building', $fields),
                 ]);
             }
         }
-        $this->printSuccessMessage('store building; by logging with admin');
+        $data = Building::where('name', '!=', null)->inRandomOrder()->first();
+        $building = FakeDataGenerator::buildingData();
+        $building['name'] = $data['name'];
+        $building['number'] = $data['number'];
+        $response = $this->post('/api/buildings', $building);
+        $response->assertJson([
+            'status' => 400,
+            'error' => [
+                'name' => ["The name has already been taken."],
+                'number' => ['The number has already been taken.'],
+            ]
+        ]);
     }
 
     private function assertPostResponse($response, $building=null){
-
         $id = Building::where('number', $building['number'])->first()->id;
         $data = [
             'id' => $id,
             "number" => $building['number'],
             "number_of_offices" => $building['number_of_offices'],
         ];
+        array_key_exists('name', $building) ? $data['name'] = $building['name'] : null;
+        array_key_exists('description', $building) ? $data['description'] = $building['description'] : null;
 
         $response->assertStatus(200);
         $response->assertJson([
@@ -174,52 +184,8 @@ class BuildingTest extends TestCase
         ]);
     }
 
-    public function testPostForItTeamMember(){
-        $this->actingAs($this->getUser(UserType::getItTeamMember()));
-
-        $building = FakeDataGenerator::buildingData();
-        $response = $this->post('/api/buildings', $building);
-        $this->assertPostResponse($response, $building);
-
-
-        foreach (Utility::allCombinationOfBuildingData() as $fields) {
-            $building = FakeDataGenerator::buildingDataOnly($fields);
-            $response = $this->post('/api/buildings', $building);
-            $fieldsMap = collect($fields)->map(function ($item, $key) {
-                return [$item => $item];
-            })->collapse();
-
-            if (collect($fieldsMap)->has(Fields::building())) {
-                $this->assertPostResponse($response, $building);
-            } elseif (collect($fieldsMap)->has('number')) {
-                $response->assertJson([
-                    'status' => 400,
-                    'error' => [
-                        'number_of_offices' => ['The number of offices field is required.']
-                    ],
-                ]);
-            } elseif (collect($fieldsMap)->has('number_of_offices')) {
-                $response->assertJson([
-                    'status' => 400,
-                    'error' => [
-                        'number' => ['The number field is required.']
-                    ],
-                ]);
-            } else{
-                $response->assertJson([
-                    'status' => 400,
-                    'error' => [
-                        'number_of_offices' => ['The number of offices field is required.'],
-                        'number' => ['The number field is required.']
-                    ],
-                ]);
-            }
-        }
-        $this->printSuccessMessage('store building; by logging with it team member');
-    }
-
     public function testShowForAdmin(){
-        $this->actingAs($this->getUser(UserType::getAdmin()));
+        $this->actingAs($this->getUser(UserType::admin()));
         $buildings = Building::orderBy('number_of_offices', 'asc')->limit(30)->get();
 
         foreach ($buildings as $building){
@@ -234,7 +200,7 @@ class BuildingTest extends TestCase
     }
 
     public function testShowForItTeamMember(){
-        $this->actingAs($this->getUser(UserType::getItTeamMember()));
+        $this->actingAs($this->getUser(UserType::itTeam()));
         $buildings = Building::orderBy('number_of_offices', 'asc')->limit(30)->get();
 
         foreach ($buildings as $building){
@@ -265,117 +231,73 @@ class BuildingTest extends TestCase
                     'id' => $building->id,
                     "number" => $building->number,
                     "number_of_offices" => $building->number_of_offices,
+                    'name' => $building->name,
+                    'description' => $building->description,
                 ]
             ]);
         }
     }
 
-    public function testUpdateForAdminWithInvalidValue1(){
-        $buildings = Building::orderBy('number_of_offices', 'asc')->limit(20)->get();
+    public function testUpdateForAdmin(){
+        $buildings = Building::inRandomOrder()->limit(20)->get();
 
         foreach ($buildings as $building){
-            $this->updateWithInvalidNumberAndNumberOfOffices($building, UserType::getAdmin());
-            $this->updateWithInvalidNumber($building, UserType::getAdmin());
+            $this->updateWithInvalidValues($building, UserType::admin());
+            $this->updateWithValidValues($building, UserType::admin());
         }
-        $this->printSuccessMessage('update building with invalid fields and values phase 1; by logging with admin');
+        $this->printSuccessMessage('update building with invalid  and valid values; by logging with admin');
     }
 
-    public function testUpdateForAdminWithInvalidValue2(){
-        $buildings = Building::orderBy('number_of_offices', 'asc')->limit(20)->get();
+    public function testUpdateForItTeamMember(){
+        $buildings = Building::inRandomOrder()->limit(20)->get();
 
         foreach ($buildings as $building){
-            $this->updateWithInvalidNumberOfOffices($building, UserType::getAdmin());
+            $this->updateWithInvalidValues($building, UserType::itTeam());
+            $this->updateWithValidValues($building, UserType::itTeam());
         }
-        $this->printSuccessMessage('update building with invalid fields and values phase 2; by logging with admin');
+        $this->printSuccessMessage('update building with invalid  and valid values; by logging with it team member');
     }
 
-    public function testUpdateForAdminWithValidValue(){
-        $buildings = Building::orderBy('number_of_offices', 'asc')->limit(20)->get();
 
-        foreach ($buildings as $building){
-            $this->updateValidFieldsAndValues($building, UserType::getAdmin());
-        }
-        $this->printSuccessMessage('update building with valid fields and values; by logging with admin');
-    }
-
-    public function testUpdateForItTeamMemberWithInvalidValue1(){
-        $buildings = Building::orderBy('number_of_offices', 'asc')->limit(20)->get();
-
-        foreach ($buildings as $building){
-            $this->updateWithInvalidNumberAndNumberOfOffices($building, UserType::getItTeamMember());
-            $this->updateWithInvalidNumber($building, UserType::getAdmin());
-        }
-        $this->printSuccessMessage('update building with invalid fields and values phase 1; by logging with it team member');
-    }
-
-    public function testUpdateForItTeamMemberWithInvalidValue2(){
-        $buildings = Building::orderBy('number_of_offices', 'asc')->limit(20)->get();
-
-        foreach ($buildings as $building){
-            $this->updateWithInvalidNumberOfOffices($building, UserType::getItTeamMember());
-        }
-        $this->printSuccessMessage('update building with invalid fields and values phase 2; by logging with it team member');
-    }
-
-    public function testUpdateForItTeamMemberWithValidValue(){
-        $buildings = Building::orderBy('number_of_offices', 'asc')->limit(20)->get();
-
-        foreach ($buildings as $building){
-            $this->updateValidFieldsAndValues($building, UserType::getItTeamMember());
-        }
-        $this->printSuccessMessage('update building with valid fields and values; by logging with it team member');
-    }
-
-    private function updateValidFieldsAndValues($building, $type){
-        if($type == UserType::getAdmin())
-            $this->actingAs($this->getUser(UserType::getAdmin()));
+    private function updateWithValidValues($building, $type){
+        if($type == UserType::admin())
+            $this->actingAs($this->getUser(UserType::admin()));
         else
-            $this->actingAs($this->getUser(UserType::getItTeamMember()));
+            $this->actingAs($this->getUser(UserType::itTeam()));
 
         $data = FakeDataGenerator::buildingData();
 
         $response = $this->put('/api/buildings/' . $building->id, $data);
         $building->number = $data['number'];
         $building->number_of_offices = $data['number_of_offices'];
-        $this->assertUpdate(6, $response, null, null, $building);
+        $building->name = $data['name'];
+        $building->description = $data['description'];
+        $this->assertUpdate(5, $response, $building);
     }
 
-    private function updateWithInvalidNumberAndNumberOfOffices($building, $type){
-        if($type == UserType::getAdmin())
-            $this->actingAs($this->getUser(UserType::getAdmin()));
+    private function updateWithInvalidValues($building, $type){
+        if($type == UserType::admin())
+            $this->actingAs($this->getUser(UserType::admin()));
         else
-            $this->actingAs($this->getUser(UserType::getItTeamMember()));
+            $this->actingAs($this->getUser(UserType::itTeam()));
 
         $response = $this->put('/api/buildings/' . $building->id, ['number' => '', 'number_of_offices' => '']);
-        $this->assertUpdate(5, $response);
-
-    }
-
-    private function updateWithInvalidNumber(Building $building, $type){
-        if($type == UserType::getAdmin())
-            $this->actingAs($this->getUser(UserType::getAdmin()));
-        else
-            $this->actingAs($this->getUser(UserType::getItTeamMember()));
-
-        $response = $this->put('/api/buildings/' . $building->id, ['number' => '']);
         $this->assertUpdate(2, $response);
-    }
-
-    private function updateWithInvalidNumberOfOffices(Building $building, $type){
-        if($type == UserType::getAdmin())
-            $this->actingAs($this->getUser(UserType::getAdmin()));
-        else
-            $this->actingAs($this->getUser(UserType::getItTeamMember()));
 
         $response = $this->put('/api/buildings/' . $building->id, ['number_of_offices' => 'test']);
+        $this->assertUpdate(3, $response);
+
+        $data = Building::where('name', '!=', null)->inRandomOrder()->first();
+        $response = $this->put('/api/buildings/' . $building->id, ['name' => $data->name, 'number' => $data->number]);
         $this->assertUpdate(4, $response);
 
-        $response = $this->put('/api/buildings/' . $building->id, ['number_of_offices' => '']);
-        $this->assertUpdate(3, $response);
+        $id =  Building::orderBy('id', 'desc')->first()->id + rand(1, 50);
+        $response = $this->put('/api/buildings/' . $id, ['name' => null, 'number' => null]);
+        $this->assertUpdate(1, $response);
 
     }
 
-    private function assertUpdate($case, $response, $key=null, $value=null, $building=null){
+    private function assertUpdate($case, $response, $building=null){
         switch ($case){
             case 1:
                 $response->assertJson( [
@@ -389,6 +311,7 @@ class BuildingTest extends TestCase
                 $response->assertJson([
                     'status' => 400,
                     'error' => [
+                        'number_of_offices' => ['The number of offices field is required.'],
                         'number' => ['The number field is required.']
                     ],
                 ]);
@@ -397,7 +320,7 @@ class BuildingTest extends TestCase
                 $response->assertJson([
                     'status' => 400,
                     'error' => [
-                        'number_of_offices' => ['The number of offices field is required.']
+                        'number_of_offices' => ['The number of offices must be an integer.']
                     ],
                 ]);
                 break;
@@ -405,59 +328,27 @@ class BuildingTest extends TestCase
                 $response->assertJson([
                     'status' => 400,
                     'error' => [
-                        'number_of_offices' => ['The number of offices must be an integer.']
+                        'name' => ['The name has already been taken.'],
+                        'number' => ["The number has already been taken."],
                     ],
                 ]);
                 break;
             case 5:
-                $response->assertJson([
-                    'status' => 400,
-                    'error' => [
-                        'number_of_offices' => ['The number of offices field is required.'],
-                        'number' => ['The number field is required.']
-                    ],
-                ]);
-                break;
-            case 6:
-                $user = $this->changeUserValue($key, $value, $building);
                 $response->assertJson( [
                     'status' => 200,
                     'building' => [
                         'id' => $building->id,
                         "number" => $building->number,
                         "number_of_offices" => $building->number_of_offices,
+                        "name" => $building->name,
+                        "description" => $building->description,
                     ],
                 ]);
-                return $user;
         }
-    }
-
-    private function changeUserValue($attribute, $value, $building){
-        switch ($attribute){
-            case 'number':
-                $building->number = $value;
-                break;
-            case 'number_of_offices':
-                $building->number_of_offices = $value;
-                break;
-//            case 'last_name':
-//                $user->last_name = $value;
-//                break;
-//            case 'email':
-//                $user->email = $value;
-//                break;
-//            case 'phone':
-//                $user->phone = $value;
-//                break;
-//            case 'type':
-//                $user->type = $value;
-//                break;
-        }
-        return $building;
     }
 
     public function testDestroyForAdmin(){
-        $this->actingAs($this->getUser(UserType::getAdmin()));
+        $this->actingAs($this->getUser(UserType::admin()));
         $buildings = Building::orderBy('number_of_offices', 'asc')->limit(30)->get();
 
         foreach ($buildings as $building){
@@ -484,7 +375,7 @@ class BuildingTest extends TestCase
     }
 
     public function testDestroyForItTeamMember(){
-        $this->actingAs($this->getUser(UserType::getItTeamMember()));
+        $this->actingAs($this->getUser(UserType::itTeam()));
         $buildings = Building::orderBy('number_of_offices', 'asc')->limit(30)->get();
 
         foreach ($buildings as $building){
