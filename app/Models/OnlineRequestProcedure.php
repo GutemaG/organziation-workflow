@@ -58,4 +58,13 @@ class OnlineRequestProcedure extends Model
     public function users() {
         return $this->belongsToMany(User::class, 'online_request_procedure_users', 'procedure_id', 'user_id');
     }
+
+    /**
+     * Get the building that owns the online request procedure.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function building() {
+        return $this->belongsTo(Building::class, 'responsible_bureau_id');
+    }
 }

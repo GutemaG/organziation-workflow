@@ -59,6 +59,18 @@ class Rule
         ];
     }
 
+    public static function onlineRequest() {
+        return [
+            'name' => 'required|string|max:300|unique:online_requests',
+            'description' => 'required|string',
+            'online_request_procedures.*.responsible_bureau_id' => ['required', 'integer', BaseRule::exists('bureaus', 'id')],
+            'online_request_procedures.*.description' => 'nullable|string',
+            'online_request_procedures.*.step_number' => 'required|integer',
+            'online_request_procedures.*.responsible_user_id.*.user_id' => ['required', 'integer', BaseRule::exists('users', 'id')],
+            'prerequisite_labels.*.label' => 'nullable|string',
+        ];
+    }
+
     /**
      * return all necessary rules for validating fields of requested model.
      *
