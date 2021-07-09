@@ -6,4 +6,5 @@ export default [
     { path: '/bureaus', component: require('./components/Bureau.vue').default },
     { path: '/requests', component: require('./components/Request.vue').default },
     { path: '/buildings', component: require('./components/Building.vue').default },
+    { path: '/add-request', component: require('./components/request/AddRequest.vue').default },
 ];

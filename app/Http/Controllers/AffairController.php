@@ -23,11 +23,23 @@ class AffairController extends Controller
 
     public function index()
     {
-        return Affair::first();
+        if(!Gate::any(['is-admin', 'is-it-team-member'])){
+            return response()->json([
+                'status' => 401,
+                'error' => 'unauthorized'
+            ]);
+        }
+        $affairs = Affair::all();
+        return response()->json(
+            [
+                'status' => 200,
+                'affairs' => $affairs
+            ]
+        );
     }
     public function store(Request $request)
     {
-        if (Gate::any(['it-team-member', 'admin'])) {
+        if (!Gate::any(['it-team-member', 'is-admin'])) {
             return response()->json(
                 [
                     'status' => 401,
@@ -38,7 +50,7 @@ class AffairController extends Controller
         $request_affair = $request->only('affair');
 
         $validation = $this->validateData($request_affair['affair']);
-        
+
 
         if ($validation->fails()) {
             return $validation->errors();
@@ -69,8 +81,8 @@ class AffairController extends Controller
                     'step' => $pro['step']
                 ]);
                 // return $pro;
-                if(array_key_exists('pre_request', $pro)){
-                    $pre_requests = $pro['pre_request'];
+                if (array_key_exists('pre_requests', $pro)) {
+                    $pre_requests = $pro['pre_requests'];
                     foreach ($pre_requests as $pre_request) {
                         $procedure->preRequests()->create([
                             'name' => $pre_request['name'],
@@ -78,8 +90,7 @@ class AffairController extends Controller
                             'affair_id' => $pre_request['affair_id']
                         ]);
                     }
-                }
-                else{
+                } else {
                     continue;
                 }
             }
@@ -99,26 +110,26 @@ class AffairController extends Controller
             'affair' => Affair::find($affair->id)
         ];
     }
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
 
-        if(Gate::any(['is-it-team-member','is-admin'])){
+        if (Gate::any(['is-it-team-member', 'is-admin'])) {
             return response()->json([
-                'status'=>401,
+                'status' => 401,
                 'error' => 'unauthorized'
             ]);
         }
         $affair = Affair::find($id);
-        if(empty($affair)){
-            return response()->json(['status'=>400, 'error'=>'Affair does not exist']);
+        if (empty($affair)) {
+            return response()->json(['status' => 400, 'error' => 'Affair does not exist']);
         }
         $request_affair = $request->only('affair');
         // return $affair->name;
         // return $request_affair['affair']['name'];
-        if($affair->name === $request_affair['affair']['name']){
-            $validation = $this->validateUpdateData($request_affair['affair'],true);
-        }
-        else{
-            $validation = $this->validateUpdateData($request_affair['affair'],true);
+        if ($affair->name === $request_affair['affair']['name']) {
+            $validation = $this->validateUpdateData($request_affair['affair'], true);
+        } else {
+            $validation = $this->validateUpdateData($request_affair['affair'], true);
         }
         if ($validation->fails()) {
             return $validation->errors();
@@ -126,11 +137,10 @@ class AffairController extends Controller
         $validated_data = $validation->validated();
         try {
             DB::beginTransaction();
-            if(array_key_exists('name',$validated_data)){
-                $affair->update(['name'=>$validated_data['name'], 'description'=>$validated_data['description']]);
-            }
-            else{
-                $affair->update(['description'=>$validated_data['description']]);
+            if (array_key_exists('name', $validated_data)) {
+                $affair->update(['name' => $validated_data['name'], 'description' => $validated_data['description']]);
+            } else {
+                $affair->update(['description' => $validated_data['description']]);
             }
             // return $affair;
             //Todo: first find authenticated user
@@ -150,7 +160,7 @@ class AffairController extends Controller
                     'description' => $pro['description'],
                     'step' => $pro['step']
                 ]);
-                if(!array_key_exists('pre_requests', $pro)){
+                if (!array_key_exists('pre_requests', $pro)) {
                     continue;
                 }
                 // return $pro;
@@ -176,21 +186,22 @@ class AffairController extends Controller
             ]);
         }
         return response()->json([
-            'status'=>200,
-            'Affair'=>Affair::find($affair->id)
+            'status' => 200,
+            'Affair' => Affair::find($affair->id)
         ]);
     }
-    public function show($id){
-        if(Gate::any(['is-admin', 'is-it-team-member'])){
+    public function show($id)
+    {
+        if (Gate::any(['is-admin', 'is-it-team-member'])) {
             return response()->json([
-                'status' =>401,
+                'status' => 401,
                 'error' => 'unauthorized'
             ]);
         }
         $affair =  Affair::find($id);
-        if(empty($affair)){
+        if (empty($affair)) {
             return response()->json([
-                'status' =>400,
+                'status' => 400,
                 'error' => 'Affair is not found'
             ]);
         }
@@ -204,13 +215,14 @@ class AffairController extends Controller
             'procedures.*.name' => 'required|string',
             'procedures.*.description' => 'nullable|string',
             'procedures.*.step' => 'required|integer',
-            'procedures.*.pre_request.*.name' => "nullable|string|required_if:pre_request.affair_id,'!null'",
-            'procedures.*.pre_request.*.description' => "nullable|string|",
-            'procedures.*.pre_request.*.affair_id' => "nullable|integer|required_if: procedures.*.pre_request.*.name, ''",
+            'procedures.*.pre_requests.*.name' => "nullable|string|required_if:pre_request.affair_id,'!null'",
+            'procedures.*.pre_requests.*.description' => "nullable|string|",
+            'procedures.*.pre_requests.*.affair_id' => "nullable|integer|required_if: procedures.*.pre_request.*.name, ''",
         ];
         return Validator::make($data, $rule);
     }
-    public function validateUpdateData($data, $is_name_the_same=false){
+    public function validateUpdateData($data, $is_name_the_same = false)
+    {
         $update_rule = [
             'description' => 'nullable|string',
             'procedures.*.name' => 'required|string',
@@ -224,11 +236,10 @@ class AffairController extends Controller
             'procedures.*.pre_requests.*.procedure_id' => "required|integer",
             'procedures.*.pre_requests.*.affair_id' => "nullable|integer|required_if: procedures.*.pre_request.*.name, ''",
         ];
-            if($is_name_the_same){
-                $update_rule['name'] =  'required|string';
-            }
+        if ($is_name_the_same) {
+            $update_rule['name'] =  'required|string';
+        }
         return Validator::make($data, $update_rule);
-
     }
 
     public static function testing()
@@ -278,9 +289,10 @@ class AffairController extends Controller
         return $aff;
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         return Affair::find(58);
-        if(!Gate::allows(['is-admin','is-it-team-member'])){
+        if (!Gate::allows(['is-admin', 'is-it-team-member'])) {
             return response()->json([
                 'status' => 401,
                 'error' => 'Unauthorized.',
@@ -288,13 +300,13 @@ class AffairController extends Controller
         }
         $affair = Affair::find($id);
         //Todo: Delete the relation ships 
-        if(empty($affair)){
+        if (empty($affair)) {
             return response()->json([
                 'status' => 400,
                 'error' => 'Affair does not exist'
             ]);
         }
         $affair->delete();
-        return response()->json(['status'=>200]);
+        return response()->json(['status' => 200]);
     }
 }

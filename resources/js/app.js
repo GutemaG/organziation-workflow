@@ -54,6 +54,7 @@ Vue.component('add-bureau-modal', require('./components/bureau/AddBureauModal.vu
 Vue.component('edit-bureau-modal', require('./components/bureau/EditBureauModal.vue').default);
 Vue.component('add-building-modal', require('./components/building/AddBuildingModal.vue').default);
 Vue.component('edit-building-modal', require('./components/building/EditBuildingModal.vue').default);
+Vue.component('base-input', require('./components/Base/BaseInput.vue').default);
 
 import store from './store'
 import Vue from 'vue';

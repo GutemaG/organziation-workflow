@@ -27,9 +27,10 @@ Route::middleware(['auth'])->prefix('api')->group(function (){
     Route::resource('/buildings', \App\Http\Controllers\BuildingController::class);
 
     Route::resource('/bureaus', \App\Http\Controllers\BureauController::class);
+    Route::resource('/affairs', \App\Http\Controllers\AffairController::class);
 
 });
-Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
+// Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
 // Route::post('/affairs', '\App\Http\Controllers\AffairController@store');
 
 Route::get('/{vue_capture?}', function () {

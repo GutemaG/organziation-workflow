@@ -45,7 +45,7 @@
         @endcan
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-cog green"></i>
+            <i class="nav-icon fas fa-home blue"></i>
             <p>
               Bureau
               <i class="right fas fa-angle-left"></i>
@@ -54,7 +54,7 @@
           <ul class="nav nav-treeview">
             <li class="nav-item">
               <router-link to="/bureaus" class="nav-link">
-                <i class="nav-icon fas fa-list-ol orange"></i>
+                <i class="nav-icon fas fa-list-ol green"></i>
                 <p>
                   Bureau
                 </p>
@@ -62,7 +62,7 @@
             </li>
             <li class="nav-item">
               <router-link to="/buildings" class="nav-link">
-                <i class="nav-icon fas fa-tags green"></i>
+                <i class="nav-icon fas fa-building green"></i>
                 <p>Buildings</p>
               </router-link>
             </li>
@@ -71,7 +71,7 @@
 
         <li class="nav-item">
           <router-link to="/requests" class="nav-link">
-            <i class="nav-icon fas fa-list orange"></i>
+            <i class="nav-icon fas fa-list blue"></i>
             <p>
               Request
             </p>
