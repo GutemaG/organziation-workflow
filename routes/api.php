@@ -14,22 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-<<<<<<< HEAD
-Route::resource('/users', \App\Http\Controllers\UserController::class); 
+// Route::resource('/users', \App\Http\Controllers\UserController::class); 
+// Route::resource('/users', \App\Http\Controllers\UserController::class);
+// Route::post('/account', [\App\Http\Controllers\AccountController::class, 'update']);
+// Route::resource('buildings', \App\Http\Controllers\BuildingController::class);
+// Route::resource('bureaus', \App\Http\Controllers\BureauController::class);
+// Route::post('/account/change-password', [\App\Http\Controllers\AccountController::class, 'changePassword']);
 
-=======
->>>>>>> 6b7fba761e5fbb5d4ecf29612adc6d396aa487ff
-//Route::resource('/users', \App\Http\Controllers\UserController::class);
-//Route::post('/account', [\App\Http\Controllers\AccountController::class, 'update']);
-//Route::resource('buildings', \App\Http\Controllers\BuildingController::class);
-//Route::resource('bureaus', \App\Http\Controllers\BureauController::class);
-<<<<<<< HEAD
-=======
-//Route::post('/account/change-password', [\App\Http\Controllers\AccountController::class, 'changePassword']);
-
-Route::resource('/users', \App\Http\Controllers\UserController::class);
->>>>>>> 6b7fba761e5fbb5d4ecf29612adc6d396aa487ff
-
+// Route::resource('/users', \App\Http\Controllers\UserController::class);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-8">
         <div class="leftside">
@@ -63,13 +63,6 @@
 </script>
 
 <style scoped>
-.dashboard {
-  padding: 0%;
-  margin-top: 1%;
-}
-.row {
-  margin-left: 12px;
-}
 .leftside, .rightside {
   width: 100%;
 }

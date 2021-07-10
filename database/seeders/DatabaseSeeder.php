@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
          User::create([
-            'user_name' => 'admin',
+            'user_name' => 'Admin',
             'first_name' =>'birhanu',
             'last_name' => 'Gudisa',
             'email' => 'owgs@astu.com',

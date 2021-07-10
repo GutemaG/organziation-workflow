@@ -43,12 +43,9 @@ class AccountController extends Controller
         try {
             $user = User::find(auth()->user()->getAuthIdentifier());
             DB::beginTransaction();
-<<<<<<< HEAD
-            $user->update(Fields::filter_user_fields($data));
+            $user->update(Fields::filterUserFields($data));
             // return Fields::filter_user_fields($data);
-=======
             $user->update($data);
->>>>>>> 6b7fba761e5fbb5d4ecf29612adc6d396aa487ff
             DB::commit();
             return response()->json([
                 'status' => 200,
@@ -113,7 +110,7 @@ class AccountController extends Controller
         else {
             try {
                 DB::beginTransaction();
-                auth()->user()->forceFill([
+                auth()->user()->update([
                     'password' => Hash::make($data['password']),
                 ]);
                 DB::commit();
