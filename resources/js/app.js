@@ -43,10 +43,9 @@ window.Toast = Toast;
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+//const files = require.context('./', true, /\.vue$/i)
+//files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('edit-user-modal', require('./components/user/EditModal.vue').default);
 Vue.component('add-user-modal', require('./components/user/AddUserModal.vue').default);
 Vue.component('home', require('./components/Home.vue').default);
@@ -55,6 +54,10 @@ Vue.component('edit-bureau-modal', require('./components/bureau/EditBureauModal.
 Vue.component('add-building-modal', require('./components/building/AddBuildingModal.vue').default);
 Vue.component('edit-building-modal', require('./components/building/EditBuildingModal.vue').default);
 Vue.component('base-input', require('./components/Base/BaseInput.vue').default);
+
+//Registering new component 
+//import components from './components'
+//Vue.component(components);
 
 import store from './store'
 import Vue from 'vue';
@@ -77,5 +80,5 @@ const router = new VueRouter({
 const app = new Vue({
     el: '#app',
     router,
-    store
+    store,
 });

@@ -7,4 +7,5 @@ export default [
     { path: '/requests', component: require('./components/Request.vue').default },
     { path: '/buildings', component: require('./components/Building.vue').default },
     { path: '/add-request', component: require('./components/request/AddRequest.vue').default },
+    { path: '/request/edit/:id',props:true, component: require('./components/request/EditRequest.vue').default },
 ];

@@ -20,7 +20,7 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
           <!-- Main content -->
-          <router-view></router-view>
+          <router-view :key="$route.fullPath"></router-view>
           <vue-progress-bar></vue-progress-bar>
           <!-- /.content -->
         </div>

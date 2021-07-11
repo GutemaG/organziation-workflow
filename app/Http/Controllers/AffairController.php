@@ -23,7 +23,7 @@ class AffairController extends Controller
 
     public function index()
     {
-        if(!Gate::any(['is-admin', 'is-it-team-member'])){
+        if (!Gate::any(['is-admin', 'is-it-team-member'])) {
             return response()->json([
                 'status' => 401,
                 'error' => 'unauthorized'
@@ -59,19 +59,20 @@ class AffairController extends Controller
         try {
             DB::beginTransaction();
             //Todo: first find authenticated user
-            /**
-           $user = auth()->user();
-            $affair = $user->affairs()->create([
-                'name' => $data['name'],
-                'description' => $data['description'],
-                'user_id' => 2
+
+            //    $user = auth()->user();
+            $affair = auth()->user()->affairs()->create([
+                'name' => $validated_data['name'],
+                'description' => $validated_data['description'],
             ]);
-             */
-            $affair = Affair::create([
+
+            /**
+             * $affair = Affair::create([
                 'name' => $validated_data['name'],
                 'description' => $validated_data['description'],
                 'user_id' => 2
             ]);
+             */
             $procedures = $validated_data['procedures'];
 
             foreach ($procedures as $pro) {
@@ -113,7 +114,7 @@ class AffairController extends Controller
     public function update(Request $request, $id)
     {
 
-        if (Gate::any(['is-it-team-member', 'is-admin'])) {
+        if (!Gate::any(['is-it-team-member', 'is-admin'])) {
             return response()->json([
                 'status' => 401,
                 'error' => 'unauthorized'
@@ -291,8 +292,7 @@ class AffairController extends Controller
 
     public function destroy($id)
     {
-        return Affair::find(58);
-        if (!Gate::allows(['is-admin', 'is-it-team-member'])) {
+        if (!Gate::any(['is-admin', 'is-it-team-member'])) {
             return response()->json([
                 'status' => 401,
                 'error' => 'Unauthorized.',
