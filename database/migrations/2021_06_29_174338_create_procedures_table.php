@@ -22,7 +22,7 @@ class CreateProceduresTable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('affair_id')->references('id')->on('affairs');
+            $table->foreign('affair_id')->references('id')->on('affairs')->onDelete('cascade');
         });
     }
 

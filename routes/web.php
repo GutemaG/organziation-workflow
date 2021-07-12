@@ -9,13 +9,13 @@ Route::get('/', function () {
 //Route::get('/home', function () {
 //    return view('home');
 //})->middleware('verified')->name('home');
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::middleware(['auth'])->prefix('api')->group(function (){
+Route::middleware(['auth'])->prefix('api')->group(function () {
     Route::resource('/users', \App\Http\Controllers\UserController::class);
 
     Route::post('/account', [\App\Http\Controllers\AccountController::class, 'update'])
@@ -28,10 +28,18 @@ Route::middleware(['auth'])->prefix('api')->group(function (){
 
     Route::resource('/bureaus', \App\Http\Controllers\BureauController::class);
     Route::resource('/affairs', \App\Http\Controllers\AffairController::class);
-
+    Route::delete('/delete-procedure/{id}/{affair_id}', [\App\Http\Controllers\AffairController::class, 'deleteProcedure']);
+    Route::delete('/delete-pre-request/{id}/{procedure_id}', [\App\Http\Controllers\AffairController::class, 'deletePreRequest']);
+    // Route::delete('/delete-procedure/{id}/{affair_id}', function ($id, $affair_id) {
+    //     return response()->json([
+    //         'id' => $id,
+    //         'affair_id' => $affair_id
+    //     ]);
+    // });
 });
 // Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
 // Route::post('/affairs', '\App\Http\Controllers\AffairController@store');
+
 
 Route::get('/{vue_capture?}', function () {
     return view('home');

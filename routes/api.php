@@ -27,3 +27,11 @@ Route::resource('/affairss', \App\Http\Controllers\AffairController::class);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+/*
+Route::delete('/delete-procedure/{id}/{affair_id}',function($id, $affair_id){
+    return response()->json([
+        'id'=>$id,
+        'affair_id'=>$affair_id
+    ]);
+});
+*/

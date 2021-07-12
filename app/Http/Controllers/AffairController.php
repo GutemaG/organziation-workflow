@@ -309,4 +309,33 @@ class AffairController extends Controller
         $affair->delete();
         return response()->json(['status' => 200]);
     }
+    public function deleteProcedure($id, $affair_id)
+    {
+        $procedure = Procedure::where('id', $id)->where('affair_id', $affair_id)->first();
+        // return $procedure;
+        if (empty($procedure)) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'Does not exist'
+            ]);
+        }
+        $procedure->delete();
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+    public function deletePreRequest($id, $procedure_id){
+        $pre_request = PreRequest::where('id', $id)->where('procedure_id', $procedure_id)->first();
+        if(empty($pre_request)){
+            return response()->json([
+                'status' => 400,
+                'error' => 'Does not exist'
+            ]);
+
+        }
+        $pre_request->delete();
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
 }

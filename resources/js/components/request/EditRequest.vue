@@ -49,7 +49,7 @@
                   <b-col cols="3">
                     <b-button
                       v-if="procedureLength > 1"
-                      @click="removeProcedure(procedure_index)"
+                      @click="deleteProcedure(procedure_index, procedure.id)"
                       variant="danger"
                     >
                       <i class="fa fa-trash"></i>
@@ -118,7 +118,12 @@
                           <b-col cols="4">
                             <b-button
                               @click="
-                                removePreRequest(procedure_index, pre_index)
+                                deletePreRequest(
+                                  procedure_index,
+                                  pre_index,
+                                  pre_request.id,
+                                  procedure.id
+                                )
                               "
                               variant="outline-danger"
                             >
@@ -138,13 +143,13 @@
                         "
                       >
                         <b-form-input
-                        :id="
-                          'pre_request-' +
-                          procedure_index +
-                          '-' +
-                          pre_index +
-                          '-name-input'
-                        "
+                          :id="
+                            'pre_request-' +
+                            procedure_index +
+                            '-' +
+                            pre_index +
+                            '-name-input'
+                          "
                           v-model="pre_request.name"
                           placeholder="Enter Pre Request Name"
                           required
@@ -202,7 +207,7 @@
                       >
                         <b-form-select
                           v-model="pre_request.affair_id"
-                          :options="affair_options"
+                          :options="affair_ids"
                           id="pre-request-affair-input"
                           v-bind:disabled="
                             pre_request.name.length !== 0 ||
@@ -261,16 +266,22 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["affairs"]),
+    ...mapGetters(["affairs", "affair_ids"]),
     selectedAffair2() {
       return this.selectedAffair;
     },
     procedureLength() {
-      return 2;
+      return this.selectedAffair.procedures.length;
     },
   },
   methods: {
-    ...mapActions(["addAffair", "fetchAffairs", "updateAffair"]),
+    ...mapActions([
+      "addAffair",
+      "fetchAffairs",
+      "updateAffair",
+      "removePreRequest",
+      "removeProcedure"
+    ]),
     submitHandler() {
       alert(`Thank you for your order!`);
     },
@@ -282,14 +293,49 @@ export default {
       this.updateAffair(data);
       console.log(JSON.stringify(data));
     },
+    addPreRequest(){
+
+      console.log("adding Pre Request");
+    },
     addProcedure() {
       console.log("adding Procedure");
     },
-    removeProcedure(procedure_index) {
-      console.log(procedure_index);
+    deleteProcedure(procedure_index, procedure_id) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        // Send request to the server
+        if (result.value) {
+          let affair_id = this.selectedAffair.id
+          this.removeProcedure({procedure_id, affair_id});
+          console.log(this.selectedAffair.id, procedure_id);
+          let pro = this.selectedAffair.procedures;
+          pro.splice(procedure_index, 1)
+        }
+      });
     },
-    removePreRequest(procedure_index, pre_index) {
-      console.log(procedure_index, pre_index);
+    deletePreRequest(procedure_index, pre_index, pre_request_id, procedure_id) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        // Send request to the server
+        if (result.value) {
+          this.removePreRequest({ pre_request_id, procedure_id });
+          let pre =
+            this.selectedAffair.procedures[procedure_index].pre_requests;
+          pre.splice(pre_index, 1);
+        }
+      });
     },
   },
   created() {
@@ -299,33 +345,4 @@ export default {
     )[0];
   },
 };
-
-/*
-
-        <b-form-group
-          label="Affair Name"
-          label-for="selected-affair-name-input"
-        >
-          <b-form-input
-            id="selected-affair-name-input"
-            v-model="selectedAffair.name"
-            placeholder="Enter Affair Name"
-            required
-          ></b-form-input>
-        </b-form-group>
-
-        <b-form-group
-          label="Description"
-          lableFor="selected-affair-description"
-          class="mb-1 mt-1"
-          label-for="procedure-description-input"
-        >
-          <b-form-textarea
-            rows="3"
-            v-model="selectedAffair.description"
-            id="'affair-description'"
-            placeholder="description for current procedure(optional)"
-          ></b-form-textarea>
-        </b-form-group>
-*/
 </script>

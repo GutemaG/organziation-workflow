@@ -22,7 +22,7 @@ class CreatePreRequestsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('procedure_id')->references('id')->on('procedures');
+            $table->foreign('procedure_id')->references('id')->on('procedures')->onDelete('cascade');
             $table->foreign('affair_id')->references('id')->on('affairs');
         });
     }

@@ -168,13 +168,25 @@
                       >
                         <b-form-select
                           v-model="pre_request.affair_id"
-                          :options="affair_options"
                           id="pre-request-affair-input"
-                          v-bind:disabled="pre_request.name.length !== 0 || pre_request.description.length !== 0"
+                          :options="affair_ids"
+                          v-bind:disabled="
+                            pre_request.name.length !== 0 ||
+                            pre_request.description.length !== 0
+                          "
                         >
-                          <b-form-select-option value="" v-bind:selected="pre_request.name.length !== 0 || pre_request.description.length !== 0" 
-                            >Select Affair: if pre request is affair(optional)</b-form-select-option
-                          >
+                              <!-- v-bind:selected="
+                                pre_request.name.length !== 0 ||
+                                pre_request.description.length !== 0
+                              " -->
+                          
+                          <slot  hidden>
+                            <b-form-select-option
+                              value=""
+                              >Select Affair: if pre request is
+                              affair(optional)</b-form-select-option
+                            >
+                          </slot>
                         </b-form-select>
                       </b-form-group>
                     </b-card>
@@ -203,7 +215,7 @@
   </b-container>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -219,21 +231,16 @@ export default {
           },
         ],
       },
-      affair_options:[
-          {value:"1", text:"something"},
-          {value:"1", text:"nt"},
-          {value:"1", text:"nothi"},
-          {value:"1", text:"ging"},
-      ]
     };
   },
   computed: {
+    ...mapGetters(["affair_ids"]),
     procedureLength() {
       return this.affair.procedures.length;
     },
   },
   methods: {
-    ...mapActions(['addAffair']),
+    ...mapActions(["addAffair"]),
     submitHandler() {
       alert(`Thank you for your order!`);
     },
@@ -277,8 +284,8 @@ export default {
     handleSubmit(event) {
       event.preventDefault();
       let data = {
-        affair: this.affair
-      }
+        affair: this.affair,
+      };
       this.addAffair(data);
       console.log(JSON.stringify(this.affair));
     },
