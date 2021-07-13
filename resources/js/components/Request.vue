@@ -3,9 +3,9 @@
     <router-link to="/add-request" class="m-2">
       <b-button size="sm" class="mr-1" variant="primary"> + Add </b-button>
     </router-link>
-        
+
     <div>
-      <b-list-group v-for="(affair, index) in affairs" :key="index" >
+      <b-list-group v-for="(affair, index) in affairs" :key="index">
         <b-row>
           <b-col class="cols-8">
             <b-list-group-item class="m-1" @click="collapse(index)">
@@ -18,12 +18,17 @@
                 Show Detail
               </b-button>
 
-              <router-link :to="'/request/edit/'+affair.id" class="">
+              <router-link :to="'/request/edit/' + affair.id" class="">
                 <b-button size="sm" class="m-1" variant="primary">
                   Edit
                 </b-button>
               </router-link>
-              <b-button size="sm" class="m-1" variant="danger" @click="deleteAffair(affair.id)">
+              <b-button
+                size="sm"
+                class="m-1"
+                variant="danger"
+                @click="deleteAffair(affair.id)"
+              >
                 Delete
               </b-button>
             </b-row>
@@ -90,8 +95,8 @@ export default {
     collapse(id) {
       this.$root.$emit("bv::toggle::collapse", "affair-" + id);
     },
-    edit(affair){
-      console.log('editing');
+    edit(affair) {
+      console.log("editing");
     },
     deleteAffair(id) {
       Swal.fire({
@@ -104,11 +109,10 @@ export default {
       }).then((result) => {
         // Send request to the server
         if (result.value) {
-          this.removeAffair(id)
+          this.removeAffair(id);
         }
       });
-    }
-
+    },
   },
   created() {
     this.fetchAffairs();
@@ -119,25 +123,6 @@ export default {
   //     console.log("isJustShown:", isJustShown);
   //   });
   // },
- 
- 
 
-  /** 
-   <b-col sm="7" md="6" class="my-1">
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="total_affairs"
-          :per-page="perPage"
-          align="fill"
-          size="sm"
-          class="my-0"
-          first-text="First"
-          prev-text="Prev"
-          next-text="Next"
-          last-text="Last"
-          aria-controls="itemList"
-        ></b-pagination>
-      </b-col>
-      */
 };
 </script>

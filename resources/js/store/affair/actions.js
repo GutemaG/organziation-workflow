@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export default {
     async fetchAffairs({ commit }) {
         try {
@@ -96,5 +98,38 @@ export default {
         } catch (error) {
             Swal.fire("Failed!", error.message, "warning");
         }
+    },
+    async addProcedure({ commit }, data) {
+        await axios
+            .post("/api/add-procedure", {
+                affair_id: data.affair_id,
+                name: data.name,
+                description: data.description,
+                step: data.step
+            })
+            .then(resp => {
+                let procedure = resp.data.procedure;
+                console.log('resp: ', procedure)
+                commit("ADD_PROCEDURE", procedure);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    },
+    async addPreRequest({ commit }, data) {
+        await axios
+            .post("/api/add-pre-request", {
+                procedure_id: data.procedure_id,
+                name: data.name,
+                description: data.description,
+            })
+            .then(resp => {
+                let pre_request = resp.data.pre_request;
+                let selected_affair_id = data.selected_affair_id
+                commit("ADD_PRE_REQUEST", { pre_request, selected_affair_id});
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 };

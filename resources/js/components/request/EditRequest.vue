@@ -229,7 +229,7 @@
                   </div>
 
                   <b-button
-                    @click="addPreRequest(procedure_index)"
+                    @click="addPreRequest(procedure.id)"
                     variant="primary"
                     class="m-1"
                   >
@@ -248,21 +248,22 @@
         >Submit</b-button
       >
     </b-form>
+
+    <add-pre-request v-if="isAddingPreRequest" :procedure_id="selected_procedure_id" :affair_id="selectedAffair.id"></add-pre-request>
+    <add-procedure :affair_id="selectedAffair.id"></add-procedure>
   </b-container>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
 // import store from '@/'
 export default {
+  props: ["id"],
   data() {
     return {
-      last_name: "birhanu",
       affair_id: this.$route.params.id,
       selectedAffair: {},
-      affair_options: [
-        { value: 1, text: "1" },
-        { value: 2, text: "2" },
-      ],
+      selected_procedure_id:"",
+      isAddingPreRequest: false,
     };
   },
   computed: {
@@ -280,7 +281,7 @@ export default {
       "fetchAffairs",
       "updateAffair",
       "removePreRequest",
-      "removeProcedure"
+      "removeProcedure",
     ]),
     submitHandler() {
       alert(`Thank you for your order!`);
@@ -293,12 +294,9 @@ export default {
       this.updateAffair(data);
       console.log(JSON.stringify(data));
     },
-    addPreRequest(){
-
-      console.log("adding Pre Request");
-    },
     addProcedure() {
-      console.log("adding Procedure");
+      console.log("adding Procedurrrrre");
+      this.$root.$emit("bv::show::modal", "add-procedure");
     },
     deleteProcedure(procedure_index, procedure_id) {
       Swal.fire({
@@ -311,13 +309,18 @@ export default {
       }).then((result) => {
         // Send request to the server
         if (result.value) {
-          let affair_id = this.selectedAffair.id
-          this.removeProcedure({procedure_id, affair_id});
+          let affair_id = this.selectedAffair.id;
+          this.removeProcedure({ procedure_id, affair_id });
           console.log(this.selectedAffair.id, procedure_id);
           let pro = this.selectedAffair.procedures;
-          pro.splice(procedure_index, 1)
+          pro.splice(procedure_index, 1);
         }
       });
+    },
+    addPreRequest(procedure_id){
+      this.selected_procedure_id= procedure_id
+      this.isAddingPreRequest = true;
+      this.$root.$emit("bv::show::modal", "add-pre-request");
     },
     deletePreRequest(procedure_index, pre_index, pre_request_id, procedure_id) {
       Swal.fire({
@@ -339,10 +342,16 @@ export default {
     },
   },
   created() {
-    this.affair_id = this.$route.params.id;
-    this.selectedAffair = this.affairs.filter(
-      (affair) => affair.id == this.affair_id
-    )[0];
+    if (this.affairs.length === 0) {
+      this.$router.push("/requests");
+      console.log(this.$route.path);
+    } else {
+      if (this.selectedAffair) {
+        this.selectedAffair = this.affairs.filter(
+          (affair) => affair.id == this.affair_id
+        )[0];
+      }
+    }
   },
 };
 </script>

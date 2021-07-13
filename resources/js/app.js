@@ -54,6 +54,8 @@ Vue.component('edit-bureau-modal', require('./components/bureau/EditBureauModal.
 Vue.component('add-building-modal', require('./components/building/AddBuildingModal.vue').default);
 Vue.component('edit-building-modal', require('./components/building/EditBuildingModal.vue').default);
 Vue.component('base-input', require('./components/Base/BaseInput.vue').default);
+Vue.component('add-procedure', require('./components/request/AddProcedure.vue').default);
+Vue.component('add-pre-request', require('./components/request/AddPreRequest.vue').default);
 
 //Registering new component 
 //import components from './components'

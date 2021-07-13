@@ -288,6 +288,7 @@ export default {
       };
       this.addAffair(data);
       console.log(JSON.stringify(this.affair));
+      this.$router.push ('/requests')
     },
   },
 };

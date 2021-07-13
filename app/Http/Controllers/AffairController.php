@@ -324,6 +324,34 @@ class AffairController extends Controller
             'status' => 200,
         ]);
     }
+    public function addProcedure(Request $request){
+        $validatedData = $request->validate([
+            'affair_id' => 'required|numeric',
+            'name' => 'required|string',
+            'description' => 'nullable|string',
+            'step' => 'required|numeric'
+        ]);
+        $procedure = Procedure::create($validatedData);
+        if($procedure){
+            return response()->json([
+                'procedure' => Procedure::find($procedure->id)
+            ]);
+        }
+        return $validatedData;
+    }
+    public function addPreRequest(Request $request){
+        $validatedData = $request->validate([
+            'procedure_id' => 'required|numeric',
+            'name' => 'nullable|string',
+            'description' => 'nullable|string',
+        ]);
+        $pre_request = PreRequest::create($validatedData);
+        if($pre_request){
+            return response()->json([
+                'pre_request' => $pre_request
+            ]);
+        }
+    }
     public function deletePreRequest($id, $procedure_id){
         $pre_request = PreRequest::where('id', $id)->where('procedure_id', $procedure_id)->first();
         if(empty($pre_request)){

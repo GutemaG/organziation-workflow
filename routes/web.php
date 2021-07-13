@@ -30,12 +30,8 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
     Route::resource('/affairs', \App\Http\Controllers\AffairController::class);
     Route::delete('/delete-procedure/{id}/{affair_id}', [\App\Http\Controllers\AffairController::class, 'deleteProcedure']);
     Route::delete('/delete-pre-request/{id}/{procedure_id}', [\App\Http\Controllers\AffairController::class, 'deletePreRequest']);
-    // Route::delete('/delete-procedure/{id}/{affair_id}', function ($id, $affair_id) {
-    //     return response()->json([
-    //         'id' => $id,
-    //         'affair_id' => $affair_id
-    //     ]);
-    // });
+    Route::post('/add-procedure', [\App\Http\Controllers\AffairController::class, 'addProcedure']);
+    Route::post('/add-pre-request', [\App\Http\Controllers\AffairController::class, 'addPreRequest']);
 });
 // Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
 // Route::post('/affairs', '\App\Http\Controllers\AffairController@store');
