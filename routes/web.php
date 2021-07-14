@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,11 +33,18 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
     Route::delete('/delete-pre-request/{id}/{procedure_id}', [\App\Http\Controllers\AffairController::class, 'deletePreRequest']);
     Route::post('/add-procedure', [\App\Http\Controllers\AffairController::class, 'addProcedure']);
     Route::post('/add-pre-request', [\App\Http\Controllers\AffairController::class, 'addPreRequest']);
+
+    Route::resource('/online-requests', \App\Http\Controllers\OnlineRequestController::class);
+
+});
+
+Route::get('/test/', function () {
+//    \App\Models\OnlineRequest::factory(20)->hasPrerequisiteLabels(rand(3,6))->create();
 });
 // Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
 // Route::post('/affairs', '\App\Http\Controllers\AffairController@store');
 
+//Route::get('/{vue_capture?}', function () {
+//    return view('home');
+//})->where('vue_capture', '[\/\w\.-]*')->middleware('auth');
 
-Route::get('/{vue_capture?}', function () {
-    return view('home');
-})->where('vue_capture', '[\/\w\.-]*')->middleware('auth');

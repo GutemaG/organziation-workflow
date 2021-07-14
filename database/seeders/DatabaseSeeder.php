@@ -20,12 +20,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         /*
-<<<<<<< HEAD
          \App\Models\User::factory()->create([
 
-=======
          User::create([
->>>>>>> master
             'user_name' => 'admin',
             'first_name' =>'birhanu',
             'last_name' => 'Gudisa',
@@ -33,7 +30,6 @@ class DatabaseSeeder extends Seeder
             'type' => 'admin',
             'password' => Hash::make('laravel1234'), // password
             'remember_token' => Str::random(10),
-<<<<<<< HEAD
          ]
          );
          \App\Models\User::factory(50)->create();
@@ -48,15 +44,18 @@ class DatabaseSeeder extends Seeder
             'name' =>'go somewhere',
             'description' =>' Description go somewhere'
         ]);
-=======
-         ]);
 
          User::factory(100)->create();
 
          Building::factory(100)->create();
-*/
 
          Bureau::factory(200)->create();
->>>>>>> master
+
+        \App\Models\OnlineRequest::factory(20)
+            ->has(\App\Models\PrerequisiteLabel::factory()->count(rand(1,5)))
+            ->has(\App\Models\OnlineRequestProcedure::factory()
+                ->hasAttached(\App\Models\User::inRandomOrder()->limit(rand(1,5))->get())
+                ->count(rand(3,6)))
+            ->create();
     }
 }

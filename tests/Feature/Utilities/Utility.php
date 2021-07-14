@@ -5,6 +5,7 @@ namespace Tests\Feature\Utilities;
 
 
 use App\Http\Controllers\Utilities\Fields;
+use Illuminate\Support\Facades\Validator;
 
 class Utility
 {
@@ -57,4 +58,55 @@ class Utility
         })->all();
     }
 
+    public static function test() {
+        $a = [
+            "affair"=>[
+                'name'=>"something",
+                'description'=> 'des'
+            ],
+            "procedure"=>[
+                [
+                    'name'=> 'namedsfj',
+                    'description' => 'description of ',
+                    'step' => 1,
+                    'pre_request'=>[
+                        [
+                        'name'=> 'sjf',
+                        'description'=>'description of pre request',
+                            ],
+                        [
+                            'name'=> 'sjf',
+                            'description'=>'description of pre request',
+                        ],
+
+                        ]
+                ],
+                [
+                    'name'=> 'namedsfj',
+                    'description' => 'description of ',
+                    'step' => 1,
+                    'pre_request'=>[
+                        [
+                            'name'=> 'sjf',
+                            'description'=>'description of pre request',
+                        ],
+                        [
+                            'name'=> 'sjf',
+                            'description'=>'description of pre request',
+                        ],
+
+                    ]
+                ]
+            ]
+        ];
+        $rule = [
+          'affair.name' => 'required|string',
+          'affair.description' => 'required|string',
+        ];
+        $validator = Validator::make($a, $rule);
+        if ($validator->fails())
+            return $validator->errors();
+        else
+            return $validator->validate();
+    }
 }

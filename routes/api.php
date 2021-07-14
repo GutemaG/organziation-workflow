@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 //Route::resource('buildings', \App\Http\Controllers\BuildingController::class);
 //Route::resource('bureaus', \App\Http\Controllers\BureauController::class);
 //Route::post('/account/change-password', [\App\Http\Controllers\AccountController::class, 'changePassword']);
+Route::resource('/online-requests', \App\Http\Controllers\OnlineRequestController::class);
 
 Route::resource('/users', \App\Http\Controllers\UserController::class);
 

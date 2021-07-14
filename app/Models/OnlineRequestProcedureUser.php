@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Building extends Model
+class OnlineRequestProcedureUser extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -16,10 +16,8 @@ class Building extends Model
      * @var string[]
      */
     protected $fillable = [
-        'number',
-        'number_of_offices',
-        'name',
-        'description',
+      'user_id',
+      'procedure_id',
     ];
 
     /**
@@ -28,7 +26,7 @@ class Building extends Model
      * @var string[]
      */
     protected $hidden = [
-        'updated_at',
         'deleted_at',
+        'updated_at',
     ];
 }
