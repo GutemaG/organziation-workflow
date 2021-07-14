@@ -77,7 +77,7 @@
       <b-col sm="7" md="6" class="my-1">
         <b-pagination
           v-model="currentPage"
-          :total-rows="buildings.length"
+          :total-rows="buildingLength"
           :per-page="perPage"
           align="fill"
           size="sm"
@@ -148,7 +148,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
   data() {
     return {
@@ -159,15 +159,15 @@ export default {
           sortable: true,
           sortDirection: "desc",
         },
-        {
+        /*{
           key: "name",
           label: "Name",
           sortable: true,
           sortDirection: "desc",
-        },
+        },*/
         {
-          key: "building_number",
-          label: "Building",
+          key: "number",
+          label: "Building Number",
           sortable: true,
           sortDirection: "desc",
         },
@@ -177,12 +177,12 @@ export default {
           sortable: true,
           sortDirection: "desc",
         },
-        {
+        /*{
           key: "description",
           label: "Description",
           sortable: true,
           sortDirection: "desc",
-        },
+        },*/
         { key: "actions", label: "Actions" },
       ],
       totalRows: 1,
@@ -207,8 +207,12 @@ export default {
           return { text: f.label, value: f.key };
         });
     },
+    buildingLength(){
+      return this.buildings.length
+    }
   },
   methods: {
+    ...mapActions(['fetchBuildings']),
     info(item, index, button) {
       console.log('editttting')
       this.selectedBuilding = item;
@@ -216,7 +220,6 @@ export default {
     },
     addBuilding(){
         this.$root.$emit("bv::show::modal", "add-building-modal");
-        console.log('Creating Building ...')
     },
     deleteBuilding(){
         console.log('deleting Building ..')
@@ -230,5 +233,8 @@ export default {
       this.currentPage = 1;
     },
   },
+  created(){
+    this.fetchBuildings();
+  }
 };
 </script>

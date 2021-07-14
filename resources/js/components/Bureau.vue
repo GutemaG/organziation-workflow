@@ -2,6 +2,7 @@
   <b-container fluid>
     <!-- User Interface controls -->
     <b-row>
+      <!-- Add button -->
       <b-col lg="6" class="my-1">
         <b-form-group
           label="Add"
@@ -27,6 +28,7 @@
         
       </b-col>
 
+      <!-- Filter input and button -->
       <b-col lg="6" class="my-1">
         <b-form-group
           label="Filter"
@@ -55,7 +57,7 @@
 
       <b-col lg="6" class="my-1">
       </b-col>
-
+      <!-- Pagination  -->
       <b-col sm="5" md="6" class="my-1">
         <b-form-group
           label="Per page"
@@ -153,7 +155,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
   data() {
     return {
@@ -171,7 +173,7 @@ export default {
           sortDirection: "desc",
         },
         {
-          key: "building",
+          key: "building_number",
           label: "Building",
           sortable: true,
           sortDirection: "desc",
@@ -180,6 +182,23 @@ export default {
           key: "office_number",
           label: "Office Number",
           sortable: true,
+          sortDirection: "desc",
+        },
+        {
+          key: "building_number",
+          label: "Building",
+          sortable: true,
+          sortDirection: "desc",
+        },
+        {
+          key: "location",
+          label: "Location",
+          sortable: true,
+          formatter: (value, key, item) => {
+            let location = JSON.parse(value)
+            let newVal=`Lat: ${location.latitude}\t Long: ${location.longitude}`
+            return newVal;
+          },
           sortDirection: "desc",
         },
         {
@@ -214,7 +233,7 @@ export default {
     },
   },
   methods: {
-
+    ...mapActions(['fetchBureaus']),
     info(item, index, button) {
       // console.log(item)
       this.selectedBureau = item;
@@ -236,5 +255,8 @@ export default {
       this.currentPage = 1;
     },
   },
+  created(){
+    this.fetchBureaus();
+  }
 };
 </script>
