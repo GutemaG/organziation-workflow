@@ -175,20 +175,19 @@
                                 
                                 <div class="show-hide_password">
                                     <a @click="showCurrentPassword()" style="display: flex; color: black; cursor: pointer; float: right; margin-top: -26px; margin-right: 34px; text-decoration: none;" v-if="currentPasswordVisibility == 'password'">
-                                        <i class="far fa-eye" id="hide"></i>
+                                        <i class="far fa-eye-slash" id="hide"></i>
                                     </a>
                                     <a @click="hideCurrentPassword()" style="display: flex; color: black; cursor: pointer; float: right; margin-top: -26px; margin-right: 34px; text-decoration: none;" v-if="currentPasswordVisibility == 'text'">
-                                        <i class="far fa-eye-slash" id="show"></i>
+                                        <i class="far fa-eye" id="show"></i>
                                     </a>
                                 </div>
                                 
                                 <!-- Displays Error Message for Password input -->
-                                <div class="valid-feedback">Current is valid!</div>
+                                <div class="valid-feedback"></div>
                                 <div v-if="passwordChange && $v.userPassword.current_password.$error" class="invalid-feedback">
                                     <span v-if="!$v.userPassword.current_password.required">Current password is required.</span>
-                                    <span v-if="!$v.userPassword.current_password.minLength">Current password is at least 8 characters.</span>
+                                    <span v-if="!$v.userPassword.current_password.minLength && passwordError.length != 0">{{ passwordError }} Please enter again!</span>
                                 </div>
-                                <div class="invalid-feedback">{{ passwordError }}</div>
                                 </b-form-group>
 
                                 <b-form-group
@@ -207,10 +206,10 @@
                                 
                                 <div class="show-hide_password">
                                     <a @click="showNewPassword()" style="display: flex; color: black; cursor: pointer; float: right; margin-top: -26px; margin-right: 34px; text-decoration: none;" v-if="newPasswordVisibility == 'password'">
-                                        <i class="far fa-eye" id="hide"></i>
+                                        <i class="far fa-eye-slash" id="hide"></i>
                                     </a>
                                     <a @click="hideNewPassword()" style="display: flex; color: black; cursor: pointer; float: right; margin-top: -26px; margin-right: 34px; text-decoration: none;" v-if="newPasswordVisibility == 'text'">
-                                        <i class="far fa-eye-slash" id="show"></i>
+                                        <i class="far fa-eye" id="show"></i>
                                     </a>
                                 </div>
 
@@ -238,10 +237,10 @@
                                 
                                 <div class="show-hide_password">
                                     <a @click="showConfirmationPassword()" style="display: flex; color: black; cursor: pointer; float: right; margin-top: -26px; margin-right: 34px; text-decoration: none;" v-if="confirmationPasswordVisibility == 'password'">
-                                        <i class="far fa-eye" id="hide"></i>
+                                        <i class="far fa-eye-slash" id="hide"></i>
                                     </a>
                                     <a @click="hideConfirmationPassword()" style="display: flex; color: black; cursor: pointer; float: right; margin-top: -26px; margin-right: 34px; text-decoration: none;" v-if="confirmationPasswordVisibility == 'text'">
-                                        <i class="far fa-eye-slash" id="show"></i>
+                                        <i class="far fa-eye" id="show"></i>
                                     </a>
                                 </div>
 
@@ -268,7 +267,7 @@
 </template>
 
 <script>
-import { required, minLength, maxLength, email, sameAs } from 'vuelidate/lib/validators'
+import { required, requiredIf, minLength, maxLength, email, sameAs } from 'vuelidate/lib/validators'
 
   export default {
     data() {
