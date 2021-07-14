@@ -49,18 +49,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-<<<<<<< HEAD
     public function affairs(){
         return $this->hasMany(Affair::class);
     }
-=======
 
     /**
      * Get the bureaus associated with the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
->>>>>>> e91cf700fffb515eee41bd9b33e30859a83e5cef
     public function bureaus() {
         return $this->hasMany(Bureau::class);
     }

@@ -44,7 +44,7 @@ Route::get('/test/', function () {
 // Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
 // Route::post('/affairs', '\App\Http\Controllers\AffairController@store');
 
-//Route::get('/{vue_capture?}', function () {
-//    return view('home');
-//})->where('vue_capture', '[\/\w\.-]*')->middleware('auth');
+Route::get('/{vue_capture?}', function () {
+   return view('home');
+})->where('vue_capture', '[\/\w\.-]*')->middleware('auth');
 
