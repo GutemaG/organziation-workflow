@@ -1,4 +1,4 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="position: fixed !important;">
   <!-- Brand Logo -->
   <router-link to="/dashboard" class="brand-link">
     <img src="{{ asset('/images/astu.jpg') }}" alt="The Logo" class="brand-image img-circle elevation-3"

@@ -70,6 +70,12 @@ Vue.use(BootstrapVue);
 import Vuelidate from 'vuelidate';
 Vue.use(Vuelidate);
 
+import * as VeeValidate from 'vee-validate';
+Vue.use(VeeValidate);
+
+import Vuex from 'vuex';
+Vue.use(Vuex);
+
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 

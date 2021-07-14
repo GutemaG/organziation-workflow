@@ -18,7 +18,7 @@
         <!-- ./Main Sidebar Container -->
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper" style="margin-top: 4.2rem;">
           <!-- Main content -->
           <router-view :key="$route.fullPath"></router-view>
           <vue-progress-bar></vue-progress-bar>
