@@ -1,6 +1,6 @@
 // import Dashboard from './components/Dashboard.vue';
 export default [
-    { path: "/", component: require("./components/Dashboard.vue").default },
+    { path: "/", component: require("./components/Welcome.vue").default },
     {
         path: "/dashboard",
         component: require("./components/Dashboard.vue").default
@@ -32,10 +32,10 @@ export default [
         path: '/home',
         redirect: '/'
     },
-    {
-        path: '/:notFound(.*)',
-        component: require("./components/404.vue").default
-    }
+    // {
+    //     path: '/:notFound(.*)',
+    //     component: require("./components/404.vue").default
+    // }
      
 ];
 

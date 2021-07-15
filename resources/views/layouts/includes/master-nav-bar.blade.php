@@ -6,7 +6,7 @@
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         
-            <router-link to="/dashboard" class="nav-link">
+            <router-link to="/home" class="nav-link">
                Home
             </router-link>
       </li>

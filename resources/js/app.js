@@ -56,6 +56,9 @@ Vue.component('edit-building-modal', require('./components/building/EditBuilding
 Vue.component('base-input', require('./components/Base/BaseInput.vue').default);
 Vue.component('add-procedure', require('./components/request/AddProcedure.vue').default);
 Vue.component('add-pre-request', require('./components/request/AddPreRequest.vue').default);
+Vue.component('vue-login', require('./components/auth/Login.vue').default);
+Vue.component('vue-welcome', require('./components/Welcome.vue').default);
+Vue.component('guest-welcome', require('./components/GuestWelcome.vue').default);
 
 //Registering new component 
 //import components from './components'

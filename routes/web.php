@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.master');
 });
 
 //Route::get('/home', function () {
