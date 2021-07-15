@@ -57,8 +57,10 @@ Vue.component('base-input', require('./components/Base/BaseInput.vue').default);
 Vue.component('add-procedure', require('./components/request/AddProcedure.vue').default);
 Vue.component('add-pre-request', require('./components/request/AddPreRequest.vue').default);
 Vue.component('vue-login', require('./components/auth/Login.vue').default);
-Vue.component('vue-welcome', require('./components/Welcome.vue').default);
-Vue.component('guest-welcome', require('./components/GuestWelcome.vue').default);
+Vue.component('vue-welcome', require('./components/welcome/Welcome.vue').default);
+Vue.component('guest-welcome', require('./components/welcome/GuestWelcome.vue').default);
+Vue.component('nav-bar', require('./components/include/NavBar.vue').default);
+Vue.component('side-bar', require('./components/include/SideBar.vue').default);
 
 //Registering new component 
 //import components from './components'

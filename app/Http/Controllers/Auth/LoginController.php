@@ -51,5 +51,19 @@ class LoginController extends Controller
            'status' => 'ok'
        ]);
     }
+    /**
+     * The user has logged out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return mixed
+     */
+    protected function loggedOut(Request $request)
+    {
+        if ($request->wantsJson()) {
+            return response()->json([], 204);
+        }
+    
+    }
+
 
 }

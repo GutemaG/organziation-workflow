@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
@@ -35,16 +36,15 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
     Route::post('/add-pre-request', [\App\Http\Controllers\AffairController::class, 'addPreRequest']);
 
     Route::resource('/online-requests', \App\Http\Controllers\OnlineRequestController::class);
-
+    Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
 
 Route::get('/test/', function () {
-//    \App\Models\OnlineRequest::factory(20)->hasPrerequisiteLabels(rand(3,6))->create();
+    //    \App\Models\OnlineRequest::factory(20)->hasPrerequisiteLabels(rand(3,6))->create();
 });
 // Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
 // Route::post('/affairs', '\App\Http\Controllers\AffairController@store');
 
 Route::get('/{vue_capture?}', function () {
-   return view('home');
+    return view('home');
 })->where('vue_capture', '[\/\w\.-]*')->middleware('auth');
-

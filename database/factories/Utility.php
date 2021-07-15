@@ -5,19 +5,16 @@ namespace Database\Factories;
 
 
 use App\Http\Controllers\Utilities\UserType;
-<<<<<<< HEAD
 use Illuminate\support\Str;
 use \App\Models\Affair;
 use \App\Models\Procedure;
 use Faker\Factory;
-=======
 use App\Models\Building;
 use App\Models\Bureau;
 use App\Models\OnlineRequest;
 use App\Models\User;
 use Ramsey\Uuid\Type\Integer;
 
->>>>>>> master
 class Utility
 {
     /**
@@ -49,7 +46,6 @@ class Utility
 
         return $userTypes[array_rand($userTypes)];
     }
-<<<<<<< HEAD
     public static function test()
     {
         $faker = Factory::create();
@@ -73,7 +69,6 @@ class Utility
             'description' =>$description,
         ];
     }
-=======
 
     /**
      * return json format of location by creating associative array of latitude and longitude.
@@ -123,9 +118,6 @@ class Utility
     public static function getUserId() {
         return User::inRandomOrder()->first()->id;
     }
-<<<<<<< HEAD
->>>>>>> master
-=======
 
     /**
      * return online request id.
@@ -146,5 +138,4 @@ class Utility
         $index = array_rand($values);
         return $values[$index];
     }
->>>>>>> e91cf700fffb515eee41bd9b33e30859a83e5cef
 }

@@ -1,4 +1,5 @@
 <template>
+  <!--
   <div class="modal fade" tabindex="-1" id="login-modal-form">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -80,6 +81,48 @@
       </div>
     </div>
   </div>
+  -->
+  <b-modal
+    id="login-modal-form"
+    title="Login"
+    ok-only
+    ok-title="Cancel"
+    ok-variant="danger"
+    no-close-on-backdrop
+    @hide="cancelLogin"
+  >
+    <form ref="form" @submit.stop.prevent="attemptLogin">
+      <base-input
+        label="Email"
+        placeholder="Email address"
+        v-model.trim="login.email"
+        labelFor="email-input"
+        id="email-input"
+        type="email"
+        required
+      >
+      </base-input>
+      <base-input
+        label="Password"
+        v-model.trim="login.password"
+        labelFor="password-input"
+        id="email-input"
+        type="password"
+        required
+      >
+      </base-input>
+      <b-form-checkbox
+        id="rememberme"
+        v-model="login.remember"
+        name="remeberme"
+      >
+      Remember Me
+      </b-form-checkbox>
+      <b-button class="form-control" type="submit" variant="primary"
+        >Login</b-button
+      >
+    </form>
+  </b-modal>
 </template>
 <script>
 export default {
@@ -102,7 +145,7 @@ export default {
           remember: this.login.remember,
         })
         .then((resp) => {
-            location.reload();
+          window.location.replace('/dashboard');
           $("#login-modal-form").modal("hide");
           console.log(resp);
         })
@@ -110,6 +153,12 @@ export default {
           console.log(error);
         });
     },
+    cancelLogin(){
+      this.login.email=""
+      this.login.password=""
+      this.login.remember=false
+    }
   },
 };
+// var mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;      
 </script>

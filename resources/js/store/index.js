@@ -13,5 +13,11 @@ export default new Vuex.Store({
         bureau: bureauModule,
         building: buildingModule,
         affair: affairModule
+    },
+    state:{
+        loggedInUser: window.user
+    },
+    getters:{
+        currentUser: state=>state.loggedInUser,
     }
 });
