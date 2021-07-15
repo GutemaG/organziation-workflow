@@ -29,6 +29,10 @@ export default [
         component: require("./components/request/EditRequest.vue").default
     },
     {
+        path: "/online-requests",
+        component: require("./components/OnlineRequest.vue").default
+    },
+    {
         path: '/home',
         redirect: '/'
     },

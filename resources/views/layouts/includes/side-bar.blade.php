@@ -68,6 +68,31 @@
             </li>
           </ul>
         </li>
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-question blue"></i>
+            <p>
+              Request
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <router-link to="/requests" class="nav-link">
+                <i class="nav-icon fas fa-list-ol green"></i>
+                <p>
+                  Request
+                </p>
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/online-requests" class="nav-link">
+                <i class="nav-icon fas fa-list green"></i>
+                <p>Online Request</p>
+              </router-link>
+            </li>
+          </ul>
+        </li>
 
         <li class="nav-item">
           <router-link to="/requests" class="nav-link">

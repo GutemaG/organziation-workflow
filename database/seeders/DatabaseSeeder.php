@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
          \App\Models\Affair::factory(50)->create();
          \App\Models\Procedure::factory(100)->create();
          \App\Models\PreRequest::factory(200)->create();
-         */
+         
         \App\Models\PreRequest::factory()->create([
             'affair_id'=>null,
             'procedure_id'=>1,
@@ -51,6 +51,7 @@ class DatabaseSeeder extends Seeder
 
          Bureau::factory(200)->create();
 
+         */
         \App\Models\OnlineRequest::factory(20)
             ->has(\App\Models\PrerequisiteLabel::factory()->count(rand(1,5)))
             ->has(\App\Models\OnlineRequestProcedure::factory()
