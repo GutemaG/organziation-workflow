@@ -62,13 +62,29 @@ export default [
                 }
             },
             {
-                path: "/online-request",
+                path: "/online-requests",
                 props: true,
                 components: {
                     dashboard: require("./components/request/OnlineRequest.vue")
                         .default
                 }
-            }
+            },
+            {
+                path: "/add-online-request",
+                props: true,
+                components: {
+                    dashboard: require("./components/request/AddOnlineRequest.vue")
+                        .default
+                }
+            },
+            {
+                path: "/online-request/edit/:id",
+                props: true,
+                components: {
+                    dashboard: require("./components/request/EditOnlineRequest.vue")
+                        .default
+                }
+            },
         ]
     },
     {

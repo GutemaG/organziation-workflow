@@ -4,13 +4,13 @@
       <side-bar></side-bar>
       <nav-bar></nav-bar>
     </div>
-    <div class="wrapper container" style="margin-top: 5rem">
-      <router-view name="dashboard"></router-view>
-    </div>
+      <div class="wrapper container" style="margin-top: 5rem">
+        <router-view name="dashboard"></router-view>
+      </div>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 import AddRequest from "./request/AddRequest.vue";
 export default {
   components: { AddRequest },
@@ -32,10 +32,10 @@ export default {
 </style>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 export default {
-  computed:{
-    ...mapGetters(['currentUser'])
-  }
-}
+  computed: {
+    ...mapGetters(["currentUser"]),
+  },
+};
 </script>

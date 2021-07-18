@@ -36,9 +36,9 @@
               <b-collapse id="request-collapse">
                 <b-nav-item to="/requests">
                   <i class="nav-icon fas fa-list-ol green"></i>
-                  Reqeuests
+                  Requests
                 </b-nav-item>
-                <b-nav-item to="/online-request">
+                <b-nav-item to="/online-requests">
                   <i class="nav-icon fas fa-building green"></i>
                   Online-Requests
                 </b-nav-item>

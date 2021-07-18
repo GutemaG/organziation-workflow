@@ -92,19 +92,21 @@
     @hide="cancelLogin"
   >
     <form ref="form" @submit.stop.prevent="attemptLogin">
-      <base-input
-        label="Email"
-        placeholder="Email address"
-        v-model.trim="login.email"
-        labelFor="email-input"
-        id="email-input"
-        type="email"
-        required
-      >
-      </base-input>
+      <b-form-group label="Email" label-for="email-input">
+        <b-form-input
+          id="email-input"
+          v-model="user.email"
+          required
+          type="email"
+          placeholder="Email address"
+        ></b-form-input>
+        <b-form-invalid-feedback :state="validation">
+          Email is not valid, please enter valide email
+        </b-form-invalid-feedback>
+      </b-form-group>
       <base-input
         label="Password"
-        v-model.trim="login.password"
+        v-model.trim="user.password"
         labelFor="password-input"
         id="email-input"
         type="password"
@@ -113,52 +115,61 @@
       </base-input>
       <b-form-checkbox
         id="rememberme"
-        v-model="login.remember"
+        v-model="user.remember"
         name="remeberme"
       >
-      Remember Me
+        Remember Me
       </b-form-checkbox>
-      <b-button class="form-control" type="submit" variant="primary"
+      <b-button
+        class="form-control"
+        type="submit"
+        variant="primary"
+        :disabled="!isValidLoginForm"
         >Login</b-button
       >
     </form>
   </b-modal>
 </template>
 <script>
+import { mapActions } from 'vuex';
 export default {
   data() {
     return {
-      login: {
+      user: {
         email: "",
         password: "",
         remember: false,
       },
     };
   },
+  computed: {
+    isValidLoginForm() {
+      return this.isEmailValid() && this.user.password;
+    },
+    validation(){
+      return this.isEmailValid();
+    }
+  },
   methods: {
+    ...mapActions(['login']),
     attemptLogin(event) {
       event.preventDefault();
-      axios
-        .post("/login", {
-          email: this.login.email,
-          password: this.login.password,
-          remember: this.login.remember,
-        })
-        .then((resp) => {
-          window.location.replace('/dashboard');
-          $("#login-modal-form").modal("hide");
-          console.log(resp);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      this.login(this.user)
     },
-    cancelLogin(){
-      this.login.email=""
-      this.login.password=""
-      this.login.remember=false
+    cancelLogin() {
+      this.user.email = "";
+      this.user.password = "";
+      this.user.remember = false;
+    },
+    isEmailValid(){
+      // let mailFormater = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+      let mailFormater = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+      if(mailFormater.test(this.user.email)){
+        return true
+      }
+      return false
     }
   },
 };
-// var mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;      
+// var mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 </script>

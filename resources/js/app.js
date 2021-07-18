@@ -54,6 +54,8 @@ Vue.component('edit-bureau-modal', require('./components/bureau/EditBureauModal.
 Vue.component('add-building-modal', require('./components/building/AddBuildingModal.vue').default);
 Vue.component('edit-building-modal', require('./components/building/EditBuildingModal.vue').default);
 Vue.component('base-input', require('./components/Base/BaseInput.vue').default);
+Vue.component('base-card', require('./components/Base/BaseCard.vue').default);
+Vue.component('base-pagination', require('./components/Base/BasePagination.vue').default);
 Vue.component('add-procedure', require('./components/request/AddProcedure.vue').default);
 Vue.component('add-pre-request', require('./components/request/AddPreRequest.vue').default);
 Vue.component('vue-login', require('./components/auth/Login.vue').default);
@@ -62,9 +64,16 @@ Vue.component('guest-welcome', require('./components/welcome/GuestWelcome.vue').
 Vue.component('nav-bar', require('./components/include/NavBar.vue').default);
 Vue.component('side-bar', require('./components/include/SideBar.vue').default);
 
+// import { FadeTransition } from "vue2-transitions";
+// Vue.component('fade-transition', FadeTransition);
+
+
 //Registering new component 
 //import components from './components'
 //Vue.component(components);
+
+// import Transitions from 'vue2-transitions'
+// Vue.use(Transitions)
 
 import store from './store'
 import Vue from 'vue';
