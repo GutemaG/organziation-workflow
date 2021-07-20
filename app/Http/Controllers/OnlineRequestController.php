@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Utilities\Fields;
 use App\Http\Controllers\Utilities\Rule;
 use App\Models\OnlineRequest;
+use App\Models\OnlineRequestProcedure;
+use App\Models\PrerequisiteLabel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -90,24 +92,25 @@ class OnlineRequestController extends Controller
         try {
             $data = $validator->validate();
             DB::beginTransaction();
-            $onlineRequest = User::find(1)->onlineRequests()->create([
+            $onlineRequest = auth()->user()->onlineRequests()->create([
                 'name' => $data['name'],
                 'description' => $data['description'],
             ]);
-            foreach ($data['online_request_procedures'] as $value)
+            foreach ($data['online_request_procedures'] as $value) {
                 $procedure = $onlineRequest->onlineRequestProcedures()->create($value);
 
                 foreach ($value['responsible_user_id'] as $item)
-                    $procedure->users()->attach($item['user_id']);
-
+                    $procedure->users()->attach($item);
+            }
             foreach ($data['prerequisite_labels'] as $label)
-                $onlineRequest->prerequisiteLabels()->create($label);
+                $onlineRequest->prerequisiteLabels()->create(['label' => $label]);
 
             DB::commit();
             return response()->json([
                 'status' => 201,
                 'online_request' => OnlineRequest::find($onlineRequest->id),
             ]);
+
         }
         catch (\Exception $e) {
             DB::rollBack();
@@ -140,6 +143,71 @@ class OnlineRequestController extends Controller
                 'online_request' => $onlineRequest,
             ]);
         }
+    }
+
+    public function update(Request $request, $id) {
+        $result = $this->isAuthorized();
+        if (! empty($result))
+            return $result;
+
+        $onlineRequest = OnlineRequest::find($id);
+        if (empty($onlineRequest))
+            return $this->badRequestResponse();
+
+        $data =  $request->all();
+        $rule = $request->name == $onlineRequest->name ? Rule::onlineRequestUpdate(false) :
+            Rule::onlineRequestUpdate(true);
+
+        $validator = Validator::make($data, $rule);
+
+        if ($validator->fails())
+            return response()->json([
+                'status' => 400,
+                'error' => $validator->errors(),
+            ]);
+
+        try {
+            $data = $validator->validate();
+            DB::beginTransaction();
+            $onlineRequest->update([
+                'name' => $request->name,
+                'description' => $data['description'],
+            ]);
+            foreach ($data['online_request_procedures'] as $value) {
+                $procedure = OnlineRequestProcedure::find($value['id']);
+
+                foreach ($value['responsible_user_id'] as $item) {
+                    $update = true;
+                    foreach($procedure->users as $user){
+                        if($user->pivot->user_id == $item) {
+                            $update = false;
+                            break;
+                        }
+                    }
+                    if ($update)
+                        $procedure->users()->attach($item);
+                }
+            }
+            foreach ($data['prerequisite_labels'] as $label) {
+                $prerequisite = PrerequisiteLabel::find($label['id']);
+                $prerequisite->update(['label' => $label]);
+            }
+            DB::commit();
+            return response()->json([
+                'status' => 201,
+                'online_request' => OnlineRequest::find($onlineRequest->id),
+            ]);
+        }
+        catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 400,
+                'error' => [
+                    'error' => ['Error occur while creating please retry again.',$e]
+                ]
+            ]);
+        }
+
     }
 
     /**

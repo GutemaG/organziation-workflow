@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\OnlineRequestException;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,9 +26,10 @@ Route::middleware(['auth'])->prefix('api')->group(function (){
 
 });
 
-Route::get('/test/', function () {
-//    \App\Models\OnlineRequest::factory(20)->hasPrerequisiteLabels(rand(3,6))->create();
-});
+
+//Route::get('/test/', function () {
+////    \App\Models\OnlineRequest::factory(20)->hasPrerequisiteLabels(rand(3,6))->create();
+//});
 
 Route::get('/{vue_capture?}', function () {
     return view('home');
