@@ -7,10 +7,7 @@
     <meta name="csrf_token" content="{{ csrf_token() }}">
     <title>OGS</title>
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
-    <!-- Fonts -->
-    {{-- <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"> --}}
 
-    {{-- <link rel="stylesheet" href="{{ mix('/css/normalize.css') }}"> --}}
     <script>
         window.Laravel = {
             csrfToken: '{{ csrf_token() }}'
@@ -24,7 +21,6 @@
 
     </style>
 
-
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -34,16 +30,11 @@
     </div>
 
     </div>
-    <!-- ./wrapper -->
-
-    <!-- REQUIRED SCRIPTS -->
-
     @auth
         <script>
             window.user = @json(auth()->user())
         </script>
     @endauth
-    <!-- jQuery -->
     <script src="{{ mix('/js/app.js') }}"></script>
 </body>
 

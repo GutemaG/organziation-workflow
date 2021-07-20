@@ -2,23 +2,20 @@
   <div>
     <b-sidebar id="sidebar-1" title="OWGS" width="260px" shadow backdrop>
       <div class="p-3">
-        <div class="flex" style="justify-content: center">
+        <div style="margin-left:3rem">
           <b-avatar src="/images/astu.jpg" size="6rem"></b-avatar>
         </div>
-        <router-link to="/profile">
-          <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="image">
-              <img
-                src="/images/user.png"
-                class="img-circle elevation-2"
-                alt="User Image"
-              />
-            </div>
-            <div class="info">
-              <span class="d-block text-muted">{{ username }}</span>
-            </div>
+        <hr class="my-1" />
+        <router-link
+          to="/profile"
+          style="text-decoration: none; align-item: center"
+        >
+          <div style="padding:0.5rem 1rem">
+            <b-avatar variant="info" src="/images/user.png"></b-avatar>
+            <span class="d-block text-muted">{{ username }}</span>
           </div>
         </router-link>
+        <hr class="my-1">
         <nav class="mb-3">
           <b-nav vertical>
             <b-nav-item to="/dashboard">

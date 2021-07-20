@@ -4,7 +4,7 @@
       <side-bar></side-bar>
       <nav-bar></nav-bar>
     </div>
-      <div class="wrapper container" style="margin-top: 5rem">
+      <div class="wrapper" style="margin-top: 5rem">
         <router-view name="dashboard"></router-view>
       </div>
   </div>

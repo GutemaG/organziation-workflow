@@ -1,6 +1,7 @@
 <template>
   <b-card
       no-body
+      :text-variant="textVariant"
        :class="[
          {'card-lift--hover': hover},
          {'shadow': shadow},
@@ -34,6 +35,10 @@
         description: "Card type"
       },
       gradient: {
+        type: String,
+        description: "Card background gradient type (warning,danger etc)"
+      },
+      textVariant: {
         type: String,
         description: "Card background gradient type (warning,danger etc)"
       },
