@@ -18,8 +18,9 @@ class OnlineRequestController extends Controller
      *
      * OnlineRequestController constructor.
      */
-    public function __construct() {
-//        $this->middleware('auth');
+    public function __construct()
+    {
+        //        $this->middleware('auth');
     }
 
     /**
@@ -28,8 +29,10 @@ class OnlineRequestController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse|null
      */
-    private function isAuthorized(){return false;
-        if (! Gate::any(['is-admin', 'is-it-team-member']))
+    private function isAuthorized()
+    {
+        return false;
+        if (!Gate::any(['is-admin', 'is-it-team-member']))
             return response()->json([
                 'status' => 401,
                 'error' => 'Unauthorized.',
@@ -38,7 +41,8 @@ class OnlineRequestController extends Controller
             return null;
     }
 
-    private function badRequestResponse() {
+    private function badRequestResponse()
+    {
         return response()->json([
             'status' => 400,
             'error' => [
@@ -53,9 +57,10 @@ class OnlineRequestController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index() {
+    public function index()
+    {
         $result = $this->isAuthorized();
-        if (! empty($result))
+        if (!empty($result))
             return $result;
 
         $onlineRequests = OnlineRequest::orderBy('name', 'asc')->get();
@@ -74,9 +79,10 @@ class OnlineRequestController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $result = $this->isAuthorized();
-        if (! empty($result))
+        if (!empty($result))
             return $result;
 
         $data =  $request->all();
@@ -90,32 +96,31 @@ class OnlineRequestController extends Controller
         try {
             $data = $validator->validate();
             DB::beginTransaction();
-            $onlineRequest = User::find(1)->onlineRequests()->create([
+            $onlineRequest = auth()->user()->onlineRequests()->create([
                 'name' => $data['name'],
                 'description' => $data['description'],
             ]);
             foreach ($data['online_request_procedures'] as $value)
                 $procedure = $onlineRequest->onlineRequestProcedures()->create($value);
 
-                foreach ($value['responsible_user_id'] as $item)
-                    $procedure->users()->attach($item['user_id']);
+            foreach ($value['responsible_user_id'] as $item)
+                $procedure->users()->attach($item);
 
             foreach ($data['prerequisite_labels'] as $label)
-                $onlineRequest->prerequisiteLabels()->create($label);
+                $onlineRequest->prerequisiteLabels()->create(['label' => $label]);
 
             DB::commit();
             return response()->json([
                 'status' => 201,
                 'online_request' => OnlineRequest::find($onlineRequest->id),
             ]);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
-               'status' => 400,
-               'error' => [
-                   'error' => ['Error occur while creating please retry again.',$e]
-               ]
+                'status' => 400,
+                'error' => [
+                    'error' => ['Error occur while creating please retry again.', $e]
+                ]
             ]);
         }
     }
@@ -126,9 +131,10 @@ class OnlineRequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id) {
+    public function show($id)
+    {
         $result = $this->isAuthorized();
-        if (! empty($result))
+        if (!empty($result))
             return $result;
 
         $onlineRequest = OnlineRequest::find($id);
@@ -142,16 +148,15 @@ class OnlineRequestController extends Controller
         }
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $result = $this->isAuthorized();
-        if (! empty($result))
+        if (!empty($result))
             return $result;
 
         $onlineRequest = OnlineRequest::find($id);
         if (empty($onlineRequest))
             return $this->badRequestResponse();
-
-
     }
 
     /**
@@ -160,12 +165,13 @@ class OnlineRequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $result = $this->isAuthorized();
-        if (! empty($result))
+        if (!empty($result))
             return $result;
 
-        $onlineRequest = OnlineRequest::withOut(['onlineRequestProcedures','prerequisiteLabels',])->find($id);
+        $onlineRequest = OnlineRequest::withOut(['onlineRequestProcedures', 'prerequisiteLabels',])->find($id);
         if (empty($onlineRequest))
             return $this->badRequestResponse();
         else {
