@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         /*
+         \App\Models\User::factory()->create([
+
          User::create([
             'user_name' => 'Admin',
             'first_name' =>'birhanu',
@@ -28,13 +30,33 @@ class DatabaseSeeder extends Seeder
             'type' => 'admin',
             'password' => Hash::make('laravel1234'), // password
             'remember_token' => Str::random(10),
-         ]);
+         ]
+         );
+         \App\Models\User::factory(50)->create();
+         
+         \App\Models\Affair::factory(50)->create();
+         \App\Models\Procedure::factory(100)->create();
+         \App\Models\PreRequest::factory(200)->create();
+         
+        \App\Models\PreRequest::factory()->create([
+            'affair_id'=>null,
+            'procedure_id'=>1,
+            'name' =>'go somewhere',
+            'description' =>' Description go somewhere'
+        ]);
 
          User::factory(100)->create();
 
          Building::factory(100)->create();
-*/
 
          Bureau::factory(200)->create();
+
+         */
+        \App\Models\OnlineRequest::factory(20)
+            ->has(\App\Models\PrerequisiteLabel::factory()->count(rand(1,5)))
+            ->has(\App\Models\OnlineRequestProcedure::factory()
+                ->hasAttached(\App\Models\User::inRandomOrder()->limit(rand(1,5))->get())
+                ->count(rand(3,6)))
+            ->create();
     }
 }

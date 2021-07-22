@@ -14,6 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Route::resource('/users', \App\Http\Controllers\UserController::class);
+//Route::post('/account', [\App\Http\Controllers\AccountController::class, 'update']);
+//Route::resource('buildings', \App\Http\Controllers\BuildingController::class);
+//Route::resource('bureaus', \App\Http\Controllers\BureauController::class);
+//Route::post('/account/change-password', [\App\Http\Controllers\AccountController::class, 'changePassword']);
+Route::resource('/online-requestss', \App\Http\Controllers\OnlineRequestController::class);
+
+Route::resource('/users', \App\Http\Controllers\UserController::class);
+
+Route::resource('/affairss', \App\Http\Controllers\AffairController::class);
 // Route::resource('/users', \App\Http\Controllers\UserController::class); 
 // Route::resource('/users', \App\Http\Controllers\UserController::class);
 // Route::post('/account', [\App\Http\Controllers\AccountController::class, 'update']);
@@ -26,3 +36,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+/*
+Route::delete('/delete-procedure/{id}/{affair_id}',function($id, $affair_id){
+    return response()->json([
+        'id'=>$id,
+        'affair_id'=>$affair_id
+    ]);
+});
+*/

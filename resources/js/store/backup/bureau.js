@@ -52,6 +52,9 @@ export default {
                     Swal.fire("Failed!", error.message, "warning");
                 });
             console.log('updating ',data);
+        },
+        resetBureau({commit}, selectedBureau){
+            commit("UPDATE_BUREAU", selectedBureau, selectedBureau.id)
         }
     },
 

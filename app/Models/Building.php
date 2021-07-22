@@ -10,6 +10,11 @@ class Building extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
     protected $fillable = [
         'number',
         'number_of_offices',
@@ -17,6 +22,11 @@ class Building extends Model
         'description',
     ];
 
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var string[]
+     */
     protected $hidden = [
         'updated_at',
         'deleted_at',

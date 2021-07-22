@@ -12,21 +12,13 @@
           label-size="sm"
           class="mb-3"
         >
-        <b-button
-          size="sm"
-          @click="addBureau"
-          class="mr-1"
-          variant="primary"
-        >
-          + Add
-        </b-button>
+          <b-button size="sm" @click="addBureau" class="mr-1" variant="primary">
+            + Add
+          </b-button>
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-
-        
-      </b-col>
+      <b-col lg="6" class="my-1"> </b-col>
 
       <!-- Filter input and button -->
       <b-col lg="6" class="my-1">
@@ -55,8 +47,7 @@
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-      </b-col>
+      <b-col lg="6" class="my-1"> </b-col>
       <!-- Pagination  -->
       <b-col sm="5" md="6" class="my-1">
         <b-form-group
@@ -110,12 +101,17 @@
       small
       @filtered="onFiltered"
       striped
+      bordered
+      ref="listOfBureau"
     >
       <!-- <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
       </template> -->
 
       <template #cell(actions)="row">
+        <b-button size="sm" @click="row.toggleDetails">
+          {{ row.detailsShowing ? "Hide" : "Show" }} Details
+        </b-button>
         <b-button
           size="sm"
           @click="info(row.item, row.index, $event.target)"
@@ -138,24 +134,30 @@
       </template>
 
       <template #row-details="row">
-        <b-card>
-          <ul>
+        <b-card
+          header="Detail"
+          header-bg-variant="dark"
+          title="Description"
+        >
+          <b-card-text>{{row.item.description}}</b-card-text>
+          <!-- <div>{{ row.item.description }}</div> -->
+          <!-- <ul>
             <li v-for="(value, key) in row.item" :key="key">
               {{ key }}: {{ value }}
             </li>
-          </ul>
+          </ul> -->
         </b-card>
       </template>
     </b-table>
 
     <!-- Info modal -->
-      <edit-bureau-modal :selectedBureau="selectedBureau"></edit-bureau-modal>
-      <add-bureau-modal></add-bureau-modal>
+    <edit-bureau-modal :selectedBureau="selectedBureau"></edit-bureau-modal>
+    <add-bureau-modal></add-bureau-modal>
   </b-container>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -195,18 +197,18 @@ export default {
           label: "Location",
           sortable: true,
           formatter: (value, key, item) => {
-            let location = JSON.parse(value)
-            let newVal=`Lat: ${location.latitude}\t Long: ${location.longitude}`
+            let location = JSON.parse(value);
+            let newVal = `Lat: ${location.latitude}\t Long: ${location.longitude}`;
             return newVal;
           },
           sortDirection: "desc",
         },
-        {
+        /*{
           key: "description",
           label: "Description",
           sortable: true,
           sortDirection: "desc",
-        },
+        },*/
         { key: "actions", label: "Actions" },
       ],
       totalRows: 1,
@@ -218,11 +220,11 @@ export default {
       sortDirection: "asc",
       filter: null,
       filterOn: [],
-      selectedBureau:{},
+      selectedBureau: {},
     };
   },
   computed: {
-    ...mapGetters(['bureaus']),
+    ...mapGetters(["bureaus"]),
     sortOptions() {
       // Create an options list from our fields
       return this.fields
@@ -233,21 +235,21 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchBureaus']),
+    ...mapActions(["fetchBureaus"]),
     info(item, index, button) {
       // console.log(item)
       this.selectedBureau = item;
       this.$root.$emit("bv::show::modal", "edit-bureau-modal", button);
     },
-    addBureau(){
-        this.$root.$emit("bv::show::modal", "add-bureau-modal");
-        console.log('Creating bureau ...')
+    addBureau() {
+      this.$root.$emit("bv::show::modal", "add-bureau-modal");
+      console.log("Creating bureau ...");
     },
-    deleteBureau(){
-        console.log('deleting bureau ..')
+    deleteBureau() {
+      console.log("deleting bureau ..");
     },
-    editBureau(){
-        console.log('Editing user ...')
+    editBureau() {
+      console.log("Editing user ...");
     },
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
@@ -255,8 +257,8 @@ export default {
       this.currentPage = 1;
     },
   },
-  created(){
+  created() {
     this.fetchBureaus();
-  }
+  },
 };
 </script>
