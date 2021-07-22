@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid">
+    <h1>List of Request</h1>
     <b-card>
       <b-card-body>
         <div>
@@ -208,17 +209,12 @@
 </template>
 <script>
 import Procedures from "./request/Procedures.vue";
-import { Pagination, Table, Button, TableColumn } from "element-ui";
 import { mapActions, mapGetters } from "vuex";
 import fields from "./request/request_table_field";
 import moment from "moment";
 export default {
   components: {
-    [Pagination.name]: Pagination,
-    [Table.name]: Table,
-    [Button.name]: Button,
-    [TableColumn.name]: TableColumn,
-    Procedures,
+   Procedures,
   },
   data() {
     return {

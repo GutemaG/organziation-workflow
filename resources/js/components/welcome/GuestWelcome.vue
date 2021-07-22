@@ -6,7 +6,7 @@
       >
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
+      <router-link to="/search">Search</router-link>
       <b-collapse id="nav-collapse" is-nav>
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
@@ -49,7 +49,7 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <h1>Guest Welcome</h1>
+    <router-view name="welcome"></router-view>
     <vue-login></vue-login>
   </div>
 </template>

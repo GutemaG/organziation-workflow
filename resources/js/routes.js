@@ -2,7 +2,21 @@
 export default [
     {
         path: "/",
-        component: require("./components/welcome/GuestWelcome.vue").default
+        component: require("./components/welcome/GuestWelcome.vue").default,
+        children:[
+            {
+                path:"/",
+                components:{
+                    welcome: require("./components/welcome/Home.vue").default
+                }
+            },
+            {
+                path:"/search",
+                components:{
+                    welcome: require("./components/welcome/Search.vue").default
+                }
+            }
+        ]
     },
     {
         path: "/dashboard",
@@ -65,7 +79,7 @@ export default [
                 path: "/online-requests",
                 props: true,
                 components: {
-                    dashboard: require("./components/request/OnlineRequest.vue")
+                    dashboard: require("./components/OnlineRequest.vue")
                         .default
                 }
             },
@@ -73,7 +87,7 @@ export default [
                 path: "/add-online-request",
                 props: true,
                 components: {
-                    dashboard: require("./components/request/AddOnlineRequest.vue")
+                    dashboard: require("./components/request/online/AddOnlineRequest.vue")
                         .default
                 }
             },
@@ -81,7 +95,7 @@ export default [
                 path: "/online-request/edit/:id",
                 props: true,
                 components: {
-                    dashboard: require("./components/request/EditOnlineRequest.vue")
+                    dashboard: require("./components/request/online/EditOnlineRequest.vue")
                         .default
                 }
             },
