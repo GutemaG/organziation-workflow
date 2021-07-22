@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\UnauthorizedException;
 use App\Http\Controllers\Utilities\Rule;
 use App\Http\Requests\OnlineRequestRequest;
 use App\Models\OnlineRequest;
@@ -16,28 +17,15 @@ class OnlineRequestController extends Controller
 {
     /**
      * Check if user is authenticated. If not redirect it login page.
+     * And check if authenticated user is authorized. If not throw UnauthorizedException.
      *
      * OnlineRequestController constructor.
+     * @throws UnauthorizedException
      */
     public function __construct() {
         $this->middleware('auth');
-
-    }
-
-    /**
-     * check if authenticated user is admin or staff.
-     * if not return with unauthorized error message.
-     *
-     * @return \Illuminate\Http\JsonResponse|null
-     */
-    private function isAuthorized(){
         if (! Gate::any(['is-admin', 'is-it-team-member']))
-            return response()->json([
-                'status' => 401,
-                'error' => 'Unauthorized.',
-            ]);
-        else
-            return null;
+            throw new UnauthorizedException();
     }
 
     private function badRequestResponse() {
@@ -56,10 +44,6 @@ class OnlineRequestController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
-        $result = $this->isAuthorized();
-        if (! empty($result))
-            return $result;
-
         $onlineRequests = OnlineRequest::orderBy('name', 'asc')->get();
         return response()->json([
             'status' => 200,
@@ -77,10 +61,6 @@ class OnlineRequestController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request) {
-        $result = $this->isAuthorized();
-        if (! empty($result))
-            return $result;
-
         $data =  $request->all();
         $validator = Validator::make($data, Rule::onlineRequest());
         if ($validator->fails())
@@ -130,10 +110,6 @@ class OnlineRequestController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($id) {
-        $result = $this->isAuthorized();
-        if (! empty($result))
-            return $result;
-
         $onlineRequest = OnlineRequest::find($id);
         if (empty($onlineRequest))
             return $this->badRequestResponse();
@@ -146,9 +122,6 @@ class OnlineRequestController extends Controller
     }
 
     public function update(OnlineRequestRequest $request, OnlineRequest $onlineRequest) {
-//        $result = $this->isAuthorized();
-//        if (! empty($result))
-//            return $result;
 //        $onlineRequest = OnlineRequest::find($id);
 //        if (empty($onlineRequest))
 //            return $this->badRequestResponse();
@@ -218,10 +191,6 @@ class OnlineRequestController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id) {
-        $result = $this->isAuthorized();
-        if (! empty($result))
-            return $result;
-
         $onlineRequest = OnlineRequest::withOut(['onlineRequestProcedures','prerequisiteLabels',])->find($id);
         if (empty($onlineRequest))
             return $this->badRequestResponse();
