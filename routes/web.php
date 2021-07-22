@@ -1,7 +1,8 @@
 <?php
 
-use App\Exceptions\OnlineRequestException;
+use App\Exceptions\MissingModelException;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,10 +23,12 @@ Route::middleware(['auth'])->prefix('api')->group(function (){
 
     Route::resource('/bureaus', \App\Http\Controllers\BureauController::class);
 
-//    Route::resource('/online-requests', \App\Http\Controllers\OnlineRequestController::class);
+    Route::resource('/online-requests', \App\Http\Controllers\OnlineRequestController::class)
+        ->missing(function (Request $request) {
+            throw new  MissingModelException();
+        });
 
 });
-
 
 //Route::get('/test/', function () {
 ////    \App\Models\OnlineRequest::factory(20)->hasPrerequisiteLabels(rand(3,6))->create();

@@ -13,10 +13,12 @@
         "laravel/sanctum": "^2.11",
         "laravel/telescope": "^4.4",
         "laravel/tinker": "^2.5",
-        "laravel/ui": "^3.3"
+        "laravel/ui": "^3.3",
+      "ext-json": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
+        "barryvdh/laravel-ide-helper": "^2.10",
         "brianium/paratest": "^6.3",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Utilities\Fields;
 use App\Http\Controllers\Utilities\Rule;
+use App\Http\Requests\OnlineRequestRequest;
 use App\Models\OnlineRequest;
 use App\Models\OnlineRequestProcedure;
 use App\Models\PrerequisiteLabel;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -21,7 +20,8 @@ class OnlineRequestController extends Controller
      * OnlineRequestController constructor.
      */
     public function __construct() {
-//        $this->middleware('auth');
+        $this->middleware('auth');
+
     }
 
     /**
@@ -30,7 +30,7 @@ class OnlineRequestController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse|null
      */
-    private function isAuthorized(){return false;
+    private function isAuthorized(){
         if (! Gate::any(['is-admin', 'is-it-team-member']))
             return response()->json([
                 'status' => 401,
@@ -145,32 +145,31 @@ class OnlineRequestController extends Controller
         }
     }
 
-    public function update(Request $request, $id) {
-        $result = $this->isAuthorized();
-        if (! empty($result))
-            return $result;
+    public function update(OnlineRequestRequest $request, OnlineRequest $onlineRequest) {
+//        $result = $this->isAuthorized();
+//        if (! empty($result))
+//            return $result;
+//        $onlineRequest = OnlineRequest::find($id);
+//        if (empty($onlineRequest))
+//            return $this->badRequestResponse();
+//        $data =  $request->all();
+//        $rule = $request->name == $onlineRequest->name ? Rule::onlineRequestUpdate(false) :
+//            Rule::onlineRequestUpdate(true);
+//
+//        $validator = Validator::make($data, $rule);
+//
+//        if ($validator->fails())
+//            return response()->json([
+//                'status' => 400,
+//                'error' => $validator->errors(),
+//            ]);
 
-        $onlineRequest = OnlineRequest::find($id);
-        if (empty($onlineRequest))
-            return $this->badRequestResponse();
-
-        $data =  $request->all();
-        $rule = $request->name == $onlineRequest->name ? Rule::onlineRequestUpdate(false) :
-            Rule::onlineRequestUpdate(true);
-
-        $validator = Validator::make($data, $rule);
-
-        if ($validator->fails())
-            return response()->json([
-                'status' => 400,
-                'error' => $validator->errors(),
-            ]);
+        $data = $request->validated();
 
         try {
-            $data = $validator->validate();
             DB::beginTransaction();
             $onlineRequest->update([
-                'name' => $request->name,
+                'name' => $data['name'],
                 'description' => $data['description'],
             ]);
             foreach ($data['online_request_procedures'] as $value) {
@@ -183,15 +182,17 @@ class OnlineRequestController extends Controller
                             $update = false;
                             break;
                         }
+                        continue;
                     }
                     if ($update)
                         $procedure->users()->attach($item);
                 }
             }
-            foreach ($data['prerequisite_labels'] as $label) {
-                $prerequisite = PrerequisiteLabel::find($label['id']);
-                $prerequisite->update(['label' => $label]);
-            }
+           if (array_key_exists('prerequisite_labels', $data))
+                foreach ($data['prerequisite_labels'] as $label) {
+                    $prerequisite = PrerequisiteLabel::find($label['id']);
+                    $prerequisite->update($label);
+                }
             DB::commit();
             return response()->json([
                 'status' => 201,
