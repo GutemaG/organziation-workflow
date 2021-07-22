@@ -8,6 +8,7 @@ use App\Http\Requests\OnlineRequestRequest;
 use App\Models\OnlineRequest;
 use App\Models\OnlineRequestProcedure;
 use App\Models\PrerequisiteLabel;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -32,7 +33,7 @@ class OnlineRequestController extends Controller
         return response()->json([
             'status' => 400,
             'error' => [
-                'error' => ['Online request doesn\'t exist.']
+                'error' => ['Bad Request.']
             ]
         ]);
     }
@@ -41,9 +42,10 @@ class OnlineRequestController extends Controller
      * return a listing of the online request.
      * it contains oll relation ship (prerequisiteLabel, onlineRequestProcedure and users).
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index() {
+    public function index(): JsonResponse
+    {
         $onlineRequests = OnlineRequest::orderBy('name', 'asc')->get();
         return response()->json([
             'status' => 200,
@@ -58,19 +60,13 @@ class OnlineRequestController extends Controller
      * Attach each user to the procedure he/she is responsible using the newly created online request procedure.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(Request $request) {
-        $data =  $request->all();
-        $validator = Validator::make($data, Rule::onlineRequest());
-        if ($validator->fails())
-            return response()->json([
-                'status' => 400,
-                'error' => $validator->errors(),
-            ]);
-
+    public function store(OnlineRequestRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+dd($data);
         try {
-            $data = $validator->validate();
             DB::beginTransaction();
             $onlineRequest = auth()->user()->onlineRequests()->create([
                 'name' => $data['name'],
@@ -85,10 +81,10 @@ class OnlineRequestController extends Controller
             foreach ($data['prerequisite_labels'] as $label)
                 $onlineRequest->prerequisiteLabels()->create(['label' => $label]);
 
-            DB::commit();
+//            DB::commit();
             return response()->json([
                 'status' => 201,
-                'online_request' => OnlineRequest::find($onlineRequest->id),
+                'online_request' => $onlineRequest,
             ]);
 
         }
@@ -107,38 +103,21 @@ class OnlineRequestController extends Controller
      * Display the specified online request.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show($id) {
         $onlineRequest = OnlineRequest::find($id);
         if (empty($onlineRequest))
             return $this->badRequestResponse();
-        else {
+        else
             return response()->json([
                 'status' => 200,
                 'online_request' => $onlineRequest,
             ]);
-        }
     }
 
     public function update(OnlineRequestRequest $request, OnlineRequest $onlineRequest) {
-//        $onlineRequest = OnlineRequest::find($id);
-//        if (empty($onlineRequest))
-//            return $this->badRequestResponse();
-//        $data =  $request->all();
-//        $rule = $request->name == $onlineRequest->name ? Rule::onlineRequestUpdate(false) :
-//            Rule::onlineRequestUpdate(true);
-//
-//        $validator = Validator::make($data, $rule);
-//
-//        if ($validator->fails())
-//            return response()->json([
-//                'status' => 400,
-//                'error' => $validator->errors(),
-//            ]);
-
         $data = $request->validated();
-
         try {
             DB::beginTransaction();
             $onlineRequest->update([
@@ -188,7 +167,7 @@ class OnlineRequestController extends Controller
      * soft delete the specified online request from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy($id) {
         $onlineRequest = OnlineRequest::withOut(['onlineRequestProcedures','prerequisiteLabels',])->find($id);

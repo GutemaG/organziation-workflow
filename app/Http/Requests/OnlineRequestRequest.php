@@ -11,8 +11,13 @@ use Illuminate\Validation\Rule as BaseRule;
 
 class OnlineRequestRequest extends FormRequest
 {
-
-    private function defaultRules() {
+    /**
+     * OnlineRequest default validation rules for both update and store.
+     *
+     * @return array
+     */
+    private function defaultRules(): array
+    {
         $id = $this->route()->parameter('online_request');
         return [
             'name' => ['required', 'string', BaseRule::unique('online_requests')->ignore($id)],
@@ -20,12 +25,18 @@ class OnlineRequestRequest extends FormRequest
             'online_request_procedures' => 'required|array|distinct|min:1',
             'online_request_procedures.*.responsible_bureau_id' => ['required', 'integer', BaseRule::exists('bureaus', 'id')],
             'online_request_procedures.*.description' => 'nullable|string',
-            'online_request_procedures.*.responsible_user_id' => 'required|array',
+            'online_request_procedures.*.responsible_user_id' => 'required|array|distinct|min:1',
             'online_request_procedures.*.step_number' => 'required|integer',
         ];
     }
 
-    private function getRules() {
+    /**
+     * Add additional rules to the default rule based on the validation is for store or update.
+     *
+     * @return array
+     */
+    private function getRules(): array
+    {
         $rules = $this->defaultRules();
         $method = strtoupper($this->method());
         if (in_array($method, ['PUT', 'PATCH'])) {
@@ -37,7 +48,8 @@ class OnlineRequestRequest extends FormRequest
         }
         else {
             $rules['online_request_procedures.*.responsible_user_id.*'] = ['required', 'integer', BaseRule::exists('users', 'id')];
-            $rules['prerequisite_labels.*'] = 'nullable|string|array|distinct';
+            $rules['prerequisite_labels'] = 'sometimes|array|distinct|min:1';
+            $rules['prerequisite_labels.*'] = 'exclude_if:prerequisite_labels,null|required|string';
         }
         return $rules;
     }
@@ -47,7 +59,7 @@ class OnlineRequestRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return Gate::any(['is-admin', 'is-it-team-member']);
     }
@@ -57,9 +69,25 @@ class OnlineRequestRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return $this->getRules();
+    }
+
+    /**
+     * Handle a passed validation attempt.
+     * And check if the procedure step number is assigned incrementally.
+     * The order won't matter. B/c it will be sorted.
+     *
+     * @return void
+     * @throws FormRequestException
+     */
+    protected function passedValidation(): void
+    {
+        $error = $this->validateEachStepNumber();
+        if (! empty($error)) {
+            $this->throwException($error);
+        }
     }
 
     /**
@@ -69,23 +97,103 @@ class OnlineRequestRequest extends FormRequest
      *
      * @throws UnauthorizedException
      */
-    public function failedAuthorization()
+    public function failedAuthorization(): void
     {
         throw new UnauthorizedException();
     }
 
     /**
      * Handle a failed validation attempt.
+     * And check if the procedure step number is assigned incrementally.
+     * The order won't matter. B/c it will be sorted.
      *
      * @param Validator $validator
      * @return void
      *
      * @throws FormRequestException
      */
-    public function failedValidation(Validator $validator)
+    public function failedValidation(Validator $validator): void
+    {
+        $error = $this->mergeError($validator);
+        $this->throwException($error);
+    }
+
+
+    /**
+     * Extract the step number of each procedure and associate it with the index of the procedure.
+     *
+     * @param bool $parentValidationFails
+     * @return \Illuminate\Support\Collection
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function getAllStepNumberOfEachProcedure($parentValidationFails=false): \Illuminate\Support\Collection
+    {
+        $data = $parentValidationFails ? collect($this->get('online_request_procedures')) :
+            collect($this->validator->validated()['online_request_procedures']);
+
+        $data = $data->map(function ($value, $key) {
+            if (array_key_exists('step_number', $value))
+                return $value['step_number'];
+            return null;
+        });
+        return $data->sort();
+    }
+
+    /**
+     * Validate if the procedure step number is assigned incrementally and return error if exist.
+     * The order won't matter. B/c it will be sorted.
+     *
+     * @param bool $parentValidationFails
+     * @return array
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateEachStepNumber($parentValidationFails=false): array
+    {
+        $data = $this->getAllStepNumberOfEachProcedure($parentValidationFails);
+        $step = 1;
+        $error = [];
+        foreach ($data as $key => $value) {
+            if ($value != $step && $value != null) {
+                $error["online_request_procedures.$key.step_number"]
+                    =
+                    ["step_number should be $step. Or please enter the step number in incremental order."];
+            }
+            ++$step;
+        }
+        return $error;
+    }
+
+    /**
+     * Merge the default error with step number error.
+     *
+     * @param Validator $validator
+     * @return array
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function mergeError(Validator $validator): array
+    {
+        $errorOfStepNumber = $this->validateEachStepNumber(true);
+        $error = $validator->errors()->toArray();
+
+        foreach ($errorOfStepNumber as $key => $value) {
+            if (array_key_exists($key, $error))
+                $error[$key][] = $errorOfStepNumber[$key][0];
+            else
+                $error[$key] = $errorOfStepNumber[$key];
+        }
+        return $error;
+    }
+
+    /**
+     * Throw FormRequestException by passing message that would be rendered.
+     *
+     * @param array $error
+     * @throws FormRequestException
+     */
+    protected function throwException(array $error): void
     {
         $message['status'] = 422;
-        $message ['error'] = $validator->errors()->toArray();
+        $message ['error'] = $error;
         $message = json_encode($message);
         throw new FormRequestException($message, 200);
     }

@@ -13,13 +13,13 @@ class OnlineRequestTest extends TestCase
 {
     private $url = '/api/online-requests/';
     public function testUpdate() {
-        $this->unauthorizedUserRequest(UserType::staff());
-        $this->unauthorizedUserRequest(UserType::reception());
+//        $this->unauthorizedUserRequest(UserType::staff());
+//        $this->unauthorizedUserRequest(UserType::reception());
 
-//        $user = User::where('type', UserType::itTeam())->inRandomOrder()->first();
-//        $this->actingAs($user);
-//        $response = $this->putJson($this->url . 3 ,[
-//            'name' => 'doloresreprehenderitmagniaquis',
+        $user = User::where('type', UserType::itTeam())->inRandomOrder()->first();
+        $this->actingAs($user);
+//        $response = $this->postJson($this->url ,[
+//            'name' => 'ddoloresreprehenderitmagniaquis',
 //            'id' => 3,
 //            'test'=>'test',
 //            'description' => 'description changed.',
@@ -37,20 +37,49 @@ class OnlineRequestTest extends TestCase
 //                    ],
 //                ],
 //                'prerequisite_labels' => [
-//                    [
-//                        'id' => 15,
-//                        'label' => 'Odit ducimus optio blanditiis laboriosam voluptatibus sequi voluptatem distinctio aliquid eius cumque rerum.',
-//                    ]
+//                    'this is test for label.',
 //                ]
 //            ]);
 //        $response->dump();
+
+        $response = $this->postJson($this->url ,[
+            'name' => 'ddoloresreprehenderitmagniaquis',
+            'description' => 'description changed.',
+            'online_request_procedures' => [
+                [
+                    'responsible_bureau_id' => 25,
+                    'step_number' => 'r',
+                    'responsible_user_id' => [
+                        76,
+                        64
+                    ],
+                ],
+                [
+                    'responsible_bureau_id' => 25,
+//                    'step_number' => 3,
+                    'responsible_user_id' => [
+                        76,
+                        64
+                    ],
+                ],
+                [
+                    'responsible_bureau_id' => 25,
+//                    'step_number' => 9,
+                    'responsible_user_id' => [
+                        76,
+                        64
+                    ],
+                ],
+            ],
+        ]);
+        $response->dump();
     }
 
     private function unauthorizedUserRequest($userType) {
         $requestId = OnlineRequest::inRandomOrder()->limit(1)->first()->id;
         $user = User::where('type', $userType)->inRandomOrder()->first();
         $this->actingAs($user);
-        $response = $this->getJson($this->url . $requestId);
+        $response = $this->putJson($this->url . $requestId ,[]);
         $response->assertStatus(200);
         $response->assertJson([
             'status' => 403,
