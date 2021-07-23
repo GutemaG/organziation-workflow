@@ -107,6 +107,14 @@
       <!-- <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
       </template> -->
+      <template #cell(id)="row">
+        {{ row.index + 1 }}
+      </template>
+      <template #cell(description)="row">
+        <p @click="row.toggleDetails" v-b-tooltip.hover :title="row.item.description">
+          {{ row.item.description.substring(0, 20) }} ...
+        </p>
+      </template>
 
       <template #cell(actions)="row">
         <b-button size="sm" @click="row.toggleDetails">
@@ -134,12 +142,8 @@
       </template>
 
       <template #row-details="row">
-        <b-card
-          header="Detail"
-          header-bg-variant="dark"
-          title="Description"
-        >
-          <b-card-text>{{row.item.description}}</b-card-text>
+        <b-card header="Detail" header-bg-variant="dark" title="Description">
+          <b-card-text>{{ row.item.description }}</b-card-text>
           <!-- <div>{{ row.item.description }}</div> -->
           <!-- <ul>
             <li v-for="(value, key) in row.item" :key="key">
@@ -158,6 +162,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import moment from 'moment'
 export default {
   data() {
     return {
@@ -203,12 +208,22 @@ export default {
           },
           sortDirection: "desc",
         },
-        /*{
+        {
+          key:"created_at",
+          label:"Created At",
+          sortable:true,
+          formatter:(value)=>{
+              let ago = moment(value).fromNow(); // years or day ago
+              let date = moment(value).format("MMM Do YY");
+              return date + ', ' + ago
+          }
+        },
+        {
           key: "description",
           label: "Description",
           sortable: true,
           sortDirection: "desc",
-        },*/
+        },
         { key: "actions", label: "Actions" },
       ],
       totalRows: 1,

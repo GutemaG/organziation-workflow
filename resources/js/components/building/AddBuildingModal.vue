@@ -20,10 +20,19 @@
           ></b-form-input>
         </b-form-group>
 
-        <b-form-group label="Building Number" label-for="building-number-input">
+        <b-form-group
+          label="Building Number"
+          label-for="building-number-input"
+          :invalid-feedback="
+            !$v.form.number.isUnique
+              ? 'Building already registered'
+              : 'Building number is required'
+          "
+        >
           <b-form-input
             id="building-number-input"
-            v-model="form.number"
+            v-model="$v.form.number.$model"
+            :state="validateState('number')"
             required
             placeholder="Building number 529, B-529"
           ></b-form-input>
@@ -32,11 +41,14 @@
           id="number_of_offices"
           label="Number of Offices"
           label-for="input-number-of-offices"
+          invalid-feedback="Number of office is required"
         >
           <b-form-input
             type="number"
-            v-model="form.number_of_offices"
+            v-model="$v.form.number_of_offices.$model"
             id="input-number-of-offices"
+            :state="validateState('number_of_offices')"
+            required
           >
           </b-form-input>
         </b-form-group>
@@ -46,10 +58,15 @@
           label="Description"
           label-for="Building-description"
         >
-          <b-form-textarea v-model="form.description" id="input-description" placeholder="You can leave it">
+          <b-form-textarea
+            v-model="form.description"
+            id="input-description"
+            placeholder="You can leave it"
+          >
           </b-form-textarea>
         </b-form-group>
         <b-button class="form-control" type="submit" variant="primary"
+        :disabled="$v.$invalid"
           >Add</b-button
         >
       </form>
@@ -57,7 +74,8 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
+import { required } from "vuelidate/lib/validators";
 export default {
   data() {
     return {
@@ -70,8 +88,15 @@ export default {
       submitEnabled: true,
     };
   },
+  computed: {
+    ...mapGetters(["buildings"]),
+  },
   methods: {
     ...mapActions(["addBuilding"]),
+    validateState(name) {
+      const { $dirty, $error } = this.$v.form[name];
+      return $dirty ? !$error : null;
+    },
     checkFormValidity() {
       const valid = this.$refs.form.checkValidity();
       this.nameState = valid;
@@ -79,7 +104,7 @@ export default {
     },
     resetModal() {
       (this.form.name = ""),
-        (this.form.number= ""),
+        (this.form.number = ""),
         (this.form.number_of_offices = ""),
         (this.form.description = "");
     },
@@ -92,9 +117,26 @@ export default {
       const data = {
         ...this.form,
       };
-      this.addBuilding(data)
+      this.addBuilding(data);
       this.$bvModal.hide("add-building-modal");
-      console.log(data)
+      console.log(data);
+    },
+  },
+  validations: {
+    form: {
+      number: {
+        required,
+        isUnique(value) {
+          let index = this.buildings.findIndex(
+            (building) => building.number == value
+          );
+          if (index === -1) return true;
+          return false;
+        },
+      },
+      number_of_offices: {
+        required,
+      },
     },
   },
 };

@@ -11,19 +11,18 @@
           label-size="sm"
           class="mb-3"
         >
-        <b-button
-          size="sm"
-          @click="addBuilding"
-          class="mr-1"
-          variant="primary"
-        >
-          + Add
-        </b-button>
+          <b-button
+            size="sm"
+            @click="addBuilding"
+            class="mr-1"
+            variant="primary"
+          >
+            + Add
+          </b-button>
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-      </b-col>
+      <b-col lg="6" class="my-1"> </b-col>
 
       <b-col lg="6" class="my-1">
         <b-form-group
@@ -51,8 +50,7 @@
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-      </b-col>
+      <b-col lg="6" class="my-1"> </b-col>
 
       <b-col sm="5" md="6" class="my-1">
         <b-form-group
@@ -98,9 +96,6 @@
       :per-page="perPage"
       :filter="filter"
       :filter-included-fields="filterOn"
-      :sort-by.sync="sortBy"
-      :sort-desc.sync="sortDesc"
-      :sort-direction="sortDirection"
       stacked="md"
       show-empty
       small
@@ -110,6 +105,9 @@
       <!-- <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
       </template> -->
+      <template #cell(id)="row">
+        {{ row.index + 1 }}
+      </template>
 
       <template #cell(actions)="row">
         <b-button
@@ -142,13 +140,15 @@
     </b-table>
 
     <!-- Info modal -->
-      <edit-building-modal :selectedBuilding="selectedBuilding"></edit-building-modal>
-      <add-building-modal></add-building-modal>
+    <edit-building-modal
+      :selectedBuilding="selectedBuilding"
+    ></edit-building-modal>
+    <add-building-modal></add-building-modal>
   </b-container>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -159,6 +159,7 @@ export default {
           sortable: true,
           sortDirection: "desc",
         },
+        //TODO: migrate the table and uncomment this
         /*{
           key: "name",
           label: "Name",
@@ -189,16 +190,13 @@ export default {
       currentPage: 1,
       perPage: 5,
       pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
-      sortBy: "",
-      sortDesc: false,
-      sortDirection: "asc",
       filter: null,
       filterOn: [],
-      selectedBuilding:{},
+      selectedBuilding: {},
     };
   },
   computed: {
-    ...mapGetters(['buildings']),
+    ...mapGetters(["buildings"]),
     sortOptions() {
       // Create an options list from our fields
       return this.fields
@@ -207,25 +205,25 @@ export default {
           return { text: f.label, value: f.key };
         });
     },
-    buildingLength(){
-      return this.buildings.length
-    }
+    buildingLength() {
+      return this.buildings.length;
+    },
   },
   methods: {
-    ...mapActions(['fetchBuildings']),
+    ...mapActions(["fetchBuildings"]),
     info(item, index, button) {
-      console.log('editttting')
+      console.log("editttting");
       this.selectedBuilding = item;
       this.$root.$emit("bv::show::modal", "edit-building-modal", button);
     },
-    addBuilding(){
-        this.$root.$emit("bv::show::modal", "add-building-modal");
+    addBuilding() {
+      this.$root.$emit("bv::show::modal", "add-building-modal");
     },
-    deleteBuilding(){
-        console.log('deleting Building ..')
+    deleteBuilding() {
+      console.log("deleting Building ..");
     },
-    editBuilding(){
-        console.log('Editing Building ...')
+    editBuilding() {
+      console.log("Editing Building ...");
     },
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
@@ -233,8 +231,8 @@ export default {
       this.currentPage = 1;
     },
   },
-  created(){
+  created() {
     this.fetchBuildings();
-  }
+  },
 };
 </script>

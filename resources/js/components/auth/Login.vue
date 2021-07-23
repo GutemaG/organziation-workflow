@@ -10,6 +10,9 @@
     @hide="cancelLogin"
   >
     <form ref="form" @submit.stop.prevent="attemptLogin">
+      <b-alert v-if="loggingUserErrorMessage" show variant="danger">{{
+        loggingUserErrorMessage
+      }}</b-alert>
       <b-form-group label="Email" label-for="email-input">
         <b-form-input
           id="email-input"
@@ -31,11 +34,7 @@
         required
       >
       </base-input>
-      <b-form-checkbox
-        id="rememberme"
-        v-model="user.remember"
-        name="remeberme"
-      >
+      <b-form-checkbox id="rememberme" v-model="user.remember" name="remeberme">
         Remember Me
       </b-form-checkbox>
       <b-button
@@ -49,7 +48,7 @@
   </b-modal>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -61,32 +60,35 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["loggingUserErrorMessage"]),
     isValidLoginForm() {
       return this.isEmailValid() && this.user.password;
     },
-    validation(){
+    validation() {
       return this.isEmailValid();
-    }
+    },
   },
   methods: {
-    ...mapActions(['login']),
+    ...mapActions(["login"]),
     attemptLogin(event) {
       event.preventDefault();
-      this.login(this.user)
+      this.login(this.user);
     },
     cancelLogin() {
       this.user.email = "";
       this.user.password = "";
       this.user.remember = false;
+      this.$store.commit("SET_ERROR", "");
     },
-    isEmailValid(){
+    isEmailValid() {
       // let mailFormater = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-      let mailFormater = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-      if(mailFormater.test(this.user.email)){
-        return true
+      let mailFormater =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+      if (mailFormater.test(this.user.email)) {
+        return true;
       }
-      return false
-    }
+      return false;
+    },
   },
 };
 // var mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;

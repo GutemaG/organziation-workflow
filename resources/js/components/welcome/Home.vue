@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-container fluid>
+        <!-- <b-container >
             <b-carousel
                 class="carousel-center"
                 id="carousel-fade"
@@ -27,7 +27,7 @@
                     img-src="/images/campus/astu campu3.jpg"
                 ></b-carousel-slide>
             </b-carousel>
-        </b-container>
+        </b-container> -->
 
         <b-container class="mt-5">
             <div style="text-align: center; margin-bottom: 2rem;">

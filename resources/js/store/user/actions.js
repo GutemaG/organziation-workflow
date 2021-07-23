@@ -35,10 +35,28 @@ export default {
             });
     },
     async addUser({ commit }, data) {
-        axios
-            .post("api/users", {
+        try {
+            let resp = await axios.post("api/users", {
                 ...data
-            })
+            });
+            if (resp.data.status === 200 || resp.data.status === 201) {
+                Swal.fire("Success!", data.message, "success");
+                let user = resp.data.user;
+                commit("ADD_USER", user);
+            }
+            if (resp.data.status === 400) {
+                let error = resp.data.error;
+                console.log(resp.data.error);
+            }
+        } catch (error) {
+            Swal.fire("Failed!", "Your Server is Down", "warning");
+        }
+    }
+};
+
+//   this.$bvModal.hide("add-user-modal");
+// $("#add-user-modal").modal("hide");
+/*
             .then(function(resp) {
                 if (resp.data.status === 200 || resp.data.status === 201) {
                     Swal.fire("Success!", data.message, "success");
@@ -51,5 +69,4 @@ export default {
             .catch(function(error) {
                 Swal.fire("Failed!", data.message, "warning");
             });
-    }
-};
+            */
