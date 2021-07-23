@@ -52,8 +52,6 @@ import './components'
 // import { FadeTransition } from "vue2-transitions";
 // Vue.component('fade-transition', FadeTransition);
 
-import Transitions from 'vue2-transitions'
-Vue.use(Transitions)
 import store from "./store";
 import Vue from "vue";
 

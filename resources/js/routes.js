@@ -15,7 +15,8 @@ export default [
                 components:{
                     welcome: require("./components/welcome/Search.vue").default
                 }
-            }
+            },
+            
         ]
     },
     {
