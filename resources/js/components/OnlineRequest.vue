@@ -332,9 +332,11 @@ export default {
     },
   },
   created() {
+    this.$Progress.start()
     this.fetchOnlineRequests();
     this.fetchBureaus();
     this.fetchUsers();
+    this.$Progress.finish()
   },
 
   filters: {

@@ -264,7 +264,9 @@ export default {
     },
   },
   created() {
+    this.$Progress.start();
     this.fetchAffairs();
+    this.$Progress.finish();
   },
   filters: {
     formatDate(value) {

@@ -11,21 +11,13 @@
           label-size="sm"
           class="mb-3"
         >
-        <b-button
-          size="sm"
-          @click="addUser"
-          class="mr-1"
-          variant="primary"
-        >
-          + Add
-        </b-button>
+          <b-button size="sm" @click="addUser" class="mr-1" variant="primary">
+            + Add
+          </b-button>
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-
-        
-      </b-col>
+      <b-col lg="6" class="my-1"> </b-col>
 
       <b-col lg="6" class="my-1">
         <b-form-group
@@ -53,8 +45,7 @@
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-      </b-col>
+      <b-col lg="6" class="my-1"> </b-col>
 
       <b-col sm="5" md="6" class="my-1">
         <b-form-group
@@ -147,14 +138,14 @@
     </b-table>
 
     <!-- Info modal -->
-      <edit-user-modal :selectedUser="selectedUser"></edit-user-modal>
-      <add-user-modal></add-user-modal>
+    <edit-user-modal :selectedUser="selectedUser"></edit-user-modal>
+    <add-user-modal></add-user-modal>
   </b-container>
 </template>
 
 <script>
 import axios from "axios";
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -183,10 +174,16 @@ export default {
           key: "type",
           label: "Type",
           formatter: (value, key, item) => {
-            let newVal=''
-            if(value === 'it_team_member'){newVal = 'IT Team'}
-            if(value === 'reception'){newVal = 'Reception'}
-            if(value === 'staff'){newVal = 'Staff'}
+            let newVal = "";
+            if (value === "it_team_member") {
+              newVal = "IT Team";
+            }
+            if (value === "reception") {
+              newVal = "Reception";
+            }
+            if (value === "staff") {
+              newVal = "Staff";
+            }
             return newVal;
           },
           sortable: true,
@@ -208,7 +205,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['users']),
+    ...mapGetters(["users"]),
     sortOptions() {
       // Create an options list from our fields
       return this.fields
@@ -217,11 +214,9 @@ export default {
           return { text: f.label, value: f.key };
         });
     },
-    userLength(){
-      return this.users.length
-    }
-  },
-  mounted() {
+    userLength() {
+      return this.users.length;
+    },
   },
   created() {
     this.$Progress.start();
@@ -235,7 +230,7 @@ export default {
       this.selectedUser = item;
       this.$root.$emit("bv::show::modal", "edit-modal", button);
     },
-     addUser() {
+    addUser() {
       this.$root.$emit("bv::show::modal", "add-user-modal");
     },
     deleteUser(item) {
@@ -249,12 +244,11 @@ export default {
       }).then((result) => {
         // Send request to the server
         if (result.value) {
-          this.removeUser(item.id)
+          this.removeUser(item.id);
           Swal.fire("Deleted!", "User is removed", "success");
         }
       });
     },
-    
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;
@@ -265,5 +259,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
