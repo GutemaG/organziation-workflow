@@ -43,13 +43,14 @@ class OnlineRequestRequest extends FormRequest
             $rules['id'] = 'required|integer';
             $rules['online_request_procedures.*.id'] = 'required|integer';
             $rules['online_request_procedures.*.responsible_user_id.*'] = ['required', 'integer', BaseRule::exists('users', 'id')];
-            $rules['prerequisite_labels.*.label'] = 'nullable|string';
-            $rules['prerequisite_labels.*.id'] = 'exclude_if:prerequisite_labels.*.label,null|required|integer';
+            $rules['prerequisite_labels'] = 'sometimes|array|distinct|min:1';
+            $rules['prerequisite_labels.*.label'] = 'required|string';
+            $rules['prerequisite_labels.*.id'] = 'required|integer';
         }
         else {
             $rules['online_request_procedures.*.responsible_user_id.*'] = ['required', 'integer', BaseRule::exists('users', 'id')];
             $rules['prerequisite_labels'] = 'sometimes|array|distinct|min:1';
-            $rules['prerequisite_labels.*'] = 'exclude_if:prerequisite_labels,null|required|string';
+            $rules['prerequisite_labels.*'] = 'required|string';
         }
         return $rules;
     }

@@ -18,8 +18,8 @@ class OnlineRequestTest extends TestCase
 
         $user = User::where('type', UserType::itTeam())->inRandomOrder()->first();
         $this->actingAs($user);
-//        $response = $this->postJson($this->url ,[
-//            'name' => 'ddoloresreprehenderitmagniaquis',
+//        $response = $this->putJson($this->url . 3 ,[
+//            'name' => 'changed 3',
 //            'id' => 3,
 //            'test'=>'test',
 //            'description' => 'description changed.',
@@ -28,7 +28,7 @@ class OnlineRequestTest extends TestCase
 //                        'text' => 'text',
 //                        'test' => 'text',
 //                        'responsible_bureau_id' => 25,
-//                        'step_number' => 7,
+//                        'step_number' => 1,
 //                        'id' => 13,
 //                        'responsible_user_id' => [
 //                            76,
@@ -37,18 +37,22 @@ class OnlineRequestTest extends TestCase
 //                    ],
 //                ],
 //                'prerequisite_labels' => [
-//                    'this is test for label.',
+//                    [
+//                        'id' => 4,
+//                        'label' => 'this is test for label.',
+//                    ]
 //                ]
 //            ]);
+//        $response = $this->getJson($this->url . 3);
 //        $response->dump();
 
         $response = $this->postJson($this->url ,[
-            'name' => 'ddoloresreprehenderitmagniaquis',
-            'description' => 'description changed.',
+            'name' => 'this is name 3',
+            'description' => 'this is description.',
             'online_request_procedures' => [
                 [
                     'responsible_bureau_id' => 25,
-                    'step_number' => 'r',
+                    'step_number' => 1,
                     'responsible_user_id' => [
                         76,
                         64
@@ -56,7 +60,7 @@ class OnlineRequestTest extends TestCase
                 ],
                 [
                     'responsible_bureau_id' => 25,
-//                    'step_number' => 3,
+                    'step_number' => 3,
                     'responsible_user_id' => [
                         76,
                         64
@@ -64,13 +68,18 @@ class OnlineRequestTest extends TestCase
                 ],
                 [
                     'responsible_bureau_id' => 25,
-//                    'step_number' => 9,
+                    'step_number' => 2,
                     'responsible_user_id' => [
                         76,
                         64
                     ],
                 ],
             ],
+            'prerequisite_labels' => [
+                'label 1',
+                'label 2',
+                'label 3',
+            ]
         ]);
         $response->dump();
     }
