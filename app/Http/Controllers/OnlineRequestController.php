@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\DatabaseException;
 use App\Exceptions\UnauthorizedException;
 use App\Http\Requests\OnlineRequestRequest;
 use App\Models\OnlineRequest;
@@ -104,6 +105,7 @@ class OnlineRequestController extends Controller
     public function update(OnlineRequestRequest $request, OnlineRequest $onlineRequest): JsonResponse
     {
         $data = $request->validated();
+
         try {
             DB::beginTransaction();
             $onlineRequest->update([
@@ -126,16 +128,18 @@ class OnlineRequestController extends Controller
                         $procedure->users()->attach($item);
                 }
             }
-           if (array_key_exists('prerequisite_labels', $data))
-                foreach ($data['prerequisite_labels'] as $label) {
-                    $prerequisite = PrerequisiteLabel::find($label['id']);
-                    $prerequisite->update($label);
-                }
+            if (! OnlinePrerequisiteController::storeOrUpdateData($data, $onlineRequest->id, true))
+                throw new DatabaseException('Error occurred during prerequisite updating. Please retry again.');
+            dd(true);
             DB::commit();
             return response()->json([
                 'status' => 201,
                 'online_request' => $onlineRequest->refresh(),
             ]);
+        }
+        catch (DatabaseException $exception){
+            DB::rollBack();
+            return $exception->render($request);
         }
         catch (\Exception $e) {
             DB::rollBack();

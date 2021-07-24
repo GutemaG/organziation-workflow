@@ -40,12 +40,12 @@ class OnlineRequestRequest extends FormRequest
         $rules = $this->defaultRules();
         $method = strtoupper($this->method());
         if (in_array($method, ['PUT', 'PATCH'])) {
-            $rules['id'] = 'required|integer';
-            $rules['online_request_procedures.*.id'] = 'required|integer';
+            $rules['id'] = ['required', 'integer', BaseRule::exists('online_requests', 'id')];
+            $rules['online_request_procedures.*.id'] = ['sometimes', 'integer', BaseRule::exists('online_request_procedures', 'id')];
             $rules['online_request_procedures.*.responsible_user_id.*'] = ['required', 'integer', BaseRule::exists('users', 'id')];
             $rules['prerequisite_labels'] = 'sometimes|array|distinct|min:1';
             $rules['prerequisite_labels.*.label'] = 'required|string';
-            $rules['prerequisite_labels.*.id'] = 'required|integer';
+            $rules['prerequisite_labels.*.id'] = ['sometimes', 'integer', BaseRule::exists('prerequisite_labels', 'id')];
         }
         else {
             $rules['online_request_procedures.*.responsible_user_id.*'] = ['required', 'integer', BaseRule::exists('users', 'id')];
