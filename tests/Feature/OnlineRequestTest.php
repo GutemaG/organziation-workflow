@@ -25,11 +25,30 @@ class OnlineRequestTest extends TestCase
             'description' => 'description changed.',
             'online_request_procedures' => [
                     [
-                        'text' => 'text',
-                        'test' => 'text',
                         'responsible_bureau_id' => 25,
                         'step_number' => 1,
                         'id' => 13,
+                        'responsible_user_id' => [
+                            76,
+                            3,
+                            1,
+                            5,
+                            64,
+                            54,
+                            34
+                        ],
+                    ],
+                    [
+                        'responsible_bureau_id' => 25,
+                        'step_number' => 3,
+                        'responsible_user_id' => [
+                            76,
+                            64
+                        ],
+                    ],
+                    [
+                        'responsible_bureau_id' => 25,
+                        'step_number' => 2,
                         'responsible_user_id' => [
                             76,
                             64
@@ -53,45 +72,46 @@ class OnlineRequestTest extends TestCase
                     ]
                 ]
             ]);
-//        $response = $this->getJson($this->url . 3);
         $response->dump();
 
-//        $response = $this->postJson($this->url ,[
-//            'name' => 'this is name 3',
-//            'description' => 'this is description.',
-//            'online_request_procedures' => [
-//                [
-//                    'responsible_bureau_id' => 25,
-//                    'step_number' => 1,
-//                    'responsible_user_id' => [
-//                        76,
-//                        64
-//                    ],
-//                ],
-//                [
-//                    'responsible_bureau_id' => 25,
-//                    'step_number' => 3,
-//                    'responsible_user_id' => [
-//                        76,
-//                        64
-//                    ],
-//                ],
-//                [
-//                    'responsible_bureau_id' => 25,
-//                    'step_number' => 2,
-//                    'responsible_user_id' => [
-//                        76,
-//                        64
-//                    ],
-//                ],
-//            ],
-//            'prerequisite_labels' => [
-//                'label 1',
-//                'label 2',
-//                'label 3',
-//            ]
-//        ]);
-//        $response->dump();
+        $response = $this->postJson($this->url ,[
+            'name' => 'this is name 4',
+            'description' => 'this is description.',
+            'online_request_procedures' => [
+                [
+                    'responsible_bureau_id' => 25,
+                    'step_number' => 1,
+                    'responsible_user_id' => [
+                        86,
+                        25,
+                        23,
+                        64
+                    ],
+                ],
+                [
+                    'responsible_bureau_id' => 25,
+                    'step_number' => 3,
+                    'responsible_user_id' => [
+                        76,
+                        64
+                    ],
+                ],
+                [
+                    'responsible_bureau_id' => 25,
+                    'step_number' => 2,
+                    'responsible_user_id' => [
+                        76,
+                        64
+                    ],
+                ],
+            ],
+            'prerequisite_labels' => [
+                'label 1',
+                'label 2',
+                'label 3',
+            ]
+        ]);
+        $response->dump();
     }
 
     private function unauthorizedUserRequest($userType) {

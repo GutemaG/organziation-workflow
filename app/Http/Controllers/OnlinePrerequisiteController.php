@@ -7,13 +7,10 @@ use Exception;
 
 class OnlinePrerequisiteController extends Controller
 {
-
     /**
-     * Store a newly created resource in storage if the data is exist.
+     * Store a newly created resource in storage.
      *
      * @param $data
-     * @param int $onlineRequestId
-     * @param bool $storeOnly
      * @return bool
      */
     public static function store($data): bool
@@ -48,6 +45,9 @@ class OnlinePrerequisiteController extends Controller
     }
 
     /**
+     * Categorize each value of incoming data to updatable and creatable.
+     * So that the new Prerequisite added will be stored and the existing prerequisite will be updated.
+     *
      * @param $prerequisite_labels
      * @return array[]
      */
@@ -57,7 +57,7 @@ class OnlinePrerequisiteController extends Controller
         $creatable = [];
 
         collect($prerequisite_labels)
-            ->filter(function ($value, $key) use (&$updatable, &$creatable) {
+            ->filter(function ($value) use (&$updatable, &$creatable) {
                 array_key_exists('id', $value) ?
                     $updatable[] = $value :
                     $creatable[] = $value;
@@ -66,6 +66,16 @@ class OnlinePrerequisiteController extends Controller
         return array($updatable, $creatable);
     }
 
+    /**
+     * Decide the incoming data should be updated or stored.
+     * And also during updating it will identify the existing and new prerequisite,
+     * so that it will update the existing prerequisite and store the new prerequisite.
+     *
+     * @param array $data
+     * @param int $onlineRequestId
+     * @param bool $update
+     * @return bool
+     */
     public static function storeOrUpdateData(array $data, int $onlineRequestId, bool $update=false): bool
     {
         if ($update) {
@@ -88,13 +98,16 @@ class OnlinePrerequisiteController extends Controller
     }
 
     /**
+     * Prepare the incoming prerequisite data by adding the online_request_id to it,
+     * so that it can be stored properly.
+     *
      * @param array $creatableData
      * @param int $onlineRequestId
      * @return array
      */
     protected static function prepareForStoring(array $creatableData, int $onlineRequestId): array
     {
-        return collect($creatableData)->map(function ($value, $key) use ($onlineRequestId) {
+        return collect($creatableData)->map(function ($value) use ($onlineRequestId) {
             if (is_array($value)) {
                 $value['online_request_id'] = $onlineRequestId;
                 return $value;

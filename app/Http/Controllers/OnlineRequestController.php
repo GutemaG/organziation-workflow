@@ -7,10 +7,8 @@ use App\Exceptions\UnauthorizedException;
 use App\Http\Requests\OnlineRequestRequest;
 use App\Models\OnlineRequest;
 use App\Models\OnlineRequestProcedure;
-use App\Models\PrerequisiteLabel;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -64,11 +62,11 @@ class OnlineRequestController extends Controller
                 'description' => $data['description'],
             ]);
 
-            if (! OnlineRequestProcedureController::store($data, $onlineRequest->id))
-                throw new Exception('error occurred when inserting procedure.', 200);
+            if (! OnlineRequestProcedureController::storeOrUpdateData($data, $onlineRequest->id, false))
+                throw new DatabaseException('Error occurred during procedure creating. Please retry again.');
 
-            if (! OnlinePrerequisiteController::store($data, $onlineRequest->id))
-                throw new Exception('error occurred when inserting prerequisite.', 200);
+            if (! OnlinePrerequisiteController::storeOrUpdateData($data, $onlineRequest->id, false))
+                throw new DatabaseException('Error occurred during prerequisite creating. Please retry again.');
 
             DB::commit();
             return response()->json([
@@ -76,6 +74,10 @@ class OnlineRequestController extends Controller
                 'online_request' => OnlineRequest::find($onlineRequest->id),
             ]);
 
+        }
+        catch (DatabaseException $exception){
+            DB::rollBack();
+            return $exception->render($request);
         }
         catch (Exception $e) {
             DB::rollBack();
@@ -105,35 +107,21 @@ class OnlineRequestController extends Controller
     public function update(OnlineRequestRequest $request, OnlineRequest $onlineRequest): JsonResponse
     {
         $data = $request->validated();
-
         try {
             DB::beginTransaction();
             $onlineRequest->update([
                 'name' => $data['name'],
                 'description' => $data['description'],
             ]);
-            foreach ($data['online_request_procedures'] as $value) {
-                $procedure = OnlineRequestProcedure::find($value['id']);
+            if (! OnlineRequestProcedureController::storeOrUpdateData($data, $onlineRequest->id, true))
+                throw new DatabaseException('Error occurred during procedure updating. Please retry again.');
 
-                foreach ($value['responsible_user_id'] as $item) {
-                    $update = true;
-                    foreach($procedure->users as $user){
-                        if($user->pivot->user_id == $item) {
-                            $update = false;
-                            break;
-                        }
-                        continue;
-                    }
-                    if ($update)
-                        $procedure->users()->attach($item);
-                }
-            }
             if (! OnlinePrerequisiteController::storeOrUpdateData($data, $onlineRequest->id, true))
                 throw new DatabaseException('Error occurred during prerequisite updating. Please retry again.');
-            dd(true);
+
             DB::commit();
             return response()->json([
-                'status' => 201,
+                'status' => 200,
                 'online_request' => $onlineRequest->refresh(),
             ]);
         }
