@@ -15,11 +15,6 @@ use Illuminate\Support\Facades\Gate;
 
 class AffairController extends Controller
 {
-    // TODO: remove id and user_id
-    public static $affair = ['id', 'user_id, name, description'];
-    public static $procedure = ['id, affair_id, name, description, step'];
-    public static $pre_request = ['id', 'procedure_id', 'affair_id', 'name', 'description'];
-
 
     public function index()
     {
@@ -37,6 +32,13 @@ class AffairController extends Controller
             ]
         );
     }
+
+    /**
+     * Store an affair:
+     * create a affair then loop over their procedures and create them
+     * when create procedures it check if it has a pre request
+     * @param $request  Illuminate\Http\Request;
+     */
     public function store(Request $request)
     {
         if (!Gate::any(['it-team-member', 'is-admin'])) {
@@ -48,40 +50,25 @@ class AffairController extends Controller
             );
         }
         $request_affair = $request->only('affair');
-
         $validation = $this->validateData($request_affair['affair']);
-
-
         if ($validation->fails()) {
             return $validation->errors();
         }
         $validated_data = $validation->validated();
         try {
             DB::beginTransaction();
-            //Todo: first find authenticated user
-
-            //    $user = auth()->user();
             $affair = auth()->user()->affairs()->create([
                 'name' => $validated_data['name'],
                 'description' => $validated_data['description'],
             ]);
 
-            /**
-             * $affair = Affair::create([
-                'name' => $validated_data['name'],
-                'description' => $validated_data['description'],
-                'user_id' => 2
-            ]);
-             */
             $procedures = $validated_data['procedures'];
-
             foreach ($procedures as $pro) {
                 $procedure = $affair->procedures()->create([
                     'name' => $pro['name'],
                     'description' => $pro['description'],
                     'step' => $pro['step']
                 ]);
-                // return $pro;
                 if (array_key_exists('pre_requests', $pro)) {
                     $pre_requests = $pro['pre_requests'];
                     foreach ($pre_requests as $pre_request) {
@@ -107,13 +94,12 @@ class AffairController extends Controller
             ]);
         }
         return [
-            'status' => 200,
+            'status' => 201,
             'affair' => Affair::find($affair->id)
         ];
     }
     public function update(Request $request, $id)
     {
-
         if (!Gate::any(['is-it-team-member', 'is-admin'])) {
             return response()->json([
                 'status' => 401,
@@ -125,12 +111,10 @@ class AffairController extends Controller
             return response()->json(['status' => 400, 'error' => 'Affair does not exist']);
         }
         $request_affair = $request->only('affair');
-        // return $affair->name;
-        // return $request_affair['affair']['name'];
         if ($affair->name === $request_affair['affair']['name']) {
             $validation = $this->validateUpdateData($request_affair['affair'], true);
         } else {
-            $validation = $this->validateUpdateData($request_affair['affair'], true);
+            $validation = $this->validateUpdateData($request_affair['affair'], false);
         }
         if ($validation->fails()) {
             return $validation->errors();
@@ -143,16 +127,6 @@ class AffairController extends Controller
             } else {
                 $affair->update(['description' => $validated_data['description']]);
             }
-            // return $affair;
-            //Todo: first find authenticated user
-            /**
-           $user = auth()->user();
-            $affair = $user->affairs()->create([
-                'name' => $data['name'],
-                'description' => $data['description'],
-                'user_id' => 2
-            ]);
-             */
             $procedures = $validated_data['procedures'];
             foreach ($procedures as $pro) {
                 $procedure = Procedure::where('id', $pro['id'])->where('affair_id', $pro['affair_id'])->first();
@@ -164,7 +138,6 @@ class AffairController extends Controller
                 if (!array_key_exists('pre_requests', $pro)) {
                     continue;
                 }
-                // return $pro;
                 $pre_requests = $pro['pre_requests'];
                 foreach ($pre_requests as $pre) {
                     $pre_request = PreRequest::where('id', $pre['id'])->where('procedure_id', $pre['procedure_id'])->first();
@@ -193,12 +166,6 @@ class AffairController extends Controller
     }
     public function show($id)
     {
-        if (Gate::any(['is-admin', 'is-it-team-member'])) {
-            return response()->json([
-                'status' => 401,
-                'error' => 'unauthorized'
-            ]);
-        }
         $affair =  Affair::find($id);
         if (empty($affair)) {
             return response()->json([
@@ -207,6 +174,113 @@ class AffairController extends Controller
             ]);
         }
         return $affair;
+    }
+
+    public function destroy($id)
+    {
+        if (!Gate::any(['is-admin', 'is-it-team-member'])) {
+            return response()->json([
+                'status' => 401,
+                'error' => 'Unauthorized.',
+            ]);
+        }
+        $affair = Affair::find($id);
+        //Todo: Delete the relation ships 
+        if (empty($affair)) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'Affair does not exist'
+            ]);
+        }
+        $affair->delete();
+        return response()->json(['status' => 200]);
+    }
+    public function deleteProcedure($id, $affair_id)
+    {
+        if (!Gate::any(['is-admin', 'is-it-team-member'])) {
+            return response()->json([
+                'status' => 401,
+                'error' => 'Unauthorized.',
+            ]);
+        }
+        $procedure = Procedure::where('id', $id)->where('affair_id', $affair_id)->first();
+        // return $procedure;
+        if (empty($procedure)) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'Does not exist'
+            ]);
+        }
+        $procedure->delete();
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+    public function addProcedure(Request $request)
+    {
+        if (!Gate::any(['is-admin', 'is-it-team-member'])) {
+            return response()->json([
+                'status' => 401,
+                'error' => 'Unauthorized.',
+            ]);
+        }
+        $validatedData = $request->validate([
+            'affair_id' => 'required|numeric',
+            'name' => 'required|string',
+            'description' => 'nullable|string',
+            'step' => 'required|numeric'
+        ]);
+        $procedure = Procedure::create($validatedData);
+        if ($procedure) {
+            return response()->json([
+                'procedure' => Procedure::find($procedure->id)
+            ]);
+        }
+        return $validatedData;
+    }
+    public function addPreRequest(Request $request)
+    {
+        if (!Gate::any(['is-admin', 'is-it-team-member'])) {
+            return response()->json([
+                'status' => 401,
+                'error' => 'Unauthorized.',
+            ]);
+        }
+        $validatedData = $request->validate([
+            'procedure_id' => 'required|numeric',
+            'name' => 'nullable|string',
+            'description' => 'nullable|string',
+        ]);
+        $pre_request = PreRequest::create($validatedData);
+        if ($pre_request) {
+            return response()->json([
+                'pre_request' => $pre_request
+            ]);
+        }
+        return response()->json([
+            'status' => 400,
+            'error' => 'something is wrong'
+        ]);
+    }
+    public function deletePreRequest($id, $procedure_id)
+    {
+        if (!Gate::any(['is-admin', 'is-it-team-member'])) {
+            return response()->json([
+                'status' => 401,
+                'error' => 'Unauthorized.',
+            ]);
+        }
+        $pre_request = PreRequest::where('id', $id)->where('procedure_id', $procedure_id)->first();
+        if (empty($pre_request)) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'Does not exist'
+            ]);
+        }
+        $pre_request->delete();
+        return response()->json([
+            'status' => 200,
+        ]);
     }
     public function validateData($data)
     {
@@ -241,129 +315,5 @@ class AffairController extends Controller
             $update_rule['name'] =  'required|string';
         }
         return Validator::make($data, $update_rule);
-    }
-
-    public static function testing()
-    {
-        $aff = [
-            "affair" => [
-                "name" => "original ",
-                "description" => "update take original file for ASTU ",
-                "procedures" => [
-                    [
-                        "name" => "update Go to Registrar",
-                        "description" => "up Go to this bureau",
-                        "step" => 1,
-                        "pre_request" => [
-                            [
-                                "name" => "nothing is here",
-                                "description" => "what the fuck",
-                                "affair_id" => null
-                            ],
-                            [
-                                "name" => "nothing bla bla",
-                                "description" => "blalala",
-                                "affair_id" => null
-                            ]
-                        ]
-                    ],
-                    [
-                        "name" => "up go to bureau number 8",
-                        "description" => "up They will handle your request",
-                        "step" => 2,
-                        "pre_request" => [
-                            [
-                                "name" => "kj",
-                                "description" => "up Photo that display on your original file",
-                                "affair_id" => null
-                            ],
-                            [
-                                "name" => "nothing also",
-                                "description" => "",
-                                "affair_id" => 2
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
-        return $aff;
-    }
-
-    public function destroy($id)
-    {
-        if (!Gate::any(['is-admin', 'is-it-team-member'])) {
-            return response()->json([
-                'status' => 401,
-                'error' => 'Unauthorized.',
-            ]);
-        }
-        $affair = Affair::find($id);
-        //Todo: Delete the relation ships 
-        if (empty($affair)) {
-            return response()->json([
-                'status' => 400,
-                'error' => 'Affair does not exist'
-            ]);
-        }
-        $affair->delete();
-        return response()->json(['status' => 200]);
-    }
-    public function deleteProcedure($id, $affair_id)
-    {
-        $procedure = Procedure::where('id', $id)->where('affair_id', $affair_id)->first();
-        // return $procedure;
-        if (empty($procedure)) {
-            return response()->json([
-                'status' => 400,
-                'error' => 'Does not exist'
-            ]);
-        }
-        $procedure->delete();
-        return response()->json([
-            'status' => 200,
-        ]);
-    }
-    public function addProcedure(Request $request){
-        $validatedData = $request->validate([
-            'affair_id' => 'required|numeric',
-            'name' => 'required|string',
-            'description' => 'nullable|string',
-            'step' => 'required|numeric'
-        ]);
-        $procedure = Procedure::create($validatedData);
-        if($procedure){
-            return response()->json([
-                'procedure' => Procedure::find($procedure->id)
-            ]);
-        }
-        return $validatedData;
-    }
-    public function addPreRequest(Request $request){
-        $validatedData = $request->validate([
-            'procedure_id' => 'required|numeric',
-            'name' => 'nullable|string',
-            'description' => 'nullable|string',
-        ]);
-        $pre_request = PreRequest::create($validatedData);
-        if($pre_request){
-            return response()->json([
-                'pre_request' => $pre_request
-            ]);
-        }
-    }
-    public function deletePreRequest($id, $procedure_id){
-        $pre_request = PreRequest::where('id', $id)->where('procedure_id', $procedure_id)->first();
-        if(empty($pre_request)){
-            return response()->json([
-                'status' => 400,
-                'error' => 'Does not exist'
-            ]);
-
-        }
-        $pre_request->delete();
-        return response()->json([
-            'status' => 200,
-        ]);
     }
 }

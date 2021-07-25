@@ -13,6 +13,7 @@
       <b-alert v-if="loggingUserErrorMessage" show variant="danger">{{
         loggingUserErrorMessage
       }}</b-alert>
+      <b-alert v-if="!!error" show variant="danger">{{ error }}</b-alert>
       <b-form-group label="Email" label-for="email-input">
         <b-form-input
           id="email-input"
@@ -25,7 +26,7 @@
           Email is not valid, please enter valide email
         </b-form-invalid-feedback>
       </b-form-group>
-      <base-input
+      <!-- <base-input
         label="Password"
         v-model.trim="user.password"
         labelFor="password-input"
@@ -33,7 +34,23 @@
         type="password"
         required
       >
-      </base-input>
+      </base-input> -->
+      <b-form-group label="Password" label-for="password-input">
+        <b-input-group>
+          <b-form-input
+            id="email-input"
+            :type="showPassword?'text':'password'"
+            required
+            v-model="user.password"
+          ></b-form-input>
+          <b-input-group-append>
+            <b-button @click="showPassword=!showPassword" variant="light">
+              <i v-show="!showPassword" class="far fa-eye" id="show"></i>
+              <i v-show="showPassword" class="far fa-eye-slash" id="show"></i>
+            </b-button>
+          </b-input-group-append>
+        </b-input-group>
+      </b-form-group>
       <b-form-checkbox id="rememberme" v-model="user.remember" name="remeberme">
         Remember Me
       </b-form-checkbox>
@@ -41,9 +58,11 @@
         class="form-control"
         type="submit"
         variant="primary"
-        :disabled="!isValidLoginForm"
-        >Login</b-button
+        :disabled="!isValidLoginForm || isLoading"
       >
+        <span v-if="!isLoading">Login</span>
+        <b-spinner v-show="isLoading" label="Loading..."></b-spinner>
+      </b-button>
     </form>
   </b-modal>
 </template>
@@ -57,6 +76,9 @@ export default {
         password: "",
         remember: false,
       },
+      error: null,
+      isLoading: false,
+      showPassword:false
     };
   },
   computed: {
@@ -70,14 +92,25 @@ export default {
   },
   methods: {
     ...mapActions(["login"]),
-    attemptLogin(event) {
+    async attemptLogin(event) {
       event.preventDefault();
-      this.login(this.user);
+      let user = this.user;
+      this.isLoading = true;
+      try {
+        await this.login(user);
+        $("#login-modal-form").modal("hide");
+        window.location.replace("/dashboard");
+      } catch (err) {
+        this.error = err.message || "Failed to authenticate";
+      }
+      this.isLoading = false;
     },
     cancelLogin() {
       this.user.email = "";
       this.user.password = "";
       this.user.remember = false;
+      this.isLoading = false;
+      this.error = null;
       this.$store.commit("SET_ERROR", "");
     },
     isEmailValid() {

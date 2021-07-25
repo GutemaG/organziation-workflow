@@ -21,6 +21,7 @@
           label="Affair Name"
           label-for="affair-name-input"
           invalid-feedback="Required"
+          description="Name for the affair or request that will be handled"
         >
           <b-form-input
             id="affair-name-input"

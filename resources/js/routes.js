@@ -3,27 +3,29 @@ export default [
     {
         path: "/",
         component: require("./components/welcome/GuestWelcome.vue").default,
-        children:[
+        meta: { requiresAuth: false },
+        children: [
             {
-                path:"/",
-                components:{
+                path: "/",
+                components: {
                     welcome: require("./components/welcome/Home.vue").default
                 }
             },
             {
-                path:"/search",
-                components:{
+                path: "/search",
+                components: {
                     welcome: require("./components/welcome/Search.vue").default
                 }
-            },
-            
+            }
         ]
     },
     {
         path: "/dashboard",
         component: require("./components/Dashboard.vue").default,
+        meta: {
+            requiresAuth: true
+        },
         children: [
-
             {
                 path: "/",
                 components: {
@@ -80,8 +82,7 @@ export default [
                 path: "/online-requests",
                 props: true,
                 components: {
-                    dashboard: require("./components/OnlineRequest.vue")
-                        .default
+                    dashboard: require("./components/OnlineRequest.vue").default
                 }
             },
             {
@@ -99,7 +100,7 @@ export default [
                     dashboard: require("./components/request/online/EditOnlineRequest.vue")
                         .default
                 }
-            },
+            }
         ]
     },
     {
@@ -107,7 +108,7 @@ export default [
         redirect: "/"
     },
     {
-        path: '/:notFound(.*)',
+        path: "/:notFound(.*)",
         component: require("./components/404.vue").default
     }
 ];

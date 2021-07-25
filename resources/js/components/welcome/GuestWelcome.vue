@@ -31,9 +31,8 @@
                 )
               "
             >
-            <b-button variant="primary">Login</b-button>
-              </b-nav-item
-            >
+              <b-button variant="primary">Login</b-button>
+            </b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav right v-if="currentUser">
             <b-nav-item to="/dashboard"> Dashboard </b-nav-item>

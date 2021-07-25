@@ -18,7 +18,7 @@ Vue.use(VueProgressBar, {
     color: "rgb(143, 255, 199)",
     failedColor: "red",
     height: "5px",
-    thickness:"5px"
+    thickness: "5px"
 });
 
 import Swal from "sweetalert2";
@@ -47,8 +47,7 @@ window.Toast = Toast;
 //const files = require.context('./', true, /\.vue$/i)
 //files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-
-import './components'
+import "./components";
 // import { FadeTransition } from "vue2-transitions";
 // Vue.component('fade-transition', FadeTransition);
 
@@ -75,6 +74,25 @@ const router = new VueRouter({
     mode: "history",
     routes
 });
+/*
+router.beforeEach((to, _, next) => {
+    // console.log('what')
+    console.log('state ',!!store.getters.currentUser)
+    if (to.meta.requiresAuth) {
+        if (!store.getters.currentUser) {
+            next("/");
+            console.log("nooooooooooo");
+        }
+        if (store.getters.currentUser) {
+            next("/dashboard");
+            console.log("logged in");
+        }
+    } else {
+            console.log("No, you are logged in");
+        next();
+    }
+});
+*/
 
 const app = new Vue({
     el: "#app",

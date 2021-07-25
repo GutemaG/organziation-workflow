@@ -29,7 +29,7 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
     Route::resource('/buildings', \App\Http\Controllers\BuildingController::class);
 
     Route::resource('/bureaus', \App\Http\Controllers\BureauController::class);
-    Route::resource('/affairs', \App\Http\Controllers\AffairController::class);
+    // Route::resource('/affairs', \App\Http\Controllers\AffairController::class);
     Route::delete('/delete-procedure/{id}/{affair_id}', [\App\Http\Controllers\AffairController::class, 'deleteProcedure']);
     Route::delete('/delete-pre-request/{id}/{procedure_id}', [\App\Http\Controllers\AffairController::class, 'deletePreRequest']);
     Route::post('/add-procedure', [\App\Http\Controllers\AffairController::class, 'addProcedure']);
@@ -39,6 +39,7 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
     Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
 
+Route::resource('/api/affairs', \App\Http\Controllers\AffairController::class);
 Route::get('/test/', function () {
     //    \App\Models\OnlineRequest::factory(20)->hasPrerequisiteLabels(rand(3,6))->create();
 });

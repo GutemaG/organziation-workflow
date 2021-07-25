@@ -27,15 +27,20 @@ export default new Vuex.Store({
     actions: {
         async login({ commit }, data) {
             try {
-                await axios.post("/login", {
+                let resp = await axios.post("/login", {
                     ...data
                 });
-                window.location.replace("/dashboard");
-                $("#login-modal-form").modal("hide");
-                commit("SET_ERROR", "");
-            } catch (error) {
-                let error_msg = "These credentials do not match our records";
-                commit("SET_ERROR", error_msg);
+                // console.log(resp);
+                // return;
+                // window.location.replace("/dashboard");
+                // $("#login-modal-form").modal("hide");
+                // commit("SET_ERROR", "");
+            } catch (err) {
+                let error_msg =
+                    "These credentials do not match our records, please try again";
+                const error = new Error(error_msg);
+                throw error;
+                // commit("SET_ERROR", error_msg);
             }
         }
     },

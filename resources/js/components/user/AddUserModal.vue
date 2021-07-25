@@ -17,7 +17,7 @@
           :invalid-feedback="
             !$v.form.user_name.isUnique
               ? 'User name already exist'
-              : 'User Name is Reqired'
+              : 'User Name is required'
           "
         >
           <b-form-input
@@ -100,33 +100,52 @@
           </b-form-select>
         </b-form-group>
         <b-form-group
-          id="password"
+          id="password-label"
           label="Password"
-          label-for="password"
-          invalid-feedback="required"
+          label-for="password-input"
         >
-          <b-form-input
-            id="password"
-            v-model="form.password"
-            type="password"
-            placeholder="Enter password for the IT team"
-            required
-          ></b-form-input>
+          <b-input-group>
+            <b-form-input
+              id="password-input"
+              v-model="$v.form.password.$model"
+              :type="showPassword ? 'text' : 'password'"
+              :state="validateState('password')"
+              placeholder="Enter password for the IT team"
+              required
+            ></b-form-input>
+            <b-input-group-append>
+              <b-button @click="showPassword = !showPassword" variant="light">
+                <i v-show="!showPassword" class="far fa-eye" id="show"></i>
+                <i v-show="showPassword" class="far fa-eye-slash" id="show"></i>
+              </b-button>
+            </b-input-group-append>
+            <b-form-invalid-feedback>Required</b-form-invalid-feedback>
+          </b-input-group>
         </b-form-group>
         <b-form-group
-          id="password_confirmation"
+          id="password-confirmation"
           label="Password"
-          label-for="Confirm Password"
-          invalid-feedback="Password does not match!"
+          label-for="password-confirmation-input"
         >
-          <b-form-input
-            id="password_confirmation"
-            v-model="$v.form.password_confirmation.$model"
-            :state="validateState('password_confirmation')"
-            type="password"
-            placeholder="Enter password for the IT team"
-            required
-          ></b-form-input>
+          <b-input-group>
+            <b-form-input
+              id="password-confirmation-input"
+              v-model="$v.form.password_confirmation.$model"
+              :type="showPassword ? 'text' : 'password'"
+              placeholder="Confirm the password"
+              :state="validateState('password_confirmation')"
+              required
+            ></b-form-input>
+            <b-input-group-append>
+              <b-button @click="showPassword = !showPassword" variant="light">
+                <i v-show="!showPassword" class="far fa-eye" id="show"></i>
+                <i v-show="showPassword" class="far fa-eye-slash" id="show"></i>
+              </b-button>
+            </b-input-group-append>
+            <b-form-invalid-feedback
+              >Password don't match</b-form-invalid-feedback
+            >
+          </b-input-group>
         </b-form-group>
         <b-button
           class="form-control"
@@ -154,6 +173,7 @@ export default {
       selected: [], // Must be an array reference!
 
       all_permissions: true,
+      showPassword: false,
       //TODO: do something tmorrow
       form: {
         user_name: "",
@@ -243,7 +263,11 @@ export default {
           return false;
         },
       },
+      password: {
+        required,
+      },
       password_confirmation: {
+        required,
         sameAsPassword: sameAs("password"),
       },
       type: {
