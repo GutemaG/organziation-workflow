@@ -227,9 +227,13 @@ import { mapActions, mapGetters } from "vuex";
 //   online_request_fields,
 //   online_request_procedure_fields,
 // } from "./../table_fields";
+import OnlineRequestProcedureTable from "./request/online/OnlineRequestProcedureTable.vue";
 import moment from "moment";
 export default {
   name: "online-request",
+  components: {
+    "online-request-procedure-table": OnlineRequestProcedureTable,
+  },
   data() {
     return {
       perPage: 5,
@@ -332,11 +336,11 @@ export default {
     },
   },
   created() {
-    this.$Progress.start()
+    this.$Progress.start();
     this.fetchOnlineRequests();
     this.fetchBureaus();
     this.fetchUsers();
-    this.$Progress.finish()
+    this.$Progress.finish();
   },
 
   filters: {

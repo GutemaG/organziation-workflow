@@ -11,25 +11,34 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import NavBar from "./include/NavBar.vue";
+import SideBar from "./include/SideBar.vue";
 export default {
-  name:'Dashboard',
+  components: { "nav-bar": NavBar, "side-bar": SideBar },
+  name: "Dashboard",
   data() {
     return {};
   },
-  methods:{
+  methods: {
     // ...mapActions(['fetchUsers', 'fetchAffairs', 'fetchBureaus', 'fetchBuildings'])
   },
   computed: {
-    ...mapGetters(["currentUser", 'users','affairs','bureaus', 'buildings', 'findUser']),
+    ...mapGetters([
+      "currentUser",
+      "users",
+      "affairs",
+      "bureaus",
+      "buildings",
+      "findUser",
+    ]),
   },
-  created(){
+  created() {
     // this.fetchUsers()
     // this.fetchAffairs()
     // this.fetchBureaus();
     // this.fetchBuildings()
     // console.log('created')
-
-  }
+  },
 };
 </script>
 <style scoped>

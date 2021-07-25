@@ -1,4 +1,19 @@
 // import Dashboard from './components/Dashboard.vue';
+import store from "./store";
+let currentUser = store.getters.currentUser;
+
+let dashboardType = "ItTeamDashboard";
+
+if (currentUser) {
+    if (currentUser.type == "admin") {
+        dashboardType = "AdminDashboard";
+    } else if (currentUser.type == "it-team") {
+        dashboardType = "ItTeamDashboard";
+    } else if (currentUser.type === "staff") dashboardType = "StaffDashboard";
+    else if (currentUser.type === "reception")
+        dashboardType = "ReceptionDashboard";
+}
+
 export default [
     {
         path: "/",
@@ -29,7 +44,8 @@ export default [
             {
                 path: "/",
                 components: {
-                    dashboard: require("./components/DashboardHome.vue").default
+                    dashboard: require(`./components/dashboard/${dashboardType}.vue`)
+                        .default
                 }
             },
             {

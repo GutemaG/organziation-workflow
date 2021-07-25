@@ -149,7 +149,14 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import AddBuildingModal from "./building/AddBuildingModal.vue";
+import EditBuildingModal from "./building/EditBuildingModal.vue";
+
 export default {
+  components: {
+    "add-building-modal": AddBuildingModal,
+    "edit-building-modal": EditBuildingModal,
+  },
   data() {
     return {
       fields: [

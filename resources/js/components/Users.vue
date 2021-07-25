@@ -144,9 +144,14 @@
 </template>
 
 <script>
-import axios from "axios";
+import EditModal from "./user/EditModal.vue";
+import AddUserModal from "./user/AddUserModal.vue";
 import { mapGetters, mapActions } from "vuex";
 export default {
+  components: {
+    "edit-user-modal": EditModal,
+    "add-user-modal":AddUserModal,
+  },
   data() {
     return {
       fields: [

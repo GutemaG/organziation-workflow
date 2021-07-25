@@ -162,8 +162,14 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import AddBureauModal from "./bureau/AddBureauModal.vue";
+import EditBureauModal from "./bureau/EditBureauModal.vue";
 import moment from 'moment'
 export default {
+  components:{
+    "add-bureau-modal":AddBureauModal,
+    "edit-bureau-modal":EditBureauModal
+  },
   data() {
     return {
       fields: [

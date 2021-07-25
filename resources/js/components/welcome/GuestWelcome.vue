@@ -53,8 +53,10 @@
   </div>
 </template>
 <script>
+import VueLogin from "./../auth/Login.vue";
 import { mapGetters } from "vuex";
 export default {
+  components: { "vue-login": VueLogin },
   computed: {
     ...mapGetters(["currentUser"]),
   },
