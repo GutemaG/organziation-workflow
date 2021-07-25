@@ -88,7 +88,7 @@
     <!-- Main table element -->
     <b-table
       :items="bureaus"
-      :fields="fields"
+      :fields="bureau_fields"
       :current-page="currentPage"
       :per-page="perPage"
       :filter="filter"
@@ -164,7 +164,7 @@
 import { mapActions, mapGetters } from "vuex";
 import AddBureauModal from "./bureau/AddBureauModal.vue";
 import EditBureauModal from "./bureau/EditBureauModal.vue";
-import moment from 'moment'
+import {bureau_fields} from '../table_fields'
 export default {
   components:{
     "add-bureau-modal":AddBureauModal,
@@ -172,66 +172,7 @@ export default {
   },
   data() {
     return {
-      fields: [
-        {
-          key: "id",
-          label: "ID",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "name",
-          label: "Name",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "building_number",
-          label: "Building",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "office_number",
-          label: "Office Number",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "building_number",
-          label: "Building",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "location",
-          label: "Location",
-          sortable: true,
-          formatter: (value, key, item) => {
-            let location = JSON.parse(value);
-            let newVal = `Lat: ${location.latitude}\t Long: ${location.longitude}`;
-            return newVal;
-          },
-          sortDirection: "desc",
-        },
-        {
-          key:"created_at",
-          label:"Created At",
-          sortable:true,
-          formatter:(value)=>{
-              let ago = moment(value).fromNow(); // years or day ago
-              let date = moment(value).format("MMM Do YY");
-              return date + ', ' + ago
-          }
-        },
-        {
-          key: "description",
-          label: "Description",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        { key: "actions", label: "Actions" },
-      ],
+      bureau_fields,
       totalRows: 1,
       currentPage: 1,
       perPage: 5,

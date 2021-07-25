@@ -120,7 +120,7 @@
         </div>
         <b-table
           :items="online_requests"
-          :fields="fields"
+          :fields="online_request_fields"
           bordered
           :current-page="currentPage"
           :filter="filter"
@@ -223,10 +223,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-// import {
-//   online_request_fields,
-//   online_request_procedure_fields,
-// } from "./../table_fields";
+import { online_request_fields, procedure_fields} from "../table_fields";
 import OnlineRequestProcedureTable from "./request/online/OnlineRequestProcedureTable.vue";
 import moment from "moment";
 export default {
@@ -236,62 +233,12 @@ export default {
   },
   data() {
     return {
+      online_request_fields,
       perPage: 5,
       currentPage: 1,
       filter: null,
       pageOptions: [20, 15, 10, 5],
-      fields: [
-        {
-          key: "id",
-          label: "#",
-          sortable: true,
-        },
-        {
-          key: "user_id",
-          label: "User",
-          sortable: true,
-          formatter: (id) => {
-            return this.searchUser(id);
-          },
-        },
-        {
-          key: "name",
-          label: "Name",
-          sortable: true,
-        },
-        {
-          key: "description",
-          label: "Description",
-        },
-        {
-          key: "online_request_procedures",
-          label: "No Procedures",
-          sortable: true,
-        },
-        {
-          key: "created_at",
-          label: "Created At",
-          sortable: true,
-          formatter: (value) => {
-            let ago = moment(value).fromNow();
-            let date = moment(value).format("MMM Do, YY");
-            return `${date}, ${ago}`;
-          },
-        },
-        {
-          key: "actions",
-          label: "Actions",
-        },
-      ],
-      procedure_fields: [
-        { key: "id", label: "#" },
-        // { key: "online_request_id", label: "Online Request" },
-        { key: "responsible_bureau_id", label: "Responsible Bureau" },
-        { key: "description", label: "Description" },
-        { key: "step_number", label: "Step" },
-        { key: "created_at", label: "Created At" },
-        { key: "users", label: "User(Responsible)" },
-      ],
+      procedure_fields,
     };
   },
   methods: {

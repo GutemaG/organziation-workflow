@@ -18,12 +18,13 @@ class AffairController extends Controller
 
     public function index()
     {
+        /*
         if (!Gate::any(['is-admin', 'is-it-team-member'])) {
             return response()->json([
                 'status' => 401,
                 'error' => 'unauthorized'
             ]);
-        }
+        }*/
         $affairs = Affair::all();
         return response()->json(
             [

@@ -86,7 +86,7 @@
     <!-- Main table element -->
     <b-table
       :items="users"
-      :fields="fields"
+      :fields="user_fields"
       :current-page="currentPage"
       :per-page="perPage"
       :filter="filter"
@@ -100,9 +100,9 @@
       @filtered="onFiltered"
       striped
     >
-      <!-- <template #cell(name)="row">
-        {{ row.value.first }} {{ row.value.last }}
-      </template> -->
+      <template #cell(id)="row">
+        {{row.index + 1}}
+      </template>
 
       <template #cell(actions)="row">
         <b-button
@@ -146,57 +146,16 @@
 <script>
 import EditModal from "./user/EditModal.vue";
 import AddUserModal from "./user/AddUserModal.vue";
+import { user_fields } from "../table_fields";
 import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
     "edit-user-modal": EditModal,
-    "add-user-modal":AddUserModal,
+    "add-user-modal": AddUserModal,
   },
   data() {
     return {
-      fields: [
-        {
-          key: "user_name",
-          label: "Username",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "first_name",
-          label: "First Name",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "last_name",
-          label: "Last Name",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        { key: "email", label: "email" },
-        { key: "phone", label: "Phone", sortable: true, sortDirection: "desc" },
-        {
-          key: "type",
-          label: "Type",
-          formatter: (value, key, item) => {
-            let newVal = "";
-            if (value === "it_team_member") {
-              newVal = "IT Team";
-            }
-            if (value === "reception") {
-              newVal = "Reception";
-            }
-            if (value === "staff") {
-              newVal = "Staff";
-            }
-            return newVal;
-          },
-          sortable: true,
-          sortByFormatted: true,
-          filterByFormatted: true,
-        },
-        { key: "actions", label: "Actions" },
-      ],
+      user_fields,
       totalRows: 1,
       currentPage: 1,
       perPage: 5,

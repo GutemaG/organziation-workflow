@@ -91,7 +91,7 @@
     <!-- Main table element -->
     <b-table
       :items="buildings"
-      :fields="fields"
+      :fields="building_fields"
       :current-page="currentPage"
       :per-page="perPage"
       :filter="filter"
@@ -151,6 +151,7 @@
 import { mapActions, mapGetters } from "vuex";
 import AddBuildingModal from "./building/AddBuildingModal.vue";
 import EditBuildingModal from "./building/EditBuildingModal.vue";
+import {building_fields } from '../table_fields'
 
 export default {
   components: {
@@ -159,40 +160,7 @@ export default {
   },
   data() {
     return {
-      fields: [
-        {
-          key: "id",
-          label: "ID",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        //TODO: migrate the table and uncomment this
-        /*{
-          key: "name",
-          label: "Name",
-          sortable: true,
-          sortDirection: "desc",
-        },*/
-        {
-          key: "number",
-          label: "Building Number",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "number_of_offices",
-          label: "Number Of Office",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        /*{
-          key: "description",
-          label: "Description",
-          sortable: true,
-          sortDirection: "desc",
-        },*/
-        { key: "actions", label: "Actions" },
-      ],
+      building_fields,
       totalRows: 1,
       currentPage: 1,
       perPage: 5,
