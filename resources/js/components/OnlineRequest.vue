@@ -157,12 +157,15 @@
               @click="row.toggleDetails"
               v-b-tooltip.hover
               :title="row.item.description"
+              style="cursor: pointer"
             >
               {{ row.item.description.substring(0, 20) }}...
             </p>
           </template>
           <template #cell(online_request_procedures)="row">
-            {{ row.item.online_request_procedures.length }}
+            <span @click="row.toggleDetails" style="cursor: pointer">{{
+              row.item.online_request_procedures.length
+            }}</span>
           </template>
           <template #cell(actions)="row">
             <router-link :to="'online-request/edit/' + row.item.id">
@@ -223,7 +226,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { online_request_fields, procedure_fields} from "../table_fields";
+import { online_request_fields, procedure_fields } from "../table_fields";
 import OnlineRequestProcedureTable from "./request/online/OnlineRequestProcedureTable.vue";
 import moment from "moment";
 export default {

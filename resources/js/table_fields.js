@@ -7,12 +7,6 @@ const building_fields = [
         sortDirection: "desc"
     },
     //TODO: migrate the table and uncomment this
-    /*{
-          key: "name",
-          label: "Name",
-          sortable: true,
-          sortDirection: "desc",
-        },*/
     {
         key: "number",
         label: "Building Number",
@@ -25,12 +19,18 @@ const building_fields = [
         sortable: true,
         sortDirection: "desc"
     },
-    /*{
-          key: "description",
-          label: "Description",
-          sortable: true,
-          sortDirection: "desc",
-        },*/
+    {
+        key: "name",
+        label: "Name",
+        sortable: true,
+        sortDirection: "desc"
+    },
+    {
+        key: "description",
+        label: "Description",
+        sortable: true,
+        sortDirection: "desc"
+    },
     { key: "actions", label: "Actions" }
 ];
 
@@ -62,7 +62,7 @@ const request_fields = [
     },
 
     {
-        key: "procedures.length",
+        key: "procedures",
         label: "Procedures",
         sortable: true
     },
@@ -70,8 +70,8 @@ const request_fields = [
 ];
 const user_fields = [
     {
-        key:"id",
-        label:"#",
+        key: "id",
+        label: "#"
     },
     {
         key: "user_name",
@@ -114,6 +114,66 @@ const user_fields = [
         filterByFormatted: true
     },
     { key: "actions", label: "Actions" }
+];
+const procedure_fields = [
+    {
+        key: "id",
+        label: "#"
+    },
+    {
+        key: "name",
+        label: "Name",
+        sortable: true
+    },
+    {
+        key: "description",
+        label: "Description"
+    },
+    {
+        key: "step",
+        label: "Step",
+        sortable: true
+    },
+    {
+        key: "created_at",
+        label: "Created At",
+        sortable: true
+    },
+    {
+        key: "pre_requests",
+        label: "Num of Pre Requests",
+        sortable: true
+    },
+    {
+        key: "actions",
+        label: "Action"
+    }
+];
+const procedure_pre_request_fields = [
+    {
+        key: "id",
+        label: "#"
+    },
+    {
+        key: "name",
+        label: "Name"
+    },
+    {
+        key: "description",
+        label: "Description"
+    },
+    {
+        key: "affair_id",
+        label: "Affair Name"
+    },
+    {
+        key: "created_at",
+        label: "Created At"
+    },
+    {
+        key: "actions",
+        label: "Actions"
+    }
 ];
 const online_request_fields = [
     {
@@ -216,7 +276,7 @@ const bureau_fields = [
     { key: "actions", label: "Actions" }
 ];
 
-const procedure_fields = [
+const online_procedure_fields = [
     { key: "id", label: "#" },
     { key: "responsible_bureau_id", label: "Responsible Bureau" },
     { key: "description", label: "Description" },
@@ -230,5 +290,7 @@ export {
     user_fields,
     bureau_fields,
     online_request_fields,
-    procedure_fields
+    procedure_fields,
+    procedure_pre_request_fields
 };
+// online_procedure_fields,

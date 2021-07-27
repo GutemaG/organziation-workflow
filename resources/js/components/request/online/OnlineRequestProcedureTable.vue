@@ -7,7 +7,7 @@
       hover
       sort-by="step_number"
       :items="procedures"
-      :fields="procedure_fields"
+      :fields="online_procedure_fields"
     >
       <template #cell(id)="row">
         {{ row.index + 1 }}
@@ -83,14 +83,24 @@
           </li>
         </ul>
       </template>
+
+      <template #cell(actions)>
+        <b-button variant="primary" size="sm">
+          <i class="fa fa-edit"></i>
+          Edit</b-button
+        >
+        <b-button variant="danger" size="sm">
+          <i class="fa fa-trash"></i>
+        </b-button>
+      </template>
     </b-table>
-    
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
+// import {online_procedure_fields} from '../../../table_fields'
 export default {
-  name:'online-request-procedure-table',
+  name: "online-request-procedure-table",
   props: {
     procedures: {
       type: Array,
@@ -103,7 +113,8 @@ export default {
   },
   data() {
     return {
-      procedure_fields: [
+      // online_procedure_fields,
+      online_procedure_fields: [
         { key: "id", label: "#" },
         // { key: "online_request_id", label: "Online Request" },
         { key: "responsible_bureau_id", label: "Responsible Bureau" },
@@ -111,6 +122,7 @@ export default {
         { key: "step_number", label: "Step" },
         { key: "created_at", label: "Created At" },
         { key: "users", label: "User(Responsible)" },
+        { key: "actions", label: "Actions" },
       ],
     };
   },

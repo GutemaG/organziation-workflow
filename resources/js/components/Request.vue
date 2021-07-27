@@ -114,12 +114,13 @@
           </b-row>
           <b-table
             :items="affairs"
-            :fields="fields"
+            :fields="request_fields"
             :current-page="currentPage"
             :per-page="perPage"
             :filter="filter"
             small
             striped
+            :busy="isLoading"
             show-empty
             stacked="md"
             label-sort-asc=""
@@ -127,6 +128,12 @@
             label-sort-clear
             sticky-header
           >
+            <template #table-busy>
+              <div class="text-center text-danger my-2">
+                <b-spinner class="align-middle"></b-spinner>
+                <strong>Loading...</strong>
+              </div>
+            </template>
             <template #cell(#)="row">
               <b-button @click="row.toggleDetails" size="sm" variant="primary">
                 <i
@@ -146,6 +153,10 @@
               >
                 {{ row.item.description.substring(0, 20) }} ...
               </p>
+            </template>
+
+            <template #cell(procedures)="row" @click="row.toggleDetails">
+              <span @click="row.toggleDetails" style="cursor:pointer">{{row.item.procedures.length}}</span>
             </template>
             <template #cell(actions)="row">
               <router-link :to="'/request/edit/' + row.item.id">
@@ -177,10 +188,10 @@
                 </b-jumbotron>
               </div>
 
-              <b-card title="List Of procedures with their Pre request" no-body>
+              <procedures :procedures="row.item.procedures"> </procedures>
+              <!-- <b-card title="List Of procedures with their Pre request" no-body>
                 <b-card-header>List of Procedures with their pre-request</b-card-header>
-                  <procedures :procedures="row.item.procedures"> </procedures>
-              </b-card>
+              </b-card> -->
             </template>
           </b-table>
         </div>
@@ -210,11 +221,11 @@
 <script>
 import Procedures from "./request/Procedures.vue";
 import { mapActions, mapGetters } from "vuex";
-import fields from "./request/request_table_field";
+import {request_fields }from "../table_fields";
 import moment from "moment";
 export default {
   components: {
-   Procedures,
+    Procedures,
   },
   data() {
     return {
@@ -227,7 +238,8 @@ export default {
         { value: 15, text: "15" },
         { value: this.totalAffairs, text: "All" },
       ],
-      fields,
+      request_fields,
+      isLoading: false,
     };
   },
   computed: {
@@ -265,7 +277,10 @@ export default {
   },
   created() {
     this.$Progress.start();
-    this.fetchAffairs();
+    if(!this.affairs)
+      this.isLoading = true;
+      this.fetchAffairs();
+    this.isLoading = false;
     this.$Progress.finish();
   },
   filters: {

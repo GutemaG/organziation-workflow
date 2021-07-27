@@ -5,7 +5,7 @@
       <nav-bar></nav-bar>
     </div>
     <div class="wrapper" style="margin-top: 5rem">
-      <router-view name="dashboard"></router-view>
+      <router-view name="dashboard" :key="$route.fullPath"></router-view>
     </div>
   </div>
 </template>

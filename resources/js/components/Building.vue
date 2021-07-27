@@ -127,6 +127,9 @@
           <i class="fa fa-trash">Delete</i>
         </b-button>
       </template>
+      <template #cell(description)="row">
+        <span v-b-tooltip.hover :title="row.item.description">{{ row.item.description.substring(0, 30) }}</span>
+      </template>
 
       <template #row-details="row">
         <b-card>
@@ -151,7 +154,7 @@
 import { mapActions, mapGetters } from "vuex";
 import AddBuildingModal from "./building/AddBuildingModal.vue";
 import EditBuildingModal from "./building/EditBuildingModal.vue";
-import {building_fields } from '../table_fields'
+import { building_fields } from "../table_fields";
 
 export default {
   components: {
