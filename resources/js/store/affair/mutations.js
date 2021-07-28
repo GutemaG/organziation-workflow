@@ -16,17 +16,15 @@ export default {
     },
     ADD_PROCEDURE(state, data) {
         let affair_id = data.affair_id;
-        console.log('mut ', affair_id, data)
         const index = state.affairs.findIndex(
             affair => affair.id == data.affair_id
         );
-        console.log('index: ', index)
+        console.log("index: ", index);
         if (index !== -1) {
             state.affairs[index].procedures.push(data);
         }
     },
     ADD_PRE_REQUEST(state, data) {
-        console.log("mutation: ", data);
         const index = state.affairs.findIndex(
             affair => affair.id === data.selected_affair_id
         );
@@ -42,5 +40,18 @@ export default {
                 procedure.push(data.pre_request);
             }
         }
-    }
+    },
+    DELETE_PROCEDURE(state, data) {
+        // let affairs = state.affairs.filter(
+        //     affair => affair.id == data.affair_id
+        // );
+        // let procedures = affairs.filter(
+        //     procedure => procedure.id == data.procedure_id
+        // );
+        // state.affairs.find(affairs).unshift(procedures);
+        // state.affairs = state.affairs.filter(affair => affair.id == data.affair_id)[0]
+        //     .procedures.filter(procedure => procedure.id !== data.procedure_id);
+        // console.log(affair[0].procedures)
+    },
+    DELETE_PRE_REQUEST(state, dadta) {}
 };

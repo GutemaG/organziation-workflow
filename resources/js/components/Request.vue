@@ -156,7 +156,9 @@
             </template>
 
             <template #cell(procedures)="row" @click="row.toggleDetails">
-              <span @click="row.toggleDetails" style="cursor:pointer">{{row.item.procedures.length}}</span>
+              <span @click="row.toggleDetails" style="cursor: pointer">{{
+                row.item.procedures.length
+              }}</span>
             </template>
             <template #cell(actions)="row">
               <router-link :to="'/request/edit/' + row.item.id">
@@ -188,7 +190,11 @@
                 </b-jumbotron>
               </div>
 
-              <procedures :procedures="row.item.procedures"> </procedures>
+              <procedures
+                :procedures="row.item.procedures"
+                v-on:removeProcedure="removeProcedure"
+              >
+              </procedures>
               <!-- <b-card title="List Of procedures with their Pre request" no-body>
                 <b-card-header>List of Procedures with their pre-request</b-card-header>
               </b-card> -->
@@ -221,7 +227,7 @@
 <script>
 import Procedures from "./request/Procedures.vue";
 import { mapActions, mapGetters } from "vuex";
-import {request_fields }from "../table_fields";
+import { request_fields } from "../table_fields";
 import moment from "moment";
 export default {
   components: {
@@ -274,12 +280,18 @@ export default {
         }
       });
     },
+    removeProcedure(procedure_id, affair_id) {
+      console.log(procedure_id, affair_id);
+     let affair = this.affairs
+        .find((affair) => affair.id == affair_id)
+    let procedure =        affair.procedures.find((procedure) => procedure.id == procedure_id);
+    this.affairs.find((affair)=>affair.id==affair_id).procedures.splice(procedure,1)
+    },
   },
   created() {
     this.$Progress.start();
-    if(!this.affairs)
-      this.isLoading = true;
-      this.fetchAffairs();
+    if (!this.affairs) this.isLoading = true;
+    this.fetchAffairs();
     this.isLoading = false;
     this.$Progress.finish();
   },

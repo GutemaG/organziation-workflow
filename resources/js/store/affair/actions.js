@@ -73,7 +73,7 @@ export default {
             );
             if (response.data.status === 200) {
                 Swal.fire("Success!", "deleted", "success");
-                // commit('DELETE_AFFAIR', id)
+                // commit('DELETE_PROCEDURE', ids)
             } else {
                 Swal.fire("Failed!", response.data.error, "error");
             }
@@ -90,7 +90,7 @@ export default {
             );
             if (response.data.status === 200) {
                 Swal.fire("Success!", "deleted", "success");
-                // commit('DELETE_AFFAIR', id)
+                commit('DELETE_PRE_REQUEST', ids)
             } else {
                 Swal.fire("Failed!", response.data.error, "error");
             }

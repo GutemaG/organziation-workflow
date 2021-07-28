@@ -63,7 +63,7 @@ const request_fields = [
 
     {
         key: "procedures",
-        label: "Procedures",
+        label: "Num of Procedures",
         sortable: true
     },
     { key: "actions", label: "Actions" }

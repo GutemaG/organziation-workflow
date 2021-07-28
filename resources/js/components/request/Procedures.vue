@@ -32,11 +32,12 @@
       </base-card>
     </div> -->
     <b-table
-      :items="procedures"
+      :items="list_of_procedures"
       :fields="procedure_fields"
       sort-by="step"
       head-variant="dark"
       striped
+      responsive
       hover
     >
       <template #cell(id)="row">
@@ -47,13 +48,22 @@
           {{ row.item.description.substring(0, 30) }}...</span
         >
       </template>
-      <template #cell(actions)>
-        <b-button variant="primary" size="sm">
+      <template #cell(actions)="row">
+        <b-button
+          variant="primary"
+          size="sm"
+          @click="editProcedure(row.item.id)"
+        >
           <i class="fa fa-edit"></i>
           Edit</b-button
         >
         <!-- @click="deleteRequest(row.item.id)" -->
-        <b-button variant="danger" size="sm">
+        <b-button
+          v-if="list_of_procedures.length !== 1"
+          variant="danger"
+          size="sm"
+          @click="deleteProcedure(row.item.id, row.item.affair_id)"
+        >
           <i class="fa fa-trash"></i>
         </b-button>
       </template>
@@ -65,13 +75,14 @@
           <!-- <b-table :items="row.item.pre_requests"> </b-table> -->
         </span>
       </template>
-      <template #row-details="row">
+      <template #row-details="pre_row">
         <div class="container">
           <h5>Pre Requests</h5>
           <b-table
-            :items="[...row.item.pre_requests]"
+            :items="[...pre_row.item.pre_requests]"
             :fields="procedure_pre_request_fields"
             fixed
+            responsive
           >
             <template #cell(id)="row">{{ row.index + 1 }}</template>
             <template #cell(name)="row">
@@ -85,17 +96,37 @@
             <template #cell(affair_id)="row">
               <span v-if="row.item.affair_id == ''">...</span>
               <span v-else>
-                {{searchAffair(row.item.affair_id)}}
-               <!-- {{$store.getters.findAffair([row.item.affair_id])}} -->
+                {{ searchAffair(row.item.affair_id) }}
+                <!-- {{$store.getters.findAffair([row.item.affair_id])}} -->
                 <!-- {{ row.item.affair_id }} -->
               </span>
             </template>
-            <template #cell(actions)>
-              <b-button variant="primary" size="sm">
+            <template #cell(actions)="row">
+              <b-button
+                variant="primary"
+                size="sm"
+                @click="
+                  editPreRequest(
+                    row.item.id,
+                    pre_row.item.id,
+                    pre_row.item.affair_id
+                  )
+                "
+              >
                 <i class="fa fa-edit"></i>
                 Edit</b-button
               >
-              <b-button variant="danger" size="sm">
+              <b-button
+                variant="danger"
+                size="sm"
+                @click="
+                  deletePreRequest(
+                    row.item.id,
+                    pre_row.item.id,
+                    pre_row.item.affair_id
+                  )
+                "
+              >
                 <i class="fa fa-trash"></i>
               </b-button>
             </template>
@@ -107,7 +138,11 @@
 </template>
 
 <script>
-import {procedure_fields,procedure_pre_request_fields} from './../../table_fields'
+import { mapActions } from "vuex";
+import {
+  procedure_fields,
+  procedure_pre_request_fields,
+} from "./../../table_fields";
 export default {
   props: {
     procedures: {
@@ -117,6 +152,7 @@ export default {
   },
   data() {
     return {
+      list_of_procedures: this.procedures,
       procedure_fields,
       procedure_pre_request_fields,
     };
@@ -127,11 +163,71 @@ export default {
       return "danger";
     },
   },
-  methods:{
-    searchAffair(id){
-      let affair = this.$store.getters.findAffair(id)
-      return affair.name
-    }
+  methods: {
+    ...mapActions(["removePreRequest", "removeProcedure", "fetchAffairs"]),
+    searchAffair(id) {
+      let affair = this.$store.getters.findAffair(id);
+      if (affair) {
+        return affair.name;
+      }
+      return "...";
+    },
+    editProcedure(id) {
+      console.log("Editing", id);
+    },
+    deleteProcedure(procedure_id, affair_id) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        // Send request to the server
+        if (result.value) {
+          this.removeProcedure({ procedure_id, affair_id });
+          console.log(procedure_id, affair_id);
+          this.$emit("removeProcedure", procedure_id, affair_id);
+        }
+      });
+    },
+    editPreRequest(pre_request_id, procedure_id, affair_id) {
+      let ids = {
+        pre_request_id: pre_request_id,
+        procedure_id: procedure_id,
+        affair_id: affair_id,
+      };
+      console.log(ids);
+    },
+    deletePreRequest(pre_request_id, procedure_id, affair_id) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        // Send request to the server
+        if (result.value) {
+          let ids = {
+            pre_request_id: pre_request_id,
+            procedure_id: procedure_id,
+            affair_id: affair_id,
+          };
+          this.removePreRequest(ids);
+          let pre = this.list_of_procedures
+            .find((procedure) => procedure.id == ids.procedure_id)
+            .pre_requests.find(
+              (pre_request) => (pre_request.id = ids.pre_request_id)
+            );
+          this.list_of_procedures
+            .find((procedure) => procedure.id == ids.procedure_id)
+            .pre_requests.splice(pre, 1);
+        }
+      });
+    },
   },
 };
 </script>
