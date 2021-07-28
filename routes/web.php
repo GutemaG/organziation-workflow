@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Exceptions\MissingModelException;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('layouts.master');
@@ -18,6 +19,9 @@ require __DIR__ . '/auth.php';
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth'])->prefix('api')->group(function () {
+require __DIR__.'/auth.php';
+
+Route::middleware(['auth'])->prefix('api')->group(function (){
     Route::resource('/users', \App\Http\Controllers\UserController::class);
 
     Route::post('/account', [\App\Http\Controllers\AccountController::class, 'update'])
@@ -45,6 +49,17 @@ Route::get('/test/', function () {
 });
 // Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
 // Route::post('/affairs', '\App\Http\Controllers\AffairController@store');
+
+    Route::resource('/online-requests', \App\Http\Controllers\OnlineRequestController::class)
+        ->missing(function (Request $request) {
+            throw new  MissingModelException();
+        });
+
+});
+
+//Route::get('/test/', function () {
+////    \App\Models\OnlineRequest::factory(20)->hasPrerequisiteLabels(rand(3,6))->create();
+//});
 
 Route::get('/{vue_capture?}', function () {
     return view('home');

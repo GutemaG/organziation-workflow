@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 use App\Models\Building;
 use App\Models\Bureau;
+use App\Models\OnlineRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -50,12 +51,12 @@ class DatabaseSeeder extends Seeder
 
          Bureau::factory(200)->create();
 
-         */
-        \App\Models\OnlineRequest::factory(20)
+        OnlineRequest::factory(20)
             ->has(\App\Models\PrerequisiteLabel::factory()->count(rand(1,5)))
             ->has(\App\Models\OnlineRequestProcedure::factory()
                 ->hasAttached(\App\Models\User::inRandomOrder()->limit(rand(1,5))->get())
                 ->count(rand(3,6)))
             ->create();
+        */
     }
 }

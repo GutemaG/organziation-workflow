@@ -2,67 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Utilities\Fields;
-use App\Http\Controllers\Utilities\Rule;
+use App\Exceptions\DatabaseException;
+use App\Exceptions\UnauthorizedException;
+use App\Http\Requests\OnlineRequestRequest;
 use App\Models\OnlineRequest;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\OnlineRequestProcedure;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Validator;
 
 class OnlineRequestController extends Controller
 {
     /**
      * Check if user is authenticated. If not redirect it login page.
+     * And check if authenticated user is authorized. If not throw UnauthorizedException.
      *
      * OnlineRequestController constructor.
+     * @throws UnauthorizedException
      */
     public function __construct()
     {
-        //        $this->middleware('auth');
-    }
-
-    /**
-     * check if authenticated user is admin or staff.
-     * if not return with unauthorized error message.
-     *
-     * @return \Illuminate\Http\JsonResponse|null
-     */
-    private function isAuthorized()
-    {
-        return false;
+        $this->middleware('auth');
         if (!Gate::any(['is-admin', 'is-it-team-member']))
-            return response()->json([
-                'status' => 401,
-                'error' => 'Unauthorized.',
-            ]);
-        else
-            return null;
-    }
-
-    private function badRequestResponse()
-    {
-        return response()->json([
-            'status' => 400,
-            'error' => [
-                'error' => ['Online request doesn\'t exist.']
-            ]
-        ]);
+            throw new UnauthorizedException();
     }
 
     /**
      * return a listing of the online request.
      * it contains oll relation ship (prerequisiteLabel, onlineRequestProcedure and users).
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        $result = $this->isAuthorized();
-        if (!empty($result))
-            return $result;
-
         $onlineRequests = OnlineRequest::orderBy('name', 'asc')->get();
         return response()->json([
             'status' => 200,
@@ -76,45 +49,35 @@ class OnlineRequestController extends Controller
      * Create new prerequisite label using the newly created online request.
      * Attach each user to the procedure he/she is responsible using the newly created online request procedure.
      *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param OnlineRequestRequest $request
+     * @return JsonResponse
+     * @throws \Throwable
      */
-    public function store(Request $request)
+    public function store(OnlineRequestRequest $request): JsonResponse
     {
-        $result = $this->isAuthorized();
-        if (!empty($result))
-            return $result;
-
-        $data =  $request->all();
-        $validator = Validator::make($data, Rule::onlineRequest());
-        if ($validator->fails())
-            return response()->json([
-                'status' => 400,
-                'error' => $validator->errors(),
-            ]);
-
+        $data = $request->validated();
         try {
-            $data = $validator->validate();
             DB::beginTransaction();
             $onlineRequest = auth()->user()->onlineRequests()->create([
                 'name' => $data['name'],
                 'description' => $data['description'],
             ]);
-            foreach ($data['online_request_procedures'] as $value)
-                $procedure = $onlineRequest->onlineRequestProcedures()->create($value);
 
-            foreach ($value['responsible_user_id'] as $item)
-                $procedure->users()->attach($item);
+            if (!OnlineRequestProcedureController::storeOrUpdateData($data, $onlineRequest->id, false))
+                throw new DatabaseException('Error occurred during procedure creating. Please retry again.');
 
-            foreach ($data['prerequisite_labels'] as $label)
-                $onlineRequest->prerequisiteLabels()->create(['label' => $label]);
+            if (!OnlinePrerequisiteController::storeOrUpdateData($data, $onlineRequest->id, false))
+                throw new DatabaseException('Error occurred during prerequisite creating. Please retry again.');
 
             DB::commit();
             return response()->json([
                 'status' => 201,
                 'online_request' => OnlineRequest::find($onlineRequest->id),
             ]);
-        } catch (\Exception $e) {
+        } catch (DatabaseException $exception) {
+            DB::rollBack();
+            return $exception->render($request);
+        } catch (Exception $e) {
             DB::rollBack();
             return response()->json([
                 'status' => 400,
@@ -128,57 +91,62 @@ class OnlineRequestController extends Controller
     /**
      * Display the specified online request.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param OnlineRequest $onlineRequest
+     * @return JsonResponse
      */
-    public function show($id)
+    public function show(OnlineRequest $onlineRequest): JsonResponse
     {
-        $result = $this->isAuthorized();
-        if (!empty($result))
-            return $result;
-
-        $onlineRequest = OnlineRequest::find($id);
-        if (empty($onlineRequest))
-            return $this->badRequestResponse();
-        else {
-            return response()->json([
-                'status' => 200,
-                'online_request' => $onlineRequest,
-            ]);
-        }
+        return response()->json([
+            'status' => 200,
+            'online_request' => $onlineRequest,
+        ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(OnlineRequestRequest $request, OnlineRequest $onlineRequest): JsonResponse
     {
-        $result = $this->isAuthorized();
-        if (!empty($result))
-            return $result;
+        $data = $request->validated();
+        try {
+            DB::beginTransaction();
+            $onlineRequest->update([
+                'name' => $data['name'],
+                'description' => $data['description'],
+            ]);
+            if (!OnlineRequestProcedureController::storeOrUpdateData($data, $onlineRequest->id, true))
+                throw new DatabaseException('Error occurred during procedure updating. Please retry again.');
 
-        $onlineRequest = OnlineRequest::find($id);
-        if (empty($onlineRequest))
-            return $this->badRequestResponse();
+            if (!OnlinePrerequisiteController::storeOrUpdateData($data, $onlineRequest->id, true))
+                throw new DatabaseException('Error occurred during prerequisite updating. Please retry again.');
+
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'online_request' => $onlineRequest->refresh(),
+            ]);
+        } catch (DatabaseException $exception) {
+            DB::rollBack();
+            return $exception->render($request);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 400,
+                'error' => [
+                    'error' => ['Error occur while creating please retry again.', $e]
+                ]
+            ]);
+        }
     }
 
     /**
      * soft delete the specified online request from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param OnlineRequest $onlineRequest
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(OnlineRequest $onlineRequest): JsonResponse
     {
-        $result = $this->isAuthorized();
-        if (!empty($result))
-            return $result;
-
-        $onlineRequest = OnlineRequest::withOut(['onlineRequestProcedures', 'prerequisiteLabels',])->find($id);
-        if (empty($onlineRequest))
-            return $this->badRequestResponse();
-        else {
-            $onlineRequest->delete();
-            return response()->json([
-                'status' => 200,
-            ]);
-        }
+        $onlineRequest->delete();
+        return response()->json([
+            'status' => 200,
+        ]);
     }
 }
