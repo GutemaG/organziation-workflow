@@ -84,12 +84,12 @@
         </ul>
       </template>
 
-      <template #cell(actions)>
-        <b-button variant="primary" size="sm">
+      <template #cell(actions)="procedure_row">
+        <b-button variant="primary" size="sm" >
           <i class="fa fa-edit"></i>
           Edit</b-button
         >
-        <b-button variant="danger" size="sm">
+        <b-button variant="danger" size="sm" @click="deleteProcedure(procedure_row.item)">
           <i class="fa fa-trash"></i>
         </b-button>
       </template>
@@ -97,6 +97,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
 import { mapGetters } from "vuex";
 // import {online_procedure_fields} from '../../../table_fields'
 export default {
@@ -134,6 +135,11 @@ export default {
       let bureau = this.bureaus.filter((bureau) => bureau.id == id)[0];
       return `${bureau.office_number}, ${bureau.building_number}, ${bureau.name}`;
     },
+    deleteProcedure(id){
+      axios.delete(`/api/online-requests/${id}`)
+        .then(resp => console.log(resp))
+        .catch(err => console.log(err))
+    }
   },
 };
 </script>

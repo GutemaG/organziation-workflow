@@ -72,6 +72,8 @@
                     ASTU with an outlay of one hundred million US Dollars. The agreement was signed between the governments of FDRE the Republic of Korea. 
                     T June 24, 2021
                 </p>
+                <p>{{totalAffairs}}</p>
+                <p>{{first.name}} {{first.description}}</p>
             </div>
         </b-container>
         <div style="left: 0; right: 0;">
@@ -214,9 +216,35 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 export default {
     data() {
-        return {};
+        return {
+            affairs:[]
+        };
+    },
+    computed:{
+        // ...mapGetters(['affairs'])
+        totalAffairs(){
+            return this.affairs.length
+        },
+        first(){
+            return this.affairs[0]
+        }
+    },
+    methods:{
+        // ...mapActions(['fetchAffairs']),
+        getAffairs(){
+            axios.get('/api/affairs').then(resp => {
+                console.log(resp)
+                this.affairs = resp.data.affairs
+            })
+        }
+    },
+    created(){
+        // this.fetchAffairs()
+        // this.$store.dispatch('fetchAffairs')
+        this.getAffairs()
     }
 };
 </script>

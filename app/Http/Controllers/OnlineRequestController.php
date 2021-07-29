@@ -21,11 +21,10 @@ class OnlineRequestController extends Controller
      * OnlineRequestController constructor.
      * @throws UnauthorizedException
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth');
-        if (!Gate::any(['is-admin', 'is-it-team-member']))
-            throw new UnauthorizedException();
+        // if (! Gate::any(['is-admin', 'is-it-team-member']))
+        //     throw new UnauthorizedException();
     }
 
     /**
@@ -63,10 +62,10 @@ class OnlineRequestController extends Controller
                 'description' => $data['description'],
             ]);
 
-            if (!OnlineRequestProcedureController::storeOrUpdateData($data, $onlineRequest->id, false))
+            if (! OnlineRequestProcedureController::storeOrUpdateData($data, $onlineRequest->id, false))
                 throw new DatabaseException('Error occurred during procedure creating. Please retry again.');
 
-            if (!OnlinePrerequisiteController::storeOrUpdateData($data, $onlineRequest->id, false))
+            if (! OnlinePrerequisiteController::storeOrUpdateData($data, $onlineRequest->id, false))
                 throw new DatabaseException('Error occurred during prerequisite creating. Please retry again.');
 
             DB::commit();
@@ -74,16 +73,19 @@ class OnlineRequestController extends Controller
                 'status' => 201,
                 'online_request' => OnlineRequest::find($onlineRequest->id),
             ]);
-        } catch (DatabaseException $exception) {
+
+        }
+        catch (DatabaseException $exception){
             DB::rollBack();
             return $exception->render($request);
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             DB::rollBack();
             return response()->json([
-                'status' => 400,
-                'error' => [
-                    'error' => ['Error occur while creating please retry again.', $e]
-                ]
+               'status' => 400,
+               'error' => [
+                   'error' => ['Error occur while creating please retry again.',$e]
+               ]
             ]);
         }
     }
@@ -111,10 +113,10 @@ class OnlineRequestController extends Controller
                 'name' => $data['name'],
                 'description' => $data['description'],
             ]);
-            if (!OnlineRequestProcedureController::storeOrUpdateData($data, $onlineRequest->id, true))
+            if (! OnlineRequestProcedureController::storeOrUpdateData($data, $onlineRequest->id, true))
                 throw new DatabaseException('Error occurred during procedure updating. Please retry again.');
 
-            if (!OnlinePrerequisiteController::storeOrUpdateData($data, $onlineRequest->id, true))
+            if (! OnlinePrerequisiteController::storeOrUpdateData($data, $onlineRequest->id, true))
                 throw new DatabaseException('Error occurred during prerequisite updating. Please retry again.');
 
             DB::commit();
@@ -122,18 +124,21 @@ class OnlineRequestController extends Controller
                 'status' => 200,
                 'online_request' => $onlineRequest->refresh(),
             ]);
-        } catch (DatabaseException $exception) {
+        }
+        catch (DatabaseException $exception){
             DB::rollBack();
             return $exception->render($request);
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
                 'status' => 400,
                 'error' => [
-                    'error' => ['Error occur while creating please retry again.', $e]
+                    'error' => ['Error occur while creating please retry again.',$e]
                 ]
             ]);
         }
+
     }
 
     /**
@@ -144,9 +149,9 @@ class OnlineRequestController extends Controller
      */
     public function destroy(OnlineRequest $onlineRequest): JsonResponse
     {
-        $onlineRequest->delete();
-        return response()->json([
-            'status' => 200,
-        ]);
+            $onlineRequest->delete();
+            return response()->json([
+                'status' => 200,
+            ]);
     }
 }

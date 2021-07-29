@@ -139,10 +139,12 @@
             <b-button
               @click="row.toggleDetails"
               size="sm"
-              :variant="!row.item._showDetails ? 'primary' : 'success'"
+              :variant="!row.detailsShowing ? 'primary' : 'success'"
             >
+              <!-- :variant="!row.item._showDetails ? 'primary' : 'success'" -->
+                <!-- v-if="!row.item._showDetails" -->
               <i
-                v-if="!row.item._showDetails"
+                v-if="!row.detailsShowing"
                 class="fas fa-angle-right small"
               ></i>
               <i v-else class="fas fa-angle-up small"></i>
@@ -291,6 +293,9 @@ export default {
     this.fetchBureaus();
     this.fetchUsers();
     this.$Progress.finish();
+  },
+  mounted(){
+    this.fetchOnlineRequests
   },
 
   filters: {
