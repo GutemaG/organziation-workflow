@@ -1,0 +1,37 @@
+<b-form-group
+id="online-request-user"
+label-for="online-request-user-input"
+label="Responsible User"
+><multiselect
+    v-model="procedure.responsible_user_id"
+    :options="staff_ids"
+    placeholder="Select Responsible User"
+    :searchable="true"
+    multiple
+    close-on-select
+    hideSelected
+    track-by="value"
+    value="Integer"
+>
+    <!-- label="text" -->
+</multiselect>
+</b-form-group>
+
+<b-form-group
+id="online-request-user"
+label-for="online-request-user-input"
+label="Responsible User"
+><multiselect
+    v-model="procedure.responsible_user_id"
+    :options="staff_ids"
+    placeholder="Select Responsible User"
+    :searchable="true"
+    multiple
+    close-on-select
+    hideSelected
+    track-by="value"
+    value="Integer"
+>
+    <!-- label="text" -->
+</multiselect>
+</b-form-group>
