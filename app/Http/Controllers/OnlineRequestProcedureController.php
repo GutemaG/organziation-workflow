@@ -164,4 +164,18 @@ class OnlineRequestProcedureController extends Controller
             return $value;
         })->sortBy('step_number')->toArray();
     }
+
+    /**
+     * soft delete the specified data from storage.
+     *
+     * @param OnlineRequestProcedure $procedure
+     * @return JsonResponse
+     */
+    public function destroy(OnlineRequestProcedure $procedure): JsonResponse
+    {
+        $procedure->delete();
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
 }

@@ -33,7 +33,11 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
 
     Route::put('/online-prerequisites/{prerequisite_label}', [\App\Http\Controllers\OnlinePrerequisiteController::class, 'update']);
 
+    Route::delete('/online-prerequisites/{prerequisite_label}', [\App\Http\Controllers\OnlinePrerequisiteController::class, 'destroy']);
+
     Route::put('/online-procedures/{procedure}', [\App\Http\Controllers\OnlineRequestProcedureController::class, 'update']);
+
+    Route::delete('/online-procedures/{procedure}', [\App\Http\Controllers\OnlineRequestProcedureController::class, 'destroy']);
 
 });
 

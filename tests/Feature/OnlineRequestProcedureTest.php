@@ -39,6 +39,10 @@ class OnlineRequestProcedureTest extends TestCase
                 1,2,3,
             ]
         ]);
+
+        $response = $this->deleteJson($this->url . 3);
         $response->dump();
+        OnlineRequestProcedure::withTrashed()->where('id', 3)->restore();
+
     }
 }

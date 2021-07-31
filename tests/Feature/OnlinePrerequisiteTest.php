@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\PrerequisiteLabel;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -37,5 +38,9 @@ class OnlinePrerequisiteTest extends TestCase
             ]
 
          ]);
+
+        $response = $this->deleteJson($this->url . 3);
+        $response->dump();
+        PrerequisiteLabel::withTrashed()->where('id', 3)->restore();
     }
 }

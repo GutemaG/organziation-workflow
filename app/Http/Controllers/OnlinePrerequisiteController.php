@@ -115,4 +115,17 @@ class OnlinePrerequisiteController extends Controller
         })->toArray();
     }
 
+    /**
+     * soft delete the specified data from storage.
+     *
+     * @param PrerequisiteLabel $prerequisiteLabel
+     * @return JsonResponse
+     */
+    public function destroy(PrerequisiteLabel $prerequisiteLabel): JsonResponse
+    {
+        $prerequisiteLabel->delete();
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
 }
