@@ -16,6 +16,18 @@ export default [
                     welcome: require("./components/welcome/Search.vue").default
                 }
             },
+            {
+                path:"/info",
+                components:{
+                    welcome: require("./components/welcome/info/InfoHome.vue").default
+                }
+            },
+            {
+                path:"/online",
+                components:{
+                    welcome: require("./components/welcome/online/OnlineHome.vue").default
+                }
+            },
             
         ]
     },
