@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Actions\OnlineRequestProcedureAction;
+use App\Http\Requests\OnlineProcedureRequest;
 use App\Models\OnlineRequestProcedure;
 use Exception;
+use Illuminate\Http\JsonResponse;
 
 class OnlineRequestProcedureController extends Controller
 {
@@ -81,22 +84,19 @@ class OnlineRequestProcedureController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param array $data
-     * @return bool
+     * @param OnlineProcedureRequest $request
+     * @param OnlineRequestProcedure $procedure
+     * @return JsonResponse
      */
-    public static function update(array $data): bool
+    public static function update(OnlineProcedureRequest $request, OnlineRequestProcedure $procedure): JsonResponse
     {
-        try {
-            foreach ($data as $value) {
-                $procedure = OnlineRequestProcedure::find($value['id']);
-                $procedure->update($value);
-                self::attach($value['responsible_user_id'], $procedure, true);
-            }
-            return true;
-        }
-        catch (Exception $e) {
-            return false;
-        }
+        $data = $request->validated();
+        $procedure->update($data);
+        self::attach($data['responsible_user_id'], $procedure, true);
+        return response()->json([
+           'status' => 200,
+           'procedure' => $procedure->refresh(),
+        ]);
     }
 
     /**
@@ -136,7 +136,7 @@ class OnlineRequestProcedureController extends Controller
         if ($update) {
             list($updatableData, $creatableData) = self::getUpdatableAndCreatableData($data['online_request_procedures']);
             $creatableData = self::prepareForStoring($creatableData, $onlineRequestId);
-            if (! self::update($updatableData) || ! self::store($creatableData))
+            if (! OnlineRequestProcedureAction::update($updatableData) || ! self::store($creatableData))
                 return false;
             return true;
         }

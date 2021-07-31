@@ -19,12 +19,16 @@ class OnlineRequestController extends Controller
      * And check if authenticated user is authorized. If not throw UnauthorizedException.
      *
      * OnlineRequestController constructor.
-     * @throws UnauthorizedException
      */
     public function __construct() {
         $this->middleware('auth');
-        if (! Gate::any(['is-admin', 'is-it-team-member']))
-            throw new UnauthorizedException();
+
+        $this->middleware(function ($request, $next) {
+            if (! Gate::any(['is-admin', 'is-it-team-member']))
+                throw new UnauthorizedException();
+            return $next($request);
+        });
+
     }
 
     /**
@@ -82,10 +86,10 @@ class OnlineRequestController extends Controller
         catch (Exception $e) {
             DB::rollBack();
             return response()->json([
-               'status' => 400,
-               'error' => [
-                   'error' => ['Error occur while creating please retry again.',$e]
-               ]
+                'status' => 400,
+                'error' => [
+                    'error' => ['Error occur while creating please retry again.',$e]
+                ]
             ]);
         }
     }
@@ -149,9 +153,9 @@ class OnlineRequestController extends Controller
      */
     public function destroy(OnlineRequest $onlineRequest): JsonResponse
     {
-            $onlineRequest->delete();
-            return response()->json([
-                'status' => 200,
-            ]);
+        $onlineRequest->delete();
+        return response()->json([
+            'status' => 200,
+        ]);
     }
 }

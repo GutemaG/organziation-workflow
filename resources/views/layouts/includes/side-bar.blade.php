@@ -1,4 +1,4 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="position: fixed !important;">
   <!-- Brand Logo -->
   <router-link to="/dashboard" class="brand-link">
     <img src="{{ asset('/images/astu.jpg') }}" alt="The Logo" class="brand-image img-circle elevation-3"
@@ -45,7 +45,7 @@
         @endcan
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-cog green"></i>
+            <i class="nav-icon fas fa-home blue"></i>
             <p>
               Bureau
               <i class="right fas fa-angle-left"></i>
@@ -54,7 +54,7 @@
           <ul class="nav nav-treeview">
             <li class="nav-item">
               <router-link to="/bureaus" class="nav-link">
-                <i class="nav-icon fas fa-list-ol orange"></i>
+                <i class="nav-icon fas fa-list-ol green"></i>
                 <p>
                   Bureau
                 </p>
@@ -62,8 +62,33 @@
             </li>
             <li class="nav-item">
               <router-link to="/buildings" class="nav-link">
-                <i class="nav-icon fas fa-tags green"></i>
+                <i class="nav-icon fas fa-building green"></i>
                 <p>Buildings</p>
+              </router-link>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-question blue"></i>
+            <p>
+              Request
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <router-link to="/requests" class="nav-link">
+                <i class="nav-icon fas fa-list-ol green"></i>
+                <p>
+                  Request
+                </p>
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/online-requests" class="nav-link">
+                <i class="nav-icon fas fa-list green"></i>
+                <p>Online Request</p>
               </router-link>
             </li>
           </ul>
@@ -71,7 +96,7 @@
 
         <li class="nav-item">
           <router-link to="/requests" class="nav-link">
-            <i class="nav-icon fas fa-list orange"></i>
+            <i class="nav-icon fas fa-list blue"></i>
             <p>
               Request
             </p>

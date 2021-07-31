@@ -1,4 +1,4 @@
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="position: fixed !important; top: 0; width: 100%;">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -6,7 +6,7 @@
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         
-            <router-link to="/dashboard" class="nav-link">
+            <router-link to="/home" class="nav-link">
                Home
             </router-link>
       </li>
@@ -16,9 +16,9 @@
     </ul>
 
     <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ml-auto" style="position: fixed; right: 0;">
       <!-- Navbar Search -->
-      <li class="nav-item">
+      <li class="nav-item" style="padding-left: 16rem !important;">
         <a class="nav-link" data-widget="navbar-search" href="#" role="button">
           <i class="fas fa-search"></i>
         </a>
@@ -127,11 +127,6 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-          <i class="fas fa-th-large"></i>
         </a>
       </li>
     </ul>

@@ -12,21 +12,13 @@
           label-size="sm"
           class="mb-3"
         >
-        <b-button
-          size="sm"
-          @click="addBureau"
-          class="mr-1"
-          variant="primary"
-        >
-          + Add
-        </b-button>
+          <b-button size="sm" @click="addBureau" class="mr-1" variant="primary">
+            + Add
+          </b-button>
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-
-        
-      </b-col>
+      <b-col lg="6" class="my-1"> </b-col>
 
       <!-- Filter input and button -->
       <b-col lg="6" class="my-1">
@@ -55,8 +47,7 @@
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-      </b-col>
+      <b-col lg="6" class="my-1"> </b-col>
       <!-- Pagination  -->
       <b-col sm="5" md="6" class="my-1">
         <b-form-group
@@ -97,7 +88,7 @@
     <!-- Main table element -->
     <b-table
       :items="bureaus"
-      :fields="fields"
+      :fields="bureau_fields"
       :current-page="currentPage"
       :per-page="perPage"
       :filter="filter"
@@ -110,12 +101,25 @@
       small
       @filtered="onFiltered"
       striped
+      bordered
+      ref="listOfBureau"
     >
       <!-- <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
       </template> -->
+      <template #cell(id)="row">
+        {{ row.index + 1 }}
+      </template>
+      <template #cell(description)="row">
+        <p @click="row.toggleDetails" v-b-tooltip.hover :title="row.item.description">
+          {{ row.item.description.substring(0, 20) }} ...
+        </p>
+      </template>
 
       <template #cell(actions)="row">
+        <b-button size="sm" @click="row.toggleDetails">
+          {{ row.detailsShowing ? "Hide" : "Show" }} Details
+        </b-button>
         <b-button
           size="sm"
           @click="info(row.item, row.index, $event.target)"
@@ -138,77 +142,37 @@
       </template>
 
       <template #row-details="row">
-        <b-card>
-          <ul>
+        <b-card header="Detail" header-bg-variant="dark" title="Description">
+          <b-card-text>{{ row.item.description }}</b-card-text>
+          <!-- <div>{{ row.item.description }}</div> -->
+          <!-- <ul>
             <li v-for="(value, key) in row.item" :key="key">
               {{ key }}: {{ value }}
             </li>
-          </ul>
+          </ul> -->
         </b-card>
       </template>
     </b-table>
 
     <!-- Info modal -->
-      <edit-bureau-modal :selectedBureau="selectedBureau"></edit-bureau-modal>
-      <add-bureau-modal></add-bureau-modal>
+    <edit-bureau-modal :selectedBureau="selectedBureau"></edit-bureau-modal>
+    <add-bureau-modal></add-bureau-modal>
   </b-container>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
+import AddBureauModal from "./bureau/AddBureauModal.vue";
+import EditBureauModal from "./bureau/EditBureauModal.vue";
+import {bureau_fields} from '../table_fields'
 export default {
+  components:{
+    "add-bureau-modal":AddBureauModal,
+    "edit-bureau-modal":EditBureauModal
+  },
   data() {
     return {
-      fields: [
-        {
-          key: "id",
-          label: "ID",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "name",
-          label: "Name",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "building_number",
-          label: "Building",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "office_number",
-          label: "Office Number",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "building_number",
-          label: "Building",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "location",
-          label: "Location",
-          sortable: true,
-          formatter: (value, key, item) => {
-            let location = JSON.parse(value)
-            let newVal=`Lat: ${location.latitude}\t Long: ${location.longitude}`
-            return newVal;
-          },
-          sortDirection: "desc",
-        },
-        {
-          key: "description",
-          label: "Description",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        { key: "actions", label: "Actions" },
-      ],
+      bureau_fields,
       totalRows: 1,
       currentPage: 1,
       perPage: 5,
@@ -218,11 +182,11 @@ export default {
       sortDirection: "asc",
       filter: null,
       filterOn: [],
-      selectedBureau:{},
+      selectedBureau: {},
     };
   },
   computed: {
-    ...mapGetters(['bureaus']),
+    ...mapGetters(["bureaus"]),
     sortOptions() {
       // Create an options list from our fields
       return this.fields
@@ -233,21 +197,21 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchBureaus']),
+    ...mapActions(["fetchBureaus"]),
     info(item, index, button) {
       // console.log(item)
       this.selectedBureau = item;
       this.$root.$emit("bv::show::modal", "edit-bureau-modal", button);
     },
-    addBureau(){
-        this.$root.$emit("bv::show::modal", "add-bureau-modal");
-        console.log('Creating bureau ...')
+    addBureau() {
+      this.$root.$emit("bv::show::modal", "add-bureau-modal");
+      console.log("Creating bureau ...");
     },
-    deleteBureau(){
-        console.log('deleting bureau ..')
+    deleteBureau() {
+      console.log("deleting bureau ..");
     },
-    editBureau(){
-        console.log('Editing user ...')
+    editBureau() {
+      console.log("Editing user ...");
     },
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
@@ -255,8 +219,8 @@ export default {
       this.currentPage = 1;
     },
   },
-  created(){
+  created() {
     this.fetchBureaus();
-  }
+  },
 };
 </script>

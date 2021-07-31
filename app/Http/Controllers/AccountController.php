@@ -40,14 +40,16 @@ class AccountController extends Controller
             ];
         }
         $data = $validator->validated();
-
         try {
             $user = User::find(auth()->user()->getAuthIdentifier());
             DB::beginTransaction();
+            $user->update(Fields::filterUserFields($data));
+            // return Fields::filter_user_fields($data);
             $user->update($data);
             DB::commit();
             return response()->json([
                 'status' => 200,
+                'user' => User::find($user->id),
             ]);
         }
         catch (\Exception $e){
@@ -108,7 +110,7 @@ class AccountController extends Controller
         else {
             try {
                 DB::beginTransaction();
-                auth()->user()->forceFill([
+                auth()->user()->update([
                     'password' => Hash::make($data['password']),
                 ]);
                 DB::commit();

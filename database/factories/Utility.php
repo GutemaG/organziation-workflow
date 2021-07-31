@@ -5,6 +5,10 @@ namespace Database\Factories;
 
 
 use App\Http\Controllers\Utilities\UserType;
+use Illuminate\support\Str;
+use \App\Models\Affair;
+use \App\Models\Procedure;
+use Faker\Factory;
 use App\Models\Building;
 use App\Models\Bureau;
 use App\Models\OnlineRequest;
@@ -41,6 +45,29 @@ class Utility
         ];
 
         return $userTypes[array_rand($userTypes)];
+    }
+    public static function test()
+    {
+        $faker = Factory::create();
+        //Fields: [id, procedure_id, affair_id, name, description]
+        $affairs_id = Affair::pluck('id');
+        $procedures_id = Procedure::pluck('id')->toArray();
+        $affair =$faker->randomElement($affairs_id, null);
+        $name = '';
+        $description='';
+        if(empty($affair)){
+           $name = Str::random(10);
+           $description = Str::random(10);
+        }
+        else{
+
+        }
+        return [
+            'affair_id'=>$affair,
+            'procedure_id'=>$faker->randomElement($procedures_id),
+            'name' =>$name,
+            'description' =>$description,
+        ];
     }
 
     /**

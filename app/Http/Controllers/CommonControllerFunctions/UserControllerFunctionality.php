@@ -173,7 +173,7 @@ class UserControllerFunctionality
      */
     private static function getUpdateFields(Request $request, User $user){
         $fields = [];
-        foreach ($request->only(Fields::except(['password', 'password_confirmation'])) as $key => $item){
+        foreach ($request->only(Fields::except('user',['password', 'password_confirmation'])) as $key => $item){
             if($request->get($key) != $user->getAttributeValue($key))
                 $fields[$key] = $item;
         }

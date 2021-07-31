@@ -1,77 +1,53 @@
 <template>
-      <div class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                 
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up the bulk of the card's
-                  content.
-                </p>
-
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-            </div>
-
-            <div class="card card-primary card-outline">
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up the bulk of the card's
-                  content.
-                </p>
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-            </div><!-- /.card -->
-          </div>
-          <!-- /.col-md-6 -->
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="m-0">Featured</h5>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">Special title treatment</h6>
-
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-              </div>
-            </div>
-
-            <div class="card card-primary card-outline">
-              <div class="card-header">
-                <h5 class="m-0">Featured</h5>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">Special title treatment</h6>
-
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-              </div>
-            </div>
-          </div>
-          <!-- /.col-md-6 -->
-        </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
+  <div class="container-fluid">
+    <div v-if="currentUser">
+      <side-bar></side-bar>
+      <nav-bar></nav-bar>
     </div>
+    <div class="wrapper" style="margin-top: 5rem">
+      <router-view name="dashboard" :key="$route.fullPath"></router-view>
+    </div>
+  </div>
 </template>
 <script>
-    export default {
-        mounted() {
-            console.log('Component mounted.')
-        }
-    }
+import { mapActions, mapGetters } from "vuex";
+import NavBar from "./include/NavBar.vue";
+import SideBar from "./include/SideBar.vue";
+export default {
+  components: { "nav-bar": NavBar, "side-bar": SideBar },
+  name: "Dashboard",
+  data() {
+    return {};
+  },
+  methods: {
+    // ...mapActions(['fetchUsers', 'fetchAffairs', 'fetchBureaus', 'fetchBuildings'])
+  },
+  computed: {
+    ...mapGetters([
+      "currentUser",
+      "users",
+      "affairs",
+      "bureaus",
+      "buildings",
+      "findUser",
+    ]),
+  },
+  created() {
+    // this.fetchUsers()
+    // this.fetchAffairs()
+    // this.fetchBureaus();
+    // this.fetchBuildings()
+    // console.log('created')
+  },
+};
 </script>
-
 <style scoped>
-.content {
-  margin-top: 1%;
+.leftside,
+.rightside {
+  width: 100%;
+}
+.bg-dark {
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
 }
 </style>

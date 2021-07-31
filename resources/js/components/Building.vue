@@ -11,19 +11,18 @@
           label-size="sm"
           class="mb-3"
         >
-        <b-button
-          size="sm"
-          @click="addBuilding"
-          class="mr-1"
-          variant="primary"
-        >
-          + Add
-        </b-button>
+          <b-button
+            size="sm"
+            @click="addBuilding"
+            class="mr-1"
+            variant="primary"
+          >
+            + Add
+          </b-button>
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-      </b-col>
+      <b-col lg="6" class="my-1"> </b-col>
 
       <b-col lg="6" class="my-1">
         <b-form-group
@@ -51,8 +50,7 @@
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-      </b-col>
+      <b-col lg="6" class="my-1"> </b-col>
 
       <b-col sm="5" md="6" class="my-1">
         <b-form-group
@@ -93,14 +91,11 @@
     <!-- Main table element -->
     <b-table
       :items="buildings"
-      :fields="fields"
+      :fields="building_fields"
       :current-page="currentPage"
       :per-page="perPage"
       :filter="filter"
       :filter-included-fields="filterOn"
-      :sort-by.sync="sortBy"
-      :sort-desc.sync="sortDesc"
-      :sort-direction="sortDirection"
       stacked="md"
       show-empty
       small
@@ -110,6 +105,9 @@
       <!-- <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
       </template> -->
+      <template #cell(id)="row">
+        {{ row.index + 1 }}
+      </template>
 
       <template #cell(actions)="row">
         <b-button
@@ -129,6 +127,9 @@
           <i class="fa fa-trash">Delete</i>
         </b-button>
       </template>
+      <template #cell(description)="row">
+        <span v-b-tooltip.hover :title="row.item.description">{{ row.item.description.substring(0, 30) }}</span>
+      </template>
 
       <template #row-details="row">
         <b-card>
@@ -142,63 +143,38 @@
     </b-table>
 
     <!-- Info modal -->
-      <edit-building-modal :selectedBuilding="selectedBuilding"></edit-building-modal>
-      <add-building-modal></add-building-modal>
+    <edit-building-modal
+      :selectedBuilding="selectedBuilding"
+    ></edit-building-modal>
+    <add-building-modal></add-building-modal>
   </b-container>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
+import AddBuildingModal from "./building/AddBuildingModal.vue";
+import EditBuildingModal from "./building/EditBuildingModal.vue";
+import { building_fields } from "../table_fields";
+
 export default {
+  components: {
+    "add-building-modal": AddBuildingModal,
+    "edit-building-modal": EditBuildingModal,
+  },
   data() {
     return {
-      fields: [
-        {
-          key: "id",
-          label: "ID",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        /*{
-          key: "name",
-          label: "Name",
-          sortable: true,
-          sortDirection: "desc",
-        },*/
-        {
-          key: "number",
-          label: "Building Number",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "number_of_offices",
-          label: "Number Of Office",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        /*{
-          key: "description",
-          label: "Description",
-          sortable: true,
-          sortDirection: "desc",
-        },*/
-        { key: "actions", label: "Actions" },
-      ],
+      building_fields,
       totalRows: 1,
       currentPage: 1,
       perPage: 5,
       pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
-      sortBy: "",
-      sortDesc: false,
-      sortDirection: "asc",
       filter: null,
       filterOn: [],
-      selectedBuilding:{},
+      selectedBuilding: {},
     };
   },
   computed: {
-    ...mapGetters(['buildings']),
+    ...mapGetters(["buildings"]),
     sortOptions() {
       // Create an options list from our fields
       return this.fields
@@ -207,25 +183,25 @@ export default {
           return { text: f.label, value: f.key };
         });
     },
-    buildingLength(){
-      return this.buildings.length
-    }
+    buildingLength() {
+      return this.buildings.length;
+    },
   },
   methods: {
-    ...mapActions(['fetchBuildings']),
+    ...mapActions(["fetchBuildings"]),
     info(item, index, button) {
-      console.log('editttting')
+      console.log("editttting");
       this.selectedBuilding = item;
       this.$root.$emit("bv::show::modal", "edit-building-modal", button);
     },
-    addBuilding(){
-        this.$root.$emit("bv::show::modal", "add-building-modal");
+    addBuilding() {
+      this.$root.$emit("bv::show::modal", "add-building-modal");
     },
-    deleteBuilding(){
-        console.log('deleting Building ..')
+    deleteBuilding() {
+      console.log("deleting Building ..");
     },
-    editBuilding(){
-        console.log('Editing Building ...')
+    editBuilding() {
+      console.log("Editing Building ...");
     },
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
@@ -233,8 +209,8 @@ export default {
       this.currentPage = 1;
     },
   },
-  created(){
+  created() {
     this.fetchBuildings();
-  }
+  },
 };
 </script>

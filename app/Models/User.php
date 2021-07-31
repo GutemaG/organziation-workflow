@@ -95,6 +95,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function affairs(){
+        return $this->hasMany(Affair::class);
+    }
 
     /**
      * Get the bureaus associated with the user.
