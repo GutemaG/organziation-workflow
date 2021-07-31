@@ -94,7 +94,7 @@ class BuildingController extends Controller
                     return response()->json([
                         'status' => 400,
                         'error' => [
-                            'error' => ['error occur while creating please retry again.']
+                            'error' => ['Error occur while creating please retry again.']
                         ],
                     ]);
                 }

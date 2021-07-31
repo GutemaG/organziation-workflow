@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-sidebar id="sidebar-1" title="OWGS" width="260px" shadow backdrop>
+    <b-sidebar id="sidebar-1" title="OWGS" width="320px" shadow backdrop>
       <div class="p-3">
         <div style="margin: 1rem 0px 1rem 3rem">
           <b-avatar src="/images/astu.jpg" size="6rem"></b-avatar>

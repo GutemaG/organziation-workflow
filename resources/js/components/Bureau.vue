@@ -88,7 +88,7 @@
     <!-- Main table element -->
     <b-table
       :items="bureaus"
-      :fields="fields"
+      :fields="bureau_fields"
       :current-page="currentPage"
       :per-page="perPage"
       :filter="filter"
@@ -107,6 +107,14 @@
       <!-- <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
       </template> -->
+      <template #cell(id)="row">
+        {{ row.index + 1 }}
+      </template>
+      <template #cell(description)="row">
+        <p @click="row.toggleDetails" v-b-tooltip.hover :title="row.item.description">
+          {{ row.item.description.substring(0, 20) }} ...
+        </p>
+      </template>
 
       <template #cell(actions)="row">
         <b-button size="sm" @click="row.toggleDetails">
@@ -134,12 +142,8 @@
       </template>
 
       <template #row-details="row">
-        <b-card
-          header="Detail"
-          header-bg-variant="dark"
-          title="Description"
-        >
-          <b-card-text>{{row.item.description}}</b-card-text>
+        <b-card header="Detail" header-bg-variant="dark" title="Description">
+          <b-card-text>{{ row.item.description }}</b-card-text>
           <!-- <div>{{ row.item.description }}</div> -->
           <!-- <ul>
             <li v-for="(value, key) in row.item" :key="key">
@@ -158,59 +162,17 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import AddBureauModal from "./bureau/AddBureauModal.vue";
+import EditBureauModal from "./bureau/EditBureauModal.vue";
+import {bureau_fields} from '../table_fields'
 export default {
+  components:{
+    "add-bureau-modal":AddBureauModal,
+    "edit-bureau-modal":EditBureauModal
+  },
   data() {
     return {
-      fields: [
-        {
-          key: "id",
-          label: "ID",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "name",
-          label: "Name",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "building_number",
-          label: "Building",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "office_number",
-          label: "Office Number",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "building_number",
-          label: "Building",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "location",
-          label: "Location",
-          sortable: true,
-          formatter: (value, key, item) => {
-            let location = JSON.parse(value);
-            let newVal = `Lat: ${location.latitude}\t Long: ${location.longitude}`;
-            return newVal;
-          },
-          sortDirection: "desc",
-        },
-        /*{
-          key: "description",
-          label: "Description",
-          sortable: true,
-          sortDirection: "desc",
-        },*/
-        { key: "actions", label: "Actions" },
-      ],
+      bureau_fields,
       totalRows: 1,
       currentPage: 1,
       perPage: 5,

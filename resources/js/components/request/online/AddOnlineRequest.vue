@@ -17,6 +17,7 @@
             <b-form-input
               id="online-request-name-input"
               v-model.trim="affair.name"
+              required
             >
             </b-form-input>
           </b-form-group>
@@ -28,6 +29,7 @@
             <b-form-textarea
               id="online-request-description-input"
               v-model="affair.description"
+              required
             ></b-form-textarea>
           </b-form-group>
           <hr class="my-4" />
@@ -85,7 +87,7 @@
                           v-model="procedure.responsible_user_id"
                           :options="staff_ids"
                           multiple
-                          style="height:10rem;"
+                          style="height: 10rem"
                         >
                           <template #first>
                             <b-form-select-option selected disabled value="">
@@ -97,11 +99,11 @@
                       <b-form-group
                         id="online-request-procedures-input"
                         label="Step"
-                        label-for="online-request-name-input"
+                        label-for="online-request-proceudre-step-number-input"
                       >
                         <b-form-input
                           placeholder="Enter Procedure step"
-                          id="online-request-name-input"
+                          id="online-request-proceudre-step-number-input"
                           v-model="procedure.step_number"
                           type="number"
                         >
@@ -110,11 +112,12 @@
                       <b-form-group
                         label="Procedures Description"
                         id="online-request-procedures-description"
+                        label-for="online-request-procedures-description-input"
                       >
                         <b-form-textarea
                           v-model="procedure.description"
                           placeholder="Enter Description for Procedure"
-                          id="online-request-procedures-description"
+                          id="online-request-procedures-description-input"
                         >
                         </b-form-textarea>
                       </b-form-group>
@@ -130,11 +133,19 @@
             >
           </base-card>
         </div>
-        <b-button v-if="!prerequisite" @click="prerequisite=true" variant="primary">add pre-request</b-button>
+        <b-button
+          v-if="!prerequisite"
+          @click="prerequisite = true"
+          variant="primary"
+          >add pre-request</b-button
+        >
         <base-card v-if="prerequisite">
           <b-row align-v="center" slot="header">
             <b-col cols="8">Add Pre Request Labels</b-col>
-            <b-col cols="4"><b-button variant="danger" @click="removeLabel()"><i class="fa fa-trash"></i></b-button></b-col>
+            <b-col cols="4"
+              ><b-button variant="danger" @click="removeLabel()"
+                ><i class="fa fa-trash"></i></b-button
+            ></b-col>
           </b-row>
           <b-form-group label="Label">
             <b-form-tags
@@ -143,13 +154,7 @@
               class="mb-2"
             >
               <template
-                v-slot="{
-                  tags,
-                  inputAttrs,
-                  inputHandlers,
-                  addTag,
-                  removeTag,
-                }"
+                v-slot="{ tags, inputAttrs, inputHandlers, addTag, removeTag }"
               >
                 <b-input-group class="mb-2">
                   <b-form-input
@@ -196,6 +201,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { required } from "vuelidate/lib/validators";
 export default {
   data() {
     return {
@@ -212,7 +218,7 @@ export default {
         ],
         prerequisite_labels: [],
       },
-      prerequisite: false
+      prerequisite: false,
     };
   },
   computed: {
@@ -220,9 +226,14 @@ export default {
   },
   methods: {
     ...mapActions(["addOnlineRequest"]),
+    validateState(value) {
+      const { $dirty, $error } = this.$v.selectedRequest[value];
+      return $dirty ? !$error : null;
+    },
     handleSubmit() {
       this.addOnlineRequest(this.affair);
-      this.$router.push('/online-requests')
+      this.$router.go(-1);
+      // this.$router.push('/online-requests')
       console.log(JSON.stringify(this.affair));
     },
     addProcedure() {
@@ -245,7 +256,25 @@ export default {
     },
     removeLabel(index) {
       this.affair.prerequisite_labels = [];
-      this.prerequisite = false
+      this.prerequisite = false;
+    },
+  },
+  validations: {
+    selectedRequest: {
+      name: {
+        required,
+        isUnique(value) {
+          let index = this.online_requests.filter(
+            (req) => req.name !== value
+          );
+
+          if (index === -1) return true;
+          return false;
+        },
+      },
+      description: {
+        required,
+      },
     },
   },
 };

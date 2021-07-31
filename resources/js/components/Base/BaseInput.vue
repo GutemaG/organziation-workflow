@@ -4,7 +4,9 @@
     :description="description"
     :label="label"
     :label-for="labelFor"
-    valid-feedback="Thank you!"
+    :valid-feedback="validFeedback"
+    :invalid-feedback="invalidFeedback"
+
   >
     <input
       :id="id"
@@ -14,6 +16,8 @@
       :disabled="disabled"
       :placeholder="placeholder"
       class="form-control"
+      :state="state"
+      
     />
     <!-- </input> -->
   </b-form-group>
@@ -76,6 +80,17 @@ export default {
       description: "Description for input group",
       default: "",
     },
+    state:{
+      type: Boolean,
+      description: "state of input"
+    },
+    validFeedback:{
+      type:String
+    },
+    invalidFeedback:{
+      type:String
+    }
+
   },
   data() {
     return {

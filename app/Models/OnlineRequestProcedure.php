@@ -6,6 +6,38 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\OnlineRequestProcedure
+ *
+ * @property int $id
+ * @property int $online_request_id
+ * @property int $responsible_bureau_id
+ * @property string|null $description
+ * @property int $step_number
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\OnlineRequest $OnlineRequest
+ * @property-read \App\Models\Building $building
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read int|null $users_count
+ * @method static \Database\Factories\OnlineRequestProcedureFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequestProcedure newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequestProcedure newQuery()
+ * @method static \Illuminate\Database\Query\Builder|OnlineRequestProcedure onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequestProcedure query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequestProcedure whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequestProcedure whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequestProcedure whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequestProcedure whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequestProcedure whereOnlineRequestId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequestProcedure whereResponsibleBureauId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequestProcedure whereStepNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequestProcedure whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|OnlineRequestProcedure withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|OnlineRequestProcedure withoutTrashed()
+ * @mixin \Eloquent
+ */
 class OnlineRequestProcedure extends Model
 {
     use HasFactory, SoftDeletes;

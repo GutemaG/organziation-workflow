@@ -25,7 +25,6 @@
                                     text="Nulla vitae elit libero, a pharetra augue mollis interdum."
                                     img-src="https://picsum.photos/1024/480/?image=52"
                                 ></b-carousel-slide>
-
                                 <!-- Slides with custom text -->
                                 <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
                                     <h1>Hello world!</h1>
@@ -111,6 +110,18 @@
                     </b-container>
                 </b-col>
             </b-row>
+            <div class="mb-5">
+                <p>
+                    Adama Science and Technology University has signed a consultant 
+                    contract agreement with Seoul National University. Accordingly, the consultant, Seoul National University, is 
+                    expected to facilitate the design, supervision, and bid document preparation of the ASTU-EDCF project.
+                    It is recalled that the government of South Korea has agreed to finance the establishment of five Centers of Excellence in 
+                    ASTU with an outlay of one hundred million US Dollars. The agreement was signed between the governments of FDRE the Republic of Korea. 
+                    T June 24, 2021
+                </p>
+                <p>{{totalAffairs}}</p>
+                <p>{{first.name}} {{first.description}}</p>
+            </div>
         </b-container>
         
         <div style="left: 0; right: 0;">
@@ -230,6 +241,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 export default {
     data() {
       return {
@@ -244,6 +256,32 @@ export default {
       onSlideEnd(slide) {
         this.sliding = false
       }
+        return {
+            affairs:[]
+        };
+    },
+    computed:{
+        // ...mapGetters(['affairs'])
+        totalAffairs(){
+            return this.affairs.length
+        },
+        first(){
+            return this.affairs[0]
+        }
+    },
+    methods:{
+        // ...mapActions(['fetchAffairs']),
+        getAffairs(){
+            axios.get('/api/affairs').then(resp => {
+                console.log(resp)
+                this.affairs = resp.data.affairs
+            })
+        }
+    },
+    created(){
+        // this.fetchAffairs()
+        // this.$store.dispatch('fetchAffairs')
+        this.getAffairs()
     }
   }
 </script>

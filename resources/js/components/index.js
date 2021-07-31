@@ -1,42 +1,54 @@
+/**
+ * //  //,?,//, todo, *
+ *  ?These component are globals. We can use them in any component
+ * ? I remove other component they must not registered globally because
+ *      ? use them in one or two component so they must be registered locally
+ * */
 import Vue from "vue";
 
-import EditModal from "./user/EditModal.vue";
-import AddUserModal from "./user/AddUserModal.vue";
-import Home from "./Home.vue";
-import AddBureauModal from "./bureau/AddBureauModal.vue";
-import EditBureauModal from "./bureau/EditBureauModal.vue";
-import AddBuildingModal from "./building/AddBuildingModal.vue";
-import EditBuildingModal from "./building/EditBuildingModal.vue";
 import BaseInput from "./Base/BaseInput.vue";
 import BaseCard from "./Base/BaseCard.vue";
 import BasePagination from "./Base/BasePagination.vue";
-import AddProcedure from "./request/AddProcedure.vue";
-import AddPreRequest from "./request/AddPreRequest.vue";
-import VueLogin from "./auth/Login.vue";
-import Welcome from "./welcome/Welcome.vue";
-import GuestWelcome from "./welcome/GuestWelcome.vue";
-import NavBar from "./include/NavBar.vue";
-import SideBar from "./include/SideBar.vue";
-import OnlineRequestProcedureTable from "./request/online/OnlineRequestProcedureTable.vue";
-
-Vue.component("edit-user-modal", EditModal);
-Vue.component("add-user-modal", AddUserModal);
-Vue.component("home", Home);
-Vue.component("add-bureau-modal", AddBureauModal);
-Vue.component("edit-bureau-modal", EditBureauModal);
-Vue.component("add-building-modal", AddBuildingModal);
-Vue.component("edit-building-modal", EditBuildingModal);
 Vue.component("base-input", BaseInput);
 Vue.component("base-card", BaseCard);
 Vue.component("base-pagination", BasePagination);
-Vue.component("add-procedure", AddProcedure);
-Vue.component("add-pre-request", AddPreRequest);
-Vue.component("vue-login", VueLogin);
-Vue.component("welcome", Welcome);
-Vue.component("guest-welcome", GuestWelcome);
-Vue.component("nav-bar", NavBar);
-Vue.component("side-bar", SideBar);
-Vue.component("online-request-procedure-table", OnlineRequestProcedureTable);
+
+/**
+ * * For Reference only
+ */
+// import EditModal from "./user/EditModal.vue";
+// import AddUserModal from "./user/AddUserModal.vue";
+// import AddBureauModal from "./bureau/AddBureauModal.vue";
+// import EditBureauModal from "./bureau/EditBureauModal.vue";
+// import AddBuildingModal from "./building/AddBuildingModal.vue";
+// import EditBuildingModal from "./building/EditBuildingModal.vue";
+// import AddProcedure from "./request/AddProcedure.vue";
+// import AddPreRequest from "./request/AddPreRequest.vue";
+// import OnlineRequestProcedureTable from "./request/online/OnlineRequestProcedureTable.vue";
+// import VueLogin from "./auth/Login.vue";
+
+// import Home from "./Home.vue";
+// import Welcome from "./welcome/Welcome.vue";
+// import GuestWelcome from "./welcome/GuestWelcome.vue";
+// import NavBar from "./include/NavBar.vue";
+// import SideBar from "./include/SideBar.vue";
+
+// Vue.component("edit-user-modal", EditModal);
+// Vue.component("add-user-modal", AddUserModal);
+// Vue.component("add-bureau-modal", AddBureauModal);
+// Vue.component("edit-bureau-modal", EditBureauModal);
+// Vue.component("add-building-modal", AddBuildingModal);
+// Vue.component("edit-building-modal", EditBuildingModal);
+// Vue.component("add-pre-request", AddPreRequest);
+// Vue.component("add-procedure", AddProcedure);
+// Vue.component("vue-login", VueLogin);
+// Vue.component("home", Home);
+
+// Vue.component("welcome", Welcome);
+// Vue.component("guest-welcome", GuestWelcome);
+// Vue.component("nav-bar", NavBar);
+// Vue.component("side-bar", SideBar);
+// Vue.component("online-request-procedure-table", OnlineRequestProcedureTable);
 
 /*
 Vue.component(

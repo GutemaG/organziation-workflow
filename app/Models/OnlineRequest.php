@@ -6,6 +6,37 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\OnlineRequest
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $name
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OnlineRequestProcedure[] $onlineRequestProcedures
+ * @property-read int|null $online_request_procedures_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PrerequisiteLabel[] $prerequisiteLabels
+ * @property-read int|null $prerequisite_labels_count
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\OnlineRequestFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequest newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequest newQuery()
+ * @method static \Illuminate\Database\Query\Builder|OnlineRequest onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequest query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequest whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequest whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequest whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequest whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequest whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequest whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OnlineRequest whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|OnlineRequest withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|OnlineRequest withoutTrashed()
+ * @mixin \Eloquent
+ */
 class OnlineRequest extends Model
 {
     use HasFactory, SoftDeletes;

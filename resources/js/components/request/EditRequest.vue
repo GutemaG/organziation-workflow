@@ -255,8 +255,14 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import AddProcedure from "./AddProcedure.vue";
+import AddPreRequest from "./AddPreRequest.vue";
 // import store from '@/'
 export default {
+  components:{
+    "add-procedure":AddProcedure,
+    "add-pre-request":AddPreRequest,
+  },
   props: ["id"],
   data() {
     return {

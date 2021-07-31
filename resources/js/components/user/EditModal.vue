@@ -76,12 +76,14 @@ export default {
     methods: {
     ...mapActions(["updateUser"]),
     updateForm(event){
+    this.$Progress.start();
       event.preventDefault()
       const data = {
          ...this.selectedUser,
       }
       this.updateUser(data);
       this.$bvModal.hide("edit-modal");
+      this.$Progress.finish()
     },
 
   },

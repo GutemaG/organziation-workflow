@@ -11,21 +11,13 @@
           label-size="sm"
           class="mb-3"
         >
-        <b-button
-          size="sm"
-          @click="addUser"
-          class="mr-1"
-          variant="primary"
-        >
-          + Add
-        </b-button>
+          <b-button size="sm" @click="addUser" class="mr-1" variant="primary">
+            + Add
+          </b-button>
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-
-        
-      </b-col>
+      <b-col lg="6" class="my-1"> </b-col>
 
       <b-col lg="6" class="my-1">
         <b-form-group
@@ -53,8 +45,7 @@
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-      </b-col>
+      <b-col lg="6" class="my-1"> </b-col>
 
       <b-col sm="5" md="6" class="my-1">
         <b-form-group
@@ -95,7 +86,7 @@
     <!-- Main table element -->
     <b-table
       :items="users"
-      :fields="fields"
+      :fields="user_fields"
       :current-page="currentPage"
       :per-page="perPage"
       :filter="filter"
@@ -109,9 +100,9 @@
       @filtered="onFiltered"
       striped
     >
-      <!-- <template #cell(name)="row">
-        {{ row.value.first }} {{ row.value.last }}
-      </template> -->
+      <template #cell(id)="row">
+        {{row.index + 1}}
+      </template>
 
       <template #cell(actions)="row">
         <b-button
@@ -147,54 +138,24 @@
     </b-table>
 
     <!-- Info modal -->
-      <edit-user-modal :selectedUser="selectedUser"></edit-user-modal>
-      <add-user-modal></add-user-modal>
+    <edit-user-modal :selectedUser="selectedUser"></edit-user-modal>
+    <add-user-modal></add-user-modal>
   </b-container>
 </template>
 
 <script>
-import axios from "axios";
-import { mapGetters, mapActions } from 'vuex';
+import EditModal from "./user/EditModal.vue";
+import AddUserModal from "./user/AddUserModal.vue";
+import { user_fields } from "../table_fields";
+import { mapGetters, mapActions } from "vuex";
 export default {
+  components: {
+    "edit-user-modal": EditModal,
+    "add-user-modal": AddUserModal,
+  },
   data() {
     return {
-      fields: [
-        {
-          key: "user_name",
-          label: "Username",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "first_name",
-          label: "First Name",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "last_name",
-          label: "Last Name",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        { key: "email", label: "email" },
-        { key: "phone", label: "Phone", sortable: true, sortDirection: "desc" },
-        {
-          key: "type",
-          label: "Type",
-          formatter: (value, key, item) => {
-            let newVal=''
-            if(value === 'it_team_member'){newVal = 'IT Team'}
-            if(value === 'reception'){newVal = 'Reception'}
-            if(value === 'staff'){newVal = 'Staff'}
-            return newVal;
-          },
-          sortable: true,
-          sortByFormatted: true,
-          filterByFormatted: true,
-        },
-        { key: "actions", label: "Actions" },
-      ],
+      user_fields,
       totalRows: 1,
       currentPage: 1,
       perPage: 5,
@@ -208,7 +169,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['users']),
+    ...mapGetters(["users"]),
     sortOptions() {
       // Create an options list from our fields
       return this.fields
@@ -217,11 +178,9 @@ export default {
           return { text: f.label, value: f.key };
         });
     },
-    userLength(){
-      return this.users.length
-    }
-  },
-  mounted() {
+    userLength() {
+      return this.users.length;
+    },
   },
   created() {
     this.$Progress.start();
@@ -235,7 +194,7 @@ export default {
       this.selectedUser = item;
       this.$root.$emit("bv::show::modal", "edit-modal", button);
     },
-     addUser() {
+    addUser() {
       this.$root.$emit("bv::show::modal", "add-user-modal");
     },
     deleteUser(item) {
@@ -249,12 +208,11 @@ export default {
       }).then((result) => {
         // Send request to the server
         if (result.value) {
-          this.removeUser(item.id)
+          this.removeUser(item.id);
           Swal.fire("Deleted!", "User is removed", "success");
         }
       });
     },
-    
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;
@@ -265,5 +223,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

@@ -1,18 +1,34 @@
 // import Dashboard from './components/Dashboard.vue';
+import store from "./store";
+let currentUser = store.getters.currentUser;
+
+let dashboardType = "ItTeamDashboard";
+
+if (currentUser) {
+    if (currentUser.type == "admin") {
+        dashboardType = "AdminDashboard";
+    } else if (currentUser.type == "it-team") {
+        dashboardType = "ItTeamDashboard";
+    } else if (currentUser.type === "staff") dashboardType = "StaffDashboard";
+    else if (currentUser.type === "reception")
+        dashboardType = "ReceptionDashboard";
+}
+
 export default [
     {
         path: "/",
         component: require("./components/welcome/GuestWelcome.vue").default,
-        children:[
+        meta: { requiresAuth: false },
+        children: [
             {
-                path:"/",
-                components:{
+                path: "/",
+                components: {
                     welcome: require("./components/welcome/Home.vue").default
                 }
             },
             {
-                path:"/search",
-                components:{
+                path: "/search",
+                components: {
                     welcome: require("./components/welcome/Search.vue").default
                 }
             },
@@ -28,18 +44,21 @@ export default [
                     welcome: require("./components/welcome/online/OnlineHome.vue").default
                 }
             },
-            
+            }
         ]
     },
     {
         path: "/dashboard",
         component: require("./components/Dashboard.vue").default,
+        meta: {
+            requiresAuth: true
+        },
         children: [
-
             {
                 path: "/",
                 components: {
-                    dashboard: require("./components/DashboardHome.vue").default
+                    dashboard: require(`./components/dashboard/${dashboardType}.vue`)
+                        .default
                 }
             },
             {
@@ -92,8 +111,7 @@ export default [
                 path: "/online-requests",
                 props: true,
                 components: {
-                    dashboard: require("./components/OnlineRequest.vue")
-                        .default
+                    dashboard: require("./components/OnlineRequest.vue").default
                 }
             },
             {
@@ -111,7 +129,7 @@ export default [
                     dashboard: require("./components/request/online/EditOnlineRequest.vue")
                         .default
                 }
-            },
+            }
         ]
     },
     {
@@ -119,7 +137,7 @@ export default [
         redirect: "/"
     },
     {
-        path: '/:notFound(.*)',
+        path: "/:notFound(.*)",
         component: require("./components/404.vue").default
     }
 ];
