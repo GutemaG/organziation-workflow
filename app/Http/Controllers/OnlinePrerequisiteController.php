@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Actions\OnlinePrerequisiteAction;
+use App\Http\Requests\OnlinePrerequisiteRequest;
 use App\Models\PrerequisiteLabel;
 use Exception;
+use Illuminate\Http\JsonResponse;
 
 class OnlinePrerequisiteController extends Controller
 {
@@ -27,21 +30,17 @@ class OnlinePrerequisiteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param array $data
+     * @param OnlinePrerequisiteRequest $request
+     * @param PrerequisiteLabel $prerequisiteLabel
      * @return bool
      */
-    public static function update(array $data): bool
+    public static function update(OnlinePrerequisiteRequest $request, PrerequisiteLabel $prerequisiteLabel): JsonResponse
     {
-        try {
-            foreach ($data as $value) {
-                $prerequisite = PrerequisiteLabel::find($value['id']);
-                $prerequisite->update($value);
-            }
-            return true;
-        }
-        catch (Exception $e) {
-            return false;
-        }
+        $prerequisiteLabel->update($request->validated());
+        return response()->json([
+           'status' => 200,
+           'prerequisite' => $prerequisiteLabel->refresh(),
+        ]);
     }
 
     /**
@@ -82,7 +81,7 @@ class OnlinePrerequisiteController extends Controller
             if (array_key_exists('prerequisite_labels', $data)) {
                 list($updatableData, $creatableData) = self::getUpdatableAndCreatableData($data['prerequisite_labels']);
                 $creatableData = self::prepareForStoring($creatableData, $onlineRequestId);
-                if (! self::update($updatableData) || ! self::store($creatableData))
+                if (! OnlinePrerequisiteAction::update($updatableData) || ! self::store($creatableData))
                     return false;
             }
             return true;
@@ -116,4 +115,17 @@ class OnlinePrerequisiteController extends Controller
         })->toArray();
     }
 
+    /**
+     * soft delete the specified data from storage.
+     *
+     * @param PrerequisiteLabel $prerequisiteLabel
+     * @return JsonResponse
+     */
+    public function destroy(PrerequisiteLabel $prerequisiteLabel): JsonResponse
+    {
+        $prerequisiteLabel->delete();
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
 }

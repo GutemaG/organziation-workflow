@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\MissingModelException;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
@@ -15,8 +16,6 @@ require __DIR__ . '/auth.php';
 
 
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 Route::middleware(['auth'])->prefix('api')->group(function () {
     Route::resource('/users', \App\Http\Controllers\UserController::class);
 
@@ -29,6 +28,34 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
     Route::resource('/buildings', \App\Http\Controllers\BuildingController::class);
 
     Route::resource('/bureaus', \App\Http\Controllers\BureauController::class);
+
+    Route::resource('/online-requests', \App\Http\Controllers\OnlineRequestController::class)
+        ->missing(function (Request $request) {
+            throw new  MissingModelException();
+        });
+
+    Route::put('/online-prerequisites/{prerequisite_label}', [\App\Http\Controllers\OnlinePrerequisiteController::class, 'update']);
+
+    Route::delete('/online-prerequisites/{prerequisite_label}', [\App\Http\Controllers\OnlinePrerequisiteController::class, 'destroy']);
+
+    Route::put('/online-procedures/{procedure}', [\App\Http\Controllers\OnlineRequestProcedureController::class, 'update']);
+
+    Route::delete('/online-procedures/{procedure}', [\App\Http\Controllers\OnlineRequestProcedureController::class, 'destroy']);
+
+});
+
+
+Route::middleware(['auth'])->prefix('api')->group(function (){
+//Route::get('/home', function () {
+//    return view('home');
+//})->middleware('verified')->name('home');
+
+
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/test/', function () {
+////    \App\Models\OnlineRequest::factory(20)->hasPrerequisiteLabels(rand(3,6))->create();
+//});
     // Route::resource('/affairs', \App\Http\Controllers\AffairController::class);
     Route::delete('/delete-procedure/{id}/{affair_id}', [\App\Http\Controllers\AffairController::class, 'deleteProcedure']);
     Route::delete('/delete-pre-request/{id}/{procedure_id}', [\App\Http\Controllers\AffairController::class, 'deletePreRequest']);

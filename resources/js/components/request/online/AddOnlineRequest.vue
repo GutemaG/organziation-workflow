@@ -72,41 +72,52 @@
                         id="online-request-bureau"
                         label-for="online-request-bureau-input"
                         label="Responsible Bureau"
+                        invalid-feedback="required"
                       >
-                        <b-form-select
-                          id="online-request-bureau-input"
+                        <v-select
                           v-model="procedure.responsible_bureau_id"
+                          label="text"
                           :options="bureau_ids"
-                          class="select-element"
+                          :reduce="(bureau) => bureau.value"
+                          placeholder="Select bureau"
                         >
-                          <template #first>
-                            <b-form-select-option selected disabled value="">
-                              Select Responsible Bureau
-                            </b-form-select-option>
+                          <template #search="{ attributes, events }">
+                            <input
+                              class="vs__search"
+                              :required="!procedure.responsible_bureau_id"
+                              v-bind="attributes"
+                              v-on="events"
+                            />
                           </template>
-                        </b-form-select>
+                        </v-select>
                       </b-form-group>
-
+                      <!--TODO: from here I remove bureau from  -->
                       <b-form-group
+                        invalid-feedback="required"
                         id="online-request-user"
                         label-for="online-request-user-input"
                         label="Responsible User"
-                        description="use Ctrl key to select many user"
                       >
-                        <b-form-select
-                          id="online-request-user-input"
+                        <v-select
                           v-model="procedure.responsible_user_id"
+                          label="text"
                           :options="staff_ids"
+                          :reduce="(staff) => staff.value"
+                          placeholder="Select Responsible User"
                           multiple
-                          style="height: 10rem"
+                          :close-on-select="false"
                         >
-                          <template #first>
-                            <b-form-select-option selected disabled value="">
-                              Select Responsible User
-                            </b-form-select-option>
+                          <template #search="{ attributes, events }">
+                            <input
+                              class="vs__search"
+                              :required="!procedure.responsible_user_id"
+                              v-bind="attributes"
+                              v-on="events"
+                            />
                           </template>
-                        </b-form-select>
+                        </v-select>
                       </b-form-group>
+                      
                       <b-form-group
                         id="online-request-procedures-input"
                         label="Step"
@@ -219,9 +230,10 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { required } from "vuelidate/lib/validators";
+import Vselect from "vue-select";
 import Multiselect from "vue-multiselect";
 export default {
-  components: { Multiselect },
+  components: { Multiselect, "v-select": Vselect },
   data() {
     return {
       affair: {
@@ -333,7 +345,7 @@ export default {
   },
 };
 </script>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style src='vue-select/dist/vue-select.css'></style>
 <style scoped>
 .select-element {
   line-height: normal;

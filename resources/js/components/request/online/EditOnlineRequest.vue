@@ -62,7 +62,10 @@
                         selectedRequest.online_request_procedures.length > 1
                       "
                     >
-                      <b-button @click="removeProcedure(procedure_index)">
+                      <b-button
+                        @click="removeProcedure(procedure.id, procedure_index)"
+                        variant="danger"
+                      >
                         <i class="fa fa-trash"></i
                       ></b-button>
                     </b-col>
@@ -165,18 +168,20 @@
                 :key="index"
               >
                 <b-row>
-                  <b-col class="cols-8">
-                    <b-list-group-item class="m-1">
-                      {{ label.label }}
-                    </b-list-group-item>
+                  <b-col class="cols-8 m-1">
+                    <b-form-input v-model="label.label" disabled>
+                    </b-form-input>
                   </b-col>
                   <b-col class="cols-4" md="4">
                     <b-row>
-                      <router-link :to="'#'" class="">
-                        <b-button size="sm" class="m-1" variant="primary">
-                          Edit
-                        </b-button>
-                      </router-link>
+                      <b-button
+                        size="sm"
+                        class="m-1"
+                        variant="primary"
+                        v-b-modal="'edit-online-request-label-' + label.id"
+                      >
+                        Edit
+                      </b-button>
                       <b-button
                         size="sm"
                         class="m-1"
@@ -185,6 +190,12 @@
                       >
                         Delete
                       </b-button>
+                      <b-modal
+                        :id="'edit-online-request-label-' + label.id"
+                        title="editing label"
+                      >
+                        <b-form-input v-model="label.label"> </b-form-input>
+                      </b-modal>
                     </b-row>
                   </b-col>
                 </b-row>
@@ -239,6 +250,9 @@ export default {
     },
     async handleSubmit() {
       try {
+        if (this.selectedRequest.prerequisite_labels.length == 0) {
+          delete this.selectedRequest["prerequisite_labels"];
+        }
         await this.updateOnlineRequest(this.selectedRequest);
         this.$router.push("/online-requests");
       } catch (err) {
@@ -247,8 +261,32 @@ export default {
       }
       // // console.log(this.selectedRequest);
     },
-    removeProcedure(index) {
-      console.log("removing procedure: ");
+    removeProcedure(id, index) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        // Send request to the server
+        if (result.value) {
+          axios
+            .delete(`/api/online-procedures/${id}`)
+            .then((resp) => {
+              if (resp.status == 200) {
+                this.selectedRequest.online_request_procedures =
+                  this.selectedRequest.online_request_procedures.filter(
+                    (procedure) => procedure.id != id
+                  );
+              }
+            })
+            .catch((err) => console.log(err));
+        }
+      });
+
+      console.log("removing procedure: ", id, index);
     },
     deleteOnlineRequestLabel(id) {
       Swal.fire({
@@ -261,7 +299,29 @@ export default {
       }).then((result) => {
         // Send request to the server
         if (result.value) {
-          console.log("deleting label ", id);
+          axios
+            .delete(`/api/online-prerequisites/${id}`)
+            .then((resp) => {
+              if (resp.status == 200) {
+                this.selectedRequest.prerequisite_labels =
+                  this.selectedRequest.prerequisite_labels.filter(
+                    (label) => label.id != id
+                  );
+              } else {
+                Swal.fire(
+                  "Failed",
+                  "Something is wrong, please try again",
+                  "warning"
+                );
+              }
+            })
+            .catch((err) => {
+              Swal.fire(
+                "Failed",
+                "Something is wrong, please try again",
+                "warning"
+              );
+            });
         }
       });
     },

@@ -70,7 +70,6 @@ class Rule
             'prerequisite_labels.*' => 'nullable|string',
         ];
     }
-
     public static function onlineRequestUpdate($unique) {
         $rule = [
             'id' => 'required|integer',

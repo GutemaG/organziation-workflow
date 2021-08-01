@@ -142,7 +142,7 @@
               :variant="!row.detailsShowing ? 'primary' : 'success'"
             >
               <!-- :variant="!row.item._showDetails ? 'primary' : 'success'" -->
-                <!-- v-if="!row.item._showDetails" -->
+              <!-- v-if="!row.item._showDetails" -->
               <i
                 v-if="!row.detailsShowing"
                 class="fas fa-angle-right small"
@@ -199,6 +199,7 @@
             <online-request-procedure-table
               :procedures="row.item.online_request_procedures"
               :index="row.index"
+              v-on:remove-procedure="removeProcedure"
             ></online-request-procedure-table>
           </template>
         </b-table>
@@ -268,6 +269,13 @@ export default {
         }
       });
     },
+    removeProcedure(request_id, index) {
+      let current = this.online_requests.findIndex(
+        (request) => request.id == request_id
+      );
+      
+      this.online_requests[current].online_request_procedures.splice(index,1) 
+    },
     searchUser(id) {
       let us = this.users.filter((user) => user.id == id);
       if (us[0]) {
@@ -294,8 +302,8 @@ export default {
     this.fetchUsers();
     this.$Progress.finish();
   },
-  mounted(){
-    this.fetchOnlineRequests
+  mounted() {
+    this.fetchOnlineRequests;
   },
 
   filters: {
