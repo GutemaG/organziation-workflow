@@ -152,17 +152,34 @@
             </div>
             <b-button class="form-control" variant="dark">+ Procedure</b-button>
           </base-card>
+          <!-- @click="prerequisite = true" -->
+          <!-- v-if="prerequisiteLength == 0" -->
           <b-button
-            v-if="prerequisiteLength == 0"
-            @click="prerequisite = true"
+            class="m-1"
+            v-b-modal.add-pre-request-label
             variant="primary"
             >add pre-request</b-button
           >
-          <base-card v-if="prerequisiteLength != 0">
+          <base-card>
             <b-row align-v="center" slot="header">
-              <b-col cols="8">Request Labels</b-col>
+              <b-col cols="8">
+                <span v-if="prerequisiteLength != 0">Request Labels</span>
+                <span v-else>No Pre request</span>
+              </b-col>
             </b-row>
             <div>
+              <b-modal
+                id="add-pre-request-label"
+                title="Add Label"
+                @ok="addLabel(selectedRequest.id)"
+              >
+                <b-form-group label="Label">
+                  <b-form-input
+                    v-model="newLabel"
+                    placeholder="Enter Label Name"
+                  ></b-form-input>
+                </b-form-group>
+              </b-modal>
               <b-list-group
                 v-for="(label, index) in selectedRequest.prerequisite_labels"
                 :key="index"
@@ -178,7 +195,7 @@
                         size="sm"
                         class="m-1"
                         variant="primary"
-                        v-b-modal="'edit-online-request-label-' + label.id"
+                        @click="emitEditPrerequesiteModel(label.id)"
                       >
                         Edit
                       </b-button>
@@ -193,8 +210,10 @@
                       <b-modal
                         :id="'edit-online-request-label-' + label.id"
                         title="editing label"
+                        @ok="updateLabel(label.id)"
                       >
-                        <b-form-input v-model="label.label"> </b-form-input>
+                        <b-form-input v-model="newUpdateLabel.label">
+                        </b-form-input>
                       </b-modal>
                     </b-row>
                   </b-col>
@@ -219,6 +238,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { required } from "vuelidate/lib/validators";
+import axios from "axios";
 export default {
   props: ["id"],
   data() {
@@ -227,6 +247,8 @@ export default {
       selectedRequest: {},
       prerequisite: false,
       error: null,
+      newLabel: null,
+      newUpdateLabel: {},
     };
   },
 
@@ -324,6 +346,47 @@ export default {
             });
         }
       });
+    },
+    emitEditPrerequesiteModel(label_id) {
+      this.newUpdateLabel = this.selectedRequest.prerequisite_labels.filter(
+        (pre) => pre.id == label_id
+      )[0];
+      this.$root.$emit(
+        "bv::show::modal",
+        `edit-online-request-label-${label_id}`
+      );
+    },
+
+    updateLabel(label_id) {
+      axios
+        .put(`/api/online-prerequisites/${label_id}`, {
+          label: this.newUpdateLabel.label,
+        })
+        .then((resp) => {
+          if (resp.data.status == 200) {
+            let data = resp.data.prerequisite;
+            let index = this.selectedRequest.prerequisite_labels.findIndex(
+              (pre) => pre.id == data.id
+            );
+            this.selectedRequest.prerequisite_labels.splice(index, 1, data);
+          }
+          else{console.log('errrro')}
+        });
+    },
+
+    addLabel(request_id) {
+      console.log(request_id);
+      axios
+        .post("/api/online-prerequisite", {
+          online_request_id: request_id,
+          label: this.newLabel,
+        })
+        .then((resp) => {
+          this.selectedRequest.prerequisite_labels.push(resp.data.prerequisite);
+        })
+        .catch((err) => console.log(err));
+
+      // this.selectedRequest.prerequisite_labels.push({ label: this.newLabel });
     },
   },
 
