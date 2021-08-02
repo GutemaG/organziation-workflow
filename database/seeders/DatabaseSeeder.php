@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        /*
+        
 
          User::create([
             'user_name' => 'Admin',
@@ -57,6 +57,6 @@ class DatabaseSeeder extends Seeder
                 ->hasAttached(\App\Models\User::inRandomOrder()->limit(rand(1,5))->get())
                 ->count(rand(3,6)))
             ->create();
-        */
+        
     }
 }

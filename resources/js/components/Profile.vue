@@ -290,217 +290,128 @@
                     label-for="current-password-input"
                     class="form-group"
                   >
-                    <b-form-input
-                      :type="currentPasswordVisibility"
-                      v-model="userPassword.current_password"
-                      id="currentPassword"
-                      name="currentPassword"
-                      class="form-control"
-                      :class="{
-                        'is-invalid':
-                          passwordChange &&
-                          $v.userPassword.current_password.$error,
-                        'is-valid': !$v.userPassword.current_password.$invalid,
-                      }"
-                    >
-                    </b-form-input>
+                    <b-input-group>
 
-                    <div class="show-hide_password">
-                      <a
-                        @click="showCurrentPassword()"
-                        style="
-                          display: flex;
-                          color: black;
-                          cursor: pointer;
-                          float: right;
-                          margin-top: -26px;
-                          margin-right: 34px;
-                          text-decoration: none;
-                        "
-                        v-if="currentPasswordVisibility == 'password'"
+                      <b-form-input
+                        :type="currentPasswordVisibility"
+                        v-model="userPassword.current_password"
+                        id="currentPassword"
+                        name="currentPassword"
+                        class="form-control"
+                        :class="{
+                          'is-invalid':
+                            passwordChange &&
+                            $v.userPassword.current_password.$error,
+                          'is-valid': !$v.userPassword.current_password.$invalid,
+                        }"
                       >
-                        <i class="far fa-eye-slash" id="hide"></i>
-                      </a>
-                      <a
-                        @click="hideCurrentPassword()"
-                        style="
-                          display: flex;
-                          color: black;
-                          cursor: pointer;
-                          float: right;
-                          margin-top: -26px;
-                          margin-right: 34px;
-                          text-decoration: none;
-                        "
-                        v-if="currentPasswordVisibility == 'text'"
-                      >
-                        <i class="far fa-eye" id="show"></i>
-                      </a>
-                    </div>
+                      </b-form-input>
 
-                    <!-- Displays Error Message for Password input -->
-                    <div class="valid-feedback"></div>
-                    <div
-                      v-if="
-                        passwordChange &&
-                        $v.userPassword.current_password.$error
-                      "
-                      class="invalid-feedback"
-                    >
-                      <span v-if="!$v.userPassword.current_password.required"
-                        >Current password is required.</span
-                      >
-                      <span
+                      <!-- Show and Hide password -->
+                        <b-input-group-append style="margin-left: 0px;">
+                          <b-button variant="light">
+                            <i @click="showCurrentPassword()" v-if="currentPasswordVisibility == 'password'" class="far fa-eye" id="hide"></i>
+                            <i @click="hideCurrentPassword()" v-if="currentPasswordVisibility == 'text'" class="far fa-eye-slash" id="show"></i>
+                          </b-button>
+                        </b-input-group-append>
+
+                      <!-- Displays Error Message for Password input -->
+                      <div class="valid-feedback"></div>
+                      <div
                         v-if="
-                          !$v.userPassword.current_password.minLength &&
-                          passwordError.length != 0
+                          passwordChange &&
+                          $v.userPassword.current_password.$error
                         "
-                        >{{ passwordError }} Please enter again!</span
+                        class="invalid-feedback"
                       >
-                    </div>
+                        <span v-if="!$v.userPassword.current_password.required"
+                          >Current password is required.</span
+                        >
+                        <span
+                          v-if="
+                            !$v.userPassword.current_password.minLength &&
+                            passwordError.length != 0
+                          "
+                          >{{ passwordError }} Please enter again!</span
+                        >
+                      </div>
+                    </b-input-group>
                   </b-form-group>
 
                   <b-form-group
                     label="New Password"
                     label-for="new-password-input"
-                    class="form-group"
-                  >
-                    <b-form-input
-                      :type="newPasswordVisibility"
-                      v-model="userPassword.password"
-                      id="newPassowrd"
-                      name="newPassword"
-                      class="form-control"
-                      :class="{
-                        'is-invalid':
-                          passwordChange && $v.userPassword.password.$error,
-                        'is-valid': !$v.userPassword.password.$invalid,
-                      }"
-                    ></b-form-input>
+                    class="form-group">
 
-                    <div class="show-hide_password">
-                      <a
-                        @click="showNewPassword()"
-                        style="
-                          display: flex;
-                          color: black;
-                          cursor: pointer;
-                          float: right;
-                          margin-top: -26px;
-                          margin-right: 34px;
-                          text-decoration: none;
-                        "
-                        v-if="newPasswordVisibility == 'password'"
-                      >
-                        <i class="far fa-eye-slash" id="hide"></i>
-                      </a>
-                      <a
-                        @click="hideNewPassword()"
-                        style="
-                          display: flex;
-                          color: black;
-                          cursor: pointer;
-                          float: right;
-                          margin-top: -26px;
-                          margin-right: 34px;
-                          text-decoration: none;
-                        "
-                        v-if="newPasswordVisibility == 'text'"
-                      >
-                        <i class="far fa-eye" id="show"></i>
-                      </a>
-                    </div>
+                    <b-input-group>
+                      <b-form-input
+                        :type="newPasswordVisibility"
+                        v-model="userPassword.password"
+                        id="newPassowrd"
+                        name="newPassword"
+                        class="form-control"
+                        :class="{ 'is-invalid': passwordChange && $v.userPassword.password.$error,
+                        'is-valid': !$v.userPassword.password.$invalid,}"
+                      ></b-form-input>
 
-                    <!-- Displays Error Message for Password input -->
-                    <div class="valid-feedback">New password is valid!</div>
-                    <div
-                      v-if="passwordChange && $v.userPassword.password.$error"
-                      class="invalid-feedback"
-                    >
-                      <span v-if="!$v.userPassword.password.required"
-                        >New password is required.</span
-                      >
-                      <span v-if="!$v.userPassword.password.minLength"
-                        >New password must be at least 8 characters.</span
-                      >
-                    </div>
+                      <!-- Show and Hide password -->
+                      <b-input-group-append style="margin-left: 0px;">
+                        <b-button variant="light">
+                          <i @click="showNewPassword()" v-if="newPasswordVisibility == 'password'" class="far fa-eye" id="hide"></i>
+                          <i @click="hideNewPassword()" v-if="newPasswordVisibility == 'text'" class="far fa-eye-slash" id="show"></i>
+                        </b-button>
+                      </b-input-group-append>
+
+                      <!-- Displays Error Message for Password input -->
+                      <div class="valid-feedback">New password is valid!</div>
+                      <div v-if="passwordChange && $v.userPassword.password.$error" class="invalid-feedback">
+                        <span v-if="!$v.userPassword.password.required">
+                          New password is required.
+                        </span>
+                        <span v-if="!$v.userPassword.password.minLength">
+                          New password must be at least 8 characters.
+                        </span>
+                      </div>
+                    </b-input-group>
                   </b-form-group>
 
                   <b-form-group
                     label="Confirm Password"
                     label-for="confirm-password-input"
-                    class="form-group"
-                  >
-                    <b-form-input
-                      :type="confirmationPasswordVisibility"
-                      v-model="userPassword.password_confirmation"
-                      id="passwordConfirmation"
-                      name="passwordConfirmation"
-                      class="form-control"
-                      :class="{
-                        'is-invalid':
-                          passwordChange &&
-                          $v.userPassword.password_confirmation.$error,
-                        'is-valid':
-                          !$v.userPassword.password_confirmation.$invalid,
-                      }"
-                    ></b-form-input>
+                    class="form-group">
 
-                    <div class="show-hide_password">
-                      <a
-                        @click="showConfirmationPassword()"
-                        style="
-                          display: flex;
-                          color: black;
-                          cursor: pointer;
-                          float: right;
-                          margin-top: -26px;
-                          margin-right: 34px;
-                          text-decoration: none;
-                        "
-                        v-if="confirmationPasswordVisibility == 'password'"
-                      >
-                        <i class="far fa-eye-slash" id="hide"></i>
-                      </a>
-                      <a
-                        @click="hideConfirmationPassword()"
-                        style="
-                          display: flex;
-                          color: black;
-                          cursor: pointer;
-                          float: right;
-                          margin-top: -26px;
-                          margin-right: 34px;
-                          text-decoration: none;
-                        "
-                        v-if="confirmationPasswordVisibility == 'text'"
-                      >
-                        <i class="far fa-eye" id="show"></i>
-                      </a>
-                    </div>
+                    <b-input-group>
+                      <b-form-input
+                        :type="confirmationPasswordVisibility"
+                        v-model="userPassword.password_confirmation"
+                        id="passwordConfirmation"
+                        name="passwordConfirmation"
+                        class="form-control"
+                        :class="{ 'is-invalid': passwordChange && $v.userPassword.password_confirmation.$error, 'is-valid':
+                        !$v.userPassword.password_confirmation.$invalid,}">
+                      </b-form-input>
 
-                    <!-- Displays Error Message for Password input -->
-                    <div class="valid-feedback">
-                      Confirmation password match!
-                    </div>
-                    <div
-                      v-if="
-                        passwordChange &&
-                        $v.userPassword.password_confirmation.$error
-                      "
-                      class="invalid-feedback"
-                    >
-                      <span
-                        v-if="!$v.userPassword.password_confirmation.required"
-                        >Confirmation password is required.</span
-                      >
-                      <span
-                        v-else-if="
-                          !$v.userPassword.password_confirmation.sameAsPassword
-                        "
-                        >Confirmation password does not match.</span
-                      >
-                    </div>
+                      <!-- Show and Hide password -->
+                      <b-input-group-append style="margin-left: 0px;">
+                        <b-button variant="light">
+                          <i @click="showConfirmationPassword()" v-if="confirmationPasswordVisibility == 'password'" class="far fa-eye" id="hide"></i>
+                          <i @click="hideConfirmationPassword()" v-if="confirmationPasswordVisibility == 'text'" class="far fa-eye-slash" id="show"></i>
+                        </b-button>
+                      </b-input-group-append>
+
+                      <!-- Displays Error Message for Password input -->
+                      <div class="valid-feedback">
+                        Confirmation password match!
+                      </div>
+                      <div v-if="passwordChange && $v.userPassword.password_confirmation.$error" class="invalid-feedback">
+                        <span v-if="!$v.userPassword.password_confirmation.required">
+                          Confirmation password is required.
+                        </span>
+                        <span v-else-if=" !$v.userPassword.password_confirmation.sameAsPassword">
+                          Confirmation password does not match.
+                        </span>
+                      </div>
+                    </b-input-group>
                   </b-form-group>
 
                   <div class="form-group">

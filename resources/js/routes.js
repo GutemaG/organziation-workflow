@@ -43,8 +43,7 @@ export default [
                 components:{
                     welcome: require("./components/welcome/online/OnlineHome.vue").default
                 }
-            },
-            }
+            },            
         ]
     },
     {

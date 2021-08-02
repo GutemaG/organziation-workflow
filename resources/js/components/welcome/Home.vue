@@ -110,18 +110,6 @@
                     </b-container>
                 </b-col>
             </b-row>
-            <div class="mb-5">
-                <p>
-                    Adama Science and Technology University has signed a consultant 
-                    contract agreement with Seoul National University. Accordingly, the consultant, Seoul National University, is 
-                    expected to facilitate the design, supervision, and bid document preparation of the ASTU-EDCF project.
-                    It is recalled that the government of South Korea has agreed to finance the establishment of five Centers of Excellence in 
-                    ASTU with an outlay of one hundred million US Dollars. The agreement was signed between the governments of FDRE the Republic of Korea. 
-                    T June 24, 2021
-                </p>
-                <p>{{totalAffairs}}</p>
-                <p>{{first.name}} {{first.description}}</p>
-            </div>
         </b-container>
         
         <div style="left: 0; right: 0;">
@@ -246,7 +234,8 @@ export default {
     data() {
       return {
         slide: 0,
-        sliding: null
+        sliding: null,
+        affairs:[]
       }
     },
     methods: {
@@ -255,10 +244,7 @@ export default {
       },
       onSlideEnd(slide) {
         this.sliding = false
-      }
-        return {
-            affairs:[]
-        };
+      },
     },
     computed:{
         // ...mapGetters(['affairs'])
