@@ -33,11 +33,11 @@ class DatabaseSeeder extends Seeder
          ]
          );
          \App\Models\User::factory(50)->create();
-         
+
          \App\Models\Affair::factory(50)->create();
          \App\Models\Procedure::factory(100)->create();
          \App\Models\PreRequest::factory(200)->create();
-         
+
         \App\Models\PreRequest::factory()->create([
             'affair_id'=>null,
             'procedure_id'=>1,

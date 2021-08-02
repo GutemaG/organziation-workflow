@@ -156,7 +156,7 @@
             </template>
 
             <template #cell(procedures)="row" @click="row.toggleDetails">
-              <span @click="row.toggleDetails" style="cursor: pointer">{{
+              <span @click="row.toggleDetails" style="cursor: pointer;display:block">{{
                 row.item.procedures.length
               }}</span>
             </template>

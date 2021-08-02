@@ -90,28 +90,21 @@
             </b-col>
 
             <b-col lg="6" class="my-1">
-              <b-form-group
-                label="Filter"
-                label-for="filter-input"
-                label-cols-sm="3"
-                label-align-sm="right"
-                label-size="sm"
-                class="mb-0"
-              >
-                <b-input-group size="sm">
-                  <b-form-input
-                    id="filter-input"
-                    type="search"
-                    placeholder="Type to Search"
-                  ></b-form-input>
-
-                  <b-input-group-append>
-                    <!-- <b-button :disabled="!filter" @click="filter = ''"
-                      >Clear</b-button
-                    > -->
-                    <b-button>hel</b-button>
-                  </b-input-group-append>
-                </b-input-group>
+              <b-form-group label="" label-cols-sm="3" label-align-sm="right">
+                <div>
+                  <b-pagination
+                    v-model="currentPage"
+                    :total-rows="totalRequests"
+                    :per-page="perPage"
+                    size="sm"
+                    class="my-0"
+                    first-text="First"
+                    prev-text="Prev"
+                    next-text="Next"
+                    last-text="Last"
+                    last-number
+                  ></b-pagination>
+                </div>
               </b-form-group>
             </b-col>
 
@@ -142,7 +135,7 @@
               :variant="!row.detailsShowing ? 'primary' : 'success'"
             >
               <!-- :variant="!row.item._showDetails ? 'primary' : 'success'" -->
-                <!-- v-if="!row.item._showDetails" -->
+              <!-- v-if="!row.item._showDetails" -->
               <i
                 v-if="!row.detailsShowing"
                 class="fas fa-angle-right small"
@@ -165,9 +158,11 @@
             </p>
           </template>
           <template #cell(online_request_procedures)="row">
-            <span @click="row.toggleDetails" style="cursor: pointer">{{
-              row.item.online_request_procedures.length
-            }}</span>
+            <span
+              @click="row.toggleDetails"
+              style="cursor: pointer; display: block"
+              >{{ row.item.online_request_procedures.length }}</span
+            >
           </template>
           <template #cell(actions)="row">
             <router-link :to="'online-request/edit/' + row.item.id">
@@ -199,29 +194,28 @@
             <online-request-procedure-table
               :procedures="row.item.online_request_procedures"
               :index="row.index"
+              v-on:remove-procedure="removeProcedure"
             ></online-request-procedure-table>
           </template>
         </b-table>
       </b-card-body>
-      <b-card-footer>
+      <!-- <b-card-footer>
         <div>
-          <b-col sm="7" md="6" class="my-1">
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalRequests"
-              :per-page="perPage"
-              size="sm"
-              class="my-0"
-              first-text="First"
-              prev-text="Prev"
-              next-text="Next"
-              last-text="Last"
-              last-number
-              align="right"
-            ></b-pagination>
-          </b-col>
-        </div>
-      </b-card-footer>
+                  <b-pagination
+                    v-model="currentPage"
+                    :total-rows="totalRequests"
+                    :per-page="perPage"
+                    size="sm"
+                    class="my-0"
+                    first-text="First"
+                    prev-text="Prev"
+                    next-text="Next"
+                    last-text="Last"
+                    last-number
+                    align="right"
+                  ></b-pagination>
+                </div>
+        </b-card-footer> -->
     </b-card>
   </div>
 </template>
@@ -268,6 +262,13 @@ export default {
         }
       });
     },
+    removeProcedure(request_id, index) {
+      let current = this.online_requests.findIndex(
+        (request) => request.id == request_id
+      );
+
+      this.online_requests[current].online_request_procedures.splice(index, 1);
+    },
     searchUser(id) {
       let us = this.users.filter((user) => user.id == id);
       if (us[0]) {
@@ -294,8 +295,8 @@ export default {
     this.fetchUsers();
     this.$Progress.finish();
   },
-  mounted(){
-    this.fetchOnlineRequests
+  mounted() {
+    this.fetchOnlineRequests;
   },
 
   filters: {

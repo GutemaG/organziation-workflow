@@ -125,7 +125,7 @@
                             >
                                 <h6 class="mb-0 white-text">
                                     Get connected with us on social networks!
-                                </h6>
+                                </h6> 
                             </b-col>
                             <b-col
                                 md="6"
@@ -140,7 +140,7 @@
                                     </i
                                 ></b-link>
                                 <b-link class="tw-ic"
-                                    ><i
+                                    ><i 
                                         class="fab fa-twitter white-text mr-lg-4"
                                     >
                                     </i
@@ -158,7 +158,7 @@
                                     </i
                                 ></b-link>
                                 <b-link class="ins-ic"
-                                    ><i
+                                    ><i 
                                         class="fab fa-instagram white-text mr-lg-4"
                                     >
                                     </i
@@ -225,11 +225,17 @@
             </div>
             <!-- Footer -->
         </div>
-    </div>
+        <div
+          class="footer-copyright text-center py-3 pt-2 pb-2"
+          style="background-color: #161c27; color: white"
+        >
+          <b-container fluid> &copy; 2021 Copyright </b-container>
+        </div>
+      </div>
+      <!-- Footer -->
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
 export default {
     data() {
       return {
@@ -238,6 +244,11 @@ export default {
         affairs:[]
       }
     },
+    computed:{
+      first() {
+        return this.affairs[0];
+      },
+    },
     methods: {
       onSlideStart(slide) {
         this.sliding = true
@@ -245,42 +256,27 @@ export default {
       onSlideEnd(slide) {
         this.sliding = false
       },
+      getAffairs(){
+        console.log('created')
+      }
     },
-    computed:{
-        // ...mapGetters(['affairs'])
-        totalAffairs(){
-            return this.affairs.length
-        },
-        first(){
-            return this.affairs[0]
-        }
+    created() {
+      // this.fetchAffairs()
+      // this.$store.dispatch('fetchAffairs')
+      this.getAffairs();
     },
-    methods:{
-        // ...mapActions(['fetchAffairs']),
-        getAffairs(){
-            axios.get('/api/affairs').then(resp => {
-                console.log(resp)
-                this.affairs = resp.data.affairs
-            })
-        }
-    },
-    created(){
-        // this.fetchAffairs()
-        // this.$store.dispatch('fetchAffairs')
-        this.getAffairs()
-    }
-  }
+};
 </script>
 
 <style scoped>
 .contain {
-    max-width: 960px;
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
-    box-sizing: border-box;
+  max-width: 960px;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  box-sizing: border-box;
 }
 
 .bLink i{

@@ -7,14 +7,13 @@
         v-b-toggle.sidebar-1
       ></b-navbar-brand>
       <router-link to="/">
-        <b-navbar-brand>Home</b-navbar-brand>
+        <b-navbar-brand>{{tr('Home')}}</b-navbar-brand>
       </router-link>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item to="/dashboard">Dashbaord</b-nav-item>
-          <b-nav-item href="#" disabled>Disabled</b-nav-item>
+          <b-nav-item to="/dashboard">{{tr('Dashbaord')}}</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -26,7 +25,7 @@
               placeholder="Search"
             ></b-form-input>
             <b-button size="sm" class="my-2 my-sm-0" type="submit"
-              >Search</b-button
+              >{{tr('Search')}}</b-button
             >
           </b-nav-form>
 
@@ -35,8 +34,8 @@
             <template #button-content>
               <em>{{ username }}</em>
             </template>
-            <b-dropdown-item to="/profile">Profile</b-dropdown-item>
-            <b-dropdown-item href="/api/logout">Sign Out</b-dropdown-item>
+            <b-dropdown-item to="/profile">{{tr('Profile')}}</b-dropdown-item>
+            <b-dropdown-item href="/api/logout">{{tr('Sign Out')}}</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>

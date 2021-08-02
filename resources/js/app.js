@@ -79,26 +79,41 @@ const router = new VueRouter({
     mode: "history",
     routes
 });
-/*
+
 router.beforeEach((to, _, next) => {
-    // console.log('what')
-    console.log('state ',!!store.getters.currentUser)
+    let current = window.user;
     if (to.meta.requiresAuth) {
-        if (!store.getters.currentUser) {
-            next("/");
-            console.log("nooooooooooo");
+        if (!current) {
+            next("/login");
+        } else {
+            if (current && to.name == "login") {
+                next("/");
+            } else {
+                next();
+            }
         }
-        if (store.getters.currentUser) {
-            next("/dashboard");
-            console.log("logged in");
-        }
+    } else if (current && to.name == "login") {
+        next("/");
     } else {
-            console.log("No, you are logged in");
         next();
     }
 });
-*/
-
+// import {lang_change} from "./language";
+import * as lang from "./language";
+// export function lang_change(lang){
+Vue.mixin({
+    methods: {
+        change_language(language) {
+            lang.lang_change(language);
+        },
+        tr(word){
+            return lang.translate(word);
+        },
+        se(identifier){
+            return lang.sentence_translate(identifier);
+        },
+    }
+});
 const app = new Vue({
     el: "#app",
     router,
