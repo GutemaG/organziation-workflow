@@ -39,7 +39,7 @@
           <!-- <b-dropdown-item to="/profile">Profile</b-dropdown-item> -->
           <b-dropdown-item href="/api/logout">Sign Out</b-dropdown-item>
         </b-nav-item-dropdown>
-        <b-nav-item-dropdown right>
+        <b-nav-item-dropdown right hidden>
           <!-- Using 'button-content' slot -->
           <template #button-content>
             <em>{{tr('Language')}}</em>
