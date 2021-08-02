@@ -26,26 +26,26 @@
             >
             <b-nav-item to="/users" v-if="isAdmin">
               <i class="fa fa-users nav-icon blue"></i>
-              Users
+             {{ tr('Users') }}
             </b-nav-item>
             <b-nav-item v-b-toggle.request-collapse class="has-tree-view">
               <i class="nav-icon fas fa-home blue"></i>
-              Requests
+              {{tr('Requests')}}
               <i class="nav-icon fas fa-caret-down red ml-3"></i>
               <b-collapse id="request-collapse">
                 <b-nav-item to="/requests">
                   <i class="nav-icon fas fa-list-ol green"></i>
-                  Requests
+                  {{tr('Requests')}}
                 </b-nav-item>
                 <b-nav-item to="/online-requests">
                   <i class="nav-icon fas fa-building green"></i>
-                  Online-Requests
+                  {{tr('Online')}}-Requests
                 </b-nav-item>
               </b-collapse>
             </b-nav-item>
             <b-nav-item v-b-toggle.bureau-collapse class="has-tree-view">
               <i class="nav-icon fas fa-home blue"></i>
-              Bureau
+              {{tr('Bureau')}}
               <i class="nav-icon fas fa-caret-down red ml-3"></i>
               <b-collapse id="bureau-collapse">
                 <b-nav-item to="/bureaus">
@@ -54,7 +54,7 @@
                 </b-nav-item>
                 <b-nav-item to="/buildings">
                   <i class="nav-icon fas fa-building green"></i>
-                  Buildings
+                  {{tr('Buildings')}}
                 </b-nav-item>
               </b-collapse>
             </b-nav-item>

@@ -93,7 +93,22 @@ router.beforeEach((to, _, next) => {
         next();
     }
 });
-
+// import {lang_change} from "./language";
+import * as lang from "./language";
+// export function lang_change(lang){
+Vue.mixin({
+    methods: {
+        change_language(language) {
+            lang.lang_change(language);
+        },
+        tr(word){
+            return lang.translate(word);
+        },
+        se(identifier){
+            return lang.sentence_translate(identifier);
+        },
+    }
+});
 const app = new Vue({
     el: "#app",
     router,

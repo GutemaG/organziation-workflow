@@ -11,7 +11,7 @@
             }}</b-alert>
             <b-alert v-if="!!error" show variant="danger">{{ error }}</b-alert>
             <b-form-group
-              label="Email"
+              :label="tr('Email')"
               label-for="email-input"
               :invalid-feedback="
                 !$v.form.email.required
@@ -28,7 +28,7 @@
                 placeholder="Email address"
               ></b-form-input>
             </b-form-group>
-            <b-form-group label="Password" label-for="password-input">
+            <b-form-group :label="tr('Password')" label-for="password-input">
               <b-input-group>
                 <b-form-input
                   id="password-input"
@@ -50,7 +50,7 @@
                     ></i>
                   </b-button>
                 </b-input-group-append>
-                <b-form-invalid-feedback>Required</b-form-invalid-feedback>
+                <b-form-invalid-feedback>{{tr('Required')}}</b-form-invalid-feedback>
               </b-input-group>
             </b-form-group>
             <b-form-checkbox
@@ -58,7 +58,7 @@
               v-model="form.remember"
               name="remeberme"
             >
-              Remember Me
+              {{tr('Remember me')}}
             </b-form-checkbox>
             <b-button
               class="form-control"
@@ -66,7 +66,7 @@
               variant="primary"
               :disabled="$v.$invalid || isLoading"
             >
-              <span v-if="!isLoading">Login</span>
+              <span v-if="!isLoading">{{tr('Login')}}</span>
               <b-spinner v-show="isLoading" label="Loading..."></b-spinner>
             </b-button>
           </form>

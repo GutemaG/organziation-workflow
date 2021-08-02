@@ -1,11 +1,11 @@
 <template>
   <b-navbar toggleable="lg" type="dark" variant="dark">
     <b-navbar-brand
-      ><router-link to="/" class="nav-link">Home</router-link></b-navbar-brand
+      ><router-link to="/" class="nav-link">{{tr('Home')}}</router-link></b-navbar-brand
     >
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-    <router-link to="/search">Search</router-link>
+    <router-link to="/search">{{tr('Search')}}</router-link>
     <b-collapse id="nav-collapse" is-nav>
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
@@ -16,7 +16,7 @@
             placeholder="Search"
           ></b-form-input>
           <b-button size="sm" class="my-2 my-sm-0" type="submit"
-            >Search</b-button
+            >{{tr('Search')}}</b-button
           >
         </b-nav-form>
         <!-- <b-navbar-nav v-if="!currentUser">
@@ -25,7 +25,7 @@
         <b-navbar-nav right v-if="!currentUser">
           <b-nav-item to="/login">
             <!-- <span>Login</span> -->
-            <a class="btn btn-secondary" role="button" >Login</a>
+            <a class="btn btn-secondary" role="button">{{tr('Login')}}</a>
           </b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav right v-if="currentUser">
@@ -38,6 +38,22 @@
           </template>
           <!-- <b-dropdown-item to="/profile">Profile</b-dropdown-item> -->
           <b-dropdown-item href="/api/logout">Sign Out</b-dropdown-item>
+        </b-nav-item-dropdown>
+        <b-nav-item-dropdown right>
+          <!-- Using 'button-content' slot -->
+          <template #button-content>
+            <em>{{tr('Language')}}</em>
+          </template>
+          <!-- <b-dropdown-item to="/profile">Profile</b-dropdown-item> -->
+          <b-dropdown-item @click="change_language('eng')"
+            >English</b-dropdown-item
+          >
+          <b-dropdown-item @click="change_language('amh')"
+            >Amharic</b-dropdown-item
+          >
+          <b-dropdown-item @click="change_language('oro')"
+            >Afaan Oromo</b-dropdown-item
+          >
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
