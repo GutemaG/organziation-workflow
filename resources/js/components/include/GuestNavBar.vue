@@ -1,17 +1,6 @@
 <template>
   <div>
-    <b-navbar
-      fixed="top"
-      toggleable="lg"
-      type="dark"
-      variant="dark"
-    >
-      <!-- style="padding-left: 340px" -->
-      <b-navbar-brand
-        href="#"
-        class="fas fa-bars"
-        v-b-toggle.sidebar-1
-      ></b-navbar-brand>
+    <b-navbar fixed="top" toggleable="lg" type="dark" variant="dark" >
       <router-link to="/">
         <b-navbar-brand>{{ tr("Home") }}</b-navbar-brand>
       </router-link>
@@ -24,7 +13,7 @@
       </b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav>
+        <b-navbar-nav v-if="username">
           <b-nav-item to="/dashboard">{{ tr("Dashbaord") }}</b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav>
@@ -76,6 +65,22 @@
               >Afaan Oromo</b-dropdown-item
             >
           </b-nav-item-dropdown>
+          <b-nav-item-dropdown right hidden>
+            <!-- Using 'button-content' slot -->
+            <template #button-content>
+              <em>{{ tr("Language") }}</em>
+            </template>
+            <!-- <b-dropdown-item to="/profile">Profile</b-dropdown-item> -->
+            <b-dropdown-item @click="change_language('eng')"
+              >English</b-dropdown-item
+            >
+            <b-dropdown-item @click="change_language('amh')"
+              >Amharic</b-dropdown-item
+            >
+            <b-dropdown-item @click="change_language('oro')"
+              >Afaan Oromo</b-dropdown-item
+            >
+          </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -95,8 +100,6 @@ export default {
       return null;
     },
   },
-  methods: {
-    
-  },
+  methods: {},
 };
 </script>

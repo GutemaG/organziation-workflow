@@ -33,17 +33,27 @@ export default [
                 }
             },
             {
-                path:"/info",
-                components:{
-                    welcome: require("./components/welcome/info/InfoHome.vue").default
+                path: "/info",
+                components: {
+                    welcome: require("./components/welcome/info/InfoHome.vue")
+                        .default
                 }
             },
             {
-                path:"/online",
-                components:{
-                    welcome: require("./components/welcome/online/OnlineHome.vue").default
+                path: "/online",
+                components: {
+                    welcome: require("./components/welcome/online/OnlineHome.vue")
+                        .default
                 }
-            },            
+            },
+
+            {
+                path: "/login",
+                name: "login",
+                components: {
+                    welcome: require("./components/auth/LoginPage.vue").default
+                }
+            }
         ]
     },
     {
@@ -168,11 +178,6 @@ export default [
     {
         path: "/home",
         redirect: "/"
-    },
-    {
-        path: "/login",
-        name: "login",
-        component: require("./components/auth/LoginPage.vue").default
     },
     {
         path: "/:notFound(.*)",
