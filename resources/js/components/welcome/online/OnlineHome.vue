@@ -569,7 +569,7 @@
                         <b-breadcrumb-item active>Online</b-breadcrumb-item>
                     </b-breadcrumb>
 
-                    <b-group>
+                    <div>
                         <b-card title="Title" header-tag="header" footer-tag="footer">
                         <template #header>
                             <h6 class="mb-0">Header Slot</h6>
@@ -580,7 +580,7 @@
                             <em>Footer Slot</em>
                         </template>
                         </b-card>
-                    </b-group>
+                    </div>
                 </div>
 
             </b-col>

@@ -217,22 +217,15 @@
                         </b-row>
                     </b-container>
                 </div>
-                <div class="footer-copyright text-center py-3 pt-2 pb-2" style="background-color: #161c27; color: white;">
-                    <b-container fluid>
-                        &copy; 2013 Copyright
-                    </b-container>
-                </div>
             </div>
-            <!-- Footer -->
         </div>
+        <!-- Footer -->
         <div
           class="footer-copyright text-center py-3 pt-2 pb-2"
-          style="background-color: #161c27; color: white"
-        >
+          style="background-color: #161c27; color: white">
           <b-container fluid> &copy; 2021 Copyright </b-container>
         </div>
       </div>
-      <!-- Footer -->
 </template>
 
 <script>
