@@ -57,6 +57,7 @@ class OnlineRequestController extends Controller
             DB::beginTransaction();
             $onlineRequest = auth()->user()->onlineRequests()->create([
                 'name' => $data['name'],
+                'type' => $data['type'],
                 'description' => $data['description'],
             ]);
 

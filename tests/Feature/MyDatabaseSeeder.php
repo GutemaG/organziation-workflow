@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\Building;
 use App\Models\Bureau;
 use App\Models\OnlineRequest;
+use App\Models\OnlineRequestProcedure;
+use App\Models\PrerequisiteLabel;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -22,18 +24,7 @@ trait MyDatabaseSeeder
                 'remember_token' => Str::random(10),
             ]
         );
-        \App\Models\User::factory(20)->create();
-//
-//        \App\Models\Affair::factory(10)->create();
-//        \App\Models\Procedure::factory(10)->create();
-//        \App\Models\PreRequest::factory(20)->create();
-
-//        \App\Models\PreRequest::factory()->create([
-//            'affair_id'=>null,
-//            'procedure_id'=>1,
-//            'name' =>'go somewhere',
-//            'description' =>' Description go somewhere'
-//        ]);
+        User::factory(20)->create();
 
         Building::factory(10)->create();
 
@@ -43,9 +34,9 @@ trait MyDatabaseSeeder
 
 
         OnlineRequest::factory(20)
-            ->has(\App\Models\PrerequisiteLabel::factory()->count(rand(1,5)))
-            ->has(\App\Models\OnlineRequestProcedure::factory()
-                ->hasAttached(\App\Models\User::inRandomOrder()->limit(rand(1,5))->get())
+            ->has(PrerequisiteLabel::factory()->count(rand(1,5)))
+            ->has(OnlineRequestProcedure::factory()
+                ->hasAttached(User::inRandomOrder()->limit(rand(1,5))->get())
                 ->count(rand(3,6)))
             ->create();
     }

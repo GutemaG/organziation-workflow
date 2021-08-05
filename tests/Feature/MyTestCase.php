@@ -26,6 +26,7 @@ class MyTestCase extends TestCase
     {
         $this->responseName = Str::snake(str_replace('App\\Models\\', '', $this->modelName));
         parent::setUp();
+        $this->artisan('migrate:refresh');
         MyDatabaseSeeder::seed();
     }
 

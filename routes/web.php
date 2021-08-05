@@ -52,6 +52,7 @@ Route::prefix('api')->group(function (){
 
 
 
+
 //Route::middleware(['auth'])->prefix('api')->group(function (){
 //Route::get('/home', function () {
 //    return view('home');

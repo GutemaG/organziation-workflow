@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Exceptions\FormRequestException;
 use App\Exceptions\UnauthorizedException;
+use App\Utilities\RequestType;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
@@ -21,7 +22,7 @@ class OnlineRequestRequest extends FormRequest
     {
         $id = $this->route()->parameter('online_request');
         return [
-
+            'type' => ['required', 'string', BaseRule::in(RequestType::all())],
             'name' => ['required', 'string', BaseRule::unique('online_requests')->ignore($id)],
             'description' => 'required|string',
             'online_request_procedures' => 'required|array|distinct|min:1',

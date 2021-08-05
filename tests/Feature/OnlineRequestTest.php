@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Http\Controllers\Utilities\UserType;
 use App\Models\OnlineRequest;
 use App\Models\User;
+use App\Utilities\RequestType;
+use Database\Factories\Utility;
 
 class OnlineRequestTest extends MyTestCase
 {
@@ -64,6 +66,7 @@ class OnlineRequestTest extends MyTestCase
         $response->assertJson([
             'status' => 422,
             'error' => [
+                'type' => ['The type field is required.'],
                 'name' => ['The name field is required.'],
                 'description' => ['The description field is required.'],
                 'online_request_procedures' => ['The online request procedures field is required.'],
@@ -75,7 +78,7 @@ class OnlineRequestTest extends MyTestCase
     {
         $url = $update ? $this->url . 1 : $this->url;
         $this->actingAs($user);
-        $data = ['name' => 'new name', 'description' => 'this is description', 'online_request_procedures' => 'test',];
+        $data = ['name' => 'new name', 'type' => Utility::getRandomRequestType(), 'description' => 'this is description', 'online_request_procedures' => 'test',];
         $response = $update ? $this->putJson($url, $data) : $this->postJson($url, $data);
         $response->assertExactJson([
             'status' => 422,
@@ -84,7 +87,7 @@ class OnlineRequestTest extends MyTestCase
             ]
         ]);
 
-        $data = ['name' => 'new name', 'description' => 'this is description', 'online_request_procedures' => [[]]];
+        $data = ['name' => 'new name', 'type' => Utility::getRandomRequestType(), 'description' => 'this is description', 'online_request_procedures' => [[]]];
         $response = $update ? $this->putJson($url, $data) : $this->postJson($url, $data);
         $response->assertExactJson([
             'status' => 422,
@@ -100,7 +103,7 @@ class OnlineRequestTest extends MyTestCase
     {
         $url = $update ? $this->url . 1 : $this->url;
         $this->actingAs($user);
-        $data = ['name' => 'new name', 'description' => 'this is description', 'online_request_procedures' => [
+        $data = ['name' => 'new name', 'type' => Utility::getRandomRequestType(), 'description' => 'this is description', 'online_request_procedures' => [
                         ['responsible_bureau_id' => 876, 'responsible_user_id' => [487549], 'step_number' => 6]
                 ]
         ];
@@ -120,6 +123,7 @@ class OnlineRequestTest extends MyTestCase
         $this->actingAs($user);
         $response = $this->postJson($this->url, [
             'name' => 'new name',
+            'type' => Utility::getRandomRequestType(),
             'description' => 'this is description',
             'online_request_procedures' => [
                 [
@@ -188,6 +192,7 @@ class OnlineRequestTest extends MyTestCase
         $onlineRequest = OnlineRequest::orderBy('id', 'DESC')->first();
         $data = $onlineRequest->toArray();
         $data['name'] = 'this is changed name';
+        $data['type'] = RequestType::getOthers();
         $data['description'] = 'this is changed description';
         $data['online_request_procedures'][0]['responsible_bureau_id'] = 5;
         $data['online_request_procedures'][0]['description'] = 'this is description for procedure';
@@ -196,6 +201,7 @@ class OnlineRequestTest extends MyTestCase
         $response = $this->putJson($this->url . $onlineRequest->id, $data);
         $result = OnlineRequest::orderBy('id', 'DESC')->first()->toArray();
         $result['name'] = 'this is changed name';
+        $result['type'] = RequestType::getOthers();
         $result['description'] = 'this is changed description';
         $result['online_request_procedures'][0]['responsible_bureau_id'] = '5';
         $result['online_request_procedures'][0]['description'] = 'this is description for procedure';
