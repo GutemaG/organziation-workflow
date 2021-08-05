@@ -2,6 +2,7 @@
 
 use App\Exceptions\MissingModelException;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\OnlineRequestController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -11,8 +12,7 @@ Route::get('/', function () {
 
 require __DIR__.'/auth.php';
 
-
-
+// private routes
 Route::middleware(['auth'])->prefix('api')->group(function () {
     Route::resource('/users', \App\Http\Controllers\UserController::class);
 
@@ -26,7 +26,8 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
 
     Route::resource('/bureaus', \App\Http\Controllers\BureauController::class);
 
-    Route::resource('/online-requests', \App\Http\Controllers\OnlineRequestController::class)
+    Route::apiResource('/online-requests', OnlineRequestController::class)
+        ->only(['store', 'update', 'destroy'])
         ->missing(function (Request $request) {
             throw new  MissingModelException();
         });
@@ -41,8 +42,17 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
 
 });
 
+// public routes
+Route::prefix('api')->group(function (){
+    Route::get('/online-requests', [OnlineRequestController::class, 'index']);
+    Route::get('/online-requests/{online_request}', [OnlineRequestController::class, 'show']);
+});
 
-Route::middleware(['auth'])->prefix('api')->group(function (){
+
+
+
+
+//Route::middleware(['auth'])->prefix('api')->group(function (){
 //Route::get('/home', function () {
 //    return view('home');
 //})->middleware('verified')->name('home');
@@ -54,23 +64,23 @@ Route::middleware(['auth'])->prefix('api')->group(function (){
 ////    \App\Models\OnlineRequest::factory(20)->hasPrerequisiteLabels(rand(3,6))->create();
 //});
     // Route::resource('/affairs', \App\Http\Controllers\AffairController::class);
-    Route::delete('/delete-procedure/{id}/{affair_id}', [\App\Http\Controllers\AffairController::class, 'deleteProcedure']);
-    Route::delete('/delete-pre-request/{id}/{procedure_id}', [\App\Http\Controllers\AffairController::class, 'deletePreRequest']);
-    Route::post('/add-procedure', [\App\Http\Controllers\AffairController::class, 'addProcedure']);
-    Route::post('/add-pre-request', [\App\Http\Controllers\AffairController::class, 'addPreRequest']);
+//    Route::delete('/delete-procedure/{id}/{affair_id}', [\App\Http\Controllers\AffairController::class, 'deleteProcedure']);
+//    Route::delete('/delete-pre-request/{id}/{procedure_id}', [\App\Http\Controllers\AffairController::class, 'deletePreRequest']);
+//    Route::post('/add-procedure', [\App\Http\Controllers\AffairController::class, 'addProcedure']);
+//    Route::post('/add-pre-request', [\App\Http\Controllers\AffairController::class, 'addPreRequest']);
 
-    Route::resource('/online-requests', \App\Http\Controllers\OnlineRequestController::class);
-    Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-});
+//    Route::resource('/online-requests', \App\Http\Controllers\OnlineRequestController::class);
+//    Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+//});
 
-Route::resource('/api/affairs', \App\Http\Controllers\AffairController::class);
-Route::get('/test/', function () {
-    //    \App\Models\OnlineRequest::factory(20)->hasPrerequisiteLabels(rand(3,6))->create();
-});
+//Route::resource('/api/affairs', \App\Http\Controllers\AffairController::class);
+//Route::get('/test/', function () {
+//    //    \App\Models\OnlineRequest::factory(20)->hasPrerequisiteLabels(rand(3,6))->create();
+//});
 // Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
 // Route::post('/affairs', '\App\Http\Controllers\AffairController@store');
 
 Route::get('/{vue_capture?}', function () {
     return view('home');
-})->where('vue_capture', '[\/\w\.-]*')->middleware('auth');
+})->where('vue_capture', '[\/\w\.-]*');
 

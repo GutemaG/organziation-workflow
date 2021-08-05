@@ -9,6 +9,7 @@ use App\Models\User;
 class OnlineRequestTest extends MyTestCase
 {
     protected $url = '/api/online-requests/';
+    protected $modelName = OnlineRequest::class;
 
     public function testAdminCanAccessIndex(): void
     {
@@ -152,7 +153,7 @@ class OnlineRequestTest extends MyTestCase
     protected function show(User $user): void
     {
         $this->actingAs($user);
-        $onlineRequest = $this->getModel(OnlineRequest::class);
+        $onlineRequest = $this->randomData(OnlineRequest::class);
         $response = $this->getJson($this->url . $onlineRequest->id);
         $response->assertJson([
             'status' => 200,
@@ -226,7 +227,7 @@ class OnlineRequestTest extends MyTestCase
     protected function destroy(User $user): void
     {
         $this->actingAs($user);
-        $onlineRequest = $this->getModel(OnlineRequest::class);
+        $onlineRequest = $this->randomData(OnlineRequest::class);
         $response = $this->deleteJson($this->url . $onlineRequest->id);
         $response->assertExactJson([
             'status' => 200,

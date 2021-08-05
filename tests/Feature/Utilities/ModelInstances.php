@@ -6,6 +6,8 @@ namespace Tests\Feature\Utilities;
 
 use App\Models\OnlineRequest;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 trait ModelInstances
 {
@@ -14,7 +16,7 @@ trait ModelInstances
         return User::whereType($userType)->inRandomOrder()->first();
     }
 
-    protected function getModel(string $modelName): ?OnlineRequest
+    protected function randomData(string $modelName): ?Model
     {
         switch ($modelName) {
             case OnlineRequest::class:
@@ -24,6 +26,18 @@ trait ModelInstances
                 return null;
                 break;
 
+        }
+    }
+
+    protected function getAllData(string $modelName): ?Collection
+    {
+        switch ($modelName) {
+            case OnlineRequest::class:
+                return OnlineRequest::orderBy('name', 'asc')->get();
+                break;
+            default:
+                return null;
+                break;
         }
     }
 

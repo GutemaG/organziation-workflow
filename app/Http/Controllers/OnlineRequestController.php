@@ -14,22 +14,17 @@ use Illuminate\Support\Facades\Gate;
 class OnlineRequestController extends Controller
 {
     /**
-     * Check if user is authenticated. If not redirect it login page.
-     * And check if authenticated user is authorized. If not throw UnauthorizedException.
+     * check if user is authorized to do the requested action.
      *
-     * OnlineRequestController constructor.
+     * @return bool
+     * @throws UnauthorizedException
      */
-    public function __construct() {
-        $this->middleware('auth');
-
-        $this->middleware(function ($request, $next) {
-            if (! Gate::any(['is-admin', 'is-it-team-member']))
-                throw new UnauthorizedException();
-            return $next($request);
-        });
-
+    protected function isAuthorized(): bool
+    {
+        if (! Gate::any(['is-admin', 'is-it-team-member']))
+            throw new UnauthorizedException();
+        return true;
     }
-
     /**
      * return a listing of the online request.
      * it contains oll relation ship (prerequisiteLabel, onlineRequestProcedure and users).
@@ -149,12 +144,15 @@ class OnlineRequestController extends Controller
      *
      * @param OnlineRequest $onlineRequest
      * @return JsonResponse
+     * @throws UnauthorizedException
      */
     public function destroy(OnlineRequest $onlineRequest): JsonResponse
     {
-        $onlineRequest->delete();
-        return response()->json([
-            'status' => 200,
-        ]);
+        if ($this->isAuthorized()) {
+            $onlineRequest->delete();
+            return response()->json([
+                'status' => 200,
+            ]);
+        }
     }
 }

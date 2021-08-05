@@ -7,7 +7,9 @@ namespace Tests\Feature;
 use App\Http\Controllers\Utilities\UserType;
 use App\Models\OnlineRequest;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Tests\Feature\Utilities\ModelInstances;
 use Tests\TestCase;
@@ -17,9 +19,12 @@ class MyTestCase extends TestCase
     use RefreshDatabase, ModelInstances;
 
     protected $url = '';
+    protected $modelName = '';
+    protected $responseName = '';
 
     public function setUp(): void
     {
+        $this->responseName = Str::snake(str_replace('App\\Models\\', '', $this->modelName));
         parent::setUp();
         MyDatabaseSeeder::seed();
     }
@@ -32,16 +37,15 @@ class MyTestCase extends TestCase
 
     public function testUnauthenticatedGuestCanAccess(): void
     {
-        $id = $this->getModel(OnlineRequest::class)->id;
+        $data = $this->randomData($this->modelName);
+        $id = $data->id;
 
-        $response = $this->getJson($this->url);
-        $this->assertUnauthenticatedRequestResponse($response);
+        $this->assertIndex();
 
         $response = $this->postJson($this->url, []);
         $this->assertUnauthenticatedRequestResponse($response);
 
-        $response = $this->getJson($this->url . $id);
-        $this->assertUnauthenticatedRequestResponse($response);
+        $this->assertShow($id, $data);
 
         $response = $this->putJson($this->url . $id, []);
         $this->assertUnauthenticatedRequestResponse($response);
@@ -84,16 +88,15 @@ class MyTestCase extends TestCase
     {
         if ($user) {
             $this->actingAs($user);
-            $id = $this->getModel(OnlineRequest::class)->id;
+            $data = $this->randomData($this->modelName);
+            $id = $data->id;
 
-            $response = $this->getJson($this->url);
-            $response->assertJson($this->unauthorizedResponse());
+            $this->assertIndex();
 
             $response = $this->postJson($this->url, []);
             $response->assertJson($this->unauthorizedResponse());
 
-            $response = $this->getJson($this->url . $id);
-            $response->assertJson($this->unauthorizedResponse());
+            $this->assertShow($id, $data);
 
             $response = $this->putJson($this->url . $id, []);
             $response->assertJson($this->unauthorizedResponse());
@@ -113,4 +116,25 @@ class MyTestCase extends TestCase
             ],
         ];
     }
+
+    protected function assertIndex(): void
+    {
+        $data = $this->getAllData(OnlineRequest::class)->toArray();
+        $response = $this->getJson($this->url);
+        $response->assertExactJson([
+            'status' => 200,
+            Str::plural($this->responseName) => $data,
+        ]);
+    }
+
+    protected function assertShow($id, ?Model $data): void
+    {
+        $response = $this->getJson($this->url . $id);
+        $response->assertJson([
+            'status' => 200,
+            $this->responseName => $data->toArray(),
+        ]);
+    }
+
+
 }
