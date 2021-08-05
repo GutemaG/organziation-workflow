@@ -28,7 +28,7 @@
           <b-nav-item to="/dashboard">{{ tr("Dashbaord") }}</b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav>
-          <b-nav-item to="/search">{{ tr("Search") }}</b-nav-item>
+          <b-nav-item to="/apply-online-affair">{{ tr("Online Affair") }}</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
