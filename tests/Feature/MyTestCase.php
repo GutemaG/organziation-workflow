@@ -135,6 +135,4 @@ class MyTestCase extends TestCase
             $this->responseName => $data->toArray(),
         ]);
     }
-
-
 }

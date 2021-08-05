@@ -16,7 +16,7 @@ class CreatePreRequestsTable extends Migration
         Schema::create('pre_requests', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('procedure_id');
-            $table->unsignedInteger('affair_id')->nullable();
+            $table->unsignedBigInteger('affair_id')->nullable();
             $table->string('name')->nullable();
             $table->longText('description')->nullable();
             $table->softDeletes();

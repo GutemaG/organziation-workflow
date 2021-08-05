@@ -5,6 +5,7 @@ namespace Database\Factories;
 
 
 use App\Http\Controllers\Utilities\UserType;
+use App\Utilities\RequestType;
 use Illuminate\support\Str;
 use \App\Models\Affair;
 use \App\Models\Procedure;
@@ -137,5 +138,17 @@ class Utility
     public static function getRandomValue(array $values) {
         $index = array_rand($values);
         return $values[$index];
+    }
+
+    /**
+     * Return random request type.
+     *
+     * @return string
+     */
+    public static function getRandomRequestType(): string
+    {
+        $data = RequestType::all();
+        $index = array_rand($data);
+        return $data[$index];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Utilities\RequestType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +18,7 @@ class CreateOnlineRequestsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('name')->unique();
+            $table->enum('type', RequestType::all());
             $table->longText('description')->nullable();
             $table->softDeletes();
             $table->timestamps();
