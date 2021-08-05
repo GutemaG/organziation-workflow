@@ -6,6 +6,7 @@ use App\Exceptions\FormRequestException;
 use App\Exceptions\UnauthorizedException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule as BaseRule;
 
@@ -20,6 +21,7 @@ class OnlineRequestRequest extends FormRequest
     {
         $id = $this->route()->parameter('online_request');
         return [
+
             'name' => ['required', 'string', BaseRule::unique('online_requests')->ignore($id)],
             'description' => 'required|string',
             'online_request_procedures' => 'required|array|distinct|min:1',
@@ -40,7 +42,7 @@ class OnlineRequestRequest extends FormRequest
         $rules = $this->defaultRules();
         $method = strtoupper($this->method());
         if (in_array($method, ['PUT', 'PATCH'])) {
-            $rules['id'] = ['required', 'integer', BaseRule::exists('online_requests', 'id')];
+//            $rules['id'] = ['required', 'integer', BaseRule::exists('online_requests', 'id')];
             $rules['online_request_procedures.*.id'] = ['sometimes', 'integer', BaseRule::exists('online_request_procedures', 'id')];
             $rules['online_request_procedures.*.responsible_user_id.*'] = ['required', 'integer', BaseRule::exists('users', 'id')];
             $rules['prerequisite_labels'] = 'sometimes|array|distinct|min:1';
@@ -119,7 +121,6 @@ class OnlineRequestRequest extends FormRequest
         $this->throwException($error);
     }
 
-
     /**
      * Extract the step number of each procedure and associate it with the index of the procedure.
      *
@@ -127,9 +128,11 @@ class OnlineRequestRequest extends FormRequest
      * @return \Illuminate\Support\Collection
      * @throws \Illuminate\Validation\ValidationException
      */
-    protected function getAllStepNumberOfEachProcedure($parentValidationFails=false): \Illuminate\Support\Collection
+    protected function getAllStepNumberOfEachProcedure($parentValidationFails=false): Collection
     {
-        $data = $parentValidationFails ? collect($this->get('online_request_procedures')) :
+        $procedures = is_array($this->get('online_request_procedures'))
+            ? $this->get('online_request_procedures') : [];
+        $data = $parentValidationFails ? collect($procedures) :
             collect($this->validator->validated()['online_request_procedures']);
 
         $data = $data->map(function ($value, $key) {

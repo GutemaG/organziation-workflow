@@ -6,7 +6,6 @@ use App\Exceptions\DatabaseException;
 use App\Exceptions\UnauthorizedException;
 use App\Http\Requests\OnlineRequestRequest;
 use App\Models\OnlineRequest;
-use App\Models\OnlineRequestProcedure;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
