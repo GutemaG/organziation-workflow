@@ -1,16 +1,18 @@
 <template>
   <div>
     <guest-nav-bar></guest-nav-bar>
-    <router-view name="welcome"></router-view>
-    <vue-login></vue-login>
+    <div style="margin-top: 3.5rem">
+      <router-view name="welcome"></router-view>
+    </div>
+    <!-- <vue-login></vue-login> -->
   </div>
 </template>
 <script>
-import VueLogin from "./../auth/Login.vue";
+// import VueLogin from "./../auth/Login.vue";
 import { mapGetters } from "vuex";
-import GuestNavBar from './GuestNavBar.vue';
+import GuestNavBar from "../include/GuestNavBar.vue";
 export default {
-  components: { "vue-login": VueLogin, GuestNavBar },
+  components: { GuestNavBar },
   computed: {
     ...mapGetters(["currentUser"]),
   },

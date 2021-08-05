@@ -41,7 +41,7 @@
             :state="validateState('password')"
             v-model="$v.form.password.$model"
           ></b-form-input>
-          <b-input-group-append style="margin-left: 0px;">
+          <b-input-group-append style="margin-left: 0px">
             <b-button @click="showPassword = !showPassword" variant="light">
               <i v-show="!showPassword" class="far fa-eye" id="show"></i>
               <i v-show="showPassword" class="far fa-eye-slash" id="show"></i>

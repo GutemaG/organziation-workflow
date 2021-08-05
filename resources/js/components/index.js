@@ -12,6 +12,8 @@ import BasePagination from "./Base/BasePagination.vue";
 Vue.component("base-input", BaseInput);
 Vue.component("base-card", BaseCard);
 Vue.component("base-pagination", BasePagination);
+// import SideBar from "./include/SideBar.vue";
+// Vue.component("side-bar", SideBar);
 
 /**
  * * For Reference only

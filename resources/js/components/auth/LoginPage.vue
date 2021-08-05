@@ -1,9 +1,9 @@
 <template>
   <div>
-    <guest-nav-bar></guest-nav-bar>
-    <b-container>
+    <!-- <guest-nav-bar></guest-nav-bar> -->
+    <b-container class="mt-5">
       <b-row>
-        <b-col > </b-col>
+        <b-col> </b-col>
         <b-col cols="8" class="mt-2">
           <form ref="form" @submit.stop.prevent="attemptLogin">
             <b-alert v-if="loggingUserErrorMessage" show variant="danger">{{
@@ -19,17 +19,32 @@
                   : 'Email is not valid, please enter valide email'
               "
             >
-              <b-form-input
-                id="email-input"
-                v-model="$v.form.email.$model"
-                required
-                type="email"
-                :state="validateState('email')"
-                placeholder="Email address"
-              ></b-form-input>
+              <b-input-group>
+                <b-input-group-append>
+                  <b-button>
+                    <i class="fas fa-at"></i>
+                    <!-- <i class="far fa-user"></i> -->
+                  </b-button>
+                </b-input-group-append>
+                <b-form-input
+                  id="email-input"
+                  v-model="$v.form.email.$model"
+                  required
+                  type="email"
+                  :state="validateState('email')"
+                  placeholder="Email address"
+                ></b-form-input>
+              </b-input-group>
             </b-form-group>
+
             <b-form-group :label="tr('Password')" label-for="password-input">
               <b-input-group>
+              <b-input-group-append>
+                <b-button>
+                  <i class="fas fa-key"></i>
+                  <!-- <i class="far fa-user"></i> -->
+                </b-button>
+              </b-input-group-append>
                 <b-form-input
                   id="password-input"
                   :type="showPassword ? 'text' : 'password'"
@@ -37,7 +52,7 @@
                   :state="validateState('password')"
                   v-model="$v.form.password.$model"
                 ></b-form-input>
-                <b-input-group-append>
+                <b-input-group-append class="ml-1">
                   <b-button
                     @click="showPassword = !showPassword"
                     variant="light"
@@ -50,7 +65,9 @@
                     ></i>
                   </b-button>
                 </b-input-group-append>
-                <b-form-invalid-feedback>{{tr('Required')}}</b-form-invalid-feedback>
+                <b-form-invalid-feedback>{{
+                  tr("Required")
+                }}</b-form-invalid-feedback>
               </b-input-group>
             </b-form-group>
             <b-form-checkbox
@@ -58,15 +75,15 @@
               v-model="form.remember"
               name="remeberme"
             >
-              {{tr('Remember me')}}
+              {{ tr("Remember me") }}
             </b-form-checkbox>
+              <!-- class="form-control" -->
             <b-button
-              class="form-control"
               type="submit"
               variant="primary"
               :disabled="$v.$invalid || isLoading"
             >
-              <span v-if="!isLoading">{{tr('Login')}}</span>
+              <span v-if="!isLoading">{{ tr("Login") }}</span>
               <b-spinner v-show="isLoading" label="Loading..."></b-spinner>
             </b-button>
           </form>
@@ -79,7 +96,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { required, email } from "vuelidate/lib/validators";
-import GuestNavBar from "../welcome/GuestNavBar.vue";
+import GuestNavBar from "../include/GuestNavBar.vue";
 export default {
   components: { GuestNavBar },
   name: "LoginPage",

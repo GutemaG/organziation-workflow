@@ -18,6 +18,7 @@
                             @sliding-start="onSlideStart"
                             @sliding-end="onSlideEnd"
                             class="mb-3"
+                            hidden
                             >
                                 <!-- Text slides with image -->
                                 <b-carousel-slide

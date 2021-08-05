@@ -1,5 +1,5 @@
 var variables = {
-    sidebar: false,
+    sidebar: false
 };
 
 const language = {
@@ -19,9 +19,9 @@ const language = {
         oro: "lakkoofsa Iccitii mirkanneessi",
         amh: "የአሁን ይለፍቃል"
     },
-    "CONFIRMATION": {
+    CONFIRMATION: {
         oro: "MIRKANEEFFADHU",
-        amh: "ማረጋገጫ",
+        amh: "ማረጋገጫ"
     },
     "Don't have an Account? ": {
         oro: "Akkawuntii hin qabduu?",
@@ -31,24 +31,24 @@ const language = {
         oro: "lakkoofsa Iccitii dagadhe",
         amh: "ይለፍቃል ተረስቷል"
     },
-    
+
     "Full Name": {
         oro: "Maqaa guutuu",
         amh: "ሙሉ ስም"
     },
-    "hello": {
+    hello: {
         oro: "Akkam",
         amh: "ሰላም"
     },
-    "Login": {
+    Login: {
         oro: "Seeni",
         amh: "ግባ"
     },
-    "Next": {
+    Next: {
         oro: "Itti Fufi",
         amh: "ቀጣይ"
     },
-    "Password": {
+    Password: {
         oro: "lakkoofsa Iccitii",
         amh: "ይለፍ ቃል"
     },
@@ -60,7 +60,7 @@ const language = {
         oro: "Lakkoofsa Bilbilaa",
         amh: "ስልክ ቁጥር"
     },
-    "Register": {
+    Register: {
         oro: "Galmeessi",
         amh: "መዝግብ"
     },
@@ -68,47 +68,43 @@ const language = {
         oro: "Na Yaadadhu",
         amh: "አስታውሰኝ"
     },
-    "Submit": {
+    Submit: {
         oro: "Xumure",
         amh: "አስረክብ"
     },
-    "Navigate": {
+    Navigate: {
         oro: "Agarsiisi",
         amh: "ጠቁም"
     },
-    "Change": {
-        oro: "Agarsiisi",
+    Change: {
+        oro: "Jijiri",
         amh: "ቀይር"
     },
     "Sign Up": {
         oro: "Galmeessi",
         amh: "ይመዝገቡ"
     },
-    "Email": {
+    Email: {
         oro: "Email",
         amh: "ኢሜል"
     },
-    "Language": {
+    Language: {
         oro: "Afaan",
         amh: "ቋንቋ"
     },
-    "Search": {
+    Search: {
         oro: "Barbaadi",
         amh: "ፈልግ"
     },
-    "Fermata": {
-        oro: "Ferrmaataa",
-        amh: "ፌርማታ"
-    },
-    "Home": {
+    Home: {
         oro: "Home",
         amh: "መነሻ"
     },
-    "Profile": {
+    Profile: {
         oro: "Profile",
         amh: "መግለጫ"
     },
-    "Contacts": {
+    Contacts: {
         oro: "Contacts",
         amh: "ግንኙነቶች"
     },
@@ -116,196 +112,258 @@ const language = {
         oro: "Saved Places",
         amh: "የከዚህ በፊት ቦታዎች"
     },
-    "Status": {
+    Status: {
         oro: "Status",
         amh: "ሁናቴ"
     },
-    "Role": {
+    Role: {
         oro: "Role",
         amh: "ድርሻ"
     },
-    "Answer": {
+    Answer: {
         oro: "Deebii",
         amh: "መልስ"
     },
-    "Station": {
+    Station: {
         oro: "buufata",
         amh: "መሣፈሪያ"
     },
-    "Service": {
+    Service: {
         oro: "Tajjaajjiilaa",
         amh: "አገልግሎት"
     },
-    "Add": {
+    Add: {
         oro: "Add",
         amh: "ጨምር"
     },
-    "Option": {
+    Option: {
         oro: "Option",
         amh: "አማራጭ"
     },
-    "Username": {
+    Username: {
         oro: "Username",
         amh: "የተጠቃሚ ልዩ ስም"
     },
 
     ///////////////////////////////////////////////////////////
-    "Edit": {
+    Edit: {
         oro: "Sirreessi",
         amh: "አሰተካከል"
     },
-    "Delete": {
+    Delete: {
         oro: "Delete",
         amh: "አጥፋ"
     },
-    "Admin": {
+    Admin: {
         oro: "Admin",
         amh: "አስተዳደር"
     },
-    
-    "Users": {
+
+    Users: {
         oro: "Users",
         amh: "ተጠቃሚዎች"
     },
-    "NewUsers": {
+    NewUsers: {
         oro: "NewUsers",
         amh: "አዲስ ተጠቃሚዎች"
     },
-    "In Case Of Emergency":{
-        oro:"In Case Of Emergency",
-        amh:"የአደጋ ጊዘ"
+    "In Case Of Emergency": {
+        oro: "In Case Of Emergency",
+        amh: "የአደጋ ጊዘ"
     },
-    "In case of Emergency Message":{
-        oro:"In case of Emergency Message",
-        amh:"የአደጋ ጊዘ ምልእክት"
+    "In case of Emergency Message": {
+        oro: "In case of Emergency Message",
+        amh: "የአደጋ ጊዘ ምልእክት"
     },
-    "deactivate":{
-        oro:"deactivate",
-        amh:"ዲአክቲቭ አድርግ"
+    deactivate: {
+        oro: "deactivate",
+        amh: "ዲአክቲቭ አድርግ"
     },
-    "activate":{
-        oro:"activate",
-        amh:"አክቲቭ አድርግ"
+    activate: {
+        oro: "activate",
+        amh: "አክቲቭ አድርግ"
     },
-    "unavailable":{
-        oro:"unavailable",
-        amh:"የለም"
+    unavailable: {
+        oro: "unavailable",
+        amh: "የለም"
     },
-    "Service Category":{
-        oro:"Service Category",
-        amh:"የአገልግሎት አይነት"
+    "Service Category": {
+        oro: "Service Category",
+        amh: "የአገልግሎት አይነት"
     },
-    "Services":{
-        oro:"TAJAAJILA",
-        amh:"የአገልግሎት ስጪዎች ዝርዝር"
+    Services: {
+        oro: "TAJAAJILA",
+        amh: "የአገልግሎት ስጪዎች ዝርዝር"
     },
-    "Service Name":{
-        oro:"Service Name",
-        amh:"አገልግሎት ሰጪ ስም"
+    "Service Name": {
+        oro: "Service Name",
+        amh: "አገልግሎት ሰጪ ስም"
     },
-    "Description":{
-        oro:"Description",
-        amh:"መግለጫ"
-    },"Type":{
-        oro:"Type",
-        amh:"አይነት"
-
+    Description: {
+        oro: "Description",
+        amh: "መግለጫ"
     },
-    "Service Provider Name":{
-        oro:"Service Provider Name",
-        amh:"አገልግሎት ሰጪ ስም"
+    Type: {
+        oro: "Type",
+        amh: "አይነት"
     },
-    "Oops!":{
-        oro:"Oops!",
-        amh:"ውይ!"
+    "Service Provider Name": {
+        oro: "Service Provider Name",
+        amh: "አገልግሎት ሰጪ ስም"
     },
-    "Not Found":{
-        oro:"Not Found",
-        amh:"አልተገኘም"
-    }
-    ,
-    "Take Me Home":{
-        oro:"Take Me Home",
-        amh:"ወደዋናው ገፅ ተመለስ"
+    "Oops!": {
+        oro: "Oops!",
+        amh: "ውይ!"
     },
-    "Contact Support":{
-        oro:"Contact Support",
-        amh:"እርዳታ አግኝ"
+    "Not Found": {
+        oro: "Not Found",
+        amh: "አልተገኘም"
     },
-    "Required":{
-        oro:"Nibarbaachisa",
-        amh:"የሰፈለገለ"
-    }
+    "Take Me Home": {
+        oro: "Take Me Home",
+        amh: "ወደዋናው ገፅ ተመለስ"
+    },
+    "Contact Support": {
+        oro: "Contact Support",
+        amh: "እርዳታ አግኝ"
+    },
+    Required: {
+        oro: "Nibarbaachisa",
+        amh: "የሰፈለገለ"
+    },
+    Building: {
+        oro: "Gamo",
+        amh: "Hintsa"
+    },
+    "Office Number": {
+        oro: "Office Number",
+        amh: "Office Number"
+    },
+    Location: {
+        oro: "Idoo",
+        amh: "Bota"
+    },
+    "Created At": {
+        oro: "Created At",
+        amh: "Created At"
+    },
+    Actions: {
+        oro: "Actions",
+        amh: "Tegbar"
+    },
+    Name: {
+        oro: "Maqa",
+        amh: "Sim"
+    },
+    ID: {
+        oro: "ID",
+        amh: "Meleya"
+    },
+    Type: {
+        oro: "Typii",
+        amh: "Halafinet"
+    },
+    "First Name": {
+        oro: "Maqa Duura",
+        amh: "Mejemeriya"
+    },
+    "Last Name": {
+        oro: "Maqa Aba",
+        amh: "Abat Sim"
+    },
+    "Clear": {
+        oro: "Balessi",
+        amh: "Asida"
+    },
+    "Per Page": {
+        oro: "Fulaan",
+        amh: "Be gets"
+    },
+    "First": {
+        oro: "Jalqabaa",
+        amh: "Mejemeriya"
+    },
+    "Prev": {
+        oro: "Deebi",
+        amh: "Befit"
+    },
+    "Last": {
+        oro: "xumrra",
+        amh: "Mecheresha"
+    },
+    Username: {
+        oro: "Maqa Adaa",
+        amh: "ልዩ ስም"
+    },
 };
 
 const sentence = {
-    "question1": {
+    question1: {
         eng: "your childhood nick name",
         oro: "Maqaa Maxxantuu ijoollumaakee?",
         amh: "የልጅነት ቅፅል ስም?"
     },
-    "question2": {
+    question2: {
         eng: "your elementary school name",
         oro: "Maqaa manabarnootaakee Kutaa gadaanaa?",
         amh: "የመጀመሪያ ደረጃ የተማሩበት ትምህርት ቤት ስም?"
     },
-    "question3": {
+    question3: {
         eng: "name of the city you were born.",
         oro: "Maqaa Magaalaa dhalootaakee?",
         amh: "የተወለዱበት ከተማ ስም?"
     },
-    "change_pass1": {
+    change_pass1: {
         eng: "Change your Password",
         oro: "Maqaa Magaalaa dhalootaakee?",
         amh: "ይለፍ ቃልዎን ይቀይሩ"
     },
-    "home1": {
+    home1: {
         eng: "Travel to where ever you want to go.",
         oro: "Maqaa Magaalaa dhalootaakee?",
         amh: "መጓዝ ወደ ሚፈልጉበት ይሂዱ"
     },
-    "sign_up1": {
+    sign_up1: {
         eng: "Sign up here and be our favorite user.",
         oro: "Galmaa'uun miseensa kabajamoo keenya ta'aa.",
         amh: "በመመዝገብ ተወዳጅ ተጠቃሚያችን ይሁኑ።"
     },
-    "change_pass2": {
+    change_pass2: {
         eng: "your current password",
         oro: "your current password",
         amh: "የአሁኑ ይለፍቃልዎት"
     },
-    "change_pass3": {
+    change_pass3: {
         eng: "create new password",
         oro: "create new password",
         amh: "አዲስ ይለፍቃል ይፍጠሩ"
     },
-    "change_pass4": {
+    change_pass4: {
         eng: "confirm your new password",
         oro: "confirm your new password",
         amh: "አዲሱን ይለፍቃሎትን ያረጋግጡ"
     },
-    "edit_pro1": {
+    edit_pro1: {
         eng: "Edit Your Profile",
         oro: "Edit Your Profile",
         amh: "መግለጫዎትን ያስተካክሉ"
     },
-    "recovery1": {
+    recovery1: {
         eng: "Account Recovery Questions",
         oro: "GAAFFILEE AKKAWUNT RIKAVARII",
         amh: "መለያ መመለሻ ጥያቄዎች"
     },
-    "username": {
+    username: {
         eng: "Your Username",
         oro: "Your Username",
         amh: "የእርስዎን ልዩ ስም"
     },
     /////////////////////////////////////////////////////
-    "notfound1": {
-        eng:"Sorry, an error has occured, Requested page not found!",
-        oro:"Sorry, an error has occured, Requested page not found!",
-        amh:"ይቅርታ ፣ ችግር በመፈጠሩ የተፈለገው ገጽ አልተገኘም"
-    },
-    
+    notfound1: {
+        eng: "Sorry, an error has occured, Requested page not found!",
+        oro: "Sorry, an error has occured, Requested page not found!",
+        amh: "ይቅርታ ፣ ችግር በመፈጠሩ የተፈለገው ገጽ አልተገኘም"
+    }
 };
 
 const vary = {
@@ -313,48 +371,47 @@ const vary = {
 };
 
 export function translate(eng) {
-
     let lang = localStorage.getItem("lang") || "eng";
-    if(lang && lang != "eng"){
-        if(language[eng]){
+    if (lang && lang != "eng") {
+        if (language[eng]) {
             return language[eng][lang];
         }
     }
 
     return eng;
-
 }
 
-export function sentence_translate(identifier){
-
+export function sentence_translate(identifier) {
     let lang = localStorage.getItem("lang") || "eng";
 
-    if(sentence[identifier]){
-        if(lang){
+    if (sentence[identifier]) {
+        if (lang) {
             return sentence[identifier][lang];
-        }else{
+        } else {
             return sentence[identifier]["eng"];
         }
     }
 
     return "";
-
 }
 
-export function sidebar(){
-    
-    if(variables.sidebar){
+export function sidebar() {
+    if (variables.sidebar) {
         console.log("clicked true");
         variables.sidebar = false;
-        document.getElementById('main_container').style.setProperty('transform','translateX(-24%)');
-    }else{
+        document
+            .getElementById("main_container")
+            .style.setProperty("transform", "translateX(-24%)");
+    } else {
         console.log("clicked false");
         variables.sidebar = true;
-        document.getElementById('main_container').style.setProperty('transform','translateX(0%)');
+        document
+            .getElementById("main_container")
+            .style.setProperty("transform", "translateX(0%)");
     }
 }
 
-export function lang_change(lang){
+export function lang_change(lang) {
     vary.lang = lang;
     localStorage.setItem("lang", lang);
     window.location.reload();
