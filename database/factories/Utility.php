@@ -151,4 +151,5 @@ class Utility
         $index = array_rand($data);
         return $data[$index];
     }
+
 }

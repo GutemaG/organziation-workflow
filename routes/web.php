@@ -48,7 +48,27 @@ Route::prefix('api')->group(function (){
     Route::get('/online-requests/{online_request}', [OnlineRequestController::class, 'show']);
 });
 
-
+Route::get('/test', function () {
+     \App\Models\OnlineRequestTracker::factory()->count(1)
+        ->create()->each(function ($request) {
+            $procedures = $request->onlineRequest->onlineRequestProcedures;
+            $old = null;
+            foreach ($procedures as $procedure) {
+                $temp = \App\Models\OnlineRequestStep::create([
+                    'online_request_tracker_id' => $request->id,
+                    'online_request_procedure_id' => $procedure->id,
+                    'user_id' => $procedure->users->first()->id,
+                    'is_completed' => random_int(0, 1),
+                    'started_at' => now(),
+                ]);
+                if ($old)
+                    $old->update(['next_step' => $temp->id]);
+                $old = $temp;
+            }
+            dump(\App\Models\OnlineRequestTracker::with(['onlineRequestSteps'])
+                ->where('id', $request->id)->get()->first()->toArray());
+        });
+});
 
 
 

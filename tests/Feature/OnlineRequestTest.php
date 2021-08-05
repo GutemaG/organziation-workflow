@@ -187,12 +187,13 @@ class OnlineRequestTest extends MyTestCase
 
     protected function update(User $user): void
     {
+        $type = RequestType::getOthers();
         $this->actingAs($user);
         $this->creatingOnlineRequest($user);
         $onlineRequest = OnlineRequest::orderBy('id', 'DESC')->first();
         $data = $onlineRequest->toArray();
         $data['name'] = 'this is changed name';
-        $data['type'] = RequestType::getOthers();
+        $data['type'] = $type;
         $data['description'] = 'this is changed description';
         $data['online_request_procedures'][0]['responsible_bureau_id'] = 5;
         $data['online_request_procedures'][0]['description'] = 'this is description for procedure';
@@ -201,7 +202,7 @@ class OnlineRequestTest extends MyTestCase
         $response = $this->putJson($this->url . $onlineRequest->id, $data);
         $result = OnlineRequest::orderBy('id', 'DESC')->first()->toArray();
         $result['name'] = 'this is changed name';
-        $result['type'] = RequestType::getOthers();
+        $result['type'] = $type;
         $result['description'] = 'this is changed description';
         $result['online_request_procedures'][0]['responsible_bureau_id'] = '5';
         $result['online_request_procedures'][0]['description'] = 'this is description for procedure';
@@ -210,6 +211,7 @@ class OnlineRequestTest extends MyTestCase
         $result['online_request_procedures'][0]['users'][2]['id'] = 4;
         $result['online_request_procedures'][0]['users'][3]['id'] = 5;
         $result['online_request_procedures'][0]['users'][4]['id'] = 7;
+
         $response->assertExactJson([
             'status' => 200,
             'online_request' => $result,

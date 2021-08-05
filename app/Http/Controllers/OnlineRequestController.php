@@ -110,6 +110,7 @@ class OnlineRequestController extends Controller
             DB::beginTransaction();
             $onlineRequest->update([
                 'name' => $data['name'],
+                'type' => $data['type'],
                 'description' => $data['description'],
             ]);
             if (! OnlineRequestProcedureController::storeOrUpdateData($data, $onlineRequest->id, true))
