@@ -69,6 +69,15 @@ class FakeDataGenerator
         return $data;
     }
 
+    public static function onlineRequestData() {
+        $faker =  Factory::create();
+        return [
+            'user_id' => Utility::getUserId(),
+            'name' => implode($faker->unique()->words(rand(2, 5))),
+            'description' => $faker->paragraph(rand(4, 10)),
+        ];
+    }
+
     public static function get($table) {
         switch ($table){
             case 'user':

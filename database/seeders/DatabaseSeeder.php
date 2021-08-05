@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        
 
          User::create([
             'user_name' => 'Admin',
@@ -50,6 +49,9 @@ class DatabaseSeeder extends Seeder
          Building::factory(100)->create();
 
          Bureau::factory(200)->create();
+
+        OnlineRequest::factory(20);
+
 
         OnlineRequest::factory(20)
             ->has(\App\Models\PrerequisiteLabel::factory()->count(rand(1,5)))

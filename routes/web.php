@@ -59,7 +59,7 @@ Route::prefix('api')->group(function (){
     Route::get('/online-requests/{online_request}', [OnlineRequestController::class, 'show']);
 
     //Birhanu
-    Route::get('/affairs', \App\Http\Controllers\AffairController::class);
+    Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
 });
 
 Route::get('/{vue_capture?}', function () {
