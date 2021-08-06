@@ -115,7 +115,7 @@ class AffairController extends Controller
             return response()->json(['status' => 400, 'error' => 'Affair does not exist']);
         }
         $request_affair = $request->only('affair');
-        if ($affair->name === $request_affair['affair']['name']) {
+        if ($affair->name == $request_affair['affair']['name']) {
             $validation = $this->validateUpdateData($request_affair['affair'], true);
         } else {
             $validation = $this->validateUpdateData($request_affair['affair'], false);
@@ -290,7 +290,7 @@ class AffairController extends Controller
     public function validateData($data)
     {
         $rule = [
-            'type' => ['required', 'string',Rule::in(RequestType::all())],
+            'type' => ['required', 'string', Rule::in(RequestType::all())],
             'name' => 'required|unique:affairs|string',
             'description' => 'nullable|string',
             'procedures.*.name' => 'required|string',
@@ -306,7 +306,7 @@ class AffairController extends Controller
     {
         $update_rule = [
             'description' => 'nullable|string',
-            'type' => ['required', 'string',Rule::in(RequestType::all())],
+            'type' => ['required', 'string', Rule::in(RequestType::all())],
             'procedures.*.name' => 'required|string',
             'procedures.*.description' => 'nullable|string',
             'procedures.*.id' => 'required|integer',
@@ -318,7 +318,7 @@ class AffairController extends Controller
             'procedures.*.pre_requests.*.procedure_id' => "required|integer",
             'procedures.*.pre_requests.*.affair_id' => "nullable|integer|required_if: procedures.*.pre_request.*.name, ''",
         ];
-        if ($is_name_the_same) {
+        if (!$is_name_the_same) {
             $update_rule['name'] =  'required|string';
         }
         return Validator::make($data, $update_rule);

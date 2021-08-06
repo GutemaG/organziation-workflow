@@ -39,6 +39,7 @@ export default {
             id: data.id,
             name: data.name,
             description: data.description,
+            type: data.type,
             online_request_procedures: data.online_request_procedures,
             prerequisite_labels: data.prerequisite_labels
         };

@@ -18,11 +18,13 @@ export default new Vuex.Store({
     },
     state: {
         loggedInUser: window.user,
-        loggingUserError: ""
+        loggingUserError: "",
+        customerToken:""
     },
     getters: {
         currentUser: state => state.loggedInUser,
-        loggingUserErrorMessage: state => state.loggingUserError
+        loggingUserErrorMessage: state => state.loggingUserError,
+        customerToken: state => state.customerToken
     },
     actions: {
         async login({ commit }, data) {
@@ -42,11 +44,17 @@ export default new Vuex.Store({
                 throw error;
                 // commit("SET_ERROR", error_msg);
             }
+        },
+        setToken({commit}, token){
+           commit("SET_TOKEN", token) 
         }
     },
     mutations: {
         SET_ERROR(state, data) {
             state.loggingUserError = data;
+        },
+        SET_TOKEN(state, token){
+            state.customerToken = token
         }
     }
 });

@@ -3,6 +3,24 @@
     <b-row class="mt-3">
       <b-col>
         <b-container>
+          <b-alert
+            variant="success"
+            :show="customerToken.length != 0"
+            dismissible
+            fade
+          >
+            <h4>Send Successfully</h4>
+            <hr />
+            <h3>
+              Your Token is <span style="color: red">{{ customerToken }}</span>
+            </h3>
+            <p>
+              Please remember your token, It helps you to check your request
+              progress.
+              <br />
+              Check your sms
+            </p>
+          </b-alert>
           <h1 style="text-align: center">ASTU ONLINE AFFAIRS</h1>
           <p>
             Here you can access our organization's affairs that can help you
@@ -85,7 +103,7 @@
   </b-container>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 import OnlineAffairByCatagory from "./OnlineAffairByCatagory.vue";
 export default {
   name: "online-affair-page",
@@ -99,10 +117,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['online_requests']),
+    ...mapGetters(["online_requests", "customerToken"]),
   },
   methods: {
-    ...mapActions(['fetchOnlineRequests']),
+    ...mapActions(["fetchOnlineRequests"]),
     /*
     fetchOnlineAffairs() {
       axios.get("/api/online-requests").then((resp) => {

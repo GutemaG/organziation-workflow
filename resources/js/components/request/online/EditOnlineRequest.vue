@@ -29,6 +29,28 @@
             </b-form-input>
           </b-form-group>
           <b-form-group
+            label="Affair Type"
+            class="mb-1 mt-1"
+            label-for="description-input"
+          >
+            <b-form-select
+              v-model="$v.selectedRequest.type.$model"
+              id="online-request-type-input"
+            >
+              <b-form-select-option value=""
+                >Selecte affair type
+              </b-form-select-option>
+              <b-form-select-option value="student"
+                >Student</b-form-select-option
+              >
+              <b-form-select-option value="staff">Staff</b-form-select-option>
+              <b-form-select-option value="teacher"
+                >Teacher</b-form-select-option
+              >
+              <b-form-select-option value="other">Other</b-form-select-option>
+            </b-form-select>
+          </b-form-group>
+          <b-form-group
             id="online-request-description"
             label="Description"
             label-for="online-request-description-input"
@@ -369,8 +391,9 @@ export default {
               (pre) => pre.id == data.id
             );
             this.selectedRequest.prerequisite_labels.splice(index, 1, data);
+          } else {
+            console.log("errrro");
           }
-          else{console.log('errrro')}
         });
     },
 
@@ -432,6 +455,9 @@ export default {
       description: {
         required,
       },
+      type:{
+        required
+      }
     },
   },
 };

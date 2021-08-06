@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        /*
+        
          User::create([
             'user_name' => 'Admin',
             'first_name' =>'birhanu',
@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
          Bureau::factory(200)->create();
 
         OnlineRequest::factory(20);
-        */
+        
 
 
         //        OnlineRequest::factory(20)

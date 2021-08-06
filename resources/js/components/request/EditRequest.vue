@@ -314,7 +314,7 @@ export default {
         affair: this.selectedAffair,
       };
       this.updateAffair(data);
-      this.$route.go(-1);
+      this.$router.go(-1);
       // console.log(JSON.stringify(data));
     },
     addProcedure() {
