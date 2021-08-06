@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Procedure;
 use App\Models\PreRequest;
 use App\Models\Bureau;
+use App\Utilities\RequestType;
+
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -286,6 +288,7 @@ class AffairController extends Controller
     public function validateData($data)
     {
         $rule = [
+            'type' => ['required', 'string',Rule::in(RequestType::all())],
             'name' => 'required|unique:affairs|string',
             'description' => 'nullable|string',
             'procedures.*.name' => 'required|string',
@@ -301,6 +304,7 @@ class AffairController extends Controller
     {
         $update_rule = [
             'description' => 'nullable|string',
+            'type' => ['required', 'string',Rule::in(RequestType::all())],
             'procedures.*.name' => 'required|string',
             'procedures.*.description' => 'nullable|string',
             'procedures.*.id' => 'required|integer',

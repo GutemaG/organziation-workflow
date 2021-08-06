@@ -36,15 +36,15 @@ class DatabaseSeeder extends Seeder
          \App\Models\Affair::factory(50)->create();
          \App\Models\Procedure::factory(100)->create();
          \App\Models\PreRequest::factory(200)->create();
-
+/*
         \App\Models\PreRequest::factory()->create([
             'affair_id'=>null,
             'procedure_id'=>1,
             'name' =>'go somewhere',
             'description' =>' Description go somewhere'
         ]);
+        */
 
-         User::factory(100)->create();
 
          Building::factory(100)->create();
 

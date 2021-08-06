@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Utilities\RequestType;
 
 class CreateOnlineRequestsTable extends Migration
 {
@@ -17,6 +18,7 @@ class CreateOnlineRequestsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('name')->unique();
+            $table->enum('type', RequestType::all());
             $table->longText('description')->nullable();
             $table->softDeletes();
             $table->timestamps();

@@ -28,8 +28,8 @@ class ProcedureFactory extends Factory
 
         return [
             'affair_id' => $this->faker->randomElement($affairs_id),
-            'name' =>Str::random(10),
-            'description' =>Str::random(30),
+            'name' => implode($this->faker->unique()->words(rand(4, 7))),
+            'description' => $this->faker->paragraph(rand(4, 10)),
             'step' => $this->faker->randomElement([1,2,3,4,5,6,7,8,9,10])
         ];
     }
