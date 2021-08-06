@@ -63,6 +63,7 @@ class AffairController extends Controller
             $affair = auth()->user()->affairs()->create([
                 'name' => $validated_data['name'],
                 'description' => $validated_data['description'],
+                'type' => $validated_data['type'],
             ]);
 
             $procedures = $validated_data['procedures'];
@@ -129,6 +130,7 @@ class AffairController extends Controller
                 $affair->update(['name' => $validated_data['name'], 'description' => $validated_data['description']]);
             } else {
                 $affair->update(['description' => $validated_data['description']]);
+                $affair->update(['type' => $validated_data['type']]);
             }
             $procedures = $validated_data['procedures'];
             foreach ($procedures as $pro) {

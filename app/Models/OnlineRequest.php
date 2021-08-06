@@ -50,6 +50,7 @@ class OnlineRequest extends Model
         'user_id',
         'name',
         'description',
+        'type',
     ];
 
     /**
