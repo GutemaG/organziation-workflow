@@ -8,25 +8,29 @@ use App\Models\OnlineRequest;
 use App\Models\OnlineRequestTracker;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class OnlineRequestTrackerAction
 {
-    public static function applyRequest(OnlineRequest $onlineRequest): JsonResponse
+    public static function applyRequest(Request $request): JsonResponse
     {
-        try {
-            DB::beginTransaction();
-            $onlineRequestTracker = $onlineRequest->onlineRequestTracker()
-                ->create(['started_at' => now(), 'token' => Str::random(6)]);
-            $procedures = $onlineRequest->onlineRequestProcedures;
-            self::createOnlineRequestStep($procedures, $onlineRequestTracker);
-            DB::commit();
-            return self::successResponse($onlineRequestTracker);
-        }
-        catch (Exception $e) {
-            DB::rollBack();
-            return self::badResponse($e);
+        $onlineRequest = OnlineRequest::find($request->get('online_request_id'));
+        if ($onlineRequest) {
+            try {
+                DB::beginTransaction();
+                $onlineRequestTracker = $onlineRequest->onlineRequestTracker()
+                    ->create(['started_at' => now(), 'token' => Str::random(6)]);
+                $procedures = $onlineRequest->onlineRequestProcedures;
+                self::createOnlineRequestStep($procedures, $onlineRequestTracker);
+                DB::commit();
+                return self::successResponse($onlineRequestTracker);
+            }
+            catch (Exception $e) {
+                DB::rollBack();
+                return self::badResponse($e);
+            }
         }
     }
 

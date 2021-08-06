@@ -59,7 +59,7 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
 Route::prefix('api')->group(function (){
     Route::get('/online-requests', [OnlineRequestController::class, 'index']);
     Route::get('/online-requests/{online_request}', [OnlineRequestController::class, 'show']);
-    Route::get('/apply-request/{online_request}', [OnlineRequestTrackerController::class, 'applyRequest']);
+    Route::post('/apply-request', [OnlineRequestTrackerController::class, 'applyRequest']);
 
     //Birhanu
     Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
