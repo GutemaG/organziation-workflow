@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -98,5 +99,15 @@ class OnlineRequest extends Model
      */
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the onlineRequestTrackers associated with the online request.
+     *
+     * @return HasMany
+     */
+    public function onlineRequestTracker(): HasMany
+    {
+        return $this->hasMany(OnlineRequestTracker::class);
     }
 }
