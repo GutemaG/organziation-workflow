@@ -3,6 +3,7 @@
 use App\Exceptions\MissingModelException;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\OnlineRequestController;
+use App\Http\Controllers\OnlineRequestTrackerController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -58,6 +59,7 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
 Route::prefix('api')->group(function (){
     Route::get('/online-requests', [OnlineRequestController::class, 'index']);
     Route::get('/online-requests/{online_request}', [OnlineRequestController::class, 'show']);
+    Route::get('/apply-request/{online_request}', [OnlineRequestTrackerController::class, 'applyRequest']);
 
     //Birhanu
     Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
