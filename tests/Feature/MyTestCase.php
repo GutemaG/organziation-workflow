@@ -21,6 +21,7 @@ class MyTestCase extends TestCase
     protected $url = '';
     protected $modelName = '';
     protected $responseName = '';
+    protected $defaultTest = true;
 
     public function setUp(): void
     {
@@ -30,13 +31,25 @@ class MyTestCase extends TestCase
         MyDatabaseSeeder::seed();
     }
 
+    public function testDefaultTest(): void
+    {
+        if ($this->defaultTest) {
+            $this->testUnauthenticatedGuestCanAccess();
+            $this->testUnauthorizedUserCanAccess();
+            $this->testReceptionCanAccess();
+            $this->testStaffCanAccess();
+        }
+        else
+            self::markTestSkipped('');
+    }
+
     protected function printSuccessMessage(string $message){
         print_r("<info>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n</info>");
         print_r("<info>  $message --- success.  \n</info>");
         print_r("<info>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n\n</info>");
     }
 
-    public function testUnauthenticatedGuestCanAccess(): void
+    protected function testUnauthenticatedGuestCanAccess(): void
     {
         $data = $this->randomData($this->modelName);
         $id = $data->id;
@@ -64,7 +77,7 @@ class MyTestCase extends TestCase
         ]);
     }
 
-    public function testUnauthorizedUserCanAccess(): void
+    protected function testUnauthorizedUserCanAccess(): void
     {
         $this->testReceptionCanAccess();
 
