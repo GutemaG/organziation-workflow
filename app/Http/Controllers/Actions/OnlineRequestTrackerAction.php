@@ -4,49 +4,44 @@
 namespace App\Http\Controllers\Actions;
 
 
+use App\Http\Controllers\Actions\Services\SmsNotifier;
 use App\Models\OnlineRequest;
 use App\Models\OnlineRequestTracker;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Twilio\Exceptions\ConfigurationException;
+use Twilio\Rest\Client;
 
 class OnlineRequestTrackerAction
 {
-    public static function applyRequest(Request $request): JsonResponse
+    public static function applyRequest(array $data): JsonResponse
     {
-        $onlineRequest = OnlineRequest::find($request->get('online_request_id'));
+        $onlineRequest = OnlineRequest::find($data['online_request_id']);
         if ($onlineRequest) {
             try {
                 DB::beginTransaction();
                 $onlineRequestTracker = $onlineRequest->onlineRequestTracker()
                     ->create(['started_at' => now(), 'token' => Str::random(6)]);
+                $token = $onlineRequestTracker->token;
                 $procedures = $onlineRequest->onlineRequestProcedures;
                 self::createOnlineRequestStep($procedures, $onlineRequestTracker);
+                self::notifierCustomer($data['phone_number'], $token);
                 DB::commit();
-                return self::successResponse($onlineRequestTracker);
+                return self::successResponse($token);
             }
             catch (Exception $e) {
                 DB::rollBack();
                 return self::badResponse($e);
             }
         }
+        return self::badResponse(new Exception('Online request is not found.'));
     }
 
     /**
-     * @param OnlineRequestTracker $onlineRequestTracker
-     * @return JsonResponse
-     */
-    protected static function successResponse(OnlineRequestTracker $onlineRequestTracker): JsonResponse
-    {
-        return response()->json([
-            'status' => 200,
-            'token' => $onlineRequestTracker->token,
-        ]);
-    }
-
-    /**
+     * Register each procedure of the online request.
+     *
      * @param $procedures
      * @param OnlineRequestTracker $onlineRequestTracker
      */
@@ -66,6 +61,18 @@ class OnlineRequestTrackerAction
     }
 
     /**
+     * @param string $token
+     * @return JsonResponse
+     */
+    protected static function successResponse(string $token): JsonResponse
+    {
+        return response()->json([
+            'status' => 200,
+            'token' => $token,
+        ]);
+    }
+
+    /**
      * @param Exception $e
      * @return JsonResponse
      */
@@ -77,5 +84,18 @@ class OnlineRequestTrackerAction
                 'error' => ['something went wrong. Please try again.', $e->getMessage()],
             ]
         ]);
+    }
+
+    /**
+     * Send the token to the customer via sms.
+     *
+     * @param $phone_number
+     * @param $token
+     * @throws ConfigurationException
+     */
+    protected static function notifierCustomer($phone_number, $token): void
+    {
+        $smsNotifier = new SmsNotifier($phone_number, $token);
+        $smsNotifier->sendSms();
     }
 }
