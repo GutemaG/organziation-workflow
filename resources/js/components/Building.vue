@@ -128,7 +128,11 @@
         </b-button>
       </template>
       <template #cell(description)="row">
-        <span v-b-tooltip.hover :title="row.item.description">{{ row.item.description.substring(0, 30) }}</span>
+        <span v-b-tooltip.hover 
+          v-b-popover.hover.top="row.item.description"
+          title="Description">{{
+          row.item.description.substring(0, 30)
+        }}</span>
       </template>
 
       <template #row-details="row">

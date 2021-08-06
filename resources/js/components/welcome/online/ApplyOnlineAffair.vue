@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <b-alert variant="danger" :show="error != null" dismissible>
+      <h4>{{ error }}</h4>
+    </b-alert>
     <b-form @submit.prevent="handleSubmit">
       <b-form-group
         id="full-name-input-label"
@@ -36,7 +39,14 @@
           required
         ></b-form-input>
       </b-form-group>
-      <b-button type="submit"> Send </b-button>
+      <b-button
+        type="submit"
+        variant="primary"
+        :disabled="$v.$invalid || isLoading"
+      >
+        <span v-if="!isLoading">{{ tr("Send") }}</span>
+        <b-spinner v-show="isLoading"></b-spinner>
+      </b-button>
     </b-form>
   </div>
 </template>
@@ -55,6 +65,8 @@ export default {
         phone_number: "",
       },
       token: "",
+      isLoading: false,
+      error: null,
     };
   },
   computed: {
@@ -73,11 +85,16 @@ export default {
           online_request_id: this.selected.id,
         })
         .then((resp) => {
+          this.isLoading = true;
           if (resp.data.status == 200) {
             this.$store.dispatch("setToken", resp.data.token);
             this.$router.go(-1);
+          } else {
+            this.error = "Something is wrong, please try again";
           }
-        });
+        })
+        .catch((err) => console.log("something is wrong"));
+      this.isLoading = false;
     },
   },
   created() {

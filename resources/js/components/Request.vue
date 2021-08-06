@@ -160,8 +160,7 @@
                 <p
                   @click="row.toggleDetails"
                   id="affair-description"
-                  v-b-tooltip.hover
-                  :title="row.item.description"
+                  v-b-popover.hover.top="row.item.description" title="Description"
                 >
                   {{ row.item.description.substring(0, 20) }} ...
                 </p>

@@ -150,10 +150,11 @@
           <template #cell(description)="row">
             <p
               @click="row.toggleDetails"
-              v-b-tooltip.hover
-              :title="row.item.description"
+              v-b-popover.hover.top="row.item.description" title="Description"
               style="cursor: pointer"
             >
+              <!-- v-b-tooltip.hover -->
+              <!-- :title="row.item.description" -->
               {{ row.item.description.substring(0, 20) }}...
             </p>
           </template>
