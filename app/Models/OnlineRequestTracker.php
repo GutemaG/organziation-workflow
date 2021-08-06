@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @method static orderBy(string $string, string $string1)
+ */
 class OnlineRequestTracker extends Model
 {
     use HasFactory, SoftDeletes;
