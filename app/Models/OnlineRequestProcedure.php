@@ -70,6 +70,7 @@ class OnlineRequestProcedure extends Model
      * @var string[]
      */
     protected $with = [
+        'bureau',
         'users'
     ];
 
@@ -96,7 +97,7 @@ class OnlineRequestProcedure extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function building() {
-        return $this->belongsTo(Building::class, 'responsible_bureau_id');
+    public function bureau() {
+        return $this->belongsTo(Bureau::class, 'responsible_bureau_id');
     }
 }

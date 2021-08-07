@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OnlineRequestStep extends Model
@@ -19,4 +20,11 @@ class OnlineRequestStep extends Model
       'user_id',
       'is_completed',
     ];
+
+    protected $with = ['onlineRequestProcedure'];
+
+    public function onlineRequestProcedure(): BelongsTo
+    {
+        return $this->belongsTo(OnlineRequestProcedure::class);
+    }
 }

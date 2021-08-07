@@ -6,16 +6,32 @@ namespace App\Http\Controllers\Actions;
 
 use App\Http\Controllers\Actions\Services\SmsNotifier;
 use App\Models\OnlineRequest;
+use App\Models\OnlineRequestProcedure;
 use App\Models\OnlineRequestTracker;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Twilio\Exceptions\ConfigurationException;
-use Twilio\Rest\Client;
 
 class OnlineRequestTrackerAction
 {
+    public static function appliedRequest(OnlineRequestTracker $onlineRequestTracker): JsonResponse
+    {
+//        $appliedRequest = OnlineRequestTracker::with(['onlineRequestSteps'])->find($id)->toArray();
+//        $length = count($appliedRequest['online_request_steps']);
+//        for ($i = 0; $i < $length; $i++) {
+//            $bureau = OnlineRequestProcedure::with('bureau')
+//                ->find($appliedRequest['online_request_steps'][$i]['online_request_procedure_id'])->bureau;
+//            $appliedRequest['online_request_steps'][$i]['bureau'] = $bureau->toArray();
+//            $appliedRequest['online_request_steps'][$i]['online_request_procedure'] = null;
+//        }
+        return response()->json([
+            'status' => 200,
+            'applied_request' => $onlineRequestTracker,
+        ]);
+    }
+
     public static function applyRequest(array $data): JsonResponse
     {
         $onlineRequest = OnlineRequest::find($data['online_request_id']);

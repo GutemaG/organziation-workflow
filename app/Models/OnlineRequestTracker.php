@@ -22,6 +22,11 @@ class OnlineRequestTracker extends Model
         'token',
     ];
 
+    protected $with = [
+        'onlineRequest',
+        'onlineRequestSteps',
+    ];
+
     public function onlineRequest(): BelongsTo
     {
         return $this->belongsTo(OnlineRequest::class);
