@@ -21,7 +21,9 @@ class CreateOnlineRequestStepsTable extends Migration
             $table->dateTime('ended_at')->nullable();
             $table->unsignedBigInteger('next_step')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->boolean('is_completed');
+            $table->boolean('is_completed')->default(false);
+            $table->boolean('is_rejected')->nullable();
+            $table->text('reason')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
