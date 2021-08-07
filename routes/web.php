@@ -58,7 +58,11 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
 // public routes
 Route::prefix('api')->group(function (){
     Route::get('/online-requests', [OnlineRequestController::class, 'index']);
-    Route::get('/online-requests/{online_request}', [OnlineRequestController::class, 'show']);
+    Route::get('/online-requests/{online_request}', [OnlineRequestController::class, 'show'])
+        ->missing(function (Request $request) {
+            throw new  MissingModelException();
+        });
+    Route::get('/apply-request/{online_request_tracker:token}', [OnlineRequestTrackerController::class, 'appliedRequest']);
     Route::post('/apply-request', [OnlineRequestTrackerController::class, 'applyRequest']);
 
     //Birhanu
