@@ -139,7 +139,6 @@ class Utility
         $index = array_rand($values);
         return $values[$index];
     }
-
     /**
      * Return random request type.
      *
@@ -151,5 +150,4 @@ class Utility
         $index = array_rand($data);
         return $data[$index];
     }
-
 }

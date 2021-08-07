@@ -70,7 +70,7 @@
 
       <template #cell(pre_requests)="row">
         <span v-if="row.item.pre_requests.length == 0">no pre request</span>
-        <span v-else @click="row.toggleDetails" style="cursor: pointer"
+        <span v-else @click="row.toggleDetails" style="cursor: pointer;display:block"
           >{{ row.item.pre_requests.length }}
           <!-- <b-table :items="row.item.pre_requests"> </b-table> -->
         </span>

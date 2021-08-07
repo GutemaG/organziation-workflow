@@ -12,7 +12,7 @@
           class="mb-3"
         >
           <b-button size="sm" @click="addUser" class="mr-1" variant="primary">
-            + Add
+           + {{tr('Add')}}
           </b-button>
         </b-form-group>
       </b-col>
@@ -38,7 +38,7 @@
 
             <b-input-group-append>
               <b-button :disabled="!filter" @click="filter = ''"
-                >Clear</b-button
+                >{{tr('Clear')}}</b-button
               >
             </b-input-group-append>
           </b-input-group>
@@ -49,7 +49,7 @@
 
       <b-col sm="5" md="6" class="my-1">
         <b-form-group
-          label="Per page"
+          :label="tr('Per page')"
           label-for="per-page-select"
           label-cols-sm="6"
           label-cols-md="4"
@@ -75,10 +75,10 @@
           align="fill"
           size="sm"
           class="my-0"
-          first-text="First"
-          prev-text="Prev"
-          next-text="Next"
-          last-text="Last"
+          :first-text="tr('First')"
+          :prev-text="tr('Prev')"
+          :next-text="tr('Next')"
+          :last-text="tr('Last')"
         ></b-pagination>
       </b-col>
     </b-row>
@@ -111,7 +111,7 @@
           class="mr-1"
           variant="primary"
         >
-          <i class="fa fa-edit">Edit</i>
+          <i class="fa fa-edit">{{tr('Edit')}}</i>
         </b-button>
         <!-- <b-button size="sm" @click="row.toggleDetails">
           {{ row.detailsShowing ? "Hide" : "Show" }} Details
@@ -122,7 +122,7 @@
           class="mr-1"
           variant="danger"
         >
-          <i class="fa fa-trash">Delete</i>
+          <i class="fa fa-trash">{{tr('Delete')}}</i>
         </b-button>
       </template>
 

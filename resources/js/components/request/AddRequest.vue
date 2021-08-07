@@ -32,6 +32,23 @@
           >
           </b-form-input>
         </b-form-group>
+
+        <b-form-group
+          label="Affair Type"
+          class="mb-1 mt-1"
+          label-for="description-input"
+        >
+          <b-form-select v-model="$v.affair.type.$model" id="affair-type-input">
+            <b-form-select-option value=""
+              >Selecte affair type
+            </b-form-select-option>
+            <b-form-select-option value="student">Student</b-form-select-option>
+            <b-form-select-option value="staff">Staff</b-form-select-option>
+            <b-form-select-option value="teacher">Teacher</b-form-select-option>
+            <b-form-select-option value="other">Other</b-form-select-option>
+          </b-form-select>
+        </b-form-group>
+
         <b-form-group
           label="Description"
           lableFor="affair-description"
@@ -242,6 +259,7 @@ export default {
       affair: {
         name: "",
         description: "",
+        type: "",
         procedures: [
           {
             name: "",
@@ -317,9 +335,12 @@ export default {
       name: {
         required,
       },
-      procedures:{
-        name:required
-      }
+      type: {
+        required,
+      },
+      procedures: {
+        name: required,
+      },
     },
   },
 };

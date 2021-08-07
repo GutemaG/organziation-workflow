@@ -44,7 +44,7 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
 
     //Birhanu
     Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-    Route::apiResource('/api/affairs', \App\Http\Controllers\AffairController::class)
+    Route::apiResource('/affairs', \App\Http\Controllers\AffairController::class)
         ->only(['store', 'update', 'destroy']);
 
     Route::delete('/delete-procedure/{id}/{affair_id}', [\App\Http\Controllers\AffairController::class, 'deleteProcedure']);
@@ -68,6 +68,10 @@ Route::prefix('api')->group(function (){
     //Birhanu
     Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
 });
+
+Route::get('/{vue_capture?}', function () {
+    return view('layouts.master');
+})->where('vue_capture', '[\/\w\.-]*');
 
 // for test
 Route::get('/test', function () {

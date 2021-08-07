@@ -70,8 +70,6 @@ class Rule
             'prerequisite_labels.*' => 'nullable|string',
         ];
     }
-
-<<<<<<< HEAD
     public static function onlineRequestUpdate($unique) {
         $rule = [
             'id' => 'required|integer',
@@ -90,8 +88,6 @@ class Rule
 
     }
 
-=======
->>>>>>> birhanu
     /**
      * return all necessary rules for validating fields of requested model.
      *

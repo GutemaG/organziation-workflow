@@ -31,7 +31,43 @@ export default [
                 components: {
                     welcome: require("./components/welcome/Search.vue").default
                 }
-            }
+            },
+            {
+                path: "/info",
+                components: {
+                    welcome: require("./components/welcome/info/InfoHome.vue")
+                        .default
+                }
+            },
+            {
+                path: "/online",
+                components: {
+                    welcome: require("./components/welcome/online/OnlineHome.vue")
+                        .default
+                }
+            },
+
+            {
+                path: "/login",
+                name: "login",
+                components: {
+                    welcome: require("./components/auth/LoginPage.vue").default
+                }
+            },
+            {
+                path: "/apply-online-affair",
+                name: "apply-online-affair",
+                components: {
+                    welcome: require("./components/welcome/online/OnlineAffairs.vue").default
+                }
+            },
+            {
+                path: "/apply-online-affair/:slug",
+                name: "apply-online-affair2",
+                components: {
+                    welcome: require("./components/welcome/online/ApplyOnlineAffair.vue").default
+                }
+            },
         ]
     },
     {
@@ -46,18 +82,28 @@ export default [
                 components: {
                     dashboard: require(`./components/dashboard/${dashboardType}.vue`)
                         .default
+                },
+                meta: {
+                    requiresAuth: true
                 }
             },
             {
                 path: "/users",
                 components: {
                     dashboard: require("./components/Users.vue").default
+                },
+                meta: {
+                    requiresAuth: true,
+                    adminOrItTeam: true
                 }
             },
             {
                 path: "/profile",
                 components: {
                     dashboard: require("./components/Profile.vue").default
+                },
+                meta: {
+                    requiresAuth: true
                 }
             },
             // { path: "/users", component: require("./components/Users.vue").default },
@@ -65,18 +111,27 @@ export default [
                 path: "/bureaus",
                 components: {
                     dashboard: require("./components/Bureau.vue").default
+                },
+                meta: {
+                    requiresAuth: true
                 }
             },
             {
                 path: "/requests",
                 components: {
                     dashboard: require("./components/Request.vue").default
+                },
+                meta: {
+                    requiresAuth: true
                 }
             },
             {
                 path: "/buildings",
                 components: {
                     dashboard: require("./components/Building.vue").default
+                },
+                meta: {
+                    requiresAuth: true
                 }
             },
             {
@@ -84,6 +139,9 @@ export default [
                 components: {
                     dashboard: require("./components/request/AddRequest.vue")
                         .default
+                },
+                meta: {
+                    requiresAuth: true
                 }
             },
             {
@@ -92,6 +150,9 @@ export default [
                 components: {
                     dashboard: require("./components/request/EditRequest.vue")
                         .default
+                },
+                meta: {
+                    requiresAuth: true
                 }
             },
             {
@@ -99,6 +160,9 @@ export default [
                 props: true,
                 components: {
                     dashboard: require("./components/OnlineRequest.vue").default
+                },
+                meta: {
+                    requiresAuth: true
                 }
             },
             {
@@ -107,6 +171,9 @@ export default [
                 components: {
                     dashboard: require("./components/request/online/AddOnlineRequest.vue")
                         .default
+                },
+                meta: {
+                    requiresAuth: true
                 }
             },
             {
@@ -115,6 +182,9 @@ export default [
                 components: {
                     dashboard: require("./components/request/online/EditOnlineRequest.vue")
                         .default
+                },
+                meta: {
+                    requiresAuth: true
                 }
             }
         ]

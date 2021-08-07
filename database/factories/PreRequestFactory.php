@@ -26,20 +26,21 @@ class PreRequestFactory extends Factory
     public function definition()
     {
         //Fields: [id, procedure_id, affair_id, name, description]
-        $affairs_id = Affair::pluck('id');
+        $affair_ids = Affair::pluck('id');
         $procedures_id = Procedure::pluck('id')->toArray();
-        $affair =$this->faker->randomElement($affairs_id, null);
+        $affair_id =$this->faker->randomElement($affair_ids, null);
         $name = '';
         $description='';
         if(empty($affair)){
-           $name = Str::random(10);
-           $description = Str::random(10);
+            $name = $this->faker->paragraph(rand(2, 4));
+            $description = $this->faker->paragraph(rand(4, 10));
         }
         else{
-
+            $name = '';
+            $description ='';
         }
         return [
-            'affair_id'=>$affair,
+            'affair_id'=>$affair_id,
             'procedure_id'=>$this->faker->randomElement($procedures_id),
             'name' =>$name,
             'description' =>$description,

@@ -2,6 +2,9 @@
 <template>
   <div class="container">
     <h1>Add Online Request</h1>
+    <b-alert variant="danger" show v-if="missedStepNumbers"
+      >Please Fille the step number correctly</b-alert
+    >
     <base-card :shadow="true">
       <b-row align-v="center" slot="header">
         <b-col cols="8"> Add Online Reqeust </b-col>
@@ -13,21 +16,51 @@
             id="online-request-name"
             label="Name"
             label-for="online-request-name-input"
+            :invalid-feedback="
+              !$v.affair.name.isUnique ? 'Already exist' : 'Name is required'
+            "
           >
             <b-form-input
               id="online-request-name-input"
-              v-model.trim="affair.name"
+              v-model.trim="$v.affair.name.$model"
+              :state="validateState('name')"
+              required
             >
             </b-form-input>
+          </b-form-group>
+          <b-form-group
+            label="Request Type"
+            class="mb-1 mt-1"
+            label-for="description-input"
+          >
+            <b-form-select
+              v-model="$v.affair.type.$model"
+              id="online-request-type-input"
+            >
+              <b-form-select-option value=""
+                >Selecte affair type
+              </b-form-select-option>
+              <b-form-select-option value="student"
+                >Student</b-form-select-option
+              >
+              <b-form-select-option value="staff">Staff</b-form-select-option>
+              <b-form-select-option value="teacher"
+                >Teacher</b-form-select-option
+              >
+              <b-form-select-option value="other">Other</b-form-select-option>
+            </b-form-select>
           </b-form-group>
           <b-form-group
             id="online-request-description"
             label="Description"
             label-for="online-request-description-input"
+            invalid-feedback="Required"
           >
             <b-form-textarea
               id="online-request-description-input"
-              v-model="affair.description"
+              v-model="$v.affair.description.$model"
+              :state="validateState('description')"
+              required
             ></b-form-textarea>
           </b-form-group>
           <hr class="my-4" />
@@ -61,60 +94,75 @@
                         id="online-request-bureau"
                         label-for="online-request-bureau-input"
                         label="Responsible Bureau"
+                        invalid-feedback="required"
                       >
-                        <b-form-select
-                          id="online-request-bureau-input"
+                        <v-select
                           v-model="procedure.responsible_bureau_id"
+                          label="text"
                           :options="bureau_ids"
+                          :reduce="(bureau) => bureau.value"
+                          placeholder="Select bureau"
                         >
-                          <template #first>
-                            <b-form-select-option selected disabled value="">
-                              Select Responsible Bureau
-                            </b-form-select-option>
+                          <template #search="{ attributes, events }">
+                            <input
+                              class="vs__search"
+                              :required="!procedure.responsible_bureau_id"
+                              v-bind="attributes"
+                              v-on="events"
+                            />
                           </template>
-                        </b-form-select>
+                        </v-select>
                       </b-form-group>
+                      <!--TODO: from here I remove bureau from  -->
                       <b-form-group
+                        invalid-feedback="required"
                         id="online-request-user"
                         label-for="online-request-user-input"
                         label="Responsible User"
-                        description="use Ctrl key to select many user"
                       >
-                        <b-form-select
-                          id="online-request-user-input"
+                        <v-select
                           v-model="procedure.responsible_user_id"
+                          label="text"
                           :options="staff_ids"
+                          :reduce="(staff) => staff.value"
+                          placeholder="Select Responsible User"
                           multiple
-                          style="height:10rem;"
+                          :close-on-select="false"
                         >
-                          <template #first>
-                            <b-form-select-option selected disabled value="">
-                              Select Responsible User
-                            </b-form-select-option>
+                          <template #search="{ attributes, events }">
+                            <input
+                              class="vs__search"
+                              :required="!procedure.responsible_user_id"
+                              v-bind="attributes"
+                              v-on="events"
+                            />
                           </template>
-                        </b-form-select>
+                        </v-select>
                       </b-form-group>
+
                       <b-form-group
                         id="online-request-procedures-input"
                         label="Step"
-                        label-for="online-request-name-input"
+                        label-for="online-request-proceudre-step-number-input"
                       >
                         <b-form-input
                           placeholder="Enter Procedure step"
-                          id="online-request-name-input"
+                          id="online-request-proceudre-step-number-input"
                           v-model="procedure.step_number"
                           type="number"
+                          required
                         >
                         </b-form-input>
                       </b-form-group>
                       <b-form-group
                         label="Procedures Description"
                         id="online-request-procedures-description"
+                        label-for="online-request-procedures-description-input"
                       >
                         <b-form-textarea
                           v-model="procedure.description"
                           placeholder="Enter Description for Procedure"
-                          id="online-request-procedures-description"
+                          id="online-request-procedures-description-input"
                         >
                         </b-form-textarea>
                       </b-form-group>
@@ -130,11 +178,19 @@
             >
           </base-card>
         </div>
-        <b-button v-if="!prerequisite" @click="prerequisite=true" variant="primary">add pre-request</b-button>
+        <b-button
+          v-if="!prerequisite"
+          @click="prerequisite = true"
+          variant="primary"
+          >add pre-request</b-button
+        >
         <base-card v-if="prerequisite">
           <b-row align-v="center" slot="header">
             <b-col cols="8">Add Pre Request Labels</b-col>
-            <b-col cols="4"><b-button variant="danger" @click="removeLabel()"><i class="fa fa-trash"></i></b-button></b-col>
+            <b-col cols="4"
+              ><b-button variant="danger" @click="removeLabel()"
+                ><i class="fa fa-trash"></i></b-button
+            ></b-col>
           </b-row>
           <b-form-group label="Label">
             <b-form-tags
@@ -143,13 +199,7 @@
               class="mb-2"
             >
               <template
-                v-slot="{
-                  tags,
-                  inputAttrs,
-                  inputHandlers,
-                  addTag,
-                  removeTag,
-                }"
+                v-slot="{ tags, inputAttrs, inputHandlers, addTag, removeTag }"
               >
                 <b-input-group class="mb-2">
                   <b-form-input
@@ -187,7 +237,12 @@
           </b-form-group>
         </base-card>
         <hr class="my-5" />
-        <b-button type="submit" class="form-control" variant="primary">
+        <b-button
+          type="submit"
+          class="form-control"
+          variant="primary"
+          :disabled="$v.$invalid || missedStepNumbers"
+        >
           Submit</b-button
         >
       </b-form>
@@ -196,40 +251,85 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { required } from "vuelidate/lib/validators";
+import Vselect from "vue-select";
+import Multiselect from "vue-multiselect";
 export default {
+  components: { Multiselect, "v-select": Vselect },
   data() {
     return {
       affair: {
         name: "",
         description: "",
+        type:"",
         online_request_procedures: [
           {
             responsible_bureau_id: "",
             description: "",
-            step_number: "",
+            step_number: 1,
             responsible_user_id: [],
           },
         ],
         prerequisite_labels: [],
       },
-      prerequisite: false
+      prerequisite: false,
     };
   },
   computed: {
-    ...mapGetters(["bureau_ids", "staff_ids"]),
+    ...mapGetters(["bureau_ids", "staff_ids", "online_requests"]),
+    staff_id_only() {
+      let ids = this.staff_ids.map((staff) => staff.value);
+      let labels = this.staff_ids.map((staff) => staff.text);
+      return ids;
+    },
+    missedStepNumbers() {
+      let step = [];
+      let procedure = this.affair.online_request_procedures;
+      let missed_step = [];
+      for (let i = 0; i < procedure.length; i++) {
+        step.push(procedure[i].step_number);
+      }
+      step = step.sort();
+      if (step[0] != 1) {
+        missed_step.push(1);
+      }
+      if (step.length > 1) {
+        for (let i = 1; i < step.length; i++) {
+          if (step[i] - step[i - 1] != 1) {
+            missed_step.push(step[i]);
+          }
+        }
+      }
+      return missed_step.length !== 0; //?false;
+    },
   },
   methods: {
     ...mapActions(["addOnlineRequest"]),
-    handleSubmit() {
-      this.addOnlineRequest(this.affair);
-      this.$router.push('/online-requests')
-      console.log(JSON.stringify(this.affair));
+    validateState(value) {
+      const { $dirty, $error } = this.$v.affair[value];
+      return $dirty ? !$error : null;
     },
+    searchStaff(value) {
+      console.log;
+      return value + "somethign";
+    },
+    handleSubmit() {
+      let tempo = this.affair;
+      if (tempo.prerequisite_labels.length == 0) {
+        delete tempo["prerequisite_labels"];
+      }
+      this.addOnlineRequest(tempo);
+      this.$router.go(-1);
+      // this.$router.push('/online-requests')
+      // console.log(JSON.stringify(tempo));
+    },
+
     addProcedure() {
+      let totalStep = this.affair.online_request_procedures.length;
       this.affair.online_request_procedures.push({
         responsible_bureau_id: "",
         description: "",
-        step_number: "",
+        step_number: totalStep + 1,
         responsible_user_id: [],
       });
     },
@@ -245,8 +345,39 @@ export default {
     },
     removeLabel(index) {
       this.affair.prerequisite_labels = [];
-      this.prerequisite = false
+      this.prerequisite = false;
+    },
+  },
+  validations: {
+    affair: {
+      name: {
+        required,
+        isUnique(value) {
+          let index = this.online_requests.findIndex(
+            (req) => req.name == value
+          );
+          console.log(index);
+          if (index === -1) return true;
+          return false;
+        },
+      },
+      description: {
+        required,
+      },
+      type:{
+        required
+      }
     },
   },
 };
 </script>
+<style src='vue-select/dist/vue-select.css'></style>
+<style scoped>
+.select-element {
+  line-height: normal;
+  white-space: normal;
+  top: 50%;
+  display: flex;
+  flex-wrap: wrap;
+}
+</style>

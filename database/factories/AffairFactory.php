@@ -6,6 +6,7 @@ use App\Models\Affair;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use \App\Models\User;
+use App\Utilities\RequestType;
 class AffairFactory extends Factory
 {
     /**
@@ -28,8 +29,10 @@ class AffairFactory extends Factory
                     ->pluck('id')->toArray();
         return [
             'user_id'=>$this->faker->randomElement($users_id),
-            'name' => Str::random(15),
-            'description' => Str::random(30),
+            'name' => implode($this->faker->unique()->words(rand(4, 7))),
+             'type' => Utility::getRandomRequestType(),
+            'description' => $this->faker->paragraph(rand(4, 10)),
+
         ];
     }
 }

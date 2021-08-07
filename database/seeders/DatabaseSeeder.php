@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Seeders;
+
 use App\Models\Building;
 use App\Models\Bureau;
 use App\Models\OnlineRequest;
@@ -22,7 +23,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-
+        
          User::create([
             'user_name' => 'Admin',
             'first_name' =>'birhanu',
@@ -45,35 +46,35 @@ class DatabaseSeeder extends Seeder
             'name' =>'go somewhere',
             'description' =>' Description go somewhere'
         ]);
+        
 
-         User::factory(100)->create();
 
          Building::factory(100)->create();
 
          Bureau::factory(200)->create();
 
         OnlineRequest::factory(20);
+        
 
 
-//        OnlineRequest::factory(20)
-//            ->has(\App\Models\PrerequisiteLabel::factory()->count(rand(1,5)))
-//            ->has(\App\Models\OnlineRequestProcedure::factory()
-//                ->hasAttached(\App\Models\User::inRandomOrder()->limit(rand(1,5))->get())
-//                ->count(rand(3,6)))
-//            ->create();
+        //        OnlineRequest::factory(20)
+        //            ->has(\App\Models\PrerequisiteLabel::factory()->count(rand(1,5)))
+        //            ->has(\App\Models\OnlineRequestProcedure::factory()
+        //                ->hasAttached(\App\Models\User::inRandomOrder()->limit(rand(1,5))->get())
+        //                ->count(rand(3,6)))
+        //            ->create();
 
-        OnlineRequest::factory()->count(5)->create()->each(function ($request) {
+        OnlineRequest::factory()->count(20)->create()->each(function ($request) {
             $stepNumber = 1;
-            $length = random_int(3,6);
+            $length = random_int(3, 6);
             PrerequisiteLabel::factory()->count(random_int(1, 5))->create(['online_request_id' => $request->id]);
 
             for ($i = 0; $i < $length; $i++) {
                 OnlineRequestProcedure::factory()
-                    ->hasAttached(\App\Models\User::inRandomOrder()->limit(rand(1,5))->get())
+                    ->hasAttached(\App\Models\User::inRandomOrder()->limit(rand(1, 5))->get())
                     ->count(1)
                     ->create(['step_number' => $stepNumber++, 'online_request_id' => $request->id]);
             }
-
         });
     }
 }

@@ -21,6 +21,21 @@
             required
           ></b-form-input>
         </b-form-group>
+        <b-form-group
+          label="Affair Type"
+          class="mb-1 mt-1"
+          label-for="description-input"
+        >
+          <b-form-select v-model="selectedAffair.type" id="affair-type-input">
+            <b-form-select-option value=""
+              >Selecte affair type
+            </b-form-select-option>
+            <b-form-select-option value="student">Student</b-form-select-option>
+            <b-form-select-option value="staff">Staff</b-form-select-option>
+            <b-form-select-option value="teacher">Teacher</b-form-select-option>
+            <b-form-select-option value="other">Other</b-form-select-option>
+          </b-form-select>
+        </b-form-group>
 
         <b-form-group
           label="Description"
@@ -93,7 +108,13 @@
                     :label-for="'procedure-' + procedure_index + 'step-input'"
                   >
                     <b-form-input
-                      :id="'procedure-' + procedure_index + '-description'"
+                      :id="
+                        'procedure-' +
+                        procedure.id +
+                        '-' +
+                        procedure_index +
+                        '-description'
+                      "
                       v-model="procedure.step"
                       placeholder="Enter Procedure Step number"
                       type="number"
@@ -145,7 +166,7 @@
                         <b-form-input
                           :id="
                             'pre_request-' +
-                            procedure_index +
+                            pre_request.id +
                             '-' +
                             pre_index +
                             '-name-input'
@@ -155,33 +176,13 @@
                           required
                         ></b-form-input>
                       </b-form-group>
-                      <base-input
-                        label="Pre Request Name"
-                        placeholder="Enter Pre request Name"
-                        v-model="pre_request.name"
-                        :labelFor="
-                          'pre_request-' +
-                          procedure_index +
-                          '-' +
-                          pre_index +
-                          'name-input'
-                        "
-                        :id="
-                          'pre_request-' +
-                          procedure_index +
-                          '-' +
-                          pre_index +
-                          '-name-input'
-                        "
-                        required
-                      >
-                      </base-input>
+
                       <b-form-group
                         label="Pre Request Description"
                         class="mb-1 mt-1"
                         :label-for="
                           'pre_request-' +
-                          procedure_index +
+                          pre_request.id +
                           '-' +
                           pre_index +
                           '-description'
@@ -192,7 +193,7 @@
                           v-model="pre_request.description"
                           :id="
                             'pre_request-' +
-                            procedure_index +
+                            pre_request.id +
                             '-' +
                             pre_index +
                             '-description'
@@ -203,12 +204,23 @@
                       <b-form-group
                         id="pre-request-affair"
                         label="Select Affair"
-                        label-for="pre-request-affair-input"
+                        :label-for="
+                          'pre-request-affair-input-' +
+                          procedure_index +
+                          '-' +
+                          pre_index
+                        "
                       >
+                        <!-- label-for="pre-request-affair-input" -->
                         <b-form-select
                           v-model="pre_request.affair_id"
                           :options="affair_ids"
-                          id="pre-request-affair-input"
+                          :id="
+                            'pre-request-affair-input-' +
+                            procedure_index +
+                            '-' +
+                            pre_index
+                          "
                           v-bind:disabled="
                             pre_request.name.length !== 0 ||
                             pre_request.description.length !== 0
@@ -249,7 +261,11 @@
       >
     </b-form>
 
-    <add-pre-request v-if="isAddingPreRequest" :procedure_id="selected_procedure_id" :affair_id="selectedAffair.id"></add-pre-request>
+    <add-pre-request
+      v-if="isAddingPreRequest"
+      :procedure_id="selected_procedure_id"
+      :affair_id="selectedAffair.id"
+    ></add-pre-request>
     <add-procedure :affair_id="selectedAffair.id"></add-procedure>
   </b-container>
 </template>
@@ -259,16 +275,16 @@ import AddProcedure from "./AddProcedure.vue";
 import AddPreRequest from "./AddPreRequest.vue";
 // import store from '@/'
 export default {
-  components:{
-    "add-procedure":AddProcedure,
-    "add-pre-request":AddPreRequest,
+  components: {
+    "add-procedure": AddProcedure,
+    "add-pre-request": AddPreRequest,
   },
   props: ["id"],
   data() {
     return {
       affair_id: this.$route.params.id,
       selectedAffair: {},
-      selected_procedure_id:"",
+      selected_procedure_id: "",
       isAddingPreRequest: false,
     };
   },
@@ -298,7 +314,8 @@ export default {
         affair: this.selectedAffair,
       };
       this.updateAffair(data);
-      console.log(JSON.stringify(data));
+      this.$router.go(-1);
+      // console.log(JSON.stringify(data));
     },
     addProcedure() {
       console.log("adding Procedurrrrre");
@@ -323,8 +340,8 @@ export default {
         }
       });
     },
-    addPreRequest(procedure_id){
-      this.selected_procedure_id= procedure_id
+    addPreRequest(procedure_id) {
+      this.selected_procedure_id = procedure_id;
       this.isAddingPreRequest = true;
       this.$root.$emit("bv::show::modal", "add-pre-request");
     },
