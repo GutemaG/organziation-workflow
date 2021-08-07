@@ -19,8 +19,8 @@ class OnlineRequestStep extends Model
       'next_step',
       'user_id',
       'is_completed',
-      'is_rejected',
-      'reason',
+        'is_rejected',
+        'reason',
     ];
 
     protected $with = ['onlineRequestProcedure'];
