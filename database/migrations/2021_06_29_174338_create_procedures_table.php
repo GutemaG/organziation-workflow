@@ -15,7 +15,7 @@ class CreateProceduresTable extends Migration
     {
         Schema::create('procedures', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('affair_id');
+            $table->unsignedBigInteger('affair_id');
             $table->string('name');
             $table->longText('description')->nullable();
             $table->unsignedInteger('step');

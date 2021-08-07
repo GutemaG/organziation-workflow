@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Utilities;
 
 use App\Models\Building;
 use App\Models\Bureau;
+use App\Models\OnlineRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -53,6 +54,21 @@ class Fields
     ];
 
     /**
+     * OnlineRequest model updatable fields.
+     *
+     * @var string[]
+     */
+    private static $onlineRequest = [
+        'name',
+        'description',
+        'online_request_procedures.*.responsible_bureau_id',
+        'online_request_procedures.*.description',
+        'online_request_procedures.*.step_number',
+        'online_request_procedures.*.responsible_user_id.*.user_id',
+        'prerequisite_labels.*.label',
+    ];
+
+    /**
      * Getter method for $user variable.
      *
      * @return string[]
@@ -82,6 +98,15 @@ class Fields
     }
 
     /**
+     * Getter method for $onlineRequest variable.
+     *
+     * @return string[]
+     */
+    public static function onlineRequest() {
+        return self::$onlineRequest;
+    }
+
+    /**
      * Getter method of fields for the requested model.
      *
      * @param $modelName
@@ -97,6 +122,9 @@ class Fields
                 break;
             case Bureau::class:
                 return self::$bureau;
+                break;
+            case OnlineRequest::class:
+                return self::$onlineRequest;
                 break;
             default:
                 return null;

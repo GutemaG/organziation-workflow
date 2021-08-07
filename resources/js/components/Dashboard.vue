@@ -5,24 +5,42 @@
       <nav-bar></nav-bar>
     </div>
     <div class="wrapper" style="margin-top: 5rem">
-      <fade-transition>
-        <router-view name="dashboard"></router-view>
-      </fade-transition>
+      <router-view name="dashboard" :key="$route.fullPath"></router-view>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
-import AddRequest from "./request/AddRequest.vue";
-import { FadeTransition, ZoomCenterTransition } from "vue2-transitions";
+import { mapActions, mapGetters } from "vuex";
+import NavBar from "./include/NavBar.vue";
+import SideBar from "./include/SideBar.vue";
 export default {
-  components: { AddRequest, FadeTransition, ZoomCenterTransition },
+  components: { "nav-bar": NavBar, "side-bar": SideBar },
+  name: "Dashboard",
   data() {
     return {};
   },
+  methods: {
+    // ...mapActions(['fetchUsers', 'fetchAffairs', 'fetchBureaus', 'fetchBuildings'])
+  },
+  computed: {
+    ...mapGetters([
+      "currentUser",
+      "users",
+      "affairs",
+      "bureaus",
+      "buildings",
+      "findUser",
+    ]),
+  },
+  created() {
+    // this.fetchUsers()
+    // this.fetchAffairs()
+    // this.fetchBureaus();
+    // this.fetchBuildings()
+    // console.log('created')
+  },
 };
 </script>
-
 <style scoped>
 .leftside,
 .rightside {
@@ -33,12 +51,3 @@ export default {
   color: rgb(255, 255, 255);
 }
 </style>
-
-<script>
-import { mapGetters } from "vuex";
-export default {
-  computed: {
-    ...mapGetters(["currentUser"]),
-  },
-};
-</script>

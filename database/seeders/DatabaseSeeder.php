@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 use App\Models\Building;
 use App\Models\Bureau;
+use App\Models\OnlineRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -19,8 +20,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        /*
-         \App\Models\User::factory()->create([
 
          User::create([
             'user_name' => 'Admin',
@@ -33,11 +32,11 @@ class DatabaseSeeder extends Seeder
          ]
          );
          \App\Models\User::factory(50)->create();
-         
+
          \App\Models\Affair::factory(50)->create();
          \App\Models\Procedure::factory(100)->create();
          \App\Models\PreRequest::factory(200)->create();
-         
+
         \App\Models\PreRequest::factory()->create([
             'affair_id'=>null,
             'procedure_id'=>1,
@@ -51,12 +50,15 @@ class DatabaseSeeder extends Seeder
 
          Bureau::factory(200)->create();
 
-         */
-        \App\Models\OnlineRequest::factory(20)
+        OnlineRequest::factory(20);
+
+
+        OnlineRequest::factory(20)
             ->has(\App\Models\PrerequisiteLabel::factory()->count(rand(1,5)))
             ->has(\App\Models\OnlineRequestProcedure::factory()
                 ->hasAttached(\App\Models\User::inRandomOrder()->limit(rand(1,5))->get())
                 ->count(rand(3,6)))
             ->create();
+        
     }
 }

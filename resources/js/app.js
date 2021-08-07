@@ -17,7 +17,8 @@ import VueProgressBar from "vue-progressbar";
 Vue.use(VueProgressBar, {
     color: "rgb(143, 255, 199)",
     failedColor: "red",
-    height: "3px"
+    height: "5px",
+    thickness: "5px"
 });
 
 import Swal from "sweetalert2";
@@ -46,8 +47,7 @@ window.Toast = Toast;
 //const files = require.context('./', true, /\.vue$/i)
 //files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-
-import './components'
+import "./components";
 // import { FadeTransition } from "vue2-transitions";
 // Vue.component('fade-transition', FadeTransition);
 
@@ -56,6 +56,11 @@ import Vue from "vue";
 
 import BootstrapVue from "bootstrap-vue";
 Vue.use(BootstrapVue);
+
+import { BootstrapVueIcons } from 'bootstrap-vue'
+import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css'
+
+Vue.use(BootstrapVueIcons)
 
 import Vuelidate from "vuelidate";
 Vue.use(Vuelidate);
@@ -75,6 +80,40 @@ const router = new VueRouter({
     routes
 });
 
+router.beforeEach((to, _, next) => {
+    let current = window.user;
+    if (to.meta.requiresAuth) {
+        if (!current) {
+            next("/login");
+        } else {
+            if (current && to.name == "login") {
+                next("/");
+            } else {
+                next();
+            }
+        }
+    } else if (current && to.name == "login") {
+        next("/");
+    } else {
+        next();
+    }
+});
+// import {lang_change} from "./language";
+import * as lang from "./language";
+// export function lang_change(lang){
+Vue.mixin({
+    methods: {
+        change_language(language) {
+            lang.lang_change(language);
+        },
+        tr(word){
+            return lang.translate(word);
+        },
+        se(identifier){
+            return lang.sentence_translate(identifier);
+        },
+    }
+});
 const app = new Vue({
     el: "#app",
     router,

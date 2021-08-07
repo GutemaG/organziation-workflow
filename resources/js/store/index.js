@@ -15,28 +15,38 @@ export default new Vuex.Store({
         building: buildingModule,
         affair: affairModule,
         online: onlineAffairModule
-        
     },
     state: {
-        loggedInUser: window.user
+        loggedInUser: window.user,
+        loggingUserError: ""
     },
     getters: {
-        currentUser: state => state.loggedInUser
+        currentUser: state => state.loggedInUser,
+        loggingUserErrorMessage: state => state.loggingUserError
     },
     actions: {
-        login({ commit }, data) {
-            axios
-                .post("/login", {
+        async login({ commit }, data) {
+            try {
+                let resp = await axios.post("/login", {
                     ...data
-                })
-                .then(resp => {
-                    window.location.replace("/dashboard");
-                    $("#login-modal-form").modal("hide");
-                    console.log(resp);
-                })
-                .catch(error => {
-                    console.log(error);
                 });
+                // console.log(resp);
+                // return;
+                // window.location.replace("/dashboard");
+                // $("#login-modal-form").modal("hide");
+                // commit("SET_ERROR", "");
+            } catch (err) {
+                let error_msg =
+                    "These credentials do not match our records, please try again";
+                const error = new Error(error_msg);
+                throw error;
+                // commit("SET_ERROR", error_msg);
+            }
+        }
+    },
+    mutations: {
+        SET_ERROR(state, data) {
+            state.loggingUserError = data;
         }
     }
 });

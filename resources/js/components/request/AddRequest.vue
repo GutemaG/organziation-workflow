@@ -7,15 +7,31 @@
         header="Creating Affair"
         header-bg-variant="secondary"
       >
-        <base-input
-          label="Affair Name"
-          labelFor="affair-name-input"
+        <!-- <base-input
+          label="affair name"
+          labelfor="affair-name-input"
           id="affair-name-input"
-          placeholder="Enter Affair Name"
+          placeholder="enter affair name"
           v-model="affair.name"
+          :state="false"
           required
         >
-        </base-input>
+        </base-input> -->
+        <b-form-group
+          label="Affair Name"
+          label-for="affair-name-input"
+          invalid-feedback="Required"
+          description="Name for the affair or request that will be handled"
+        >
+          <b-form-input
+            id="affair-name-input"
+            placeholder="Enter Affair Name"
+            v-model="$v.affair.name.$model"
+            :state="validateState('name')"
+            required
+          >
+          </b-form-input>
+        </b-form-group>
         <b-form-group
           label="Description"
           lableFor="affair-description"
@@ -31,7 +47,7 @@
         </b-form-group>
         <div class="m-2">
           <div
-            v-for="(procdure, procedure_index) in affair.procedures"
+            v-for="(procedure, procedure_index) in affair.procedures"
             :key="procedure_index"
           >
             <b-card class="m-1" border-variant="light">
@@ -57,7 +73,7 @@
                   <base-input
                     label="Procedure Name"
                     placeholder="Enter Procedure Name"
-                    v-model="procdure.name"
+                    v-model="procedure.name"
                     required
                     :id="'procedure-' + procedure_index + '-description'"
                   >
@@ -71,7 +87,7 @@
                   >
                     <b-form-textarea
                       rows="3"
-                      v-model="procdure.description"
+                      v-model="procedure.description"
                       :id="
                         'procedure-' + procedure_index + '-description-input'
                       "
@@ -84,7 +100,7 @@
                     type="number"
                     :labelFor="'procedure-' + procedure_index + 'step-input'"
                     :id="'procedure-' + procedure_index + '-step-input'"
-                    v-model="procdure.step"
+                    v-model="procedure.step"
                     required
                   >
                   </base-input>
@@ -175,14 +191,13 @@
                             pre_request.description.length !== 0
                           "
                         >
-                              <!-- v-bind:selected="
+                          <!-- v-bind:selected="
                                 pre_request.name.length !== 0 ||
                                 pre_request.description.length !== 0
                               " -->
-                          
-                          <slot  hidden>
-                            <b-form-select-option
-                              value=""
+
+                          <slot hidden>
+                            <b-form-select-option value=""
                               >Select Affair: if pre request is
                               affair(optional)</b-form-select-option
                             >
@@ -208,7 +223,11 @@
           </b-button>
         </div>
       </b-card>
-      <b-button type="submit" class="form-control" variant="outline-primary"
+      <b-button
+        type="submit"
+        class="form-control"
+        variant="primary"
+        :disabled="$v.$invalid"
         >Submit</b-button
       >
     </b-form>
@@ -216,6 +235,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { required } from "vuelidate/lib/validators";
 export default {
   data() {
     return {
@@ -241,8 +261,9 @@ export default {
   },
   methods: {
     ...mapActions(["addAffair"]),
-    submitHandler() {
-      alert(`Thank you for your order!`);
+    validateState(name) {
+      const { $dirty, $error } = this.$v.affair[name];
+      return $dirty ? !$error : null;
     },
     addUser() {
       this.users.push({
@@ -288,7 +309,17 @@ export default {
       };
       this.addAffair(data);
       console.log(JSON.stringify(this.affair));
-      this.$router.push ('/requests')
+      this.$router.push("/requests");
+    },
+  },
+  validations: {
+    affair: {
+      name: {
+        required,
+      },
+      procedures:{
+        name:required
+      }
     },
   },
 };
