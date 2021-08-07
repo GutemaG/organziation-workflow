@@ -10,6 +10,7 @@ use App\Models\OnlineRequestProcedure;
 use App\Models\OnlineRequestTracker;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Twilio\Exceptions\ConfigurationException;
@@ -18,17 +19,10 @@ class OnlineRequestTrackerAction
 {
     public static function appliedRequest(OnlineRequestTracker $onlineRequestTracker): JsonResponse
     {
-//        $appliedRequest = OnlineRequestTracker::with(['onlineRequestSteps'])->find($id)->toArray();
-//        $length = count($appliedRequest['online_request_steps']);
-//        for ($i = 0; $i < $length; $i++) {
-//            $bureau = OnlineRequestProcedure::with('bureau')
-//                ->find($appliedRequest['online_request_steps'][$i]['online_request_procedure_id'])->bureau;
-//            $appliedRequest['online_request_steps'][$i]['bureau'] = $bureau->toArray();
-//            $appliedRequest['online_request_steps'][$i]['online_request_procedure'] = null;
-//        }
+        $data = self::removeUnusedData($onlineRequestTracker->toArray());
         return response()->json([
             'status' => 200,
-            'applied_request' => $onlineRequestTracker,
+            'applied_request' => $data,
         ]);
     }
 
@@ -39,7 +33,7 @@ class OnlineRequestTrackerAction
             try {
                 DB::beginTransaction();
                 $onlineRequestTracker = $onlineRequest->onlineRequestTracker()
-                    ->create(['started_at' => now(), 'token' => Str::random(6)]);
+                    ->create(['token' => Str::random(6)]);
                 $token = $onlineRequestTracker->token;
                 $procedures = $onlineRequest->onlineRequestProcedures;
                 self::createOnlineRequestStep($procedures, $onlineRequestTracker);
@@ -113,5 +107,29 @@ class OnlineRequestTrackerAction
     {
         $smsNotifier = new SmsNotifier($phone_number, $token);
         $smsNotifier->sendSms();
+    }
+
+    /**
+     * remove unused data such as users, prerequisites and procedures.
+     *
+     * @param array $onlineRequestTracker
+     * @return Collection
+     */
+    protected static function removeUnusedData(array $onlineRequestTracker): Collection
+    {
+        $onlineRequestTracker = collect($onlineRequestTracker)->map(function ($value, $key) {
+            if ($key == 'online_request') {
+                unset($value['online_request_procedures']);
+                unset($value['prerequisite_labels']);
+            } elseif ($key == 'online_request_steps') {
+                $length = count($value);
+                for ($i = 0; $i < $length; $i++) {
+                    $value[$i]['bureau'] = $value[$i]['online_request_procedure']['bureau'];
+                    unset($value[$i]['online_request_procedure']);
+                }
+            }
+            return $value;
+        });
+        return $onlineRequestTracker;
     }
 }
