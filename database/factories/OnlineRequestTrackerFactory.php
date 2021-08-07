@@ -24,8 +24,6 @@ class OnlineRequestTrackerFactory extends Factory
     {
         return [
             'online_request_id' => Utility::getOnlineRequestId(),
-            'started_at' => now(),
-            'ended_at' => now(),
             'token' => Str::random(6),
         ];
     }
