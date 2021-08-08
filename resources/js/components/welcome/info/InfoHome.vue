@@ -187,15 +187,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-
 export default {
     data() {
         return {
-        tabIndex: 0,
-        isVisible: false, // starts un-collapsed
         affairs: [],
-        procedures: [],
         };
     },
     methods: {
