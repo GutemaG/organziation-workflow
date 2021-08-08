@@ -68,6 +68,13 @@ export default [
                     welcome: require("./components/welcome/online/ApplyOnlineAffair.vue").default
                 }
             },
+            {
+                path: "/check-request-progress",
+                name: "check-request-progress",
+                components: {
+                    welcome: require("./components/welcome/online/CheckOnlineRequestProgress.vue").default
+                }
+            },
         ]
     },
     {

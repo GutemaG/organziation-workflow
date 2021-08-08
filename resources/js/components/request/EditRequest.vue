@@ -21,6 +21,21 @@
             required
           ></b-form-input>
         </b-form-group>
+        <b-form-group
+          label="Affair Type"
+          class="mb-1 mt-1"
+          label-for="description-input"
+        >
+          <b-form-select v-model="selectedAffair.type" id="affair-type-input">
+            <b-form-select-option value=""
+              >Selecte affair type
+            </b-form-select-option>
+            <b-form-select-option value="student">Student</b-form-select-option>
+            <b-form-select-option value="staff">Staff</b-form-select-option>
+            <b-form-select-option value="teacher">Teacher</b-form-select-option>
+            <b-form-select-option value="other">Other</b-form-select-option>
+          </b-form-select>
+        </b-form-group>
 
         <b-form-group
           label="Description"
@@ -161,27 +176,7 @@
                           required
                         ></b-form-input>
                       </b-form-group>
-                      <base-input
-                        label="Pre Request Name"
-                        placeholder="Enter Pre request Name"
-                        v-model="pre_request.name"
-                        :labelFor="
-                          'pre_request-' +
-                          procedure_index +
-                          '-' +
-                          pre_index +
-                          'name-input'
-                        "
-                        :id="
-                          'pre_request-' +
-                          procedure_index +
-                          '-' +
-                          pre_index +
-                          '-name-input'
-                        "
-                        required
-                      >
-                      </base-input>
+
                       <b-form-group
                         label="Pre Request Description"
                         class="mb-1 mt-1"
@@ -319,7 +314,8 @@ export default {
         affair: this.selectedAffair,
       };
       this.updateAffair(data);
-      console.log(JSON.stringify(data));
+      this.$router.go(-1);
+      // console.log(JSON.stringify(data));
     },
     addProcedure() {
       console.log("adding Procedurrrrre");

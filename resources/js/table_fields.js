@@ -56,6 +56,11 @@ const request_fields = [
         sortDirection: "desc"
     },
     {
+        key: "type",
+        label: lang.translate("Type"),
+        sortable: true,
+    },
+    {
         key: "created_at",
         label: lang.translate("Created At"),
         sortable: true,
@@ -195,6 +200,11 @@ const online_request_fields = [
     {
         key: "description",
         label: lang.translate("Description"),
+    },
+    {
+        key: "type",
+        label: lang.translate("Type"),
+        sortable: true,
     },
     {
         key: "online_request_procedures",

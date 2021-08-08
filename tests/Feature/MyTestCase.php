@@ -21,12 +21,24 @@ class MyTestCase extends TestCase
     protected $url = '';
     protected $modelName = '';
     protected $responseName = '';
+    protected $defaultTest = true;
 
     public function setUp(): void
     {
         $this->responseName = Str::snake(str_replace('App\\Models\\', '', $this->modelName));
         parent::setUp();
+        $this->artisan('migrate:refresh');
         MyDatabaseSeeder::seed();
+    }
+
+    public function testDefaultTest(): void
+    {
+        if ($this->defaultTest) {
+            $this->testUnauthenticatedGuestCanAccess();
+            $this->testUnauthorizedUserCanAccess();
+        }
+        else
+            self::assertTrue(true, true);
     }
 
     protected function printSuccessMessage(string $message){
@@ -35,7 +47,7 @@ class MyTestCase extends TestCase
         print_r("<info>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n\n</info>");
     }
 
-    public function testUnauthenticatedGuestCanAccess(): void
+    protected function testUnauthenticatedGuestCanAccess(): void
     {
         $data = $this->randomData($this->modelName);
         $id = $data->id;
@@ -63,7 +75,7 @@ class MyTestCase extends TestCase
         ]);
     }
 
-    public function testUnauthorizedUserCanAccess(): void
+    protected function testUnauthorizedUserCanAccess(): void
     {
         $this->testReceptionCanAccess();
 
@@ -135,6 +147,4 @@ class MyTestCase extends TestCase
             $this->responseName => $data->toArray(),
         ]);
     }
-
-
 }

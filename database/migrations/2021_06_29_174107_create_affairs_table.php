@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use App\Utilities\RequestType;
 class CreateAffairsTable extends Migration
 {
     /**
@@ -17,6 +17,7 @@ class CreateAffairsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('name');
+            $table->enum('type', RequestType::all());
             $table->longText('description')->nullable();
             $table->softDeletes();
             $table->timestamps();

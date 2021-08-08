@@ -111,7 +111,13 @@
         {{ row.index + 1 }}
       </template>
       <template #cell(description)="row">
-        <p @click="row.toggleDetails" v-b-tooltip.hover :title="row.item.description">
+        <p
+          @click="row.toggleDetails"
+          v-b-popover.hover.top="row.item.description"
+          title="Description"
+        >
+          <!-- v-b-tooltip.hover -->
+          <!-- :title="row.item.description" -->
           {{ row.item.description.substring(0, 20) }} ...
         </p>
       </template>
@@ -164,11 +170,11 @@
 import { mapActions, mapGetters } from "vuex";
 import AddBureauModal from "./bureau/AddBureauModal.vue";
 import EditBureauModal from "./bureau/EditBureauModal.vue";
-import {bureau_fields} from '../table_fields'
+import { bureau_fields } from "../table_fields";
 export default {
-  components:{
-    "add-bureau-modal":AddBureauModal,
-    "edit-bureau-modal":EditBureauModal
+  components: {
+    "add-bureau-modal": AddBureauModal,
+    "edit-bureau-modal": EditBureauModal,
   },
   data() {
     return {

@@ -29,6 +29,28 @@
             </b-form-input>
           </b-form-group>
           <b-form-group
+            label="Request Type"
+            class="mb-1 mt-1"
+            label-for="description-input"
+          >
+            <b-form-select
+              v-model="$v.affair.type.$model"
+              id="online-request-type-input"
+            >
+              <b-form-select-option value=""
+                >Selecte affair type
+              </b-form-select-option>
+              <b-form-select-option value="student"
+                >Student</b-form-select-option
+              >
+              <b-form-select-option value="staff">Staff</b-form-select-option>
+              <b-form-select-option value="teacher"
+                >Teacher</b-form-select-option
+              >
+              <b-form-select-option value="other">Other</b-form-select-option>
+            </b-form-select>
+          </b-form-group>
+          <b-form-group
             id="online-request-description"
             label="Description"
             label-for="online-request-description-input"
@@ -117,7 +139,7 @@
                           </template>
                         </v-select>
                       </b-form-group>
-                      
+
                       <b-form-group
                         id="online-request-procedures-input"
                         label="Step"
@@ -239,6 +261,7 @@ export default {
       affair: {
         name: "",
         description: "",
+        type:"",
         online_request_procedures: [
           {
             responsible_bureau_id: "",
@@ -341,6 +364,9 @@ export default {
       description: {
         required,
       },
+      type:{
+        required
+      }
     },
   },
 };
