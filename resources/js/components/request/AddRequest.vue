@@ -1,22 +1,10 @@
 <template>
   <b-container>
     <b-form @submit="handleSubmit">
-      <b-card
-        class="m-1"
-        border-variant="primary"
-        header="Creating Affair"
-        header-bg-variant="secondary"
+      <b-alert variant="danger" show v-if="missedStepNumber"
+        >Please Fille the step number correctly</b-alert
       >
-        <!-- <base-input
-          label="affair name"
-          labelfor="affair-name-input"
-          id="affair-name-input"
-          placeholder="enter affair name"
-          v-model="affair.name"
-          :state="false"
-          required
-        >
-        </base-input> -->
+      <b-card class="m-1" header="Creating Affair">
         <b-form-group
           label="Affair Name"
           label-for="affair-name-input"
@@ -68,7 +56,7 @@
             :key="procedure_index"
           >
             <b-card class="m-1" border-variant="light">
-              <b-card-header header-bg-variant="dark">
+              <b-card-header header-bg-variant="secondary">
                 <b-row>
                   <b-col cols="10" md="9"
                     >Procedure - {{ procedure_index }}</b-col
@@ -87,14 +75,19 @@
 
               <b-row>
                 <b-col cols="12" md="6">
-                  <base-input
+                  <b-form-group
                     label="Procedure Name"
-                    placeholder="Enter Procedure Name"
-                    v-model="procedure.name"
-                    required
-                    :id="'procedure-' + procedure_index + '-description'"
+                    :label-for="'procedure-' + procedure_index + 'step-input'"
+                    invalid-feedback="Required"
                   >
-                  </base-input>
+                    <b-form-input
+                      :id="'procedure-' + procedure_index + '-description'"
+                      placeholder="Enter Procedure Name"
+                      v-model="procedure.name"
+                      required
+                    >
+                    </b-form-input>
+                  </b-form-group>
                   <b-form-group
                     label="Description"
                     class="mb-1 mt-1"
@@ -111,16 +104,21 @@
                       placeholder="description for current procedure(optional)"
                     ></b-form-textarea>
                   </b-form-group>
-                  <base-input
+
+                  <b-form-group
                     label="Step"
-                    placeholder="Enter Procedure Number"
-                    type="number"
-                    :labelFor="'procedure-' + procedure_index + 'step-input'"
-                    :id="'procedure-' + procedure_index + '-step-input'"
-                    v-model="procedure.step"
-                    required
+                    :label-for="'procedure-' + procedure_index + 'step-input'"
+                    invalid-feedback="Required"
                   >
-                  </base-input>
+                    <b-form-input
+                      :id="'procedure-' + procedure_index + '-step-input'"
+                      placeholder="Enter Procedure Number"
+                      v-model="procedure.step"
+                      type="number"
+                      required
+                    >
+                    </b-form-input>
+                  </b-form-group>
                 </b-col>
 
                 <b-col>
@@ -149,27 +147,32 @@
                           </b-col>
                         </b-row>
                       </b-card-header>
-                      <base-input
+                      <b-form-group
                         label="Pre Request Name"
-                        placeholder="Enter Pre request Name"
-                        v-model="pre_request.name"
-                        :labelFor="
+                        :label-for="
                           'pre_request-' +
                           procedure_index +
                           '-' +
                           pre_index +
                           'name-input'
                         "
-                        :id="
-                          'pre_request-' +
-                          procedure_index +
-                          '-' +
-                          pre_index +
-                          '-name-input'
-                        "
-                        required
+                        invalid-feedback="Required"
                       >
-                      </base-input>
+                        <b-form-input
+                          :id="
+                            'pre_request-' +
+                            procedure_index +
+                            '-' +
+                            pre_index +
+                            '-name-input'
+                          "
+                          placeholder="Enter Pre request Name"
+                          v-model="pre_request.name"
+                          required
+                        >
+                        </b-form-input>
+                      </b-form-group>
+
                       <b-form-group
                         label="Pre Request Description"
                         class="mb-1 mt-1"
@@ -244,7 +247,7 @@
         type="submit"
         class="form-control"
         variant="primary"
-        :disabled="$v.$invalid"
+        :disabled="$v.$invalid || missedStepNumber"
         >Submit</b-button
       >
     </b-form>
@@ -254,6 +257,7 @@
 import { mapActions, mapGetters } from "vuex";
 import { required } from "vuelidate/lib/validators";
 export default {
+  name: "add-request",
   data() {
     return {
       affair: {
@@ -264,7 +268,7 @@ export default {
           {
             name: "",
             description: "",
-            step: "",
+            step: 1,
             pre_requests: [],
           },
         ],
@@ -275,6 +279,33 @@ export default {
     ...mapGetters(["affair_ids"]),
     procedureLength() {
       return this.affair.procedures.length;
+    },
+    missedStepNumber() {
+      let steps = [];
+      let procedures = this.affair.procedures;
+      let missed_steps = [];
+      for (let i = 0; i < procedures.length; i++) {
+        steps.push(procedures[i].step);
+      }
+      steps = steps.sort();
+      if (steps[0] != 1) {
+        missed_steps.push(1);
+      }
+      if (steps.length > 1) {
+        for (let i = 1; i < steps.length; i++) {
+          if (steps[i] - steps[i - 1] != 1) {
+            missed_steps.push(steps[i]);
+          }
+        }
+      }
+      if (missed_steps.length !== 0) {
+        this.$bvToast.toast("Please check there are missed step numbers", {
+          title: "Please Fill the form Correctly",
+          variant:'danger',
+          solid: true,
+        });
+      }
+      return missed_steps.length !== 0;
     },
   },
   methods: {
@@ -294,7 +325,7 @@ export default {
       this.affair.procedures.push({
         name: "",
         description: "",
-        step: "",
+        step: this.procedureLength + 1,
         pre_requests: [],
       });
       console.log("add Procedure");

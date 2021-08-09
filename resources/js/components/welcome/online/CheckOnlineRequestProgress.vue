@@ -36,19 +36,18 @@
               <template #cell(id)="row">
                 <span>{{ row.index + 1 }}</span>
               </template>
-              <template #cell(started_at)="row">
+              <!-- <template #cell(started_at)="row">
                 <span v-if="row.item.started_at">{{
                   row.item.started_at
                 }}</span>
                 <span v-else>----</span>
-              </template>
-              <template #cell(ended_at)="row">
-                <span v-if="row.item.ended_at">{{ row.item.ended_at }}</span>
-                <span v-else>----</span>
-              </template>
+              </template> -->
               <template #cell(is_completed)="row">
                 <b-progress
-                  v-if="!row.item.ended_at && row.item.started_at
+                  v-if="
+                    !row.item.ended_at &&
+                    row.item.started_at &&
+                    row.item.is_rejected != 1
                   "
                 >
                   <b-progress-bar
@@ -59,7 +58,10 @@
                   >
                   </b-progress-bar>
                 </b-progress>
-                <b-progress v-else-if="!row.item.started_at" variant="info">
+                <b-progress
+                  v-else-if="!row.item.started_at && row.item.is_rejected != 1"
+                  variant="info"
+                >
                   <b-progress-bar :value="100" label="Pending">
                   </b-progress-bar>
                 </b-progress>
@@ -75,14 +77,25 @@
                   >
                   </b-progress-bar>
                 </b-progress>
-                <b-progress-bar
+                <b-button
                   v-else
-                  :value="100"
-                  label="Rejected"
-                  variant="danger"
-                  striped
+                  @click="row.toggleDetails"
+                  style="background: red"
                 >
-                </b-progress-bar>
+                  <b-progress-bar
+                    :value="100"
+                    label="Rejected ?"
+                    variant="danger"
+                    striped
+                  >
+                  </b-progress-bar>
+                </b-button>
+              </template>
+              <template #row-details="row">
+                <div class="align-center">
+                  <h4 style="color:red">Reason For Rejection</h4>
+                  <h3>{{ row.item.reason }}</h3>
+                </div>
               </template>
             </b-table>
           </b-jumbotron>
@@ -112,14 +125,18 @@ export default {
         {
           label: "Requestd At",
           key: "created_at",
-          formatter: (value) => {
-            let ago = moment(value).fromNow();
-            let date = moment(value).format("MMM Do, YY");
-            return `${date}; ${ago}`;
-          },
+          formatter: (value) => this.dateFormatter(value),
         },
-        { label: "Started At", key: "started_at" },
-        { label: "Ended At", key: "ended_at" },
+        {
+          label: "Started At",
+          key: "started_at",
+          formatter: (value) => this.dateFormatter(value),
+        },
+        {
+          label: "Ended At",
+          key: "ended_at",
+          formatter: (value) => this.dateFormatter(value),
+        },
         {
           label: "Status",
           key: "is_completed",
@@ -138,7 +155,6 @@ export default {
         .then((resp) => {
           if (resp.status == 200) {
             this.applied_request = resp.data.applied_request;
-            console.log(resp.data.applied_request);
           } else {
             this.error = "Something is wrong, please try later";
           }
@@ -147,6 +163,15 @@ export default {
           this.error =
             "We don't find your request, Please check your key again";
         });
+    },
+    dateFormatter(value) {
+      if (value) {
+        let ago = moment(value).fromNow();
+        let date = moment(value).format("MMM Do, YY");
+        return `${date}; ${ago}`;
+      } else {
+        return "----";
+      }
     },
   },
 };

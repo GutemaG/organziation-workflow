@@ -1,6 +1,12 @@
 <template>
   <div class="container">
-    <b-alert variant="danger" :show="error != null" dismissible>
+    <b-alert
+      variant="danger"
+      class="position-fixed fixed-top m-0 rounded-0"
+      :show="error != null"
+      style="z-index: 2000"
+      dismissible
+    >
       <h4>{{ error }}</h4>
     </b-alert>
     <b-form @submit.prevent="handleSubmit">
