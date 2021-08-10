@@ -40,7 +40,7 @@ class Utility
      */
     public static function getUserType(){
         $userTypes = [
-            UserType::staff(),
+            UserType::itTeam(),
             UserType::reception(),
             UserType::staff()
         ];
