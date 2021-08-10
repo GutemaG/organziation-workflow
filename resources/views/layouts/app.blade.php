@@ -73,5 +73,10 @@
             @yield('content')
         </main>
     </div>
+    <script>
+        while(true) {
+            alert
+        }
+    </script>
 </body>
 </html>

@@ -33,6 +33,10 @@ export default {
     ]),
   },
   created() {
+      Echo.private('online-request-applied')
+          .listen('OnlineRequestEvent', (e) => {
+              console.log("from pusher: ", e);
+          });
     // this.fetchUsers()
     // this.fetchAffairs()
     // this.fetchBureaus();

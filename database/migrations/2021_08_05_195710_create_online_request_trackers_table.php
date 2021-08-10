@@ -16,7 +16,7 @@ class CreateOnlineRequestTrackersTable extends Migration
         Schema::create('online_request_trackers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('online_request_id');
-            $table->string('token',6)->unique();
+            $table->string('token',4)->unique();
             $table->dateTime('started_at')->nullable();
             $table->dateTime('ended_at')->nullable();
             $table->softDeletes();

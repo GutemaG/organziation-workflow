@@ -84,11 +84,11 @@
                         </b-row>
                         <div class="mb-5">
                             <p>
-                                Adama Science and Technology University has signed a consultant 
-                                contract agreement with Seoul National University. Accordingly, the consultant, Seoul National University, is 
+                                Adama Science and Technology University has signed a consultant
+                                contract agreement with Seoul National University. Accordingly, the consultant, Seoul National University, is
                                 expected to facilitate the design, supervision, and bid document preparation of the ASTU-EDCF project.
-                                It is recalled that the government of South Korea has agreed to finance the establishment of five Centers of Excellence in 
-                                ASTU with an outlay of one hundred million US Dollars. The agreement was signed between the governments of FDRE the Republic of Korea. 
+                                It is recalled that the government of South Korea has agreed to finance the establishment of five Centers of Excellence in
+                                ASTU with an outlay of one hundred million US Dollars. The agreement was signed between the governments of FDRE the Republic of Korea.
                                 T June 24, 2021
                             </p>
                         </div>
@@ -101,7 +101,7 @@
                             <b-breadcrumb-item>
                                 <router-link to="/"><b-icon icon="house-fill" scale="1.25" shift-v="1.25" aria-hidden="true"></b-icon>
                                 Home</router-link>
-                                
+
                             </b-breadcrumb-item>
                             <b-breadcrumb-item>
                                 <router-link to="/info">Info</router-link>
@@ -112,7 +112,7 @@
                 </b-col>
             </b-row>
         </b-container>
-        
+
         <div style="left: 0; right: 0;">
             <!-- Footer -->
             <div class="page-footer font-small pt-0">
@@ -126,7 +126,7 @@
                             >
                                 <h6 class="mb-0 white-text">
                                     Get connected with us on social networks!
-                                </h6> 
+                                </h6>
                             </b-col>
                             <b-col
                                 md="6"
@@ -141,7 +141,7 @@
                                     </i
                                 ></b-link>
                                 <b-link class="tw-ic"
-                                    ><i 
+                                    ><i
                                         class="fab fa-twitter white-text mr-lg-4"
                                     >
                                     </i
@@ -159,7 +159,7 @@
                                     </i
                                 ></b-link>
                                 <b-link class="ins-ic"
-                                    ><i 
+                                    ><i
                                         class="fab fa-instagram white-text mr-lg-4"
                                     >
                                     </i
@@ -179,7 +179,7 @@
                                     <strong>Guidance</strong>
                                 </h1>
                                 <p>
-                                    
+
                                 </p>
                             </b-col>
 

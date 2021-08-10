@@ -22,7 +22,7 @@ class OnlineRequestTest extends MyTestCase
 
     public function testItTeamCanAccessIndex(): void
     {
-        $user = $this->getUser(UserType::itTeam());
+        $user = $this->getUser(UserType::supportiveStaff());
         $this->index($user);
         $this->printSuccessMessage('It team can access index passed ');
     }
@@ -50,7 +50,7 @@ class OnlineRequestTest extends MyTestCase
 
     public function testItTeamCanAccessPost(): void
     {
-        $user = $this->getUser(UserType::itTeam());
+        $user = $this->getUser(UserType::supportiveStaff());
         $this->majorValidation($user);
         $this->majorNestedValidation($user);
         $this->additionalNestedValidation($user);
@@ -149,7 +149,7 @@ class OnlineRequestTest extends MyTestCase
 
     public function testItTeamCanAccessShow(): void
     {
-        $user = $this->getUser(UserType::itTeam());
+        $user = $this->getUser(UserType::supportiveStaff());
         $this->show($user);
         $this->printSuccessMessage('It team can view any online request passed ');
     }
@@ -177,7 +177,7 @@ class OnlineRequestTest extends MyTestCase
 
     public function testItTeamCanAccessUpdate(): void
     {
-        $user = $this->getUser(UserType::itTeam());
+        $user = $this->getUser(UserType::supportiveStaff());
         $this->majorValidation($user, true);
         $this->majorNestedValidation($user, true);
         $this->additionalNestedValidation($user, true);
