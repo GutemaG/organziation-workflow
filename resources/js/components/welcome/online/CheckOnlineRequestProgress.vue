@@ -13,9 +13,13 @@
               placeholder="Enter your token key"
               v-model="token"
               required
+              autofocus
             ></b-form-input>
           </b-form-group>
-          <b-button type="submit">Check</b-button>
+          <b-button type="submit">
+            <span v-if="!isLoading">{{ tr("Check") }} </span>
+            <b-spinner v-show="isLoading" label="Loading..."></b-spinner>
+          </b-button>
         </form>
         <div v-if="applied_request" style="border-radius">
           <b-jumbotron>
@@ -93,7 +97,7 @@
               </template>
               <template #row-details="row">
                 <div class="align-center">
-                  <h4 style="color:red">Reason For Rejection</h4>
+                  <h4 style="color: red">Reason For Rejection</h4>
                   <h3>{{ row.item.reason }}</h3>
                 </div>
               </template>
@@ -119,6 +123,7 @@ export default {
       token: "",
       applied_request: null,
       error: null,
+      isLoading: false,
       fields: [
         { label: "Id", key: "id" },
         { label: "Bureau", key: "bureau.name" },
@@ -150,18 +155,22 @@ export default {
   methods: {
     handleSubmit(e) {
       this.applied_request = null;
+      this.isLoading = true;
       axios
         .get(`/api/apply-request/${this.token}`)
         .then((resp) => {
           if (resp.status == 200) {
             this.applied_request = resp.data.applied_request;
+            this.isLoading=false
           } else {
             this.error = "Something is wrong, please try later";
+            this.isLoading = false;
           }
         })
         .catch((err) => {
           this.error =
             "We don't find your request, Please check your key again";
+          this.isLoading = false;
         });
     },
     dateFormatter(value) {

@@ -1,5 +1,5 @@
-<template> 
-<!-- style="position:fixed; top:0;width:100vw; right:0;left:0" -->
+<template>
+  <!-- style="position:fixed; top:0;width:100vw; right:0;left:0" -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
@@ -165,17 +165,57 @@
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
       </li>
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          data-widget="control-sidebar"
-          data-slide="true"
-          href="#"
-          role="button"
-        >
-          <i class="fas fa-th-large"></i>
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#" role="button">
+          {{user.user_name}}
+          <!-- <i class="right fas fa-angle-left"></i> -->
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <a href="#" class="dropdown-item">{{user.first_name}} {{user.last_name}}</a>
+            <div class="dropdown-divider"></div>
+            <router-link to="/profile" class="dropdown-item">
+              Profile
+            </router-link>
+            <div class="dropdown-divider"></div>
+            <a
+              href="#"
+              class="dropdown-item"
+              onclick="event.preventDefault();
+          document.getElementById('logout-form').submit();"
+            >
+              <i class="nav-icon fas fa-power-off red"></i>
+              {{ tr("Sign Out") }}
+            </a>
+            <form
+              id="logout-form"
+              action="api/logout"
+              method="get"
+              style="display: none"
+            ></form>
+          </div>
         </a>
       </li>
     </ul>
   </nav>
 </template>
+<script>
+export default {
+  data() {
+    return {
+
+    };
+  },
+  computed: {
+    user() {
+      let currentUser = window.user;
+      return currentUser
+      // if (user) {
+      //   return user.user_name;
+      // }
+      // return null;
+    },
+  },
+  methods: {
+    
+  },
+};
+</script>

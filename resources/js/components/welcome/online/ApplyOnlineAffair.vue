@@ -51,7 +51,7 @@
         :disabled="$v.$invalid || isLoading"
       >
         <span v-if="!isLoading">{{ tr("Send") }}</span>
-        <b-spinner v-show="isLoading"></b-spinner>
+        <b-spinner v-show="isLoading" label=""></b-spinner>
       </b-button>
     </b-form>
   </div>
@@ -85,22 +85,23 @@ export default {
       return $dirty ? !$error : null;
     },
     handleSubmit() {
+      this.isLoading = true;
       axios
         .post("/api/apply-request", {
           ...this.form,
           online_request_id: this.selected.id,
         })
         .then((resp) => {
-          this.isLoading = true;
           if (resp.data.status == 200) {
             this.$store.dispatch("setToken", resp.data.token);
             this.$router.go(-1);
           } else {
             this.error = "Something is wrong, please try again";
+            this.isLoading = false;
           }
         })
         .catch((err) => console.log("something is wrong"));
-      this.isLoading = false;
+      // this.isLoading = false;
     },
   },
   created() {
