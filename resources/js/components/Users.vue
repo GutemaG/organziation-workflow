@@ -1,9 +1,10 @@
 <template>
   <div>
     <!-- User Interface controls -->
+    <h2></h2>
     <div
-      class="container bg-light shadow-lg mx-auto"
-      style="border-radius: 21px 21px 0 0"
+      class="bg-light shadow mx-auto"
+      style="max-height: 100%; border-radius: 21px 21px 0 0"
     >
       <b-row>
         <b-col lg="6" class="my-1">
@@ -103,7 +104,15 @@
         small
         @filtered="onFiltered"
         striped
+        :filter-debounce="500"
+        :busy="isLoading"
       >
+        <template #table-busy>
+          <div class="text-center text-danger my-2">
+            <b-spinner class="align-middle"></b-spinner>
+            <strong>Loading...</strong>
+          </div>
+        </template>
         <template #cell(id)="row">
           {{ row.index + 1 }}
         </template>
@@ -163,7 +172,7 @@ export default {
       user_fields,
       totalRows: 1,
       currentPage: 1,
-      perPage: 5,
+      perPage: 15,
       pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
       sortBy: "",
       sortDesc: false,
@@ -171,6 +180,7 @@ export default {
       filter: null,
       filterOn: [],
       selectedUser: {},
+      isLoading: true,
     };
   },
   computed: {
@@ -191,6 +201,7 @@ export default {
     this.$Progress.start();
     this.fetchUsers();
     this.$Progress.finish();
+    this.isLoading = false;
   },
   methods: {
     ...mapActions(["fetchUsers", "removeUser"]),

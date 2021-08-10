@@ -1,5 +1,9 @@
 <template>
-  <b-container fluid>
+  <b-container
+    fluid
+    class="bg-light shadow mx-auto mt-2"
+    style="max-height: 100%; border-radius: 21px 21px 0 0"
+  >
     <!-- User Interface controls -->
     <b-row>
       <!-- Add button -->
@@ -181,7 +185,7 @@ export default {
       bureau_fields,
       totalRows: 1,
       currentPage: 1,
-      perPage: 5,
+      perPage: 10,
       pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
       sortBy: "",
       sortDesc: false,

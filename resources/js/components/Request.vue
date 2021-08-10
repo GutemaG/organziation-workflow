@@ -10,7 +10,7 @@
           <b-skeleton width="70%"></b-skeleton>
         </b-card>
       </template>
-      <b-card>
+      <b-card class="shadow" style="border-radius: 21px 21px 0 0">
         <b-card-body>
           <div>
             <b-row>
@@ -93,30 +93,19 @@
                 </b-form-group>
               </b-col>
 
-              <b-col lg="6" class="my-1">
-                <b-form-group
-                  label="Filter"
-                  label-for="filter-input"
-                  label-cols-sm="3"
-                  label-align-sm="right"
-                  label-size="sm"
-                  class="mb-0"
-                >
-                  <b-input-group size="sm">
-                    <b-form-input
-                      id="filter-input"
-                      type="search"
-                      placeholder="Type to Search"
-                    ></b-form-input>
-
-                    <b-input-group-append>
-                      <!-- <b-button :disabled="!filter" @click="filter = ''"
-                      >Clear</b-button
-                    > -->
-                      <b-button>{{ tr("hel") }}</b-button>
-                    </b-input-group-append>
-                  </b-input-group>
-                </b-form-group>
+              <b-col md="6" class="my-1">
+                <b-pagination
+                  v-model="currentPage"
+                  :total-rows="totalAffairs"
+                  :per-page="perPage"
+                  size="sm"
+                  class="my-0"
+                  align="fill"
+                  :first-text="tr('First')"
+                  :prev-text="tr('Prev')"
+                  :next-text="tr('Next')"
+                  :last-text="tr('Last')"
+                ></b-pagination>
               </b-col>
 
               <b-col sm="5" md="6" class="my-1"> </b-col>
@@ -160,7 +149,8 @@
                 <p
                   @click="row.toggleDetails"
                   id="affair-description"
-                  v-b-popover.hover.top="row.item.description" title="Description"
+                  v-b-popover.hover.top="row.item.description"
+                  title="Description"
                 >
                   {{ row.item.description.substring(0, 20) }} ...
                 </p>
@@ -215,7 +205,7 @@
             </b-table>
           </div>
         </b-card-body>
-        <b-card-footer>
+        <!-- <b-card-footer>
           <div>
             <b-col sm="7" md="6" class="my-1">
               <b-pagination
@@ -232,7 +222,7 @@
               ></b-pagination>
             </b-col>
           </div>
-        </b-card-footer>
+        </b-card-footer> -->
       </b-card>
     </b-skeleton-wrapper>
   </div>
