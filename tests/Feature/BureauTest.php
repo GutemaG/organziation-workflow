@@ -96,7 +96,7 @@ class BureauTest extends TestCase
         $this->indexForAdminAndItTeamMember(UserType::admin());
         $this->printSuccessMessage('list all bureau; by logging with admin');
 
-        $this->indexForAdminAndItTeamMember(UserType::itTeam());
+        $this->indexForAdminAndItTeamMember(UserType::supportiveStaff());
         $this->printSuccessMessage('list all bureau; by logging with it team member');
     }
 
@@ -154,7 +154,7 @@ class BureauTest extends TestCase
     }
 
     public function testPostForItTeamMember(){
-        $user = $this->getUser(UserType::itTeam());
+        $user = $this->getUser(UserType::supportiveStaff());
         $this->actingAs($user);
 
         $bureau = FakeDataGenerator::bureauData();
@@ -217,9 +217,9 @@ class BureauTest extends TestCase
     }
 
     public function testUpdateForItTeamMember(){
-        $this->updateWithIncorrectBuildingNumber(UserType::itTeam());
-        $this->updateWithIncorrectAccountableTo(UserType::itTeam());
-        $this->update(UserType::itTeam());
+        $this->updateWithIncorrectBuildingNumber(UserType::supportiveStaff());
+        $this->updateWithIncorrectAccountableTo(UserType::supportiveStaff());
+        $this->update(UserType::supportiveStaff());
         $this->printSuccessMessage('update bureau; by logging with it team member.');
     }
 
@@ -227,7 +227,7 @@ class BureauTest extends TestCase
         if ($userType == UserType::admin())
             $this->actingAs($this->getUser(UserType::admin()));
         else
-            $this->actingAs($this->getUser(UserType::itTeam()));
+            $this->actingAs($this->getUser(UserType::supportiveStaff()));
 
         $bureaus = Bureau::orderBy('name', 'asc')->limit(10)->get();
         foreach ($bureaus as $bureau){
@@ -301,7 +301,7 @@ class BureauTest extends TestCase
         if($userType == UserType::admin())
             $this->actingAs($this->getUser(UserType::admin()));
         else
-            $this->actingAs($this->getUser(UserType::itTeam()));
+            $this->actingAs($this->getUser(UserType::supportiveStaff()));
 
         $id = Bureau::orderBy('id', 'desc')->first()->id + 1;
         $response = $this->put($this->url . ($id - 1), ['accountable_to' => $id]);
@@ -326,7 +326,7 @@ class BureauTest extends TestCase
         if($userType == UserType::admin())
             $this->actingAs($this->getUser(UserType::admin()));
         else
-            $this->actingAs($this->getUser(UserType::itTeam()));
+            $this->actingAs($this->getUser(UserType::supportiveStaff()));
         $id = Bureau::inRandomOrder()->first()->id;
         $response = $this->put($this->url . $id, ['building_number' => 'slkfjskljfs']);
         $response->assertStatus(200);
@@ -354,7 +354,7 @@ class BureauTest extends TestCase
     }
 
     public function testShowForItTeamMember(){
-        $this->actingAs($this->getUser(UserType::itTeam()));
+        $this->actingAs($this->getUser(UserType::supportiveStaff()));
         $bureaus = Bureau::orderBy('name', 'asc')->limit(30)->get();
 
         foreach ($bureaus as $bureau){
@@ -423,7 +423,7 @@ class BureauTest extends TestCase
     }
 
     public function testDestroyForItTeamMember(){
-        $this->actingAs($this->getUser(UserType::itTeam()));
+        $this->actingAs($this->getUser(UserType::supportiveStaff()));
         $bureaus = Bureau::orderBy('name', 'asc')->limit(30)->get();
 
         foreach ($bureaus as $bureau){

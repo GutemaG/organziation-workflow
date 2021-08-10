@@ -29,7 +29,7 @@ class UserControllerFunctionality
         if($userType == UserType::admin())
             $users = User::where('type', '!=', UserType::admin())
                 ->orderBy('user_name', 'asc')->get();
-        elseif ($userType == UserType::itTeam())
+        elseif ($userType == UserType::supportiveStaff())
             $users = User::whereIn('type', [UserType::reception(), UserType::staff()])
                 ->orderBy('user_name', 'asc')->get();
         else
@@ -69,8 +69,8 @@ class UserControllerFunctionality
               'status' => 400,
               'error' => ['type' => ['You can\'t register user with admin privilege.']]
             ];
-        elseif ($userType == UserType::itTeam() &&
-            (in_array($fields['type'], [UserType::itTeam(), UserType::admin()]))
+        elseif ($userType == UserType::supportiveStaff() &&
+            (in_array($fields['type'], [UserType::supportiveStaff(), UserType::admin()]))
         )
             return [
                 'status' => 400,
@@ -142,7 +142,7 @@ class UserControllerFunctionality
     {
         if($userType == UserType::admin())
             $user = User::where('id', $id)->where('type', '!=', UserType::admin())->first();
-        elseif ($userType == UserType::itTeam())
+        elseif ($userType == UserType::supportiveStaff())
             $user = User::where('id', $id)->whereIn('type', [UserType::staff(), UserType::reception()])
                 ->first();
         else
@@ -196,13 +196,13 @@ class UserControllerFunctionality
             else
                 return null;
 
-        elseif ($userType == UserType::itTeam())
-            if (in_array($user->type, [UserType::itTeam(), UserType::admin()]))
+        elseif ($userType == UserType::supportiveStaff())
+            if (in_array($user->type, [UserType::supportiveStaff(), UserType::admin()]))
                 return [
                     'status' => 400,
                     'error' => ['type' => ['You can\'t update user with admin or It team member privilege.']]
                 ];
-            elseif(in_array($newUserType, [UserType::itTeam(), UserType::admin()]))
+            elseif(in_array($newUserType, [UserType::supportiveStaff(), UserType::admin()]))
                 return [
                     'status' => 400,
                     'error' => ['type' => ['You can\'t assassin user with admin or It team member privilege.']]
@@ -280,8 +280,8 @@ class UserControllerFunctionality
                 'status' => 400,
                 'error' => 'Bad request.',
             ];
-        elseif ($userType == UserType::itTeam() &&
-            in_array($user->type, [UserType::itTeam(), UserType::admin()])
+        elseif ($userType == UserType::supportiveStaff() &&
+            in_array($user->type, [UserType::supportiveStaff(), UserType::admin()])
         )
             return [
                 'status' => 400,

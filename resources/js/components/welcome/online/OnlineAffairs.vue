@@ -7,10 +7,10 @@
             variant="success"
             :show="customerToken.length != 0 && dismissCountDown"
             dismissible
-            @dismissed="dismissCountDown=0"
+            @dismissed="dismissCountDown = 0"
             @dismiss-count-down="countDownChanged"
           >
-            <h4>Send Successfully {{dismissCountDown}}</h4>
+            <h4>Send Successfully {{ dismissCountDown }}</h4>
             <hr />
             <h3>
               Your Token is <span style="color: red">{{ customerToken }}</span>
@@ -63,8 +63,6 @@
                     :tabIndex="tabIndex"
                   ></online-affair-by-catagory>
                 </b-tab>
-
-                
               </b-tabs>
             </b-card>
           </div>
@@ -128,8 +126,9 @@ export default {
     //for alert countdown
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
-      if(this.dismissCountDown == 0){
-        this.customerToken == ''
+      if (this.dismissCountDown == 0) {
+        // this.$sotre.dispatch("removeToken");
+        this.$store.dispatch("removeToken");
       }
     },
     /*

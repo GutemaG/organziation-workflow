@@ -31,7 +31,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('is-it-team-member', function ($user){
-            return $user->type == UserType::itTeam();
+            return $user->type == UserType::supportiveStaff();
         });
 
         Gate::define('is-staff', function ($user){

@@ -12,18 +12,23 @@ class OnlineRequestStep extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-      'online_request_tracker_id',
-      'online_request_procedure_id',
-      'started_at',
-      'ended_at',
-      'next_step',
-      'user_id',
-      'is_completed',
+        'online_request_tracker_id',
+        'online_request_procedure_id',
+        'started_at',
+        'ended_at',
+        'next_step',
+        'user_id',
+        'is_completed',
         'is_rejected',
         'reason',
     ];
 
     protected $with = ['onlineRequestProcedure'];
+
+    public function onlineRequestTracker(): BelongsTo
+    {
+        return $this->belongsTo(OnlineRequestTracker::class);
+    }
 
     public function onlineRequestProcedure(): BelongsTo
     {

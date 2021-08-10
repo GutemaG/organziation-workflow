@@ -42,7 +42,7 @@ class OnlineRequestTrackerTest extends MyTestCase
 
     public function testApplyRequestWithValidData(): void
     {
-        $response = $this->postJson($this->url, ['online_request_id' => 2, 'phone_number' => '+251953960596']);
+        $response = $this->postJson($this->url, ['online_request_id' => 2, 'phone_number' => '+251985190194']);
         $token = OnlineRequestTracker::orderBy('id', 'DESC')->limit(1)->get()->first()->token;
         $response->assertExactJson([
             'status' => 200,

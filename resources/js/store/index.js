@@ -47,6 +47,9 @@ export default new Vuex.Store({
         },
         setToken({commit}, token){
            commit("SET_TOKEN", token) 
+        },
+        removeToken({commit}){
+            commit('REMOVE_TOKEN')
         }
     },
     mutations: {
@@ -55,6 +58,9 @@ export default new Vuex.Store({
         },
         SET_TOKEN(state, token){
             state.customerToken = token
+        },
+        REMOVE_TOKEN(state){
+            state.customerToken = ""
         }
     }
 });
