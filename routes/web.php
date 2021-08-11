@@ -74,7 +74,7 @@ Route::prefix('api')->group(function (){
 
 // for test
 Route::get('/test', function () {
-    \App\Events\OnlineRequestEvent::dispatch('this is test');
+   \App\Events\OnlineRequestEvent::dispatch('this is test');
     return true;
 
 //    for ($i=0;$i<20;$i++){
@@ -235,4 +235,3 @@ Route::get('/test', function () {
 //Route::get('/{vue_capture?}', function () {
 //    return view('home');
 //})->where('vue_capture', '[\/\w\.-]*');
-

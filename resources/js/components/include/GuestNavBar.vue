@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-navbar fixed="top" toggleable="lg" type="dark" variant="dark" >
+    <b-navbar fixed="top" toggleable="lg" type="dark" variant="dark">
       <router-link to="/">
         <b-navbar-brand>{{ tr("Home") }}</b-navbar-brand>
       </router-link>
@@ -17,7 +17,16 @@
           <b-nav-item to="/dashboard">{{ tr("Dashbaord") }}</b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav>
-          <b-nav-item to="/apply-online-affair">{{ tr("Online Affair") }}</b-nav-item>
+          <b-nav-item to="/apply-online-affair">{{
+            tr("Online Affair")
+          }}</b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav>
+          <b-nav-item to="/check-request-progress">
+            <b-button size="sm">
+              {{ tr("Check Requst progress") }}
+            </b-button>
+          </b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->

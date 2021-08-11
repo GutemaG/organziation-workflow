@@ -6,9 +6,7 @@
     <b-form @submit="handleSubmit">
       <b-card
         class="m-1"
-        border-variant="primary"
         :header="'Edit Affair-' + $route.params.id"
-        header-bg-variant="secondary"
       >
         <b-form-group
           label="Affair Name"
@@ -48,6 +46,7 @@
             v-model="selectedAffair.description"
             id="'affair-description'"
             placeholder="description for current procedure(optional)"
+            style="height: 150px"
           ></b-form-textarea>
         </b-form-group>
         <div class="m-2">
@@ -56,7 +55,7 @@
             :key="procedure_index"
           >
             <b-card class="m-1" border-variant="light">
-              <b-card-header header-bg-variant="dark">
+              <b-card-header header-bg-variant="secondary">
                 <b-row>
                   <b-col cols="10" md="9"
                     >Procedure - {{ procedure_index }}</b-col
@@ -101,11 +100,18 @@
                         'procedure-' + procedure_index + '-description-input'
                       "
                       placeholder="description for current procedure(optional)"
+                      style="height: 150px"
                     ></b-form-textarea>
                   </b-form-group>
                   <b-form-group
                     label="Step"
-                    :label-for="'procedure-' + procedure_index + 'step-input'"
+                    :label-for="
+                      'procedure-' +
+                      procedure.id +
+                      '-' +
+                      procedure_index +
+                      '-step-input'
+                    "
                   >
                     <b-form-input
                       :id="
@@ -113,7 +119,7 @@
                         procedure.id +
                         '-' +
                         procedure_index +
-                        '-description'
+                        '-step-input'
                       "
                       v-model="procedure.step"
                       placeholder="Enter Procedure Step number"
@@ -199,6 +205,7 @@
                             '-description'
                           "
                           placeholder="description for current procedure(optional)"
+                          style="height:150px"
                         ></b-form-textarea>
                       </b-form-group>
                       <b-form-group

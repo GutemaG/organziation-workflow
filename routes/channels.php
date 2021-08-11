@@ -12,8 +12,7 @@ use Illuminate\Support\Facades\Broadcast;
 | used to check if an authenticated user can listen to the channel.
 |
 */
-
-Broadcast::channel('online-request-applied', function () {
+Broadcast::channel('{id}.online-request-applied', function () {
     return Gate::check('is-staff');
 });
 

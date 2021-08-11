@@ -1,7 +1,7 @@
 <template>
   <div>
     <guest-nav-bar></guest-nav-bar>
-    <div style="margin-top: 3.5rem">
+    <div style="margin-top: 4rem">
       <router-view name="welcome"></router-view>
     </div>
     <!-- <vue-login></vue-login> -->

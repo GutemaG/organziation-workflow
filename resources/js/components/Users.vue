@@ -1,146 +1,160 @@
 <template>
-  <b-container fluid>
+  <div>
     <!-- User Interface controls -->
-    <b-row>
-      <b-col lg="6" class="my-1">
-        <b-form-group
-          label="Add"
-          label-for="addUser"
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          class="mb-3"
-        >
-          <b-button size="sm" @click="addUser" class="mr-1" variant="primary">
-           + {{tr('Add')}}
-          </b-button>
-        </b-form-group>
-      </b-col>
-
-      <b-col lg="6" class="my-1"> </b-col>
-
-      <b-col lg="6" class="my-1">
-        <b-form-group
-          label="Filter"
-          label-for="filter-input"
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          class="mb-0"
-        >
-          <b-input-group size="sm">
-            <b-form-input
-              id="filter-input"
-              v-model="filter"
-              type="search"
-              placeholder="Type to Search"
-            ></b-form-input>
-
-            <b-input-group-append>
-              <b-button :disabled="!filter" @click="filter = ''"
-                >{{tr('Clear')}}</b-button
-              >
-            </b-input-group-append>
-          </b-input-group>
-        </b-form-group>
-      </b-col>
-
-      <b-col lg="6" class="my-1"> </b-col>
-
-      <b-col sm="5" md="6" class="my-1">
-        <b-form-group
-          :label="tr('Per page')"
-          label-for="per-page-select"
-          label-cols-sm="6"
-          label-cols-md="4"
-          label-cols-lg="3"
-          label-align-sm="right"
-          label-size="sm"
-          class="mb-0"
-        >
-          <b-form-select
-            id="per-page-select"
-            v-model="perPage"
-            :options="pageOptions"
-            size="sm"
-          ></b-form-select>
-        </b-form-group>
-      </b-col>
-
-      <b-col sm="7" md="6" class="my-1">
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="userLength"
-          :per-page="perPage"
-          align="fill"
-          size="sm"
-          class="my-0"
-          :first-text="tr('First')"
-          :prev-text="tr('Prev')"
-          :next-text="tr('Next')"
-          :last-text="tr('Last')"
-        ></b-pagination>
-      </b-col>
-    </b-row>
-
-    <!-- Main table element -->
-    <b-table
-      :items="users"
-      :fields="user_fields"
-      :current-page="currentPage"
-      :per-page="perPage"
-      :filter="filter"
-      :filter-included-fields="filterOn"
-      :sort-by.sync="sortBy"
-      :sort-desc.sync="sortDesc"
-      :sort-direction="sortDirection"
-      stacked="md"
-      show-empty
-      small
-      @filtered="onFiltered"
-      striped
+    <h2></h2>
+    <div
+      class="bg-light shadow mx-auto"
+      style="max-height: 100%; border-radius: 21px 21px 0 0"
     >
-      <template #cell(id)="row">
-        {{row.index + 1}}
-      </template>
+      <b-row>
+        <b-col lg="6" class="my-1">
+          <b-form-group
+            label="Add"
+            label-for="addUser"
+            label-cols-sm="3"
+            label-align-sm="right"
+            label-size="sm"
+            class="mb-3"
+          >
+            <b-button size="sm" @click="addUser" class="mr-1" variant="primary">
+              + {{ tr("Add") }}
+            </b-button>
+          </b-form-group>
+        </b-col>
 
-      <template #cell(actions)="row">
-        <b-button
-          size="sm"
-          @click="info(row.item, row.index, $event.target)"
-          class="mr-1"
-          variant="primary"
-        >
-          <i class="fa fa-edit">{{tr('Edit')}}</i>
-        </b-button>
-        <!-- <b-button size="sm" @click="row.toggleDetails">
+        <b-col lg="6" class="my-1"> </b-col>
+
+        <b-col lg="6" class="my-1">
+          <b-form-group
+            label="Filter"
+            label-for="filter-input"
+            label-cols-sm="3"
+            label-align-sm="right"
+            label-size="sm"
+            class="mb-0"
+          >
+            <b-input-group size="sm">
+              <b-form-input
+                id="filter-input"
+                v-model="filter"
+                type="search"
+                placeholder="Type to Search"
+              ></b-form-input>
+
+              <b-input-group-append>
+                <b-button :disabled="!filter" @click="filter = ''">{{
+                  tr("Clear")
+                }}</b-button>
+              </b-input-group-append>
+            </b-input-group>
+          </b-form-group>
+        </b-col>
+
+        <b-col lg="6" class="my-1"> </b-col>
+
+        <b-col sm="5" md="6" class="my-1">
+          <b-form-group
+            :label="tr('Per page')"
+            label-for="per-page-select"
+            label-cols-sm="6"
+            label-cols-md="4"
+            label-cols-lg="3"
+            label-align-sm="right"
+            label-size="sm"
+            class="mb-0"
+          >
+            <b-form-select
+              id="per-page-select"
+              v-model="perPage"
+              :options="pageOptions"
+              size="sm"
+            ></b-form-select>
+          </b-form-group>
+        </b-col>
+
+        <b-col sm="7" md="6" class="my-1">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="userLength"
+            :per-page="perPage"
+            align="fill"
+            size="sm"
+            class="my-0"
+            :first-text="tr('First')"
+            :prev-text="tr('Prev')"
+            :next-text="tr('Next')"
+            :last-text="tr('Last')"
+          ></b-pagination>
+        </b-col>
+      </b-row>
+
+      <!-- Main table element -->
+      <b-table
+        :items="users"
+        :fields="user_fields"
+        :current-page="currentPage"
+        :per-page="perPage"
+        :filter="filter"
+        :filter-included-fields="filterOn"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
+        :sort-direction="sortDirection"
+        stacked="md"
+        show-empty
+        small
+        @filtered="onFiltered"
+        striped
+        :filter-debounce="500"
+        :busy="isLoading"
+      >
+        <template #table-busy>
+          <div class="text-center text-danger my-2">
+            <b-spinner class="align-middle"></b-spinner>
+            <strong>Loading...</strong>
+          </div>
+        </template>
+        <template #cell(id)="row">
+          {{ row.index + 1 }}
+        </template>
+
+        <template #cell(actions)="row">
+          <b-button
+            size="sm"
+            @click="info(row.item, row.index, $event.target)"
+            class="mr-1"
+            variant="primary"
+          >
+            <i class="fa fa-edit">{{ tr("Edit") }}</i>
+          </b-button>
+          <!-- <b-button size="sm" @click="row.toggleDetails">
           {{ row.detailsShowing ? "Hide" : "Show" }} Details
         </b-button> -->
-        <b-button
-          size="sm"
-          @click="deleteUser(row.item)"
-          class="mr-1"
-          variant="danger"
-        >
-          <i class="fa fa-trash">{{tr('Delete')}}</i>
-        </b-button>
-      </template>
+          <b-button
+            size="sm"
+            @click="deleteUser(row.item)"
+            class="mr-1"
+            variant="danger"
+          >
+            <i class="fa fa-trash">{{ tr("Delete") }}</i>
+          </b-button>
+        </template>
 
-      <template #row-details="row">
-        <b-card>
-          <ul>
-            <li v-for="(value, key) in row.item" :key="key">
-              {{ key }}: {{ value }}
-            </li>
-          </ul>
-        </b-card>
-      </template>
-    </b-table>
+        <template #row-details="row">
+          <b-card>
+            <ul>
+              <li v-for="(value, key) in row.item" :key="key">
+                {{ key }}: {{ value }}
+              </li>
+            </ul>
+          </b-card>
+        </template>
+      </b-table>
 
-    <!-- Info modal -->
-    <edit-user-modal :selectedUser="selectedUser"></edit-user-modal>
-    <add-user-modal></add-user-modal>
-  </b-container>
+      <!-- Info modal -->
+      <edit-user-modal :selectedUser="selectedUser"></edit-user-modal>
+      <add-user-modal></add-user-modal>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -158,7 +172,7 @@ export default {
       user_fields,
       totalRows: 1,
       currentPage: 1,
-      perPage: 5,
+      perPage: 15,
       pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
       sortBy: "",
       sortDesc: false,
@@ -166,6 +180,7 @@ export default {
       filter: null,
       filterOn: [],
       selectedUser: {},
+      isLoading: true,
     };
   },
   computed: {
@@ -186,6 +201,7 @@ export default {
     this.$Progress.start();
     this.fetchUsers();
     this.$Progress.finish();
+    this.isLoading = false;
   },
   methods: {
     ...mapActions(["fetchUsers", "removeUser"]),

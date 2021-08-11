@@ -1,5 +1,8 @@
 <template>
-  <b-container fluid>
+  <b-container fluid 
+    class="bg-light shadow mx-auto mt-2"
+    style="max-height: 100%; border-radius: 21px 21px 0 0"
+    >
     <!-- User Interface controls -->
     <b-row>
       <b-col lg="6" class="my-1">
@@ -128,7 +131,11 @@
         </b-button>
       </template>
       <template #cell(description)="row">
-        <span v-b-tooltip.hover :title="row.item.description">{{ row.item.description.substring(0, 30) }}</span>
+        <span v-b-tooltip.hover 
+          v-b-popover.hover.top="row.item.description"
+          title="Description">{{
+          row.item.description.substring(0, 30)
+        }}</span>
       </template>
 
       <template #row-details="row">
@@ -166,7 +173,7 @@ export default {
       building_fields,
       totalRows: 1,
       currentPage: 1,
-      perPage: 5,
+      perPage: 10,
       pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
       filter: null,
       filterOn: [],

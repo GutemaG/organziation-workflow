@@ -58,16 +58,26 @@ export default [
                 path: "/apply-online-affair",
                 name: "apply-online-affair",
                 components: {
-                    welcome: require("./components/welcome/online/OnlineAffairs.vue").default
+                    welcome: require("./components/welcome/online/OnlineAffairs.vue")
+                        .default
                 }
             },
             {
                 path: "/apply-online-affair/:slug",
                 name: "apply-online-affair2",
                 components: {
-                    welcome: require("./components/welcome/online/ApplyOnlineAffair.vue").default
+                    welcome: require("./components/welcome/online/ApplyOnlineAffair.vue")
+                        .default
                 }
             },
+            {
+                path: "/check-request-progress",
+                name: "check-request-progress",
+                components: {
+                    welcome: require("./components/welcome/online/CheckOnlineRequestProgress.vue")
+                        .default
+                }
+            }
         ]
     },
     {

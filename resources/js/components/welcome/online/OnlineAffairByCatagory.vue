@@ -16,7 +16,7 @@
       <hr />
     </div>
     <b-row>
-      <h3 v-if="!filteredAffairs">Oops, No result found Please try other  </h3>
+      <h3 v-if="!filteredAffairs">Oops, No result found Please try other</h3>
       <b-col
         :cols="!selectedAffair ? '' : 6"
         style="height: 65vh; overflow-y: scroll"
@@ -41,7 +41,32 @@
         <h4>Description:</h4>
         <p>{{ selectedAffair.description }}</p>
         <hr />
-        <h3>Pre Requests</h3>
+
+        <div
+          class="timeline"
+          v-if="selectedAffair.prerequisite_labels.length != 0"
+        >
+          <div class="time-label">
+            <span>Pre Requests</span>
+          </div>
+          <div
+            v-for="(prerequisite, index) in selectedAffair.prerequisite_labels"
+            :key="prerequisite.id"
+          >
+            <!-- style="overflow-y: scroll" -->
+            <i class="fas bg-blue" >{{ index + 1 }}</i>
+            <div class="timeline-item">
+              <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
+
+              <div class="timeline-body">
+                {{ prerequisite.label }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else>No Pre Request</div>
+
+        <!-- <h3>Pre Requests</h3>
         <div v-if="selectedAffair.prerequisite_labels.length != 0">
           <b-list-group
             v-for="prerequisite in selectedAffair.prerequisite_labels"
@@ -55,7 +80,7 @@
         </div>
         <div v-else>
           <h4>No Pre Request</h4>
-        </div>
+        </div> -->
         <div>
           <router-link
             :to="{

@@ -23,7 +23,7 @@ class OnlineRequestStep extends Model
         'reason',
     ];
 
-//    protected $with = ['onlineRequestProcedure'];
+   protected $with = ['onlineRequestProcedure'];
 
     public function onlineRequestTracker(): BelongsTo
     {
