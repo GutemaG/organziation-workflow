@@ -52,10 +52,11 @@ class OnlineRequestTrackerAction
     }
 
     /**
-     * @param $phone_number
-     * @param $token
+     * @param string $phone_number
+     * @param string $token
      * @param Model $onlineRequest
      * @param Collection $procedures
+     * @param Model $onlineRequestStep
      * @throws ConfigurationException
      */
     protected static function initiateNotification(string $phone_number, string $token, Model $onlineRequest, Collection $procedures, Model $onlineRequestStep): void

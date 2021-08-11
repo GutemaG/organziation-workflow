@@ -36,8 +36,8 @@ class OnlineRequestEvent implements ShouldBroadcast
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()
-    {G
-//        return new PrivateChannel('online-request-applied');
+    {
+        dump($this->user->id . '.' . 'online-request-applied');
         return new PrivateChannel($this->user->id . '.' . 'online-request-applied');
     }
 }
