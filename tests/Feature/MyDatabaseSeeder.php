@@ -30,15 +30,26 @@ trait MyDatabaseSeeder
 
         Bureau::factory(20)->create();
 
-        OnlineRequest::factory(20);
+//        OnlineRequest::factory(20);
 
 
-        OnlineRequest::factory(20)
-            ->has(PrerequisiteLabel::factory()->count(rand(1,5)))
-            ->has(OnlineRequestProcedure::factory()
-                ->hasAttached(User::inRandomOrder()->limit(rand(1,5))->get())
-                ->count(rand(3,6)))
-            ->create();
+        OnlineRequest::factory(20)->create()->each(function ($onlineRequest) {
+            PrerequisiteLabel::factory()->create(['online_request_id' => $onlineRequest->id])
+                ->count(rand(1,5));
+            OnlineRequestProcedure::factory(random_int(3,5))->create(['online_request_id' => $onlineRequest->id])
+                ->each(function ($onlineRequestProcedure) {
+                    $onlineRequestProcedure->users()
+                        ->attach(User::select('id')->inRandomOrder()->limit(random_int(1,5))->get());
+                });
+
+        });
+//            ->has(PrerequisiteLabel::factory()->count(rand(1,5)))
+//            ->has(OnlineRequestProcedure::factory()->count(rand(3,6))
+//                ->each(function ($onlineRequestProcedure) {
+////                    $onlineRequestProcedure
+////                        ->attach(User::select('id')->inRandomOrder()->limit(rand(1,5))->get());
+//                }))
+//            ->create();
 
         for ($i=0;$i<20;$i++){
         $isDone = random_int(0,1) == 0;
@@ -49,20 +60,6 @@ trait MyDatabaseSeeder
                 $procedures = $request->onlineRequest->onlineRequestProcedures;
                 $old = null;
                 $time = now();
-//                $isComplete = $isDone;
-//
-//                function complete() use (&$isComplete, $isDone): bool
-//                {
-//                    if ($isDone)
-//                        return true;
-//                    elseif ($isComplete) {
-//                        $complete = random_int(0,1) == 1;
-//                        $isComplete = $complete;
-//                        return $complete;
-//                    }
-//                    return false;
-//                }
-
                 foreach ($procedures as $procedure) {
                     $done = null;
                     if ($isDone)

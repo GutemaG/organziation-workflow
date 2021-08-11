@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -9,22 +10,24 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Collection;
 
 class OnlineRequestEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message;
+    public $onlineRequestStep;
+    private $user;
 
     /**
      * Create a new event instance.
      *
-     * @param $message
+     * @param User $user
+     * @param array $onlineRequestStep
      */
-    public function __construct($message)
+    public function __construct(User $user, array $onlineRequestStep)
     {
-        $this->message = $message;
+        $this->onlineRequestStep = $onlineRequestStep;
+        $this->user =  $user;
     }
 
     /**
@@ -34,6 +37,7 @@ class OnlineRequestEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('online-request-applied');
+//        return new PrivateChannel('online-request-applied');
+        return new PrivateChannel($this->user->id . '.' . 'online-request-applied');
     }
 }

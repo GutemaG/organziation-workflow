@@ -69,10 +69,10 @@ class OnlineRequest extends Model
      *
      * @var string[]
      */
-    protected $with = [
-        'onlineRequestProcedures',
-        'prerequisiteLabels',
-    ];
+//    protected $with = [
+//        'onlineRequestProcedures',
+//        'prerequisiteLabels',
+//    ];
 
     /**
      * Get the procedures associated with the online request.

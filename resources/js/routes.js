@@ -196,6 +196,18 @@ export default [
                 meta: {
                     requiresAuth: true
                 }
+            },
+            {
+                path: "/notification/:slug",
+                name:"notification",
+                props: true,
+                components: {
+                    dashboard: require("./components/request/online/StaffNotification.vue")
+                        .default
+                },
+                meta: {
+                    requiresAuth: true
+                }
             }
         ]
     },

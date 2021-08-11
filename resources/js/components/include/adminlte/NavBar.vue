@@ -136,32 +136,37 @@
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
           <span class="badge badge-warning navbar-badge">{{
-            notfication.length
+            notfications.length
           }}</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
           <span class="dropdown-header"
-            >{{ notfication.length }} Notifications</span
+            >{{ notfications.length }} Notifications</span
           >
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer"
-            >See All Notifications</a
-          >
+          <div v-if="notfications.length > 0">
+            <div v-for="(notfication, index) in notfications" :key="index">
+              <div class="dropdown-divider"></div>
+              <router-link
+                :to="{
+                  name: 'notification',
+                  params: { slug: notfication.message, request: notfication },
+                }"
+                class="dropdown-item"
+              >
+                <i class="fas fa-dot-circle mr-2"></i> {{ notfication.message }}
+                <span class="float-right text-muted text-sm">
+                  <b-button variant="success" size="sm">accept</b-button>
+                  <b-button variant="danger" size="sm">reject</b-button>
+                </span>
+                <!-- <span class="float-right text-muted text-sm">{{notfication.created_at}}3 mins</span> -->
+              </router-link>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item dropdown-footer"
+                >See All Notifications</a
+              >
+            </div>
+          </div>
         </div>
       </li>
       <li class="nav-item">
@@ -207,7 +212,7 @@
 export default {
   data() {
     return {
-      notfication: [],
+      notfications: [],
     };
   },
   computed: {
@@ -230,9 +235,9 @@ export default {
     // },
   },
   methods: {},
-  created() {
-    Echo.private("online-request-applied").listen("OnlineRequestEvent", (e) => {
-      this.notfication.unshift(e);
+  mounted() {
+    Echo.private(`${this.user.id}.online-request-applied`).listen("OnlineRequestEvent", (e) => {
+      this.notfications.unshift(e);
       console.log("from pusherrrr: ", e);
     });
   },

@@ -40,7 +40,11 @@ class OnlineRequestStepTest extends MyTestCase
         $user = $this->getUser(UserType::staff());
         $this->actingAs($user);
         $response = $this->getJson($this->url);
-        $response->assertJson(['status' => 200]);
+        $onlineRequestSteps = $this->getOnlineRequestSteps($user);
+        $response->assertExactJson([
+                'status' => 200,
+                'online_request_steps' => $onlineRequestSteps,
+            ]);
         $this->printSuccessMessage('Staff user can access online request steps which are handled by him/her.');
     }
 
@@ -52,5 +56,21 @@ class OnlineRequestStepTest extends MyTestCase
         $this->actingAs($user);
         $response = $this->getJson($this->url);
         $response->assertExactJson($this->unauthorizedResponse());
+    }
+
+    /**
+     * @param User $user
+     * @return mixed
+     */
+    protected function getOnlineRequestSteps(User $user)
+    {
+        $onlineRequestSteps = OnlineRequestStep::where('user_id', $user->id)
+            ->with('onlineRequestTracker.onlineRequest')->get()->toArray();
+        $length = count($onlineRequestSteps);
+        for ($i = 0; $i < $length; $i++) {
+            $onlineRequestSteps[$i]['online_request'] = $onlineRequestSteps[$i]['online_request_tracker']['online_request'];
+            unset($onlineRequestSteps[$i]['online_request_tracker']);
+        }
+        return $onlineRequestSteps;
     }
 }

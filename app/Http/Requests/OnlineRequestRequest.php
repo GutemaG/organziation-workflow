@@ -154,7 +154,6 @@ class OnlineRequestRequest extends FormRequest
      */
     protected function validateEachStepNumber($parentValidationFails=false): array
     {
-        return [];
         $data = $this->getAllStepNumberOfEachProcedure($parentValidationFails);
         $step = 1;
         $error = [];

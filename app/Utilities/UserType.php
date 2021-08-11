@@ -12,7 +12,7 @@ class UserType
      * @var string
      */
     private static $admin = "admin";
-    private static $supportiveStaff = "supportive-staff";
+    private static $itTeam = "supportive-staff";
     private static $staff = "staff";
     private static $reception = "reception";
 
@@ -31,9 +31,9 @@ class UserType
      *
      * @return string
      */
-    public static function supportiveStaff()
+    public static function itTeam()
     {
-        return UserType::$supportiveStaff;
+        return UserType::$itTeam;
     }
 
     /**
@@ -64,7 +64,7 @@ class UserType
     public static function all(){
         return [
             self::$admin,
-            self::$supportiveStaff,
+            self::$itTeam,
             self::$staff,
             self::$reception,
         ];
@@ -77,7 +77,7 @@ class UserType
      */
     public static function exceptAdmin(){
         return [
-            self::$supportiveStaff,
+            self::$itTeam,
             self::$staff,
             self::$reception,
         ];
@@ -91,7 +91,7 @@ class UserType
     public static function majors(){
         return [
             self::$admin,
-            self::$supportiveStaff,
+            self::$itTeam,
         ];
     }
 
