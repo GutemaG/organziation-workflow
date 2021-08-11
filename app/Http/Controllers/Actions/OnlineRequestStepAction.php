@@ -46,7 +46,7 @@ class OnlineRequestStepAction
         }
         return response()->json([
             'status' => 200,
-            'online-request-steps' => $data,
+            'online_request_steps' => $data,
         ]);
     }
 }

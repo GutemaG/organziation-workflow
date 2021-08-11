@@ -135,10 +135,14 @@
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
+          <span class="badge badge-warning navbar-badge">{{
+            notfication.length
+          }}</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-header">15 Notifications</span>
+          <span class="dropdown-header"
+            >{{ notfication.length }} Notifications</span
+          >
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item">
             <i class="fas fa-envelope mr-2"></i> 4 new messages
@@ -167,10 +171,12 @@
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#" role="button">
-          {{user.user_name}}
+          {{ user.user_name }}
           <!-- <i class="right fas fa-angle-left"></i> -->
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <a href="#" class="dropdown-item">{{user.first_name}} {{user.last_name}}</a>
+            <a href="#" class="dropdown-item"
+              >{{ user.first_name }} {{ user.last_name }}</a
+            >
             <div class="dropdown-divider"></div>
             <router-link to="/profile" class="dropdown-item">
               Profile
@@ -201,21 +207,34 @@
 export default {
   data() {
     return {
-
+      notfication: [],
     };
   },
   computed: {
     user() {
       let currentUser = window.user;
-      return currentUser
+      return currentUser;
       // if (user) {
       //   return user.user_name;
       // }
       // return null;
     },
+    // pusherListner() {
+    //   Echo.private("online-request-applied").listen(
+    //     "OnlineRequestEvent",
+    //     (e) => {
+    //       this.notfication.unshift(e);
+    //       console.log("from pusher: ", e);
+    //     }
+    //   );
+    // },
   },
-  methods: {
-    
+  methods: {},
+  created() {
+    Echo.private("online-request-applied").listen("OnlineRequestEvent", (e) => {
+      this.notfication.unshift(e);
+      console.log("from pusherrrr: ", e);
+    });
   },
 };
 </script>
