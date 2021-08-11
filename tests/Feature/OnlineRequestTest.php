@@ -12,6 +12,7 @@ class OnlineRequestTest extends MyTestCase
 {
     protected $url = '/api/online-requests/';
     protected $modelName = OnlineRequest::class;
+    protected $defaultTest = false;
 
     public function testAdminCanAccessIndex(): void
     {
@@ -22,7 +23,7 @@ class OnlineRequestTest extends MyTestCase
 
     public function testItTeamCanAccessIndex(): void
     {
-        $user = $this->getUser(UserType::supportiveStaff());
+        $user = $this->getUser(UserType::itTeam());
         $this->index($user);
         $this->printSuccessMessage('It team can access index passed ');
     }
@@ -31,8 +32,8 @@ class OnlineRequestTest extends MyTestCase
     {
         $this->actingAs($user);
         $response = $this->getJson($this->url);
-        $data = OnlineRequest::orderBy('name', 'asc')->get()->toArray();
-        $response->assertJson([
+        $data = OnlineRequest::with(['onlineRequestProcedures', 'prerequisiteLabels'])->orderBy('name', 'asc')->get()->toArray();
+        $response->assertExactJson([
             'status' => 200,
             'online_requests' => $data,
         ]);
@@ -50,7 +51,7 @@ class OnlineRequestTest extends MyTestCase
 
     public function testItTeamCanAccessPost(): void
     {
-        $user = $this->getUser(UserType::supportiveStaff());
+        $user = $this->getUser(UserType::itTeam());
         $this->majorValidation($user);
         $this->majorNestedValidation($user);
         $this->additionalNestedValidation($user);
@@ -63,7 +64,7 @@ class OnlineRequestTest extends MyTestCase
         $url = $update ? $this->url . 1 : $this->url;
         $this->actingAs($user);
         $response = $update ? $this->putJson($url, []) : $this->postJson($url, []);
-        $response->assertJson([
+        $response->assertExactJson([
             'status' => 422,
             'error' => [
                 'type' => ['The type field is required.'],
@@ -138,6 +139,11 @@ class OnlineRequestTest extends MyTestCase
         $this->assertDatabaseHas('online_request_procedures', ['responsible_bureau_id' => 1, 'step_number' => 1]);
         $this->assertDatabaseHas('online_request_procedure_users', ['procedure_id' => $procedure->id, 'user_id' => 1]);
         $this->assertDatabaseHas('online_request_procedure_users', ['procedure_id' => $procedure->id, 'user_id' => 2]);
+        $onlineRequest = OnlineRequest::with(['onlineRequestProcedures', 'prerequisiteLabels'])->orderByDesc('id')->first()->toArray();
+        $response->assertExactJson([
+            'status' => 201,
+            'online_request' => $onlineRequest,
+        ]);
     }
 
     public function testAdminCanAccessShow(): void
@@ -149,7 +155,7 @@ class OnlineRequestTest extends MyTestCase
 
     public function testItTeamCanAccessShow(): void
     {
-        $user = $this->getUser(UserType::supportiveStaff());
+        $user = $this->getUser(UserType::itTeam());
         $this->show($user);
         $this->printSuccessMessage('It team can view any online request passed ');
     }
@@ -177,7 +183,7 @@ class OnlineRequestTest extends MyTestCase
 
     public function testItTeamCanAccessUpdate(): void
     {
-        $user = $this->getUser(UserType::supportiveStaff());
+        $user = $this->getUser(UserType::itTeam());
         $this->majorValidation($user, true);
         $this->majorNestedValidation($user, true);
         $this->additionalNestedValidation($user, true);
@@ -190,7 +196,7 @@ class OnlineRequestTest extends MyTestCase
         $type = RequestType::getOthers();
         $this->actingAs($user);
         $this->creatingOnlineRequest($user);
-        $onlineRequest = OnlineRequest::orderBy('id', 'DESC')->first();
+        $onlineRequest = OnlineRequest::with(['onlineRequestProcedures.users', 'prerequisiteLabels'])->orderBy('id', 'DESC')->first();
         $data = $onlineRequest->toArray();
         $data['name'] = 'this is changed name';
         $data['type'] = $type;
@@ -200,7 +206,7 @@ class OnlineRequestTest extends MyTestCase
         $data['online_request_procedures'][0]['responsible_user_id'] = [1, 3, 4, 5, 7];
         array_pop($data);
         $response = $this->putJson($this->url . $onlineRequest->id, $data);
-        $result = OnlineRequest::orderBy('id', 'DESC')->first()->toArray();
+        $result = OnlineRequest::with(['onlineRequestProcedures.users', 'prerequisiteLabels'])->orderBy('id', 'DESC')->first()->toArray();
         $result['name'] = 'this is changed name';
         $result['type'] = $type;
         $result['description'] = 'this is changed description';
@@ -227,7 +233,7 @@ class OnlineRequestTest extends MyTestCase
 
     public function testItTeamCanAccessDestroy(): void
     {
-        $user = $this->getUser(UserType::admin());
+        $user = $this->getUser(UserType::itTeam());
         $this->destroy($user);
         $this->printSuccessMessage('It team can destroy any online request passed ');
     }
@@ -243,4 +249,5 @@ class OnlineRequestTest extends MyTestCase
         $this->assertSoftDeleted($onlineRequest);
         OnlineRequest::withTrashed()->restore();
     }
+
 }

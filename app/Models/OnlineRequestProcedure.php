@@ -69,10 +69,10 @@ class OnlineRequestProcedure extends Model
      *
      * @var string[]
      */
-    protected $with = [
-        'bureau',
-        'users'
-    ];
+//    protected $with = [
+//        'bureau',
+//        'users'
+//    ];
 
     /**
      * Get the online request that owns the online request procedure.

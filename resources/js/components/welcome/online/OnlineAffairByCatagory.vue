@@ -96,6 +96,8 @@ export default {
       //   return this.online_affairs;
       // }
       let key = this.filterKey.toLowerCase();
+      console.log(this.onlie_requests);
+      // return [];
       let filtered = this.online_requests.filter((affair) => {
         return (
           affair.name.toLowerCase().indexOf(key) != -1 ||

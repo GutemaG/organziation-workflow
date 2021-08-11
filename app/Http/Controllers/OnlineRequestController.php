@@ -33,7 +33,7 @@ class OnlineRequestController extends Controller
      */
     public function index(): JsonResponse
     {
-        $onlineRequests = OnlineRequest::orderBy('name', 'asc')->get();
+        $onlineRequests = OnlineRequest::with(['onlineRequestProcedures', 'prerequisiteLabels'])->orderBy('name', 'asc')->get();
         return response()->json([
             'status' => 200,
             'online_requests' => $onlineRequests,
@@ -70,7 +70,7 @@ class OnlineRequestController extends Controller
             DB::commit();
             return response()->json([
                 'status' => 201,
-                'online_request' => OnlineRequest::find($onlineRequest->id),
+                'online_request' => OnlineRequest::with(['onlineRequestProcedures', 'prerequisiteLabels'])->find($onlineRequest->id),
             ]);
 
         }
@@ -122,7 +122,7 @@ class OnlineRequestController extends Controller
             DB::commit();
             return response()->json([
                 'status' => 200,
-                'online_request' => $onlineRequest->refresh(),
+                'online_request' => OnlineRequest::with(['onlineRequestProcedures.users', 'prerequisiteLabels'])->find($onlineRequest->id),
             ]);
         }
         catch (DatabaseException $exception){

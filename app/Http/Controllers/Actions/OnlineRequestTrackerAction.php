@@ -10,6 +10,7 @@ use App\Models\OnlineRequest;
 use App\Models\OnlineRequestProcedure;
 use App\Models\OnlineRequestTracker;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +30,7 @@ class OnlineRequestTrackerAction
 
     public static function applyRequest(array $data): JsonResponse
     {
-        $onlineRequest = OnlineRequest::find($data['online_request_id']);
+        $onlineRequest = OnlineRequest::with('onlineRequestProcedures')->find($data['online_request_id']);
         if ($onlineRequest) {
             try {
                 DB::beginTransaction();
@@ -37,9 +38,8 @@ class OnlineRequestTrackerAction
                     ->create(['token' => Str::random(4)]);
                 $token = $onlineRequestTracker->token;
                 $procedures = $onlineRequest->onlineRequestProcedures;
-                self::createOnlineRequestStep($procedures, $onlineRequestTracker);
-                self::notifierCustomer($data['phone_number'], $token);
-                $users = $onlineRequestTracker->onlineRequestSteps->first()->onlineRequestProcedure->users;
+                $onlineRequestStep = OnlineRequestStepAction::store($procedures, $onlineRequestTracker);
+                self::initiateNotification($data['phone_number'], $token, $onlineRequest, $procedures, $onlineRequestStep);
                 DB::commit();
                 return self::successResponse($token);
             }
@@ -52,35 +52,23 @@ class OnlineRequestTrackerAction
     }
 
     /**
-     * Register each procedure of the online request.
-     *
-     * @param $procedures
-     * @param OnlineRequestTracker $onlineRequestTracker
+     * @param $phone_number
+     * @param $token
+     * @param Model $onlineRequest
+     * @param Collection $procedures
+     * @throws ConfigurationException
      */
-    protected static function createOnlineRequestStep($procedures, OnlineRequestTracker $onlineRequestTracker): void
+    protected static function initiateNotification(string $phone_number, string $token, Model $onlineRequest, Collection $procedures, Model $onlineRequestStep): void
     {
-        $firstOnlineRequestStep = null;
-        $oldOnlineRequestStep = null;
-        foreach ($procedures as $procedure) {
-            $currentOnlineRequest = $onlineRequestTracker->onlineRequestSteps()
-                ->create(['online_request_procedure_id' => $procedure->id, 'is_completed' => false,]);
-            $oldOnlineRequestStep ? $oldOnlineRequestStep->update(['next_step' => $currentOnlineRequest->id]) : null;
-
-            if (! $firstOnlineRequestStep)
-                $firstOnlineRequestStep = $currentOnlineRequest;
-            $oldOnlineRequestStep = $currentOnlineRequest;
-        }
-        $temp = $firstOnlineRequestStep->onlineRequestTracker->toArray();
-
-        $firstOnlineRequestStep = $firstOnlineRequestStep->toArray();
-        unset($firstOnlineRequestStep['online_request_tracker']['online_request']['online_request_procedures']);
-        unset($firstOnlineRequestStep['online_request_tracker']['online_request']['prerequisite_labels']);
-        unset($firstOnlineRequestStep['online_request_tracker']);
-        $firstOnlineRequestStep['online_request'] = $firstOnlineRequestStep['online_request_tracker']['online_request'];
-
-//        $firstOnlineRequestStep->pull('onlineRequestSteps');
-        dump($firstOnlineRequestStep);
-//        OnlineRequestEvent::dispatch($firstOnlineRequestStep);
+        self::notifierCustomer($phone_number, $token);
+        $users = self::getUsers($procedures);
+        $users->each(function ($user) use ($onlineRequest, $onlineRequestStep) {
+            $onlineRequestStep = $onlineRequestStep->toArray();
+            $onlineRequest = $onlineRequest->toArray();
+            unset($onlineRequest['online_request_procedures']);
+            $onlineRequestStep['request'] = $onlineRequest;
+            OnlineRequestEvent::dispatch($user, $onlineRequestStep);
+        });
     }
 
     /**
@@ -118,8 +106,8 @@ class OnlineRequestTrackerAction
      */
     protected static function notifierCustomer($phone_number, $token): void
     {
-//        $smsNotifier = new SmsNotifier($phone_number, $token);
-//        $smsNotifier->sendSms();
+        $smsNotifier = new SmsNotifier($phone_number, $token);
+        $smsNotifier->sendSms();
     }
 
     /**
@@ -144,5 +132,15 @@ class OnlineRequestTrackerAction
             return $value;
         });
         return $onlineRequestTracker;
+    }
+
+    /**
+     * @param $procedures
+     * @return Collection
+     */
+    protected static function getUsers($procedures): Collection
+    {
+        $temp = $procedures->sortBy('step_number')->first();
+        return $temp->users;
     }
 }
