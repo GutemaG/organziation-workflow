@@ -139,33 +139,39 @@
             notfications.length
           }}</span>
         </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="width:400px;overflow:auto;">
           <span class="dropdown-header"
             >{{ notfications.length }} Notifications</span
           >
           <div v-if="notfications.length > 0">
             <div v-for="(notfication, index) in notfications" :key="index">
               <div class="dropdown-divider"></div>
-              <router-link
-                :to="{
-                  name: 'notification',
-                  params: { slug: notfication.message, request: notfication },
-                }"
-                class="dropdown-item"
-              >
-                <i class="fas fa-dot-circle mr-2"></i> {{ notfication.message }}
-                <span class="float-right text-muted text-sm">
-                  <b-button variant="success" size="sm">accept</b-button>
-                  <b-button variant="danger" size="sm">reject</b-button>
+              <a href="#" class="dropdown-item">
+                <i class="fas fa-dot-circle mr-2"></i
+                >{{ notfication.request.name }} Lorem, ipsum dolor sit amet consectetur adipisicing elit. Porro, illum.
+                <span class="float-right text-muted">
+                  <b-button
+                    variant="success"
+                    size="sm"
+                    @click="acceptRequest(notfication)"
+                  >
+                    <i class="fas fa-check white"></i>
+                  </b-button>
+                  <b-button variant="danger" size="sm">
+                    <i class="fas fa-times-circle white"></i>
+                  </b-button>
                 </span>
-                <!-- <span class="float-right text-muted text-sm">{{notfication.created_at}}3 mins</span> -->
-              </router-link>
+              </a>
               <div class="dropdown-divider"></div>
-              <div class="dropdown-divider"></div>
-              <a href="#" class="dropdown-item dropdown-footer"
-                >See All Notifications</a
-              >
             </div>
+            <router-link
+              class="dropdown-item"
+              :to="{
+                name: 'notification',
+                params: { slug: 'all-notfications', request: notfications },
+              }"
+              >Show All Request
+            </router-link>
           </div>
         </div>
       </li>
@@ -234,12 +240,19 @@ export default {
     //   );
     // },
   },
-  methods: {},
+  methods: {
+    acceptRequest(request) {
+      console.log("accepting ", request);
+    },
+  },
   mounted() {
-    Echo.private(`${this.user.id}.online-request-applied`).listen("OnlineRequestEvent", (e) => {
-      this.notfications.unshift(e);
-      console.log("from pusherrrr: ", e);
-    });
+    Echo.private(`${this.user.id}.online-request-applied`).listen(
+      "OnlineRequestEvent",
+      (e) => {
+        this.notfications.unshift(e.onlineRequestStep);
+        console.log("from pusherrrr: ", e.onlineRequestStep);
+      }
+    );
   },
 };
 </script>
