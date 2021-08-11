@@ -32,7 +32,7 @@ class PreRequestFactory extends Factory
         $name = '';
         $description='';
         if(empty($affair)){
-            $name = $this->faker->paragraph(rand(2, 4));
+            $name = implode($this->faker->unique()->words(rand(2, 4)));
             $description = $this->faker->paragraph(rand(4, 10));
         }
         else{

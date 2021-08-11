@@ -13,9 +13,9 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
 
- Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-                 ->middleware('guest')
-                 ->name('login');
+//  Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+//                  ->middleware('guest')
+//                  ->name('login');
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])
                 ->middleware('guest');
