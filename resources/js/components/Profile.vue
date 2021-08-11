@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="container-fluid">
-      <b-card class="content">
-        <b-row>
-          <b-col cols="" class="text-center">
+    <div class="container-fluid mt-5 mb-5 bv-example-row">
+      <b-row class="justify-content-md-center">
+        <b-col cols="" class="text-center">
+          <b-card class="content">
             <b-dropdown
               id="dropdown-right"
               right
@@ -420,9 +420,9 @@
                 </form>
               </b-modal>
             </div>
-          </b-col>
-        </b-row>
-      </b-card>
+          </b-card>
+        </b-col>
+      </b-row>
     </div>
   </div>
 </template>

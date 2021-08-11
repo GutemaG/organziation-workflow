@@ -1,6 +1,6 @@
 <template>
     <b-container fluid>
-        <b-row class="mt-3">
+        <b-row>
             <b-col>
                 <b-container class="infoHome">
                     <h1 class="text-center">INFORMATION CENTER</h1>
@@ -21,20 +21,17 @@
                     </p>
 
                     <div id="student" class="mt-3 mb-3">
-                        <!-- Tabs to provide information on Students -->
-                        <b-card
-                        header-bg-variant="dark"
-                        header-text-variant="light"
-                        header-html="<h2><strong>Affairs</strong></h2>"
-                        text-variant="dark"
-                        header-class="text-center"
-                        no-body
-                        >
-                            <b-tabs card 
+                        <!-- Tabs to provide information -->
+                        <div class="card shadow shadow-lg--hover" style="border-radius: 1.2rem 1.2rem;">
+                            <div class="card-header text-center shadow" 
+                            style="background-color: #343a40 !important; color: white; border-radius: 1.2rem 1.2rem 0rem 0;">
+                                <h2><strong>Affairs</strong></h2>
+                            </div>
+                            <b-tabs card pills no-fade 
                             active-nav-item-class="font-weight-bold bg-info"
                             >
                                 <b-tab title="All">
-                                    <h3>Lorem ipsum, dolor sit amet consectetur</h3>
+                                    <h3>List of All affairs</h3>
                                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
                                         Numquam, culpa. Sint, a laborum quia porro molestias vero consequatur pariatur aut similique at mollitia 
                                         ratione sapiente explicabo. Ipsa voluptatem consequuntur culpa.
@@ -45,109 +42,409 @@
 
                                     <!-- For list of affairs -->
                                     <b-row>
-                                        <b-col>
-                                            <b-card-group class="mb-2 mt-2" v-for="affair in affairs" :key="affair.id">
-                                                <b-card header-bg-variant="dark" header-text-variant="white">
-                                                    <template #header class="text-center">
-                                                        <div class="d-flex align-items-center">
-                                                            <b-icon icon="info-circle-fill" class="mr-3" scale="2" variant="info"></b-icon>
-                                                            <h4 class="mb-0">{{ affair.name }}</h4>
+                                        <b-col style="height: 80vh; overflow-y: scroll">
+                                            <div class="card">
+                                                <div class="d-flex">
+                                                    <b-form inline>
+                                                        <label class="sr-only" for="inline-form-input-username">Username</label>
+                                                        <b-input-group prepend="@" class="mb-2 mr-sm-2 mb-sm-0">
+                                                            <b-form-input id="inline-form-input-username" placeholder="Username"></b-form-input>
+                                                        </b-input-group>
+                                                        <b-button pill scale="1"><b-icon icon="search"></b-icon></b-button>
+
+                                                    </b-form>
+                                                </div>
+                                                <hr style="margin-left: 1rem; margin-right: 1rem;">
+                                                <b-card-group class="ml-3" v-for="affair in affairs" :key="affair.id">
+                                                    <div class="card mb-3 mt-3 justify-content-md-center shadow shadow-lg--hover" style="max-width: 70%; border-radius: 1.36rem; border: 1px solid rgba(0, 0, 0, 0.125);">
+                                                        <div class="card-header text-center shadow" 
+                                                            style="background-color: #6c757d !important; color: white; border-radius: 1.25rem 1.25rem 0rem 0;">
+                                                            <div class="d-flex align-items-center">
+                                                                <b-icon icon="info-circle-fill" class="mr-3" scale="2" variant="info"></b-icon>
+                                                                <h4 class="mb-0">{{ affair.name }}</h4>
+                                                            </div>
                                                         </div>
-                                                    </template>
 
 
-                                                    <!-- Via array of string IDs passed to directive value -->
-                                                    <div v-for="procedure in affair.procedures" :key="procedure.id">
-                                                        <b-button 
-                                                        block pill 
-                                                        variant="outline-info text-dark"
-                                                        v-b-toggle="'procedures'+procedure.id"
-                                                        class="d-flex mt-2"
-                                                        style="border-color: white !important;">
-                                                            <b-badge pill class="mr-2 d-flex align-items-center" variant="primary">Step {{ procedure.step }}</b-badge>
-                                                            {{ procedure.name }}
-                                                        </b-button>
+                                                        <!-- Via array of string IDs passed to directive value -->
+                                                        <div style="padding: 5px" class="container" v-for="procedure in affair.procedures" :key="procedure.id">
+                                                            <b-button 
+                                                                pill block
+                                                                variant="outline-info text-dark"
+                                                                v-b-toggle="'procedures'+procedure.id"
+                                                                class="d-flex align-items-center mb-0 m-1"
+                                                                style="border-color: white !important;">
+                                                                <b-badge pill class="d-flex mr-3 align-items-center" variant="primary">Step {{ procedure.step }}</b-badge>
+                                                                {{ procedure.name }}
+                                                            </b-button>
 
-                                                        <!-- Elements to collapse -->
-                                                        <b-collapse :id="'procedures'+procedure.id" class="mt-2 mb-2">
-                                                            <b-card>
+                                                            <!-- Elements to collapse -->
+                                                            <b-collapse :id="'procedures'+procedure.id" 
+                                                            class="mt-2 mb-2">
+                                                                <div class=" d-flex justify-content-md-center">
+                                                                    <b-card style="max-width: 90%; border-radius: 1.25rem; border: 1.6px solid rgba(0, 0, 0, 0.125);"
+                                                                    class="shadow shadow-lg--hover">
+                                                                        <h3><strong>Description</strong></h3>
+                                                                        <hr>
+                                                                        <p>
+                                                                            {{ procedure.description }}
+                                                                        </p>
+                                                                        <div v-if="procedure.pre_requests.length > 0">
+                                                                            <strong>Pre-requests required: </strong>
+                                                                            <div class="mt-2">
+                                                                                <div class="list-group" style="border-radius: 2rem" v-for="pre_request, index in procedure.pre_requests" :key="pre_request.id">
+                                                                                    <b-list-group-item href="#" variant="dark" class="d-flex align-items-center mb-1" v-b-toggle="'pre_requests'+pre_request.id">
+                                                                                        <b-badge pill class="mr-2" font-scale="2" variant="dark">{{ index+1 }}</b-badge>
+                                                                                        <span>{{ pre_request.name }}</span>
+                                                                                    </b-list-group-item>
+                                                                                    
+                                                                                    <!-- Toggle pre_requests -->
+                                                                                    <b-card-group>
+                                                                                        <b-collapse :id="'pre_requests'+pre_request.id">
+                                                                                            <b-card  style="border-radius: 1.25rem; border: 1.8px solid rgba(0, 0, 0, 0.125);" 
+                                                                                            class="mt-2 mb-2 shadow shadow-lg--hover">
+                                                                                                <h5><strong>Description</strong></h5>
+                                                                                                <hr>
+                                                                                                <p>{{ pre_request.description }}</p>
+                                                                                            </b-card>
+                                                                                        </b-collapse>
+                                                                                    </b-card-group>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </b-card>
+                                                                </div>
+                                                            </b-collapse>
+                                                        </div>
+                                                    </div>
+                                                </b-card-group>
+                                            </div>
+                                        </b-col>
+                                    </b-row>
+                                </b-tab>
+
+                                <b-tab title="Student">
+
+                                    <h2>List of Student affairs</h2>
+                                    <p>
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus quasi nihil at quis vel voluptates id nostrum ratione, 
+                                        autem voluptate nobis suscipit ipsum quia quo vero esse, neque, non ullam.
+                                        Tempore ullam illo, aspernatur repellendus qui accusantium totam sit cumque repudiandae error quam eveniet. Qui fugiat quod 
+                                        libero quibusdam laboriosam, possimus ea recusandae repellendus labore sequi, temporibus nihil, saepe nisi.
+                                    </p>
+
+                                    <div>
+                                        <b-card-group v-for="affair in affairs" :key="affair.id">
+                                            <div v-if="affair.type == 'student'" 
+                                                class="card mb-3 mt-3 shadow shadow-lg--hover" 
+                                                style="max-width: 70%; border-radius: 1.36rem; border: 1px solid rgba(0, 0, 0, 0.125);">
+                                                <div class="card-header text-center shadow" 
+                                                    style="background-color: #6c757d !important; color: white; border-radius: 1.25rem 1.25rem 0rem 0;">
+                                                    <div class="d-flex align-items-center">
+                                                        <b-icon icon="info-circle-fill" class="mr-3" scale="2" variant="info"></b-icon>
+                                                        <h4 class="mb-0">{{ affair.name }}</h4>
+                                                    </div>
+                                                </div>
+
+
+                                                <!-- Via array of string IDs passed to directive value -->
+                                                <div style="padding: 8px" class="container" v-for="procedure in affair.procedures" :key="procedure.id">
+                                                    <b-button 
+                                                    pill block
+                                                    variant="outline-info text-dark"
+                                                    v-b-toggle="'procedures'+procedure.id"
+                                                    class="d-flex align-items-center"
+                                                    style="border-color: white !important;">
+                                                        <b-badge pill class="d-flex mr-3 align-items-center" variant="primary">Step {{ procedure.step }}</b-badge>
+                                                        {{ procedure.name }}
+                                                    </b-button>
+
+                                                    <!-- Elements to collapse -->
+                                                    <b-collapse :id="'procedures'+procedure.id" 
+                                                    class="mt-2 mb-2">
+                                                        <div class=" d-flex justify-content-md-center">
+                                                            <b-card style="max-width: 90%; border-radius: 1.25rem; border: 1.6px solid rgba(0, 0, 0, 0.125);"
+                                                            class="shadow shadow-lg--hover">
                                                                 <h3><strong>Description</strong></h3>
+                                                                <hr>
                                                                 <p>
                                                                     {{ procedure.description }}
                                                                 </p>
                                                                 <div v-if="procedure.pre_requests.length > 0">
                                                                     <strong>Pre-requests required: </strong>
-                                                                    <div>
-                                                                        <b-list-group v-for="pre_request, index in procedure.pre_requests" :key="pre_request.id">
-                                                                            <b-list-group-item variant="" class="d-flex align-items-center mb-1" v-b-toggle="'pre_requests'+pre_request.id">
-                                                                                <b-badge pill class="mr-2" font-scale="2" variant="secondary">{{ index+1 }}</b-badge>
+                                                                    <div class="mt-2">
+                                                                        <div class="list-group" style="border-radius: 2rem" v-for="pre_request, index in procedure.pre_requests" :key="pre_request.id">
+                                                                            <b-list-group-item href="#" variant="dark" class="d-flex align-items-center mb-1" v-b-toggle="'pre_requests'+pre_request.id">
+                                                                                <b-badge pill class="mr-2" font-scale="2" variant="dark">{{ index+1 }}</b-badge>
                                                                                 <span>{{ pre_request.name }}</span>
                                                                             </b-list-group-item>
                                                                             
                                                                             <!-- Toggle pre_requests -->
                                                                             <b-card-group>
                                                                                 <b-collapse :id="'pre_requests'+pre_request.id">
-                                                                                    <b-card border-variant="light" class="mb-1">
+                                                                                    <b-card  style="border-radius: 1.25rem; border: 1.8px solid rgba(0, 0, 0, 0.125);" 
+                                                                                    class="mt-2 mb-2 shadow shadow-lg--hover">
                                                                                         <h5><strong>Description</strong></h5>
+                                                                                        <hr>
                                                                                         <p>{{ pre_request.description }}</p>
                                                                                     </b-card>
                                                                                 </b-collapse>
                                                                             </b-card-group>
-                                                                        </b-list-group>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </b-card>
-                                                        </b-collapse>
-                                                    </div>
-                                                </b-card>
-                                            </b-card-group>
-                                        </b-col>
-                                    </b-row>
-                                </b-tab>
-
-                                <b-tab title="Student">
-                                    <h3>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</h3>
-                                    <p>
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit voluptatem culpa minima necessitatibus minus, 
-                                        officia, et in ducimus cum, perferendis at. Sapiente voluptatum totam maiores provident repellat quod quasi tenetur!
-                                        Quia nisi aliquid alias quam officia aspernatur id officiis? Laudantium cupiditate veritatis vero placeat saepe eius soluta explicabo. 
-                                        Cum, molestiae corrupti vitae maiores magni officiis rerum possimus accusamus expedita laborum!
-                                    </p>
-                                    <h3>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</h3>
-                                    <p>
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit voluptatem culpa minima necessitatibus minus, 
-                                        officia, et in ducimus cum, perferendis at. Sapiente voluptatum totam maiores provident repellat quod quasi tenetur!
-                                        Quia nisi aliquid alias quam officia aspernatur id officiis? Laudantium cupiditate veritatis vero placeat saepe eius soluta explicabo. 
-                                        Cum, molestiae corrupti vitae maiores magni officiis rerum possimus accusamus expedita laborum!
-                                    </p>
+                                                        </div>
+                                                    </b-collapse>
+                                                </div>
+                                            </div>
+                                        </b-card-group>
+                                    </div>
+                                    
                                 </b-tab>
 
                                 <b-tab title="Staff">
-                                    <h2>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</h2>
+
+                                    <h2>List of Staff affairs</h2>
                                     <p>
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates, repudiandae. Id autem animi nulla, recusandae nemo quos minima 
-                                        voluptates impedit rerum! Veritatis ex quaerat assumenda blanditiis exercitationem, nobis maiores eius?
-                                        Animi non natus facilis provident deleniti quo nostrum vero reiciendis repudiandae velit illo eligendi corporis 
-                                        quibusdam ipsa dolore inventore, architecto quae! Harum a sint corrupti obcaecati possimus blanditiis nostrum ratione!
-                                        Optio molestiae libero nobis corrupti et dolorem tenetur tempore sit, officia, natus repellendus voluptas fuga nostrum? Minima, fuga saepe, 
-                                        commodi repellendus praesentium odio mollitia facere reprehenderit consectetur repudiandae qui magni.
-                                        Eveniet itaque necessitatibus excepturi maiores cupiditate at obcaecati debitis vitae, aperiam ad aspernatur incidunt veritatis recusandae, 
-                                        quisquam saepe non a aliquid minima, esse rem. Eligendi, voluptate. Quos laboriosam nostrum culpa.
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus quasi nihil at quis vel voluptates id nostrum ratione, 
+                                        autem voluptate nobis suscipit ipsum quia quo vero esse, neque, non ullam.
+                                        Tempore ullam illo, aspernatur repellendus qui accusantium totam sit cumque repudiandae error quam eveniet. Qui fugiat quod 
+                                        libero quibusdam laboriosam, possimus ea recusandae repellendus labore sequi, temporibus nihil, saepe nisi.
                                     </p>
-                                    <h2>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</h2>
-                                    <p>
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates, repudiandae. Id autem animi nulla, recusandae nemo quos minima 
-                                        voluptates impedit rerum! Veritatis ex quaerat assumenda blanditiis exercitationem, nobis maiores eius?
-                                        Animi non natus facilis provident deleniti quo nostrum vero reiciendis repudiandae velit illo eligendi corporis 
-                                        quibusdam ipsa dolore inventore, architecto quae! Harum a sint corrupti obcaecati possimus blanditiis nostrum ratione!
-                                        Optio molestiae libero nobis corrupti et dolorem tenetur tempore sit, officia, natus repellendus voluptas fuga nostrum? Minima, fuga saepe, 
-                                        commodi repellendus praesentium odio mollitia facere reprehenderit consectetur repudiandae qui magni.
-                                        Eveniet itaque necessitatibus excepturi maiores cupiditate at obcaecati debitis vitae, aperiam ad aspernatur incidunt veritatis recusandae, 
-                                        quisquam saepe non a aliquid minima, esse rem. Eligendi, voluptate. Quos laboriosam nostrum culpa.
-                                    </p>
+
+                                    <div>
+                                        <b-card-group v-for="affair in affairs" :key="affair.id">
+                                            <div v-if="affair.type == 'staff'" 
+                                                class="card mb-3 mt-3 shadow shadow-lg--hover" 
+                                                style="max-width: 70%; border-radius: 1.36rem; border: 1px solid rgba(0, 0, 0, 0.125);">
+                                                <div class="card-header text-center shadow" 
+                                                    style="background-color: #6c757d !important; color: white; border-radius: 1.25rem 1.25rem 0rem 0;">
+                                                    <div class="d-flex align-items-center">
+                                                        <b-icon icon="info-circle-fill" class="mr-3" scale="2" variant="info"></b-icon>
+                                                        <h4 class="mb-0">{{ affair.name }}</h4>
+                                                    </div>
+                                                </div>
+
+
+                                                <!-- Via array of string IDs passed to directive value -->
+                                                <div style="padding: 8px" class="container" v-for="procedure in affair.procedures" :key="procedure.id">
+                                                    <b-button 
+                                                    pill block
+                                                    variant="outline-info text-dark"
+                                                    v-b-toggle="'procedures'+procedure.id"
+                                                    class="d-flex align-items-center"
+                                                    style="border-color: white !important;">
+                                                        <b-badge pill class="d-flex mr-3 align-items-center" variant="primary">Step {{ procedure.step }}</b-badge>
+                                                        {{ procedure.name }}
+                                                    </b-button>
+
+                                                    <!-- Elements to collapse -->
+                                                    <b-collapse :id="'procedures'+procedure.id" 
+                                                    class="mt-2 mb-2">
+                                                        <div class=" d-flex justify-content-md-center">
+                                                            <b-card style="max-width: 90%; border-radius: 1.25rem; border: 1.6px solid rgba(0, 0, 0, 0.125);"
+                                                            class="shadow shadow-lg--hover">
+                                                                <h3><strong>Description</strong></h3>
+                                                                <hr>
+                                                                <p>
+                                                                    {{ procedure.description }}
+                                                                </p>
+                                                                <div v-if="procedure.pre_requests.length > 0">
+                                                                    <strong>Pre-requests required: </strong>
+                                                                    <div class="mt-2">
+                                                                        <div class="list-group" style="border-radius: 2rem" v-for="pre_request, index in procedure.pre_requests" :key="pre_request.id">
+                                                                            <b-list-group-item href="#" variant="dark" class="d-flex align-items-center mb-1" v-b-toggle="'pre_requests'+pre_request.id">
+                                                                                <b-badge pill class="mr-2" font-scale="2" variant="dark">{{ index+1 }}</b-badge>
+                                                                                <span>{{ pre_request.name }}</span>
+                                                                            </b-list-group-item>
+                                                                            
+                                                                            <!-- Toggle pre_requests -->
+                                                                            <b-card-group>
+                                                                                <b-collapse :id="'pre_requests'+pre_request.id">
+                                                                                    <b-card  style="border-radius: 1.25rem; border: 1.8px solid rgba(0, 0, 0, 0.125);" 
+                                                                                    class="mt-2 mb-2 shadow shadow-lg--hover">
+                                                                                        <h5><strong>Description</strong></h5>
+                                                                                        <hr>
+                                                                                        <p>{{ pre_request.description }}</p>
+                                                                                    </b-card>
+                                                                                </b-collapse>
+                                                                            </b-card-group>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </b-card>
+                                                        </div>
+                                                    </b-collapse>
+                                                </div>
+                                            </div>
+                                        </b-card-group>
+                                    </div>
+
                                 </b-tab>
+
+                                <b-tab title="Teacher">
+
+                                    <h2>List of Teacher affairs</h2>
+                                    <p>
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus quasi nihil at quis vel voluptates id nostrum ratione, 
+                                        autem voluptate nobis suscipit ipsum quia quo vero esse, neque, non ullam.
+                                        Tempore ullam illo, aspernatur repellendus qui accusantium totam sit cumque repudiandae error quam eveniet. Qui fugiat quod 
+                                        libero quibusdam laboriosam, possimus ea recusandae repellendus labore sequi, temporibus nihil, saepe nisi.
+                                    </p>
+
+                                    <div>
+                                        <b-card-group v-for="affair in affairs" :key="affair.id">
+                                            <div v-if="affair.type == 'teacher'" 
+                                                class="card mb-3 mt-3 shadow shadow-lg--hover" 
+                                                style="max-width: 70%; border-radius: 1.36rem; border: 1px solid rgba(0, 0, 0, 0.125);">
+                                                <div class="card-header text-center shadow" 
+                                                    style="background-color: #6c757d !important; color: white; border-radius: 1.25rem 1.25rem 0rem 0;">
+                                                    <div class="d-flex align-items-center">
+                                                        <b-icon icon="info-circle-fill" class="mr-3" scale="2" variant="info"></b-icon>
+                                                        <h4 class="mb-0">{{ affair.name }}</h4>
+                                                    </div>
+                                                </div>
+
+
+                                                <!-- Via array of string IDs passed to directive value -->
+                                                <div style="padding: 8px" class="container" v-for="procedure in affair.procedures" :key="procedure.id">
+                                                    <b-button 
+                                                    pill block
+                                                    variant="outline-info text-dark"
+                                                    v-b-toggle="'procedures'+procedure.id"
+                                                    class="d-flex align-items-center"
+                                                    style="border-color: white !important;">
+                                                        <b-badge pill class="d-flex mr-3 align-items-center" variant="primary">Step {{ procedure.step }}</b-badge>
+                                                        {{ procedure.name }}
+                                                    </b-button>
+
+                                                    <!-- Elements to collapse -->
+                                                    <b-collapse :id="'procedures'+procedure.id" 
+                                                    class="mt-2 mb-2">
+                                                        <div class=" d-flex justify-content-md-center">
+                                                            <b-card style="max-width: 90%; border-radius: 1.25rem; border: 1.6px solid rgba(0, 0, 0, 0.125);"
+                                                            class="shadow shadow-lg--hover">
+                                                                <h3><strong>Description</strong></h3>
+                                                                <hr>
+                                                                <p>
+                                                                    {{ procedure.description }}
+                                                                </p>
+                                                                <div v-if="procedure.pre_requests.length > 0">
+                                                                    <strong>Pre-requests required: </strong>
+                                                                    <div class="mt-2">
+                                                                        <div class="list-group" style="border-radius: 2rem" v-for="pre_request, index in procedure.pre_requests" :key="pre_request.id">
+                                                                            <b-list-group-item href="#" variant="dark" class="d-flex align-items-center mb-1" v-b-toggle="'pre_requests'+pre_request.id">
+                                                                                <b-badge pill class="mr-2" font-scale="2" variant="dark">{{ index+1 }}</b-badge>
+                                                                                <span>{{ pre_request.name }}</span>
+                                                                            </b-list-group-item>
+                                                                            
+                                                                            <!-- Toggle pre_requests -->
+                                                                            <b-card-group>
+                                                                                <b-collapse :id="'pre_requests'+pre_request.id">
+                                                                                    <b-card  style="border-radius: 1.25rem; border: 1.8px solid rgba(0, 0, 0, 0.125);" 
+                                                                                    class="mt-2 mb-2 shadow shadow-lg--hover">
+                                                                                        <h5><strong>Description</strong></h5>
+                                                                                        <hr>
+                                                                                        <p>{{ pre_request.description }}</p>
+                                                                                    </b-card>
+                                                                                </b-collapse>
+                                                                            </b-card-group>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </b-card>
+                                                        </div>
+                                                    </b-collapse>
+                                                </div>
+                                            </div>
+                                        </b-card-group>
+                                    </div>
+
+                                </b-tab>
+
+                                <b-tab title="Other">
+
+                                    <h2>List of Other affairs</h2>
+                                    <p>
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus quasi nihil at quis vel voluptates id nostrum ratione, 
+                                        autem voluptate nobis suscipit ipsum quia quo vero esse, neque, non ullam.
+                                        Tempore ullam illo, aspernatur repellendus qui accusantium totam sit cumque repudiandae error quam eveniet. Qui fugiat quod 
+                                        libero quibusdam laboriosam, possimus ea recusandae repellendus labore sequi, temporibus nihil, saepe nisi.
+                                    </p>
+
+                                    <div>
+                                        <b-card-group v-for="affair in affairs" :key="affair.id">
+                                            <div v-if="affair.type == 'other'" 
+                                                class="card mb-3 mt-3 shadow shadow-lg--hover" 
+                                                style="max-width: 70%; border-radius: 1.36rem; border: 1px solid rgba(0, 0, 0, 0.125);">
+                                                <div class="card-header text-center shadow" 
+                                                    style="background-color: #6c757d !important; color: white; border-radius: 1.25rem 1.25rem 0rem 0;">
+                                                    <div class="d-flex align-items-center">
+                                                        <b-icon icon="info-circle-fill" class="mr-3" scale="2" variant="info"></b-icon>
+                                                        <h4 class="mb-0">{{ affair.name }}</h4>
+                                                    </div>
+                                                </div>
+
+
+                                                <!-- Via array of string IDs passed to directive value -->
+                                                <div style="padding: 8px" class="container" v-for="procedure in affair.procedures" :key="procedure.id">
+                                                    <b-button 
+                                                    pill block
+                                                    variant="outline-info text-dark"
+                                                    v-b-toggle="'procedures'+procedure.id"
+                                                    class="d-flex align-items-center"
+                                                    style="border-color: white !important;">
+                                                        <b-badge pill class="d-flex mr-3 align-items-center" variant="primary">Step {{ procedure.step }}</b-badge>
+                                                        {{ procedure.name }}
+                                                    </b-button>
+
+                                                    <!-- Elements to collapse -->
+                                                    <b-collapse :id="'procedures'+procedure.id" 
+                                                    class="mt-2 mb-2">
+                                                        <div class=" d-flex justify-content-md-center">
+                                                            <b-card style="max-width: 90%; border-radius: 1.25rem; border: 1.6px solid rgba(0, 0, 0, 0.125);"
+                                                            class="shadow shadow-lg--hover">
+                                                                <h3><strong>Description</strong></h3>
+                                                                <hr>
+                                                                <p>
+                                                                    {{ procedure.description }}
+                                                                </p>
+                                                                <div v-if="procedure.pre_requests.length > 0">
+                                                                    <strong>Pre-requests required: </strong>
+                                                                    <div class="mt-2">
+                                                                        <div class="list-group" style="border-radius: 2rem" v-for="pre_request, index in procedure.pre_requests" :key="pre_request.id">
+                                                                            <b-list-group-item href="#" variant="dark" class="d-flex align-items-center mb-1" v-b-toggle="'pre_requests'+pre_request.id">
+                                                                                <b-badge pill class="mr-2" font-scale="2" variant="dark">{{ index+1 }}</b-badge>
+                                                                                <span>{{ pre_request.name }}</span>
+                                                                            </b-list-group-item>
+                                                                            
+                                                                            <!-- Toggle pre_requests -->
+                                                                            <b-card-group>
+                                                                                <b-collapse :id="'pre_requests'+pre_request.id">
+                                                                                    <b-card  style="border-radius: 1.25rem; border: 1.8px solid rgba(0, 0, 0, 0.125);" 
+                                                                                    class="mt-2 mb-2 shadow shadow-lg--hover">
+                                                                                        <h5><strong>Description</strong></h5>
+                                                                                        <hr>
+                                                                                        <p>{{ pre_request.description }}</p>
+                                                                                    </b-card>
+                                                                                </b-collapse>
+                                                                            </b-card-group>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </b-card>
+                                                        </div>
+                                                    </b-collapse>
+                                                </div>
+                                            </div>
+                                        </b-card-group>
+                                    </div>
+
+                                </b-tab>
+
                             </b-tabs>
-                        </b-card>
+                        </div>
                     </div>
                 </b-container>
             </b-col>
@@ -187,15 +484,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-
 export default {
     data() {
         return {
-        tabIndex: 0,
-        isVisible: false, // starts un-collapsed
         affairs: [],
-        procedures: [],
         };
     },
     methods: {
