@@ -23,7 +23,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        
+        /*
+          User::create([
+            'user_name' => 'Staff',
+            'first_name' =>'Israel',
+            'last_name' => 'Hawaria',
+            'email' => 'staff@astu.com',
+            'type' => 'staff',
+            'password' => Hash::make('laravel1234'), // password
+            'remember_token' => Str::random(10),
+         ]
+         );
+         User::create([
+            'user_name' => 'kal',
+            'first_name' =>'Kaleab',
+            'last_name' => 'Alabachew',
+            'email' => 'reception@astu.com',
+            'type' => 'reception',
+            'password' => Hash::make('laravel1234'), // password
+            'remember_token' => Str::random(10),
+         ]
+         );
+         */
          User::create([
             'user_name' => 'Admin',
             'first_name' =>'birhanu',
@@ -76,5 +97,7 @@ class DatabaseSeeder extends Seeder
                     ->create(['step_number' => $stepNumber++, 'online_request_id' => $request->id]);
             }
         });
+        
+       
     }
 }

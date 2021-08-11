@@ -42,6 +42,8 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
 
     Route::delete('/online-procedures/{procedure}', [\App\Http\Controllers\OnlineRequestProcedureController::class, 'destroy']);
 
+    Route::get('/online-request-steps', [\App\Http\Controllers\OnlineRequestStepController::class, 'index']);
+
     //Birhanu
     Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     Route::apiResource('/affairs', \App\Http\Controllers\AffairController::class)
@@ -69,64 +71,63 @@ Route::prefix('api')->group(function (){
     Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
 });
 
-//Route::get('/{vue_capture?}', function () {
-//    return view('layouts.master');
-//})->where('vue_capture', '[\/\w\.-]*');
 
 // for test
 Route::get('/test', function () {
+   \App\Events\OnlineRequestEvent::dispatch('this is test');
+    return true;
 
-    for ($i=0;$i<20;$i++){
-        $isDone = random_int(0,1) == 0;
-        $ended_at = now()->addDay();
-        \App\Models\OnlineRequestTracker::factory()->count(1)
-            ->create(['started_at' => now(), 'ended_at' => $isDone ? $ended_at : null])
-            ->each(function ($request) use ($isDone) {
-                $procedures = $request->onlineRequest->onlineRequestProcedures;
-                $old = null;
-                $time = now();
-//                $isComplete = $isDone;
+//    for ($i=0;$i<20;$i++){
+//        $isDone = random_int(0,1) == 0;
+//        $ended_at = now()->addDay();
+//        \App\Models\OnlineRequestTracker::factory()->count(1)
+//            ->create(['started_at' => now(), 'ended_at' => $isDone ? $ended_at : null])
+//            ->each(function ($request) use ($isDone) {
+//                $procedures = $request->onlineRequest->onlineRequestProcedures;
+//                $old = null;
+//                $time = now();
+////                $isComplete = $isDone;
+////
+////                function complete() use (&$isComplete, $isDone): bool
+////                {
+////                    if ($isDone)
+////                        return true;
+////                    elseif ($isComplete) {
+////                        $complete = random_int(0,1) == 1;
+////                        $isComplete = $complete;
+////                        return $complete;
+////                    }
+////                    return false;
+////                }
 //
-//                function complete() use (&$isComplete, $isDone): bool
-//                {
+//                foreach ($procedures as $procedure) {
+//                    $done = null;
 //                    if ($isDone)
-//                        return true;
-//                    elseif ($isComplete) {
-//                        $complete = random_int(0,1) == 1;
-//                        $isComplete = $complete;
-//                        return $complete;
+//                        $done = true;
+//                    else{
+//                        if (random_int(0,1) == 0)
+//                            $done = false;
+//                        else
+//                            $done = true;
 //                    }
-//                    return false;
+//                    $time = now()->addHour();
+//                    $temp = \App\Models\OnlineRequestStep::create([
+//                        'online_request_tracker_id' => $request->id,
+//                        'online_request_procedure_id' => $procedure->id,
+//                        'user_id' => $procedure->users->first()->id,
+//                        'started_at' => $time,
+//                        'ended_at' => $done ? $time : null,
+//                        'is_completed' => $done,
+//                        'is_rejected' => !$done,
+//                        'reason' => $done ? null : \Illuminate\Support\Str::random(random_int(30, 50))
+//                    ]);
+//                    if ($old)
+//                        $old->update(['next_step' => $temp->id]);
+//                    $old = $temp;
 //                }
-
-                foreach ($procedures as $procedure) {
-                    $done = null;
-                    if ($isDone)
-                        $done = true;
-                    else{
-                        if (random_int(0,1) == 0)
-                            $done = false;
-                        else
-                            $done = true;
-                    }
-                    $time = now()->addHour();
-                    $temp = \App\Models\OnlineRequestStep::create([
-                        'online_request_tracker_id' => $request->id,
-                        'online_request_procedure_id' => $procedure->id,
-                        'user_id' => $procedure->users->first()->id,
-                        'started_at' => $time,
-                        'ended_at' => $done ? $time : null,
-                        'is_completed' => $done,
-                        'is_rejected' => !$done,
-                        'reason' => $done ? null : \Illuminate\Support\Str::random(random_int(30, 50))
-                    ]);
-                    if ($old)
-                        $old->update(['next_step' => $temp->id]);
-                    $old = $temp;
-                }
-            });
-
-    }
+//            });
+//
+//    }
 
 //    \App\Models\OnlineRequestTracker::factory()->count(20)
 //        ->create()->each(function ($request) {
@@ -148,6 +149,7 @@ Route::get('/test', function () {
 //                ->where('id', $request->id)->get()->first()->toArray());
 //        });
     });
+
 
 
     Route::get('/{vue_capture?}', function () {

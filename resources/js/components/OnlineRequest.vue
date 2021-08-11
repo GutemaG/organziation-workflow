@@ -1,13 +1,16 @@
 <template>
   <div class="container-fluid">
-    <b-card>
+    <b-card
+      class="container-fluid bg-light shadow mx-auto mt-2"
+      style="max-height: 100%; border-radius: 21px 21px 0 0"
+    >
       <b-card-body>
         <div>
           <b-row>
             <b-col lg="6" class="my-1">
               <router-link to="/add-online-request" class="m-2">
                 <b-button size="sm" class="mr-1" variant="primary">
-                  + {{tr('Add')}}
+                  + {{ tr("Add") }}
                 </b-button>
               </router-link>
             </b-col>
@@ -30,9 +33,9 @@
                   ></b-form-input>
 
                   <b-input-group-append>
-                    <b-button :disabled="!filter" @click="filter = ''"
-                      >{{tr('Clear')}}</b-button
-                    >
+                    <b-button :disabled="!filter" @click="filter = ''">{{
+                      tr("Clear")
+                    }}</b-button>
                   </b-input-group-append>
                 </b-input-group>
               </b-form-group>
@@ -81,9 +84,9 @@
                   size="sm"
                 >
                   <template #first>
-                    <b-form-select-option :value="totalRequests"
-                      >{{tr('All')}}</b-form-select-option
-                    >
+                    <b-form-select-option :value="totalRequests">{{
+                      tr("All")
+                    }}</b-form-select-option>
                   </template>
                 </b-form-select>
               </b-form-group>
@@ -150,7 +153,8 @@
           <template #cell(description)="row">
             <p
               @click="row.toggleDetails"
-              v-b-popover.hover.top="row.item.description" title="Description"
+              v-b-popover.hover.top="row.item.description"
+              title="Description"
               style="cursor: pointer"
             >
               <!-- v-b-tooltip.hover -->
@@ -169,7 +173,7 @@
             <router-link :to="'online-request/edit/' + row.item.id">
               <b-button variant="primary" size="sm">
                 <i class="fa fa-edit"></i>
-                {{tr('Edit')}}</b-button
+                {{ tr("Edit") }}</b-button
               >
             </router-link>
             <b-button
@@ -234,7 +238,7 @@ export default {
   data() {
     return {
       online_request_fields,
-      perPage: 5,
+      perPage: 10,
       currentPage: 1,
       filter: null,
       pageOptions: [20, 15, 10, 5],

@@ -15,6 +15,7 @@
         "laravel/telescope": "^4.4",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
+        "pusher/pusher-php-server": "^7.0",
         "twilio/sdk": "^6.27"
     },
     "require-dev": {

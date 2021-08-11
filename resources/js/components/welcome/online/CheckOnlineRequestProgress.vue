@@ -13,9 +13,13 @@
               placeholder="Enter your token key"
               v-model="token"
               required
+              autofocus
             ></b-form-input>
           </b-form-group>
-          <b-button type="submit">Check</b-button>
+          <b-button type="submit">
+            <span v-if="!isLoading">{{ tr("Check") }} </span>
+            <b-spinner v-show="isLoading" label="Loading..."></b-spinner>
+          </b-button>
         </form>
         <div v-if="applied_request" style="border-radius">
           <b-jumbotron>
@@ -36,19 +40,18 @@
               <template #cell(id)="row">
                 <span>{{ row.index + 1 }}</span>
               </template>
-              <template #cell(started_at)="row">
+              <!-- <template #cell(started_at)="row">
                 <span v-if="row.item.started_at">{{
                   row.item.started_at
                 }}</span>
                 <span v-else>----</span>
-              </template>
-              <template #cell(ended_at)="row">
-                <span v-if="row.item.ended_at">{{ row.item.ended_at }}</span>
-                <span v-else>----</span>
-              </template>
+              </template> -->
               <template #cell(is_completed)="row">
                 <b-progress
-                  v-if="!row.item.ended_at && row.item.started_at
+                  v-if="
+                    !row.item.ended_at &&
+                    row.item.started_at &&
+                    row.item.is_rejected != 1
                   "
                 >
                   <b-progress-bar
@@ -59,7 +62,10 @@
                   >
                   </b-progress-bar>
                 </b-progress>
-                <b-progress v-else-if="!row.item.started_at" variant="info">
+                <b-progress
+                  v-else-if="!row.item.started_at && row.item.is_rejected != 1"
+                  variant="info"
+                >
                   <b-progress-bar :value="100" label="Pending">
                   </b-progress-bar>
                 </b-progress>
@@ -75,14 +81,25 @@
                   >
                   </b-progress-bar>
                 </b-progress>
-                <b-progress-bar
+                <b-button
                   v-else
-                  :value="100"
-                  label="Rejected"
-                  variant="danger"
-                  striped
+                  @click="row.toggleDetails"
+                  style="background: red"
                 >
-                </b-progress-bar>
+                  <b-progress-bar
+                    :value="100"
+                    label="Rejected ?"
+                    variant="danger"
+                    striped
+                  >
+                  </b-progress-bar>
+                </b-button>
+              </template>
+              <template #row-details="row">
+                <div class="align-center">
+                  <h4 style="color: red">Reason For Rejection</h4>
+                  <h3>{{ row.item.reason }}</h3>
+                </div>
               </template>
             </b-table>
           </b-jumbotron>
@@ -106,20 +123,25 @@ export default {
       token: "",
       applied_request: null,
       error: null,
+      isLoading: false,
       fields: [
         { label: "Id", key: "id" },
         { label: "Bureau", key: "bureau.name" },
         {
           label: "Requestd At",
           key: "created_at",
-          formatter: (value) => {
-            let ago = moment(value).fromNow();
-            let date = moment(value).format("MMM Do, YY");
-            return `${date}; ${ago}`;
-          },
+          formatter: (value) => this.dateFormatter(value),
         },
-        { label: "Started At", key: "started_at" },
-        { label: "Ended At", key: "ended_at" },
+        {
+          label: "Started At",
+          key: "started_at",
+          formatter: (value) => this.dateFormatter(value),
+        },
+        {
+          label: "Ended At",
+          key: "ended_at",
+          formatter: (value) => this.dateFormatter(value),
+        },
         {
           label: "Status",
           key: "is_completed",
@@ -133,20 +155,32 @@ export default {
   methods: {
     handleSubmit(e) {
       this.applied_request = null;
+      this.isLoading = true;
       axios
         .get(`/api/apply-request/${this.token}`)
         .then((resp) => {
           if (resp.status == 200) {
             this.applied_request = resp.data.applied_request;
-            console.log(resp.data.applied_request);
+            this.isLoading=false
           } else {
             this.error = "Something is wrong, please try later";
+            this.isLoading = false;
           }
         })
         .catch((err) => {
           this.error =
             "We don't find your request, Please check your key again";
+          this.isLoading = false;
         });
+    },
+    dateFormatter(value) {
+      if (value) {
+        let ago = moment(value).fromNow();
+        let date = moment(value).format("MMM Do, YY");
+        return `${date}; ${ago}`;
+      } else {
+        return "----";
+      }
     },
   },
 };

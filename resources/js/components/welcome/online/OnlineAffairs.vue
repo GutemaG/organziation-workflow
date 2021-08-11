@@ -5,11 +5,12 @@
         <b-container>
           <b-alert
             variant="success"
-            :show="customerToken.length != 0"
+            :show="customerToken.length != 0 && dismissCountDown"
             dismissible
-            fade
+            @dismissed="dismissCountDown = 0"
+            @dismiss-count-down="countDownChanged"
           >
-            <h4>Send Successfully</h4>
+            <h4>Send Successfully {{ dismissCountDown }}</h4>
             <hr />
             <h3>
               Your Token is <span style="color: red">{{ customerToken }}</span>
@@ -111,6 +112,7 @@ export default {
   data() {
     return {
       tabIndex: 0,
+      dismissCountDown: 10,
       // online_affairs: [],
       // selectedAffair: null,
       // filterKey: "",
@@ -121,6 +123,14 @@ export default {
   },
   methods: {
     ...mapActions(["fetchOnlineRequests"]),
+    //for alert countdown
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
+      if (this.dismissCountDown == 0) {
+        // this.$sotre.dispatch("removeToken");
+        this.$store.dispatch("removeToken");
+      }
+    },
     /*
     fetchOnlineAffairs() {
       axios.get("/api/online-requests").then((resp) => {
