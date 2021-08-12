@@ -75,4 +75,9 @@ class OnlineRequestStepAction
 //        OnlineRequestEvent::dispatch($firstOnlineRequestStep);
         return $firstOnlineRequestStep;
     }
+
+    public static function assignResponsibleUser(OnlineRequestStep $onlineRequestStep): void
+    {
+        $onlineRequestStep->update(['user_id' => auth()->user()->id]);
+    }
 }

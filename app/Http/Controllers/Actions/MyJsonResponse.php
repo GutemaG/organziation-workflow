@@ -18,11 +18,11 @@ trait MyJsonResponse
         ]);
     }
 
-    protected static function successResponse(array $data, int $status=200): JsonResponse
+    protected static function successResponse(array $data=[], int $status=200): JsonResponse
     {
-        return response()->json([
-            'status' => $status,
-            $data,
-        ]);
+        $response = array();
+        $response['status'] = $status;
+        $response = $data ? array_merge($response, $data) : $response;
+        return response()->json([$response]);
     }
 }

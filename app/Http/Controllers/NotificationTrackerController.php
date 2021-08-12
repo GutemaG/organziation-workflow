@@ -17,4 +17,9 @@ class NotificationTrackerController extends Controller
     {
         return NotificationTrackerAction::onlineRequestAccepted($notificationTracker);
     }
+
+    public function onlineRequestCompleted(NotificationTracker $notificationTracker): JsonResponse
+    {
+        return NotificationTrackerAction::onlineRequestCompleted($notificationTracker);
+    }
 }

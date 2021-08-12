@@ -30,7 +30,7 @@ class OnlineRequestEventListener
     public function handle(OnlineRequestEvent $event)
     {
         $this->registerCurrentNotifiedUser($event);
-        $this->deleteOldNotification($event);
+//        $this->deleteOldNotification($event);
     }
 
     /**
@@ -50,17 +50,17 @@ class OnlineRequestEventListener
         NotifyUserEvent::dispatch($event->getUsers(), $onlineRequestStep);
     }
 
-    /**
-     * @param OnlineRequestEvent $event
-     */
-    protected function deleteOldNotification(OnlineRequestEvent $event): void
-    {
-        if ($event->getOldNotificationTrackerId()) {
-            $notificationTracker = NotificationTracker::find($event->getOldNotificationTrackerId());
-            if ($notificationTracker) {
-                $notificationTracker->notifiedUsers()->delete();
-                $notificationTracker->delete();
-            }
-        }
-    }
+//    /**
+//     * @param OnlineRequestEvent $event
+//     */
+//    protected function deleteOldNotification(OnlineRequestEvent $event): void
+//    {
+//        if ($event->getOldNotificationTrackerId()) {
+//            $notificationTracker = NotificationTracker::find($event->getOldNotificationTrackerId());
+//            if ($notificationTracker) {
+//                $notificationTracker->notifiedUsers()->delete();
+//                $notificationTracker->delete();
+//            }
+//        }
+//    }
 }
