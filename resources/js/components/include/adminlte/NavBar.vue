@@ -157,9 +157,6 @@
                   >
                     <i class="fas fa-check white"></i>
                   </b-button>
-                  <b-button variant="danger" size="sm">
-                    <i class="fas fa-times-circle white"></i>
-                  </b-button>
                 </span>
               </a>
               <div class="dropdown-divider"></div>
@@ -247,7 +244,7 @@ export default {
   },
   mounted() {
     Echo.private(`${this.user.id}.online-request-applied`).listen(
-      "OnlineRequestEvent",
+      "NotifyUserEvent",
       (e) => {
         this.notfications.unshift(e.onlineRequestStep);
         console.log("from pusherrrr: ", e.onlineRequestStep);

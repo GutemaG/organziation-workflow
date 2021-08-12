@@ -3,40 +3,57 @@
 namespace App\Events;
 
 use App\Models\User;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 
-class OnlineRequestEvent implements ShouldBroadcast
+class OnlineRequestEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $onlineRequestStep;
-    private $user;
+    private $onlineRequestStep;
+    private $users;
+    private $oldNotificationTrackerId;
 
     /**
      * Create a new event instance.
      *
-     * @param User $user
+     * @param User $users
      * @param array $onlineRequestStep
+     * @param int|null $oldNotificationTrackerId
      */
-    public function __construct(User $user, array $onlineRequestStep)
+    public function __construct(Collection $users, array $onlineRequestStep, int $oldNotificationTrackerId=null)
     {
         $this->onlineRequestStep = $onlineRequestStep;
-        $this->user =  $user;
+        $this->users =  $users;
+        $this->oldNotificationTrackerId = $oldNotificationTrackerId;
     }
 
     /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Collection
      */
-    public function broadcastOn()
+    public function getUsers(): Collection
     {
-        return new PrivateChannel($this->user->id . '.' . 'online-request-applied');
+        return $this->users;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOldNotificationTrackerId()
+    {
+        return $this->oldNotificationTrackerId;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOnlineRequestStep(): array
+    {
+        return $this->onlineRequestStep;
+    }
+
 }

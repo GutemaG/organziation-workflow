@@ -18,6 +18,7 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\OnlineRequestEvent' => [
             'App\Listeners\OnlineRequestEventListener',
         ],
+        'App\Events\NotifyUserEvent' => [],
 
         Registered::class => [
             SendEmailVerificationNotification::class,
