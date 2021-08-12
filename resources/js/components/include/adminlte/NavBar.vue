@@ -231,7 +231,7 @@ export default {
   },
   methods: {},
   created() {
-    Echo.private(`${this.user.id}.online-request-applied`).listen("OnlineRequestEvent", (e) => {
+    Echo.private(`${this.user.id}.online-request-applied`).listen("NotifyUserEvent", (e) => {
       this.notfication.unshift(e);
       console.log("from pusherrrr: ", e);
     });

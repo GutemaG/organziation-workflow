@@ -63,13 +63,18 @@ class OnlineRequestTrackerAction
     {
 //        self::notifierCustomer($phone_number, $token);
         $users = self::getUsers($procedures);
-        $users->each(function ($user) use ($onlineRequest, $onlineRequestStep) {
-            $onlineRequestStep = $onlineRequestStep->toArray();
-            $onlineRequest = $onlineRequest->toArray();
-            unset($onlineRequest['online_request_procedures']);
-            $onlineRequestStep['request'] = $onlineRequest;
-            OnlineRequestEvent::dispatch($user, $onlineRequestStep);
-        });
+        $onlineRequestStep = $onlineRequestStep->toArray();
+        $onlineRequest = $onlineRequest->toArray();
+        unset($onlineRequest['online_request_procedures']);
+        $onlineRequestStep['request'] = $onlineRequest;
+        OnlineRequestEvent::dispatch($users, $onlineRequestStep);
+//        $users->each(function ($user) use ($onlineRequest, $onlineRequestStep) {
+//            $onlineRequestStep = $onlineRequestStep->toArray();
+//            $onlineRequest = $onlineRequest->toArray();
+//            unset($onlineRequest['online_request_procedures']);
+//            $onlineRequestStep['request'] = $onlineRequest;
+//            OnlineRequestEvent::dispatch($user, $onlineRequestStep);
+//        });
 //        $firstOnlineRequestStep = null;
 //        $oldOnlineRequestStep = null;
 //        foreach ($procedures as $procedure) {
@@ -82,15 +87,13 @@ class OnlineRequestTrackerAction
 //            $oldOnlineRequestStep = $currentOnlineRequest;
 //        }
 //        $temp = $firstOnlineRequestStep->onlineRequestTracker->toArray();
-
 //        $firstOnlineRequestStep = $firstOnlineRequestStep->toArray();
 //        unset($firstOnlineRequestStep['online_request_tracker']['online_request']['online_request_procedures']);
 //        unset($firstOnlineRequestStep['online_request_tracker']['online_request']['prerequisite_labels']);
 //        // unset($firstOnlineRequestStep['online_request_tracker']);
 //        $firstOnlineRequestStep['online_request'] = $firstOnlineRequestStep['online_request_tracker']['online_request'];
-
 //        $firstOnlineRequestStep->pull('onlineRequestSteps');
-        // dump($firstOnlineRequestStep);
+//         dump($firstOnlineRequestStep);
 //        OnlineRequestEvent::dispatch($firstOnlineRequestStep);
     }
 
