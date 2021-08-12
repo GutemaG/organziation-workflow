@@ -17,6 +17,7 @@ class CreateNotifiedUsersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('notification_tracker_id');
             $table->unsignedBigInteger('user_id');
+            $table->boolean('is_accepted')->default(false);
             $table->softDeletes();
             $table->timestamps();
 

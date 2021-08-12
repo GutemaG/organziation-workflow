@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OnlineRequestStep extends Model
@@ -23,7 +24,7 @@ class OnlineRequestStep extends Model
         'reason',
     ];
 
-   protected $with = ['onlineRequestProcedure'];
+//   protected $with = ['onlineRequestProcedure'];
 
     public function onlineRequestTracker(): BelongsTo
     {
@@ -33,5 +34,10 @@ class OnlineRequestStep extends Model
     public function onlineRequestProcedure(): BelongsTo
     {
         return $this->belongsTo(OnlineRequestProcedure::class);
+    }
+
+    public function nextStep(): HasOne
+    {
+        return $this->hasOne(OnlineRequestStep::class, 'id', 'next_step');
     }
 }

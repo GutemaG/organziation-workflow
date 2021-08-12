@@ -44,6 +44,10 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
 
     Route::get('/online-request-steps', [\App\Http\Controllers\OnlineRequestStepController::class, 'index']);
 
+    Route::get('/online-request-applied/accept/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestAccepted']);
+
+    Route::get('/online-request-applied', [\App\Http\Controllers\NotificationTrackerController::class, 'index']);
+
     //Birhanu
     Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     Route::apiResource('/affairs', \App\Http\Controllers\AffairController::class)

@@ -99,7 +99,7 @@ class OnlineRequestTrackerAction
 
     /**
      * @param string $token
-     * @return JsonResponse
+     * @return MyJsonResponse
      */
     protected static function successResponse(string $token): JsonResponse
     {
@@ -111,7 +111,7 @@ class OnlineRequestTrackerAction
 
     /**
      * @param Exception $e
-     * @return JsonResponse
+     * @return MyJsonResponse
      */
     protected static function badResponse(Exception $e): JsonResponse
     {
