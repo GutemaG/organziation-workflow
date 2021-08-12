@@ -14,11 +14,16 @@ class NotifiedUser extends Model
     protected $fillable = [
         'notification_tracker_id',
         'user_id',
+        'is_accepted',
     ];
-
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function notificationTracker(): BelongsTo
+    {
+        return $this->belongsTo(NotificationTracker::class);
     }
 }
