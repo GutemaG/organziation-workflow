@@ -24,6 +24,11 @@ class NotifyUserAction
         return $onlineRequestSteps->toArray();
     }
 
+    public static function store(array $data): void
+    {
+        NotifiedUser::insert($data);
+    }
+
     public static function accepted(NotificationTracker $notificationTracker): void
     {
         $notificationTracker->notifiedUsers()->update(['is_accepted' => true]);
