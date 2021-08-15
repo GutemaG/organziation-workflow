@@ -66,11 +66,5 @@ export default {
 </script>
 
 <style>
-.btn {
-  border-radius: 50rem !important;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.7875rem;
-  line-height: 1.5;
-  margin-right: 0.25rem !important;
-}
+
 </style>

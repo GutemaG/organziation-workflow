@@ -7,9 +7,7 @@
           <b-card
             header="Login"
             header-class="scale-3"
-            class=""
-            shadow shadow-lg--hover
-            style="border-radius: 1.25rem; border: 3px solid rgba(0, 0, 0, 0.125);"
+            style="box-shadow: 0 1.5rem 2rem rgb(0 0 0 / 16%) !important; border-radius: 1.25rem; border: 3px solid rgba(0, 0, 0, 0.125);"
             header-tag="header"
           >
             <b-form class="d-grid" ref="form" @submit.stop.prevent="attemptLogin">
