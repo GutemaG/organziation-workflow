@@ -98,7 +98,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  name: "online-affair-by-catagory",
+  name: "online-affair-by-category",
   props: {
     tabIndex: {
       type: Number,
@@ -116,13 +116,7 @@ export default {
   computed: {
     ...mapGetters(["online_requests"]),
     filteredAffairs() {
-      // this.selectedAffair = null
-      // if (this.filterKey == null || this.filterKey == "") {
-      //   return this.online_affairs;
-      // }
       let key = this.filterKey.toLowerCase();
-      console.log(this.onlie_requests);
-      // return [];
       let filtered = this.online_requests.filter((affair) => {
         return (
           affair.name.toLowerCase().indexOf(key) != -1 ||

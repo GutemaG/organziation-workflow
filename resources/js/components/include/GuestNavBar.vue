@@ -34,7 +34,17 @@
 
             <li v-if="username" class="nav-item">
               <router-link to="/dashboard" class="nav-link">{{
-                tr("Dashbaord")
+                tr("Dashboard")
+              }}</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/info" class="nav-link">{{
+                tr("Info")
+              }}</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/online" class="nav-link">{{
+                tr("Online")
               }}</router-link>
             </li>
             <li class="nav-item">

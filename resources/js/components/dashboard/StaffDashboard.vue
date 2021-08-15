@@ -6,16 +6,22 @@
       card
     > -->
     <b-card class="shadow">
-      <b-table :items="steps" :fields="fields" borderless>
+      <b-table :items="steps" :fields="fields" borderless stacked="md">
         <template #cell(id)="row">
           {{ row.index + 1 }}
         </template>
         <template #cell(actions)="row">
-          <b-button
+          <!-- <b-button
             v-if="!row.item.started_at"
             variant="success"
             @click="acceptRequest(item)"
             >Accept</b-button
+          > -->
+          <b-button
+            v-if="!row.item.ended_at"
+            variant="primary"
+            @click="complete_request(row.item)"
+            >Complete</b-button
           >
           <b-button
             v-if="!row.item.ended_at"
@@ -24,12 +30,6 @@
             >Reject</b-button
           >
           <!-- this.$root.$emit("bv::show::modal", "add-user-modal"); -->
-          <b-button
-            v-if="!row.item.ended_at"
-            variant="primary"
-            @click="completeRequest(row.item)"
-            >Complet</b-button
-          >
           <span
             v-if="row.item.is_completed == 1"
             variant="success"
@@ -82,11 +82,11 @@
 </template>
 <script>
 import moment from "moment";
+import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
       tabIndex: 0,
-      steps: [],
       fields: [
         {
           key: "id",
@@ -140,6 +140,11 @@ export default {
           },
         },
         {
+          key: "online_request.type",
+          label: "Type",
+          sortable: true,
+        },
+        {
           key: "is_completed",
           label: "Completed",
           sortable: true,
@@ -170,12 +175,17 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["staff_all_accepted_request"]),
+    steps() {
+      return this.staff_all_accepted_request;
+    },
     isRejectReasonEmpty() {
       return this.reject_reason.length == 0;
     },
   },
   methods: {
-    DateFormater(value) {
+    ...mapActions(["fetchAllAcceptedRequest","completeRequest"]),
+    DateFormatter(value) {
       if (value) {
         let ago = moment(value).fromNow();
         let date = moment(value).format("MMM Do, YY");
@@ -204,24 +214,27 @@ export default {
         }
       });
     },
-    completeRequest(item) {
-      console.log("complete request: ", item);
+    complete_request(request) {
+      this.completeRequest(request)
+      console.log("complete request: ", request);
     },
     acceptRequest(item) {
       console.log("accepting: ", item);
     },
   },
   mounted() {
-    axios
+    this.fetchAllAcceptedRequest();
+    /* axios
       .get("/api/online-request-steps")
       .then((resp) => {
         if (resp.data.status == 200) {
           this.steps = resp.data.online_request_steps;
-          console.log(this.steps);
+          // console.log(this.steps);
         }
       })
       .catch((err) => console.log(err));
     // Route::get('/online-request-steps', [\App\Http\Controllers\OnlineRequestStepController::class, 'index']);
+  */
   },
 };
 </script>

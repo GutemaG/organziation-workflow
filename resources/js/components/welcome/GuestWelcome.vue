@@ -5,7 +5,7 @@
       <router-view name="welcome"></router-view>
     </div>
 
-    <footer class="main-footer">
+    <footer class="main-footer" hidden>
       <div class="float-right d-none d-sm-block"><b>Version</b> 3.1.0</div>
       <strong
         >Copyright © 2014-2021
