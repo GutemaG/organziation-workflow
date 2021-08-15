@@ -99,7 +99,7 @@
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
         :sort-direction="sortDirection"
-        stacked="md"
+        :stacked="windowSize > screenMaxWidth / 2 ? false : true"
         show-empty
         small
         @filtered="onFiltered"
@@ -107,7 +107,10 @@
         :filter-debounce="500"
         :busy="isLoading"
       >
-        <template #table-busy>
+        <template #table-busy>    hods: {
+        handleResize() {
+            this.window.width = window.innerWidth;
+            th
           <div class="text-center text-danger my-2">
             <b-spinner class="align-middle"></b-spinner>
             <strong>Loading...</strong>
@@ -181,6 +184,8 @@ export default {
       filterOn: [],
       selectedUser: {},
       isLoading: true,
+      windowSize: 0,
+      screenMaxWidth:window.screen.availWidth,
     };
   },
   computed: {
@@ -202,6 +207,8 @@ export default {
     this.fetchUsers();
     this.$Progress.finish();
     this.isLoading = false;
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize();
   },
   methods: {
     ...mapActions(["fetchUsers", "removeUser"]),
@@ -233,6 +240,10 @@ export default {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
+    },
+    handleResize() {
+      this.windowSize = window.innerWidth;
+      // this.window.height = window.innerHeight;
     },
   },
 };

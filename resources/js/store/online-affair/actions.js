@@ -1,5 +1,4 @@
 import axios from "axios";
-
 export default {
     async fetchOnlineRequests({ commit }) {
         try {
@@ -18,7 +17,7 @@ export default {
             if (resp.status === 200 || resp.status === 201) {
                 commit("ADD_ONLINE_REQUEST", resp.data.online_requests);
             }
-            console.log(resp);
+            // console.log(resp);
         } catch (error) {
             console.log(error);
         }
@@ -29,7 +28,7 @@ export default {
             if (resp.status === 200) {
                 commit("DELETE_ONLINE_REQUEST", id);
             }
-            console.log(resp);
+            // console.log(resp);
         } catch (error) {
             console.log(error);
         }
@@ -56,5 +55,75 @@ export default {
         } catch (error) {
             throw new Error(error);
         }
+    },
+    /** *!
+     * *For Staff Notification
+     */
+    fetchAllAcceptedRequest({ commit }) {
+        axios
+            .get("/api/online-request-steps")
+            .then(resp => {
+                if (resp.data.status == 200) {
+                    let steps = resp.data.online_request_steps;
+                    commit("FETCH_ONLINE_REQUEST_STEPS", steps);
+                    // console.log(this.steps);
+                }
+            })
+            .catch(err => console.log(err));
+        // Route::get('/online-request-steps', [\App\Http\Controllers\OnlineRequestStepController::class, 'index']);
+    },
+    fetchPendingRequests({ commit }) {
+        axios
+            .get("/api/online-request-applied")
+            .then(resp => {
+                // console.log(resp)
+                if (resp.data.status == 200) {
+                    let datas = resp.data.online_request_steps;
+                    let pending = [];
+                    datas.forEach(data => {
+                        pending.push(data);
+                    });
+                    // console.log(pending)
+                    commit("PENDING_ONLINE_REQUEST_STEPS", pending);
+                }
+            })
+            .catch(err => console.log(err));
+    },
+    acceptPendingRequest({ commit }, data) {
+        axios
+            .get(
+                `/api/online-request-applied/accept/${data.notification_tracker_id}`
+            )
+            .then(resp => {
+                let response = resp.data;
+                if (response.status == 200) {
+                    commit(
+                        "DELETE_PENDING_REQUEST",
+                        data.notification_tracker_id
+                    );
+                    // this.notifications = this.notifications.filter(
+                    //   (notification) =>
+                    //     notification.notification_tracker_id !=
+                    //     request.notification_tracker_id
+                    // );
+                    // this.fetchAllPendingRequest();
+                }
+            });
+    },
+    completeRequest({ commit }, data) {
+        // Route::get('/online-request-applied/complete/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestCompleted']);
+        console.log(data);
+        axios
+            .get(
+                `/api/online-request-applied/complete/${data.online_request_tracker_id}`
+            )
+            .then(resp => {
+                console.log(resp);
+                let response = resp.data;
+                if (response.status == 200) {
+                    commit("COMPLETE_REQUEST", data.notification_tracker_id);
+                }
+            })
+            .catch(err => console.log(err));
     }
 };

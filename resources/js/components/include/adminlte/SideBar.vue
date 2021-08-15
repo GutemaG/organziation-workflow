@@ -30,62 +30,9 @@
           />
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{username}}</a>
-          <!-- <a href="#" class="d-block">{{username}}</a> -->
+          <router-link to="profile" class="d-block">{{ username }}</router-link>
         </div>
       </div>
-
-      <!-- SidebarSearch Form -->
-      <!-- <div class="form-inline">
-        <div class="input-group" data-widget="sidebar-search">
-          <input
-            class="form-control form-control-sidebar"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <div class="input-group-append">
-            <button class="btn btn-sidebar">
-              <i class="fas fa-search fa-fw"></i>
-            </button>
-          </div>
-        </div>
-        <div class="sidebar-search-results">
-          <div class="list-group">
-            <a href="#" class="list-group-item"
-              ><div class="search-title">
-                <strong class="text-light"></strong>adadfasdN<strong
-                  class="text-light"
-                ></strong
-                >o<strong class="text-light"></strong>
-                <strong class="text-light"></strong>e<strong
-                  class="text-light"
-                ></strong
-                >l<strong class="text-light"></strong>e<strong
-                  class="text-light"
-                ></strong
-                >m<strong class="text-light"></strong>e<strong
-                  class="text-light"
-                ></strong
-                >n<strong class="text-light"></strong>t<strong
-                  class="text-light"
-                ></strong>
-                <strong class="text-light"></strong>f<strong
-                  class="text-light"
-                ></strong
-                >o<strong class="text-light"></strong>u<strong
-                  class="text-light"
-                ></strong
-                >n<strong class="text-light"></strong>d<strong
-                  class="text-light"
-                ></strong
-                >!<strong class="text-light"></strong>
-              </div>
-              <div class="search-path"></div
-            ></a>
-          </div>
-        </div>
-      </div> -->
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -93,7 +40,7 @@
           class="nav nav-pills nav-sidebar flex-column"
           data-widget="treeview"
           role="menu"
-          data-accordion="false"
+          data-accordion="true"
         >
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
@@ -103,41 +50,43 @@
               <p>Dashboard</p>
             </router-link>
           </li>
-          <li class="nav-item">
-            <router-link to="/users" class="nav-link">
-              <!-- <router-link to="/"> Back to Home </router-link> -->
-              <i class="nav-icon fa fa-users blue"></i>
-              <p>{{ tr("Users") }}</p>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/requests" class="nav-link">
-              <!-- <i class="nav-icon fas fa-tachometer-alt"></i> -->
-              <i class="nav-icon fas fa-home blue"></i>
-              <p>
-                {{ tr("Requests") }}
-                <!-- <i class="right fas fa-angle-left"></i> -->
-              </p>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/online-requests" class="nav-link">
-              <i class="nav-icon fas fa-building blue"></i>
-              <p>{{ tr("Online") }}-Requests</p>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/bureaus" class="nav-link">
-              <i class="nav-icon fas fa-list-ol blue"></i>
-              <p>{{ tr("Bureau") }}</p>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/buildings" class="nav-link">
-              <i class="nav-icon fas fa-building blue"></i>
-              <p>{{ tr("Buildings") }}</p>
-            </router-link>
-          </li>
+          <div v-if="isAdmin">
+            <li class="nav-item">
+              <router-link to="/users" class="nav-link">
+                <!-- <router-link to="/"> Back to Home </router-link> -->
+                <i class="nav-icon fa fa-users blue"></i>
+                <p>{{ tr("Users") }}</p>
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/requests" class="nav-link">
+                <!-- <i class="nav-icon fas fa-tachometer-alt"></i> -->
+                <i class="nav-icon fas fa-home blue"></i>
+                <p>
+                  {{ tr("Requests") }}
+                  <!-- <i class="right fas fa-angle-left"></i> -->
+                </p>
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/online-requests" class="nav-link">
+                <i class="nav-icon fas fa-building blue"></i>
+                <p>{{ tr("Online") }}-Requests</p>
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/bureaus" class="nav-link">
+                <i class="nav-icon fas fa-list-ol blue"></i>
+                <p>{{ tr("Bureau") }}</p>
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/buildings" class="nav-link">
+                <i class="nav-icon fas fa-building blue"></i>
+                <p>{{ tr("Buildings") }}</p>
+              </router-link>
+            </li>
+          </div>
           <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-home blue"></i>
@@ -214,7 +163,6 @@ export default {
       return this.currentUser.type === "staff";
     },
   },
-  methods:{
-  }
+  methods: {},
 };
 </script>

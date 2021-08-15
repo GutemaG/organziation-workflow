@@ -136,32 +136,65 @@
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
           <span class="badge badge-warning navbar-badge">{{
-            notfication.length
+            notifications.length
           }}</span>
         </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <div
+          class="dropdown-menu dropdown-menu-lg dropdown-menu-right"
+          :style="{
+            width: 400 + 'px',
+          }"
+        >
+          <!-- height: heightOfNotificationDropDown,
+            overflow: 'scroll', -->
           <span class="dropdown-header"
-            >{{ notfication.length }} Notifications</span
+            >{{ notifications.length }} Notifications</span
           >
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer"
-            >See All Notifications</a
+          <div
+            v-if="notifications.length > 0"
+            style="max-height: 60vh; overflow-y: scroll"
           >
+            <div v-for="(notification, index) in notifications" :key="index">
+              <div class="dropdown-divider"></div>
+              <span class="dropdown-item">
+                <router-link
+                class="dropdown-item"
+                  :to="{
+                    name: 'notification',
+                    params: {
+                      slug: 'notification-' + notification.id,
+                      request: notification,
+                    },
+                  }"
+                >
+                <i class="fas fa-dot-circle mr-2"></i>
+                  <p>
+                    {{ notification.online_request.name }}
+                  </p>
+                </router-link>
+                <span class="float-right text-muted">
+                  <b-button
+                    variant="info"
+                    size="sm"
+                    @click="acceptRequest(notification)"
+                  >
+                    <span>accept</span>
+                    <!-- <i class="fas fa-check white"></i> -->
+                  </b-button>
+                </span>
+              </span>
+              <div class="dropdown-divider"></div>
+            </div>
+          </div>
+          <router-link
+            v-if="notifications.length > 1"
+            class="dropdown-item"
+            :to="{
+              name: 'notification',
+              params: { slug: 'all-notifications', request: notifications },
+            }"
+            >Show All Request
+          </router-link>
         </div>
       </li>
       <li class="nav-item">
@@ -204,21 +237,28 @@
   </nav>
 </template>
 <script>
+import axios from "axios";
+import { mapActions, mapGetters } from 'vuex';
 export default {
   data() {
     return {
-      notfication: [],
+      // notifications:[],
+      notification:[
+        {"id":350,"online_request_tracker_id":"104","online_request_procedure_id":"91","started_at":null,"ended_at":null,"next_step":"351","user_id":"52","is_completed":"0","is_rejected":null,"reason":null,"deleted_at":null,"created_at":"2021-08-12T09:05:56.000000Z","updated_at":"2021-08-13T05:11:15.000000Z","online_request":{"id":23,"user_id":"1","name":"request for staff","type":"staff","description":"Qui unde cumque dolo","created_at":"2021-08-11T13:51:26.000000Z"}},
+        {"id":366,"online_request_tracker_id":"112","online_request_procedure_id":"88","started_at":null,"ended_at":null,"next_step":"367","user_id":"52","is_completed":"0","is_rejected":null,"reason":null,"deleted_at":null,"created_at":"2021-08-12T10:01:20.000000Z","updated_at":"2021-08-13T06:32:06.000000Z","online_request":{"id":21,"user_id":"1","name":"Colorado Oliver","type":"staff","description":"Dolor doloribus quia","created_at":"2021-08-10T17:52:02.000000Z"}}
+      ],
     };
   },
   computed: {
+    ...mapGetters(['pending_requests']),
     user() {
       let currentUser = window.user;
       return currentUser;
-      // if (user) {
-      //   return user.user_name;
-      // }
-      // return null;
     },
+    notifications(){
+      let n = this.notification
+        return n.concat(this.pending_requests)
+    }
     // pusherListner() {
     //   Echo.private("online-request-applied").listen(
     //     "OnlineRequestEvent",
@@ -229,12 +269,56 @@ export default {
     //   );
     // },
   },
-  methods: {},
-  created() {
-    Echo.private(`${this.user.id}.online-request-applied`).listen("NotifyUserEvent", (e) => {
-      this.notfication.unshift(e);
-      console.log("from pusherrrr: ", e);
-    });
+  methods: {
+    ...mapActions(['fetchPendingRequests','acceptPendingRequest']),
+    acceptRequest(request) {
+      this.acceptPendingRequest(request)
+      /*
+      // Route::get('/online-request-applied/accept/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestAccepted']);
+      axios
+        .get(
+          `/api/online-request-applied/accept/${request.notification_tracker_id}`
+        )
+        .then((resp) => {
+          if (resp.data[0].status == 200) {
+            this.notifications = this.notifications.filter(
+              (notification) =>
+                notification.notification_tracker_id !=
+                request.notification_tracker_id
+            );
+            // this.fetchAllPendingRequest();
+          }
+        });
+        */
+    },
+    fetchAllPendingRequest() {
+      axios
+        .get("/api/online-request-applied")
+        .then((resp) => {
+          if (resp.data[0].status == 200) {
+            let datas = resp.data[0].online_request_steps;
+            datas.forEach((data) => {
+              this.notifications.push(data);
+            });
+          }
+        })
+        .catch((err) => console.log(err));
+    },
+  },
+  mounted() {
+    if (this.user.type == "staff") {
+      this.fetchPendingRequests()
+      // this.fetchAllPendingRequest();
+      /*
+      Echo.private(`${this.user.id}.online-request-applied`).listen(
+        "NotifyUserEvent",
+        (e) => {
+          this.notfications.unshift(e.onlineRequestStep);
+          console.log("from pusherrrr: ", e.onlineRequestStep);
+        }
+      );
+      */
+    }
   },
 };
 </script>

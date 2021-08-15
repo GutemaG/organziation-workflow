@@ -1,8 +1,10 @@
-<template>
-  <div>
+<template class="sidebar-mini">
+  <div class="wrapper">
     <div v-if="currentUser">
       <NavBar />
       <SideBar />
+      <!-- <div v-if="currentUser.type == 'admin'">
+      </div> -->
 
       <div class="content-wrapper" style="min-height: 253px">
         <!-- Content Header (Page header) -->
@@ -52,10 +54,10 @@ export default {
     ]),
   },
   created() {
-      // Echo.private('online-request-applied')
-      //     .listen('OnlineRequestEvent', (e) => {
-      //         console.log("from pusher: ", e);
-      //     });
+    // Echo.private('online-request-applied')
+    //     .listen('OnlineRequestEvent', (e) => {
+    //         console.log("from pusher: ", e);
+    //     });
     // this.fetchUsers()
     // this.fetchAffairs()
     // this.fetchBureaus();

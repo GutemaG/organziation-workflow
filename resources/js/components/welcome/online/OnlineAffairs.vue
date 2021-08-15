@@ -39,76 +39,45 @@
                 card
               >
                 <b-tab title="All Affairs" lazy>
-                  <online-affair-by-catagory
+                  <online-affair-by-category
                     :tabIndex="tabIndex"
-                  ></online-affair-by-catagory>
+                  ></online-affair-by-category>
                 </b-tab>
                 <b-tab title="Student" lazy>
-                  <online-affair-by-catagory
+                  <online-affair-by-category
                     :tabIndex="tabIndex"
-                  ></online-affair-by-catagory>
+                  ></online-affair-by-category>
                 </b-tab>
                 <b-tab title="Staff" lazy>
-                  <online-affair-by-catagory
+                  <online-affair-by-category
                     :tabIndex="tabIndex"
-                  ></online-affair-by-catagory>
+                  ></online-affair-by-category>
                 </b-tab>
                 <b-tab title="Teacher" lazy>
-                  <online-affair-by-catagory
+                  <online-affair-by-category
                     :tabIndex="tabIndex"
-                  ></online-affair-by-catagory>
+                  ></online-affair-by-category>
                 </b-tab>
                 <b-tab title="Other" lazy>
-                  <online-affair-by-catagory
+                  <online-affair-by-category
                     :tabIndex="tabIndex"
-                  ></online-affair-by-catagory>
+                  ></online-affair-by-category>
                 </b-tab>
               </b-tabs>
             </b-card>
           </div>
         </b-container>
       </b-col>
-      <b-col cols="3">
-        <div style="position: fixed">
-          <b-breadcrumb>
-            <b-breadcrumb-item>
-              <router-link to="/"
-                ><b-icon
-                  icon="house-fill"
-                  scale="1.25"
-                  shift-v="1.25"
-                  aria-hidden="true"
-                ></b-icon>
-                Home</router-link
-              >
-            </b-breadcrumb-item>
-            <b-breadcrumb-item>
-              <router-link to="/info">Info</router-link>
-            </b-breadcrumb-item>
-            <b-breadcrumb-item active>Online</b-breadcrumb-item>
-          </b-breadcrumb>
-
-          <b-card title="Title" header-tag="header" footer-tag="footer">
-            <template #header>
-              <h6 class="mb-0">Header Slot</h6>
-            </template>
-            <b-card-text>Header and footers using slots.</b-card-text>
-            <b-button href="#" variant="primary">Go somewhere</b-button>
-            <template #footer>
-              <em>Footer Slot</em>
-            </template>
-          </b-card>
-        </div>
-      </b-col>
+      
     </b-row>
   </b-container>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-import OnlineAffairByCatagory from "./OnlineAffairByCatagory.vue";
+import OnlineAffairByCategory from "./OnlineAffairByCategory.vue";
 export default {
   name: "online-affair-page",
-  components: { "online-affair-by-catagory": OnlineAffairByCatagory },
+  components: { "online-affair-by-category": OnlineAffairByCategory },
   data() {
     return {
       tabIndex: 0,
