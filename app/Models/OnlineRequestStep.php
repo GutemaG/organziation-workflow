@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -39,5 +40,10 @@ class OnlineRequestStep extends Model
     public function nextStep(): HasOne
     {
         return $this->hasOne(OnlineRequestStep::class, 'id', 'next_step');
+    }
+
+    public function notificationTracker(): HasOne
+    {
+        return $this->hasOne(NotificationTracker::class);
     }
 }
