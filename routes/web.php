@@ -46,6 +46,8 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
 
     Route::get('/online-request-applied/accept/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestAccepted']);
 
+    Route::get('/online-request-applied/complete/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestCompleted']);
+
     Route::get('/online-request-applied', [\App\Http\Controllers\NotificationTrackerController::class, 'index']);
 
     //Birhanu

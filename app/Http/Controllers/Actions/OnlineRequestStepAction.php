@@ -76,8 +76,27 @@ class OnlineRequestStepAction
         return $firstOnlineRequestStep;
     }
 
+    /**
+     * Assign the responsible user for the given online request step the current logged in user.
+     *
+     * @param OnlineRequestStep $onlineRequestStep
+     */
     public static function assignResponsibleUser(OnlineRequestStep $onlineRequestStep): void
     {
-        $onlineRequestStep->update(['user_id' => auth()->user()->id]);
+        $onlineRequestStep->update(['user_id' => auth()->user()->id, 'started_at' => now()]);
+    }
+
+    /**
+     * Make the given online request step completed.
+     *
+     * @param OnlineRequestStep $onlineRequestStep
+     */
+    public static function complete(OnlineRequestStep $onlineRequestStep): void
+    {
+        $onlineRequestStep->update([
+            'ended_at' => now(),
+            'is_completed' => true,
+            'is_rejected' => false
+        ]);
     }
 }

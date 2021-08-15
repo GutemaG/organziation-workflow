@@ -25,6 +25,19 @@ class NotificationTrackerAction
     }
 
     /**
+     * Store notification tracker.
+     *
+     * @param array $onlineRequestStepId
+     * @return NotificationTracker
+     */
+    public static function store(int $onlineRequestStepId): NotificationTracker
+    {
+        return NotificationTracker::create([
+            'online_request_step_id' => $onlineRequestStepId,
+        ]);
+    }
+
+    /**
      * If the current logged in user is authorized to accept the online request step requested;
      * this make the logged in user responsible for the online request step requested.
      *
@@ -42,12 +55,35 @@ class NotificationTrackerAction
         return self::unauthorizedResponse();
     }
 
+    /**
+     * Make the online request step complete and if the next next step exits send the notification
+     * to the staff users responsible for the next online request step.
+     *
+     * @param NotificationTracker $notificationTracker
+     * @return JsonResponse
+     */
     public static function onlineRequestCompleted(NotificationTracker $notificationTracker): JsonResponse
     {
-        //            $nextOnlineRequestStep = $notificationTracker->onlineRequestStep->nextStep;
-        //            NotifyUserAction::delete($notificationTracker);
-
-
+        $onlineRequestStep = $notificationTracker->onlineRequestStep;
+        $nextOnlineRequestStep = $onlineRequestStep->nextStep;
+        OnlineRequestStepAction::complete($onlineRequestStep);
+        NotifyUserAction::delete($notificationTracker);
+        if ($nextOnlineRequestStep) {
+            $notificationTracker = self::store($nextOnlineRequestStep->id);
+            $users = $nextOnlineRequestStep->onlineRequestProcedure->users;
+            $data = $users->map(function ($value) use ($notificationTracker){
+                return ['user_id' => $value->id, 'notification_tracker_id' => $notificationTracker->id];
+            })->toArray();
+            NotifyUserAction::store($data);
+            $onlineRequest = $nextOnlineRequestStep->onlineRequestProcedure->onlineRequest->toArray();
+            $nextOnlineRequestStep = $nextOnlineRequestStep->toArray();
+            unset($nextOnlineRequestStep['online_request_procedure']);
+            $nextOnlineRequestStep['online_request'] = $onlineRequest;
+            $nextOnlineRequestStep['notification_tracker_id'] = $notificationTracker->id;
+            NotifyUserEvent::dispatch($users, $nextOnlineRequestStep);
+            return self::successResponse();
+        }
+        return self::successResponse(['message' => 'Request completed.']);
     }
 
 
