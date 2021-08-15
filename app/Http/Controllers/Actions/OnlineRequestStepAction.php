@@ -31,8 +31,17 @@ class OnlineRequestStepAction
     {
         if (! self::checkAuthorization())
             return self::unauthorizedResponse();
-        $onlineRequestSteps = OnlineRequestStep::where('user_id', auth()->user()->id)
-                            ->with('onlineRequestTracker.onlineRequest')->get()->toArray();
+        $onlineRequestSteps = OnlineRequestStep::with('notificationTracker')
+            ->where('user_id', auth()->user()->id)
+            ->with('onlineRequestTracker.onlineRequest')
+            ->orderByDesc('id')->get();
+        $onlineRequestSteps = $onlineRequestSteps->map(function ($value) {
+            $value = $value->toArray();
+            $value['notification_tracker_id'] =  $value['notification_tracker']['id'] ?? null;
+            unset($value['notification_tracker']);
+            return $value;
+        })->toArray();
+
         $length = count($onlineRequestSteps);
         for ($i = 0; $i < $length; $i++) {
             $onlineRequestSteps[$i]['online_request'] = $onlineRequestSteps[$i]['online_request_tracker']['online_request'];
