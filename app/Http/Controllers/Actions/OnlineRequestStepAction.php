@@ -108,4 +108,20 @@ class OnlineRequestStepAction
             'is_rejected' => false
         ]);
     }
+
+    /**
+     * Make the given online request step reject.
+     *
+     * @param OnlineRequestStep $onlineRequestStep
+     * @param string $reason
+     */
+    public static function reject(OnlineRequestStep $onlineRequestStep, string $reason): void
+    {
+        $onlineRequestStep->update([
+            'ended_at' => now(),
+            'is_completed' => false,
+            'is_rejected' => true,
+            'reason' => $reason,
+        ]);
+    }
 }
