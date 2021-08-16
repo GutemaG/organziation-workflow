@@ -77,16 +77,39 @@
                 <b-col cols="12" md="6">
                   <b-form-group
                     label="Procedure Name"
-                    :label-for="'procedure-' + procedure_index + 'step-input'"
+                    :label-for="'procedure-' + procedure_index + 'name-input'"
                     invalid-feedback="Required"
                   >
                     <b-form-input
-                      :id="'procedure-' + procedure_index + '-description'"
+                      :id="'procedure-' + procedure_index + '-name'"
                       placeholder="Enter Procedure Name"
                       v-model="procedure.name"
                       required
                     >
                     </b-form-input>
+                    <b-form-group
+                      id="request-bureau"
+                      label-for="request-bureau-input"
+                      label="Responsible Bureau"
+                      invalid-feedback="required"
+                    >
+                      <v-select
+                        v-model="procedure.responsible_bureau_id"
+                        label="text"
+                        :options="bureau_ids"
+                        :reduce="(bureau) => bureau.value"
+                        placeholder="Select Responsible bureau"
+                      >
+                        <template #search="{ attributes, events }">
+                          <input
+                            class="vs__search"
+                            :required="!procedure.responsible_bureau_id"
+                            v-bind="attributes"
+                            v-on="events"
+                          />
+                        </template>
+                      </v-select>
+                    </b-form-group>
                   </b-form-group>
                   <b-form-group
                     label="Description"
@@ -254,10 +277,12 @@
   </b-container>
 </template>
 <script>
+import Vselect from "vue-select";
 import { mapActions, mapGetters } from "vuex";
 import { required } from "vuelidate/lib/validators";
 export default {
   name: "add-request",
+  components: { "v-select": Vselect },
   data() {
     return {
       affair: {
@@ -270,13 +295,14 @@ export default {
             description: "",
             step: 1,
             pre_requests: [],
+            responsible_bureau_id: null,
           },
         ],
       },
     };
   },
   computed: {
-    ...mapGetters(["affair_ids"]),
+    ...mapGetters(["affair_ids", "bureau_ids"]),
     procedureLength() {
       return this.affair.procedures.length;
     },
@@ -301,7 +327,7 @@ export default {
       if (missed_steps.length !== 0) {
         this.$bvToast.toast("Please check there are missed step numbers", {
           title: "Please Fill the form Correctly",
-          variant:'danger',
+          variant: "danger",
           solid: true,
         });
       }

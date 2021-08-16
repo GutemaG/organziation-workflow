@@ -12,7 +12,7 @@ class Procedure extends Model
     use HasFactory, Notifiable, SoftDeletes;
     
     protected $guarded = [];
-    protected $with = ['preRequests'];
+    protected $with = ['preRequests','bureau'];
 
     protected $hidden = ['deleted_at','updated_at',];
 
@@ -21,6 +21,9 @@ class Procedure extends Model
     }
     public function preRequests(){
         return $this->hasMany(PreRequest::class);
+    }
+    public function bureau(){
+        return $this->belongsTo(Bureau::class, 'responsible_bureau_id');
     }
     
 }

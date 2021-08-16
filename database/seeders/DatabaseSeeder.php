@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        /*
+    /*    
           User::create([
             'user_name' => 'Staff',
             'first_name' =>'Israel',
@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
          ]
          );
-         */
+         
          User::create([
             'user_name' => 'Admin',
             'first_name' =>'birhanu',
@@ -56,8 +56,12 @@ class DatabaseSeeder extends Seeder
          ]
          );
          \App\Models\User::factory(50)->create();
-
+         
          \App\Models\Affair::factory(50)->create();
+         */
+         Building::factory(100)->create();
+
+         Bureau::factory(200)->create();
          \App\Models\Procedure::factory(100)->create();
          \App\Models\PreRequest::factory(200)->create();
 
@@ -70,9 +74,6 @@ class DatabaseSeeder extends Seeder
         
 
 
-         Building::factory(100)->create();
-
-         Bureau::factory(200)->create();
 
         OnlineRequest::factory(20);
         

@@ -296,6 +296,7 @@ class AffairController extends Controller
             'procedures.*.name' => 'required|string',
             'procedures.*.description' => 'nullable|string',
             'procedures.*.step' => 'required|integer',
+            'procedures.*.responsible_user_id' => 'required|integer',
             'procedures.*.pre_requests.*.name' => "nullable|string|required_if:pre_request.affair_id,'!null'",
             'procedures.*.pre_requests.*.description' => "nullable|string|",
             'procedures.*.pre_requests.*.affair_id' => "nullable|integer|required_if: procedures.*.pre_request.*.name, ''",

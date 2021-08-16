@@ -19,10 +19,13 @@ class CreateProceduresTable extends Migration
             $table->string('name');
             $table->longText('description')->nullable();
             $table->unsignedInteger('step');
+            $table->unsignedBigInteger('responsible_bureau_id');
             $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('affair_id')->references('id')->on('affairs')->onDelete('cascade');
+            $table->foreign('responsible_bureau_id')->references('id')->on('bureaus')
+                ->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }
 

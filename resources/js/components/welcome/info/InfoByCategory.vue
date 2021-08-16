@@ -124,6 +124,23 @@
 
                     <div class="timeline-body">
                       {{ procedure.name }}
+                      <!-- <div class="card collapsed-card">
+                        <div class="card-header">
+                          <h3 class="card-title">{{ procedure.name }}</h3>
+                          <div class="card-tools">
+                            <button
+                              type="button"
+                              class="btn btn-tool"
+                              data-card-widget="collapse"
+                            >
+                              <i class="fas fa-plus"></i>
+                            </button>
+                          </div>
+                        </div>
+                        <div class="card-body" style="display: none">
+                          {{procedure}}
+                        </div>
+                      </div> -->
                     </div>
                   </div>
                 </div>
@@ -137,7 +154,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "info-by-category",
   props: {
@@ -150,7 +167,7 @@ export default {
   data() {
     return {
       selectedAffair: null,
-    //   tabIndex: 0,
+      //   tabIndex: 0,
       filterKey: "",
     };
   },
@@ -199,7 +216,6 @@ export default {
     },
   },
 };
-
 </script>
 
 <style scoped>

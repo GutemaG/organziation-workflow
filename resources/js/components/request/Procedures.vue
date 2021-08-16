@@ -31,11 +31,13 @@
         </b-row>
       </base-card>
     </div> -->
+    <h3>List Of procedures</h3>
     <b-table
       :items="list_of_procedures"
       :fields="procedure_fields"
       sort-by="step"
       head-variant="dark"
+      stacked="md"
       striped
       responsive
       hover
@@ -44,9 +46,17 @@
         {{ row.index + 1 }}
       </template>
       <template #cell(description)="row">
-        <span v-b-tooltip.hover :title="row.item.description">
-          {{ row.item.description.substring(0, 30) }}...</span
-        >
+        <p v-b-popover.hover.top="row.item.description" title="Description">
+          {{ row.item.description.substring(0, 30) }}...</p>
+      </template>
+
+      <template #cell(responsible_bureau_id)="row">
+        <!-- <span>{{row.item.bureau}}</span> -->
+        <p v-b-tooltip.hover title="office Number, building Number, Office Name">
+          <span>{{ row.item.bureau.office_number }}</span>,
+          <span>{{ row.item.bureau.building_number }}</span>,
+          <span>{{ row.item.bureau.name }}</span>
+        </p>
       </template>
       <template #cell(actions)="row">
         <b-button
@@ -70,7 +80,10 @@
 
       <template #cell(pre_requests)="row">
         <span v-if="row.item.pre_requests.length == 0">no pre request</span>
-        <span v-else @click="row.toggleDetails" style="cursor: pointer;display:block"
+        <span
+          v-else
+          @click="row.toggleDetails"
+          style="cursor: pointer; display: block"
           >{{ row.item.pre_requests.length }}
           <!-- <b-table :items="row.item.pre_requests"> </b-table> -->
         </span>

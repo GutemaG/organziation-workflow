@@ -24,11 +24,18 @@
             >Complete</b-button
           >
           <b-button
-            v-if="!row.item.ended_at"
+            v-if="!row.item.ended_at && !row.item.is_rejected==1"
             variant="danger"
             v-b-modal="'reject-reason-modal-' + row.item.id"
             >Reject</b-button
           >
+          <span
+            v-if="row.item.is_rejected == 1"
+            variant="danger"
+            disabled
+            style="display: block; color:red"
+            >Rejected <i class="fas fa-times red"></i
+          ></span>
           <!-- this.$root.$emit("bv::show::modal", "add-user-modal"); -->
           <span
             v-if="row.item.is_completed == 1"
@@ -46,7 +53,7 @@
             @ok="handleOk"
             @hidden="handleOk"
           >
-            <form ref="form" @submit.stop.prevent="rejectRequest(row.item.id)">
+            <form ref="form" @submit.stop.prevent="reject_request(row.item)">
               <b-form-group
                 label="Reason"
                 invalid-feedback="Required"
@@ -184,7 +191,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["fetchAllAcceptedRequest","completeRequest"]),
+    ...mapActions([
+      "fetchAllAcceptedRequest",
+      "completeRequest",
+      "rejectRequest",
+    ]),
     DateFormatter(value) {
       if (value) {
         let ago = moment(value).fromNow();
@@ -197,7 +208,7 @@ export default {
     handleOk() {
       this.reject_reason = "";
     },
-    rejectRequest(request_id) {
+    reject_request(request) {
       Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -208,14 +219,18 @@ export default {
       }).then((result) => {
         // Send request to the server
         if (result.value) {
-          console.log(request_id, this.reject_reason);
+          // console.log(request.id, request);
+          // let data = {...request, this.reject_reason}
+          let reason = this.reject_reason;
+          let data = {...request, reason}
+          this.rejectRequest(data);
           // Swal.fire("Deleted!", "User is removed", "success");
-          this.$bvModal.hide("reject-reason-modal-" + request_id);
+          this.$bvModal.hide("reject-reason-modal-" + request.id);
         }
       });
     },
     complete_request(request) {
-      this.completeRequest(request)
+      this.completeRequest(request);
       // console.log("complete request: ", request);
     },
     acceptRequest(item) {
