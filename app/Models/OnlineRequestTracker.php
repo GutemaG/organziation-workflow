@@ -24,7 +24,7 @@ class OnlineRequestTracker extends Model
 
    protected $with = [
        'onlineRequest',
-       'onlineRequestSteps',
+       'onlineRequestSteps.onlineRequestProcedure.bureau',
    ];
 
     public function onlineRequest(): BelongsTo

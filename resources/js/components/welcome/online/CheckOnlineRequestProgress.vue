@@ -46,12 +46,12 @@
                 }}</span>
                 <span v-else>----</span>
               </template> -->
-              <template #cell(is_completed)="row">
+              <template #cell(status)="row">
                 <b-progress
                   v-if="
-                    !row.item.ended_at &&
-                    row.item.started_at &&
-                    row.item.is_rejected != 1
+                    row.item.is_rejected != 1 &&
+                    row.item.is_completed != 1 &&
+                    row.item.started_at
                   "
                 >
                   <b-progress-bar
@@ -62,15 +62,13 @@
                   >
                   </b-progress-bar>
                 </b-progress>
-                <b-progress
-                  v-else-if="!row.item.started_at && row.item.is_rejected != 1"
-                  variant="info"
-                >
+                <b-progress v-else-if="!row.item.started_at" variant="info">
                   <b-progress-bar :value="100" label="Pending">
                   </b-progress-bar>
                 </b-progress>
+
                 <b-progress
-                  v-else-if="row.item.started_at && row.item.ended_at"
+                  v-else-if="row.item.ended_at && row.item.is_completed == 1"
                 >
                   <b-progress-bar
                     :value="100"
@@ -144,7 +142,7 @@ export default {
         },
         {
           label: "Status",
-          key: "is_completed",
+          key: "status",
           formatter: (value) => {
             return value;
           },
@@ -161,7 +159,7 @@ export default {
         .then((resp) => {
           if (resp.status == 200) {
             this.applied_request = resp.data.applied_request;
-            this.isLoading=false
+            this.isLoading = false;
           } else {
             this.error = "Something is wrong, please try later";
             this.isLoading = false;
