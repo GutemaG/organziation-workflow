@@ -32,11 +32,14 @@
 
           <div>
             <!-- Tabs with card integration -->
-            <b-card no-body>
-              <b-tabs
-                active-nav-item-class="font-weight-bold bg-info text-uppercase"
+            <div class="card shadow shadow-lg--hover" style="border-radius: 1.2rem 1.2rem;">
+              <div class="card-header text-center shadow" 
+              style="background-color: #343a40 !important; color: white; border-radius: 1.2rem 1.2rem 0rem 0;">
+                  <h2><strong>Apply Online Affair</strong></h2>
+              </div>
+              <b-tabs card pills no-fade vertical
+                active-nav-item-class="font-weight-bold bg-info"
                 v-model="tabIndex"
-                card
               >
                 <b-tab title="All Affairs" lazy>
                   <online-affair-by-category
@@ -64,7 +67,7 @@
                   ></online-affair-by-category>
                 </b-tab>
               </b-tabs>
-            </b-card>
+            </div>
           </div>
         </b-container>
       </b-col>

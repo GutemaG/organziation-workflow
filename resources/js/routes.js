@@ -40,14 +40,6 @@ export default [
                 }
             },
             {
-                path: "/online",
-                components: {
-                    welcome: require("./components/welcome/online/OnlineHome.vue")
-                        .default
-                }
-            },
-
-            {
                 path: "/login",
                 name: "login",
                 components: {
