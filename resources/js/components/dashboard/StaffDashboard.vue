@@ -216,7 +216,7 @@ export default {
     },
     complete_request(request) {
       this.completeRequest(request)
-      console.log("complete request: ", request);
+      // console.log("complete request: ", request);
     },
     acceptRequest(item) {
       console.log("accepting: ", item);
@@ -224,17 +224,6 @@ export default {
   },
   mounted() {
     this.fetchAllAcceptedRequest();
-    /* axios
-      .get("/api/online-request-steps")
-      .then((resp) => {
-        if (resp.data.status == 200) {
-          this.steps = resp.data.online_request_steps;
-          // console.log(this.steps);
-        }
-      })
-      .catch((err) => console.log(err));
-    // Route::get('/online-request-steps', [\App\Http\Controllers\OnlineRequestStepController::class, 'index']);
-  */
   },
 };
 </script>

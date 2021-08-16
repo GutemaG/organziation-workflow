@@ -244,8 +244,8 @@ export default {
     return {
       // notifications:[],
       notification:[
-        {"id":350,"online_request_tracker_id":"104","online_request_procedure_id":"91","started_at":null,"ended_at":null,"next_step":"351","user_id":"52","is_completed":"0","is_rejected":null,"reason":null,"deleted_at":null,"created_at":"2021-08-12T09:05:56.000000Z","updated_at":"2021-08-13T05:11:15.000000Z","online_request":{"id":23,"user_id":"1","name":"request for staff","type":"staff","description":"Qui unde cumque dolo","created_at":"2021-08-11T13:51:26.000000Z"}},
-        {"id":366,"online_request_tracker_id":"112","online_request_procedure_id":"88","started_at":null,"ended_at":null,"next_step":"367","user_id":"52","is_completed":"0","is_rejected":null,"reason":null,"deleted_at":null,"created_at":"2021-08-12T10:01:20.000000Z","updated_at":"2021-08-13T06:32:06.000000Z","online_request":{"id":21,"user_id":"1","name":"Colorado Oliver","type":"staff","description":"Dolor doloribus quia","created_at":"2021-08-10T17:52:02.000000Z"}}
+        {"id":350,"online_request_tracker_id":"104","online_request_procedure_id":"91","started_at":null,"ended_at":null,"next_step":"351","user_id":"52","is_completed":"0","is_rejected":null,"reason":null,"deleted_at":null,"created_at":"2021-08-12T09:05:56.000000Z","updated_at":"2021-08-13T05:11:15.000000Z","online_request":{"id":23,"user_id":"1","name":"fake data","type":"staff","description":"Qui unde cumque dolo","created_at":"2021-08-11T13:51:26.000000Z"}},
+        {"id":366,"online_request_tracker_id":"112","online_request_procedure_id":"88","started_at":null,"ended_at":null,"next_step":"367","user_id":"52","is_completed":"0","is_rejected":null,"reason":null,"deleted_at":null,"created_at":"2021-08-12T10:01:20.000000Z","updated_at":"2021-08-13T06:32:06.000000Z","online_request":{"id":21,"user_id":"1","name":"fake Data","type":"staff","description":"Dolor doloribus quia","created_at":"2021-08-10T17:52:02.000000Z"}}
       ],
     };
   },
@@ -290,19 +290,6 @@ export default {
           }
         });
         */
-    },
-    fetchAllPendingRequest() {
-      axios
-        .get("/api/online-request-applied")
-        .then((resp) => {
-          if (resp.data[0].status == 200) {
-            let datas = resp.data[0].online_request_steps;
-            datas.forEach((data) => {
-              this.notifications.push(data);
-            });
-          }
-        })
-        .catch((err) => console.log(err));
     },
   },
   mounted() {

@@ -7,10 +7,11 @@
           type="search"
           v-model="filterKey"
           placeholder="Type to Search"
+          style="max-width: 24rem;"
         ></b-form-input>
 
         <b-input-group-append>
-          <b-button @click="filterKey = ''">{{ tr("Clear") }}</b-button>
+          <button type="button" class="btn btn-dark" style="border-radius: none;" @click="filterKey = ''">{{ tr("Clear") }}</button>
         </b-input-group-append>
       </b-input-group>
       <hr />
@@ -18,78 +19,96 @@
     <b-row>
       <h3 v-if="!filteredAffairs">Oops, No result found Please try other</h3>
       <b-col
-        :cols="!selectedAffair ? '' : 6"
-        style="height: 65vh; overflow-y: scroll"
+        :cols="!selectedAffair ? '' : 5"
+        style="height: 80vh; overflow-y: scroll"
       >
-        <b-list-group v-for="affair in filteredAffairs" :key="affair.id">
+        <div class="list-group" style="height: 3.8rem;" v-for="affair,index in filteredAffairs" :key="affair.id">
           <b-list-group-item
-            button
             @click="selectAffair(affair)"
             :active="selectedListIndex(affair.id)"
-            class="m-1"
+            class="d-flex mb-1 mt-1 shadow shadow-lg--hover items" 
+            style="cursor: pointer; border: 2px solid rgba(0, 0, 0, 0.151); align-items:baseline; overflow: hidden"
           >
-            <h3>
-              {{ affair.name }}
-            </h3>
-            <small>{{ affair.description }}</small>
+            <b-badge pill class="mr-2" style="font-size: 14px" variant="dark">{{ index+1 }}</b-badge>
+            <p><strong>{{ affair.name }}</strong></p>
           </b-list-group-item>
-        </b-list-group>
+        </div>
       </b-col>
-      <b-col v-if="selectedAffair" cols="6">
-        <h1>{{ selectedAffair.name }}</h1>
-        <hr />
-        <h4>Description:</h4>
-        <p>{{ selectedAffair.description }}</p>
-        <hr />
+      <b-col v-if="selectedAffair" cols="7">
+        <div class="card mb-2 mt-2 justify-content-md-center shadow shadow-lg--hover"
+        style="max-width: 100%; border-radius: 1.36rem; border: 1px solid rgba(0, 0, 0, 0.125);">
+          <div class="card-body shadow" 
+          style="border-radius: 1.25rem;">
+            <div class="card-header text-center shadow" 
+                style="background-color: #343a40 !important; 
+                color: white; border-radius: 1.25rem 1.25rem 0rem 0;">
+                <div class="d-flex justify-content-md-center align-items-center">
+                    <b-icon icon="file-earmark-spreadsheet-fill" class="mr-3" scale="2" variant="success"></b-icon>
+                    <h4 class="mb-0">{{ selectedAffair.name }}</h4>
+                </div>
+            </div>
+            <div class="card-body align-items-center p-4"
+            style="border: 1px solid rgba(0, 0, 0, 0.228);
+            background-color: #ced5da;
+            border-radius: 0 0 1.25rem 1.25rem;">
+              <h4><strong>Description</strong></h4>
+              <hr />
+              <p>{{ selectedAffair.description }}</p>
 
-        <div
-          class="timeline"
-          v-if="selectedAffair.prerequisite_labels.length != 0"
-        >
-          <div class="time-label">
-            <span>Pre Requests</span>
-          </div>
-          <div
-            v-for="(prerequisite, index) in selectedAffair.prerequisite_labels"
-            :key="prerequisite.id"
-          >
-            <!-- style="overflow-y: scroll" -->
-            <i class="fas bg-blue" >{{ index + 1 }}</i>
-            <div class="timeline-item">
-              <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
+              <div
+                class="timeline"
+                v-if="selectedAffair.prerequisite_labels.length != 0"
+              >
+                <div class="time-label">
+                  <span>Pre Requests</span>
+                </div>
+                <div
+                  v-for="(prerequisite, index) in selectedAffair.prerequisite_labels"
+                  :key="prerequisite.id"
+                  class="d-flex align-items-center"
+                >
+                  <!-- style="overflow-y: scroll" -->
+                  <i class="fas bg-blue" >{{ index + 1 }}</i>
+                  <div class="timeline-item">
+                    <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
 
-              <div class="timeline-body">
-                {{ prerequisite.label }}
+                    <div class="timeline-body">
+                      {{ prerequisite.label }}
+                    </div>
+                  </div>
+                </div>
               </div>
+              <div v-else>No Pre Request</div>
+
+              <!-- <h3>Pre Requests</h3>
+              <div v-if="selectedAffair.prerequisite_labels.length != 0">
+                <b-list-group
+                  v-for="prerequisite in selectedAffair.prerequisite_labels"
+                  :key="prerequisite.id"
+                  style="overflow-y: scroll"
+                >
+                  <b-list-group-item>
+                    {{ prerequisite.label }}
+                  </b-list-group-item>
+                </b-list-group>
+              </div>
+              <div v-else>
+                <h4>No Pre Request</h4>
+              </div> -->
+              <div>
+                <router-link
+                  :to="{
+                    name: 'apply-online-affair2',
+                    params: { slug: selectedAffair.name },
+                  }"
+                >
+                  <b-button variant="primary" class="form-control"> Send Request </b-button>
+                </router-link>
+              </div>
+            
             </div>
           </div>
-        </div>
-        <div v-else>No Pre Request</div>
 
-        <!-- <h3>Pre Requests</h3>
-        <div v-if="selectedAffair.prerequisite_labels.length != 0">
-          <b-list-group
-            v-for="prerequisite in selectedAffair.prerequisite_labels"
-            :key="prerequisite.id"
-            style="overflow-y: scroll"
-          >
-            <b-list-group-item>
-              {{ prerequisite.label }}
-            </b-list-group-item>
-          </b-list-group>
-        </div>
-        <div v-else>
-          <h4>No Pre Request</h4>
-        </div> -->
-        <div>
-          <router-link
-            :to="{
-              name: 'apply-online-affair2',
-              params: { slug: selectedAffair.name },
-            }"
-          >
-            <b-button class="form-control"> Send Request </b-button>
-          </router-link>
         </div>
       </b-col>
     </b-row>
@@ -159,3 +178,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.items:hover{
+  background-color: #3490dc;
+  color: white;
+  transform: scale(1.03);
+}
+</style>

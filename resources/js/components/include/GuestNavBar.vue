@@ -43,11 +43,6 @@
               }}</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/online" class="nav-link">{{
-                tr("Online")
-              }}</router-link>
-            </li>
-            <li class="nav-item">
               <router-link to="/apply-online-affair" class="nav-link">{{
                 tr("Online Affair")
               }}</router-link>

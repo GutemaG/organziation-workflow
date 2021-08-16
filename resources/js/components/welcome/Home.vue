@@ -68,13 +68,7 @@
                                             >Info</router-link
                                         ></b-col
                                     >
-                                    <b-col lg="5"
-                                        ><router-link
-                                            to="/online"
-                                            class="btn btn-primary btn-lg p-2"
-                                            >Online</router-link
-                                        ></b-col
-                                    >
+                                    
                                 </div>
                             </b-row>
 

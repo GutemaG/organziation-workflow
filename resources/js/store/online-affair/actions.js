@@ -112,16 +112,14 @@ export default {
     },
     completeRequest({ commit }, data) {
         // Route::get('/online-request-applied/complete/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestCompleted']);
-        console.log(data);
         axios
             .get(
-                `/api/online-request-applied/complete/${data.online_request_tracker_id}`
+                `/api/online-request-applied/complete/${data.notification_tracker_id}`
             )
             .then(resp => {
-                console.log(resp);
                 let response = resp.data;
                 if (response.status == 200) {
-                    commit("COMPLETE_REQUEST", data.notification_tracker_id);
+                    commit("COMPLETE_REQUEST", data);
                 }
             })
             .catch(err => console.log(err));
