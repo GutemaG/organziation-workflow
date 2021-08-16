@@ -16,7 +16,7 @@ use Tests\TestCase;
 
 class MyTestCase extends TestCase
 {
-    use RefreshDatabase, ModelInstances;
+    use  ModelInstances;
 
     protected $url = '';
     protected $modelName = '';
@@ -27,8 +27,8 @@ class MyTestCase extends TestCase
     {
         $this->responseName = Str::snake(str_replace('App\\Models\\', '', $this->modelName));
         parent::setUp();
-        $this->artisan('migrate:refresh');
-        MyDatabaseSeeder::seed();
+//        $this->artisan('migrate:refresh');
+//        MyDatabaseSeeder::seed();
     }
 
     public function testDefaultTest(): void
