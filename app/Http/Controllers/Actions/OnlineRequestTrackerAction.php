@@ -145,10 +145,7 @@ class OnlineRequestTrackerAction
     protected static function removeUnusedData(array $onlineRequestTracker): Collection
     {
         $onlineRequestTracker = collect($onlineRequestTracker)->map(function ($value, $key) {
-            if ($key == 'online_request') {
-                unset($value['online_request_procedures']);
-                unset($value['prerequisite_labels']);
-            } elseif ($key == 'online_request_steps') {
+            if ($key == 'online_request_steps') {
                 $length = count($value);
                 for ($i = 0; $i < $length; $i++) {
                     $value[$i]['bureau'] = $value[$i]['online_request_procedure']['bureau'];

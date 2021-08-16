@@ -33,7 +33,7 @@ class OnlineRequestController extends Controller
      */
     public function index(): JsonResponse
     {
-        $onlineRequests = OnlineRequest::with(['onlineRequestProcedures', 'prerequisiteLabels'])->orderBy('name', 'asc')->get();
+        $onlineRequests = OnlineRequest::with(['onlineRequestProcedures.users', 'prerequisiteLabels'])->orderBy('name', 'asc')->get();
         return response()->json([
             'status' => 200,
             'online_requests' => $onlineRequests,
