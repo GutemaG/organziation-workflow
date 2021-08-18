@@ -94,9 +94,9 @@
           <b-table
             :items="[...pre_row.item.pre_requests]"
             :fields="procedure_pre_request_fields"
-            fixed
             responsive
           >
+            <!-- fixed -->
             <template #cell(id)="row">{{ row.index + 1 }}</template>
             <template #cell(name)="row">
               <span v-if="row.item.name == ''">...</span>
@@ -104,7 +104,7 @@
             </template>
             <template #cell(description)="row">
               <span v-if="row.item.description == ''">...</span>
-              <span v-else>{{ row.item.description }}</span>
+              <span v-else v-b-popover.hover.top="row.item.description" title="Description">{{ row.item.description.substring(0,20) }}...</span>
             </template>
             <template #cell(affair_id)="row">
               <span v-if="row.item.affair_id == ''">...</span>

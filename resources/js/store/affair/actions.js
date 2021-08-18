@@ -105,7 +105,8 @@ export default {
                 affair_id: data.affair_id,
                 name: data.name,
                 description: data.description,
-                step: data.step
+                step: data.step,
+                responsible_bureau_id:data.responsible_bureau_id,
             })
             .then(resp => {
                 let procedure = resp.data.procedure;

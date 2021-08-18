@@ -6,5 +6,5 @@ export default {
                 text: bureau.name,
                 value: bureau.id
             };
-        })
+        }),
 };

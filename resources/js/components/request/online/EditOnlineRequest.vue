@@ -285,7 +285,7 @@ export default {
   methods: {
     ...mapActions([
       "addOnlineRequest",
-      "fetchOnlinRequests",
+      "fetchOnlineRequests",
       "updateOnlineRequest",
     ]),
     validateState(value) {

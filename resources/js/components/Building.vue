@@ -184,7 +184,7 @@ export default {
     ...mapGetters(["buildings"]),
     sortOptions() {
       // Create an options list from our fields
-      return this.fields
+      return this.building_fields
         .filter((f) => f.sortable)
         .map((f) => {
           return { text: f.label, value: f.key };

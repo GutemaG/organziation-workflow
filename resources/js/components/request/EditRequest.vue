@@ -4,10 +4,7 @@
       <b-button size="sm" class="mr-1" variant="primary">back</b-button>
     </router-link>
     <b-form @submit="handleSubmit">
-      <b-card
-        class="m-1"
-        :header="'Edit Affair-' + $route.params.id"
-      >
+      <b-card class="m-1" :header="'Edit Affair-' + $route.params.id">
         <b-form-group
           label="Affair Name"
           label-for="selected-affair-name-input"
@@ -86,6 +83,25 @@
                     ></b-form-input>
                   </b-form-group>
 
+                  <b-form-group
+                    id="request-responsible-bureau"
+                    :label-for="'request-responsible-bureau-input-'+procedure_index"
+                    label="Responsible Bureau"
+                    invalid-feedback="required"
+                  >
+                      <!-- :options="bureau_ids" -->
+                    <b-form-select
+                      :id="'request-responsible-bureau-input-' + procedure_index"
+                      v-model="procedure.responsible_bureau_id"
+                      required
+                    >
+                      <template #first>
+                        <b-form-select-option selected disabled value="">
+                          Select Responsible Bureau
+                        </b-form-select-option>
+                      </template>
+                    </b-form-select>
+                  </b-form-group>
                   <b-form-group
                     label="Description"
                     class="mb-1 mt-1"
@@ -205,7 +221,7 @@
                             '-description'
                           "
                           placeholder="description for current procedure(optional)"
-                          style="height:150px"
+                          style="height: 150px"
                         ></b-form-textarea>
                       </b-form-group>
                       <b-form-group
@@ -280,11 +296,14 @@
 import { mapActions, mapGetters } from "vuex";
 import AddProcedure from "./AddProcedure.vue";
 import AddPreRequest from "./AddPreRequest.vue";
+import Vselect from "vue-select";
 // import store from '@/'
 export default {
+  name: "edit-request",
   components: {
     "add-procedure": AddProcedure,
     "add-pre-request": AddPreRequest,
+    "v-select": Vselect,
   },
   props: ["id"],
   data() {
@@ -296,12 +315,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["affairs", "affair_ids"]),
-    selectedAffair2() {
-      return this.selectedAffair;
-    },
+    ...mapGetters(["affairs", "affair_ids", "bureau_ids"]),
     procedureLength() {
-      return this.selectedAffair.procedures.length;
+      if (this.selectedAffair) {
+        return this.selectedAffair.procedures.length;
+      }
+      return 0;
     },
   },
   methods: {
@@ -311,6 +330,7 @@ export default {
       "updateAffair",
       "removePreRequest",
       "removeProcedure",
+      "fetchBureaus",
     ]),
     submitHandler() {
       alert(`Thank you for your order!`);
@@ -371,10 +391,13 @@ export default {
       });
     },
   },
+  mounted() {
+    this.fetchBureaus();
+  },
   created() {
-    if (this.affairs.length === 0) {
+    if (this.affairs.length == 0) {
       this.$router.push("/requests");
-      console.log(this.$route.path);
+      // console.log(this.$route.path);
     } else {
       if (this.selectedAffair) {
         this.selectedAffair = this.affairs.filter(

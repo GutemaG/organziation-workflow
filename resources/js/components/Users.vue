@@ -87,6 +87,7 @@
           ></b-pagination>
         </b-col>
       </b-row>
+        <!-- :stacked="windowSize > screenMaxWidth / 2 ? false : true" -->
 
       <!-- Main table element -->
       <b-table
@@ -99,7 +100,7 @@
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
         :sort-direction="sortDirection"
-        :stacked="windowSize > screenMaxWidth / 2 ? false : true"
+        stacked="xl"
         show-empty
         small
         @filtered="onFiltered"

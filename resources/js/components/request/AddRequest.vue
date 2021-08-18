@@ -335,7 +335,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["addAffair"]),
+    ...mapActions(["addAffair","fetchBureaus"]),
     validateState(name) {
       const { $dirty, $error } = this.$v.affair[name];
       return $dirty ? !$error : null;
@@ -353,6 +353,7 @@ export default {
         description: "",
         step: this.procedureLength + 1,
         pre_requests: [],
+        responsible_bureau_id:null,
       });
       console.log("add Procedure");
     },
@@ -400,5 +401,8 @@ export default {
       },
     },
   },
+  mounted(){
+    this.fetchBureaus();
+  }
 };
 </script>

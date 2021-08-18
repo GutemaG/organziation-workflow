@@ -10,7 +10,10 @@
           <b-skeleton width="70%"></b-skeleton>
         </b-card>
       </template>
-      <b-card class="shadow" style="border-radius: 21px 21px 0 0">
+      <b-card
+        class="shadow"
+        style="border-radius: 21px 21px 0 0; overflow-x: scroll"
+      >
         <b-card-body>
           <div>
             <b-row>
@@ -121,7 +124,7 @@
               striped
               :busy="isLoading"
               show-empty
-              stacked="md"
+              stacked="xl"
               label-sort-clear
               sticky-header
             >
