@@ -27,7 +27,7 @@
             @click="selectAffair(affair)"
             :active="selectedListIndex(affair.id)"
             class="d-flex mb-1 mt-1 shadow shadow-lg--hover items" 
-            style="cursor: pointer; border: 2px solid rgba(0, 0, 0, 0.151); align-items:baseline; overflow: hidden"
+            style="cursor: pointer; border: 2px solid rgba(0, 0, 0, 0.151); border-radius: 2rem; align-items:baseline; overflow: hidden"
           >
             <b-badge pill class="mr-2" style="font-size: 14px" variant="dark">{{ index+1 }}</b-badge>
             <p><strong>{{ affair.name }}</strong></p>
@@ -39,15 +39,14 @@
         style="max-width: 100%; border-radius: 1.36rem; border: 1px solid rgba(0, 0, 0, 0.125);">
           <div class="card-body shadow" 
           style="border-radius: 1.25rem;">
-            <div class="card-header text-center shadow" 
-                style="background-color: #343a40 !important; 
-                color: white; border-radius: 1.25rem 1.25rem 0rem 0;">
-                <div class="d-flex justify-content-md-center align-items-center">
-                    <b-icon icon="file-earmark-spreadsheet-fill" class="mr-3" scale="2" variant="success"></b-icon>
-                    <h4 class="mb-0">{{ selectedAffair.name }}</h4>
-                </div>
+            <div class="card-header text-center shadow d-flex justify-content-md-center align-items-center" 
+            style="background-color: #343a40 !important; 
+            color: white; border-radius: 1.25rem 1.25rem 0rem 0;"
+            >
+                <b-icon icon="file-earmark-spreadsheet-fill" class="mr-3" scale="2" variant="success"></b-icon>
+                <h4 class="mb-0">{{ selectedAffair.name }}</h4>
             </div>
-            <div class="card-body align-items-center p-4"
+            <div class="card-body align-items-center p-3"
             style="border: 1px solid rgba(0, 0, 0, 0.228);
             background-color: #ced5da;
             border-radius: 0 0 1.25rem 1.25rem;">
@@ -95,14 +94,15 @@
               <div v-else>
                 <h4>No Pre Request</h4>
               </div> -->
-              <div>
+              <div class="d-flex justify-content-md-center">
                 <router-link
                   :to="{
                     name: 'apply-online-affair2',
                     params: { slug: selectedAffair.name },
                   }"
+                  style="text-decoration: none; width: 65%;"
                 >
-                  <b-button variant="primary" class="form-control"> Send Request </b-button>
+                  <b-button pill block variant="primary" class="form-control"> Send Request </b-button>
                 </router-link>
               </div>
             

@@ -1,110 +1,81 @@
 <template>
     <div>
-            <b-row>
-                <b-col>
-                    <b-container class="mt-3">
-                        <div class="mb-3">
-                            <div style="z-index: 111; position: absolute; text-align: center; margin-bottom: 2rem;
-                            top: 150px;
-                            width: 80%;
-                            background-color: #00000042;
-                            color: white;">
-                                <h2>Adama Science And Technology University</h2>
-                                <h2>Guidance System</h2>
-                            </div>
-                            
-                            <b-carousel
-                                id="carousel-fade"
-                                style="text-shadow: 0px 0px 2px #000"
-                                fade
-                                indicators
-                                img-width="1024"
-                                img-height="480"
-                            >
-                                <b-carousel-slide
-                                caption="First slide"
-                                img-src="https://picsum.photos/1024/480/?image=10"
-                                ></b-carousel-slide>
-                                <b-carousel-slide
-                                caption="Second Slide"
-                                img-src="https://picsum.photos/1024/480/?image=12"
-                                ></b-carousel-slide>
-                                <b-carousel-slide
-                                caption="Third Slide"
-                                img-src="https://picsum.photos/1024/480/?image=22"
-                                ></b-carousel-slide>
-                            </b-carousel>
+        <b-row>
+            <b-col>
+                <b-container>
+                    <div class="mb-3">
+                        <div style="z-index: 111; position: absolute; text-align: center; margin-bottom: 2rem;
+                        top: 150px;
+                        width: 80%;
+                        background-color: #00000042;
+                        color: white;">
+                            <h2>Adama Science And Technology University</h2>
+                            <h2>Guidance System</h2>
                         </div>
+                        
+                        <b-carousel
+                            id="carousel-fade"
+                            style="text-shadow: 0px 0px 2px #000"
+                            fade
+                            indicators
+                            img-width="1024"
+                            img-height="480"
+                        >
+                            <b-carousel-slide
+                            caption="First slide"
+                            img-src="https://picsum.photos/1024/480/?image=10"
+                            ></b-carousel-slide>
+                            <b-carousel-slide
+                            caption="Second Slide"
+                            img-src="https://picsum.photos/1024/480/?image=12"
+                            ></b-carousel-slide>
+                            <b-carousel-slide
+                            caption="Third Slide"
+                            img-src="https://picsum.photos/1024/480/?image=22"
+                            ></b-carousel-slide>
+                        </b-carousel>
+                    </div>
 
-                        <div class="mt-5 mb-5">
-                            <h3>
-                                Office of Academic Affairs
-                            </h3>
-                            <p>
-                                
-                                Adama Science and Technology University, ASTU, is one of the two science and technology universities established to 
-                                support the industrial development of the nation by producing competent and leading graduates in science and technology fields. 
-                                The university is working aggressively to produce qualified, competent, and socially responsible professionals in the fields of science and 
-                                technology through promoting research oriented science and technology education. The academic wing has taken the leading role to ensure 
-                                quality education which helps to realize the goals and ultimately the mission of ASTU.  The academic affairs office was established under 
-                                the Vice President for Academic Affairs (VPA) to lead all academic and academic-related matters of the university.
-                                Adama Science And Technology University Guidance System website
-                                will help guide you through with any affairs you have with our
-                                campus. To get any information related to your affair go click
-                                the info button and search any kind of affair you have. But if
-                                you want get your affair done online go and click the online
-                                button below.
-                            </p>
+                    <div class="mt-5 mb-5">
+                        <h3>
+                            Office of Academic Affairs
+                        </h3>
+                        <p>
                             
-                            <b-row>
-                                <div style="display: flex;
-                                position: relative;
-                                margin: 2rem auto;"
-                                >
-                                    <b-col lg="5"
-                                        ><router-link rounded="2"
-                                            to="/info"
-                                            class="btn btn-info btn-lg p-2"
-                                            >Info</router-link
-                                        ></b-col
-                                    >
-                                    
-                                </div>
-                            </b-row>
+                            Adama Science and Technology University, ASTU, is one of the two science and technology universities established to 
+                            support the industrial development of the nation by producing competent and leading graduates in science and technology fields. 
+                            The university is working aggressively to produce qualified, competent, and socially responsible professionals in the fields of science and 
+                            technology through promoting research oriented science and technology education. The academic wing has taken the leading role to ensure 
+                            quality education which helps to realize the goals and ultimately the mission of ASTU.  The academic affairs office was established under 
+                            the Vice President for Academic Affairs (VPA) to lead all academic and academic-related matters of the university.
+                            Adama Science And Technology University Guidance System website
+                            will help guide you through with any affairs you have with our
+                            campus. To get any information related to your affair go click
+                            the info button and search any kind of affair you have. But if
+                            you want get your affair done online go and click the online
+                            button below.
+                        </p>
 
-                            <p>
-                                Adama Science and Technology University has signed a consultant
-                                contract agreement with Seoul National University. Accordingly, the consultant, Seoul National University, is
-                                expected to facilitate the design, supervision, and bid document preparation of the ASTU-EDCF project.
-                                It is recalled that the government of South Korea has agreed to finance the establishment of five Centers of Excellence in
-                                ASTU with an outlay of one hundred million US Dollars. The agreement was signed between the governments of FDRE the Republic of Korea.
-                                T June 24, 2021
-                            </p>
+                        <p>
+                            Adama Science and Technology University has signed a consultant
+                            contract agreement with Seoul National University. Accordingly, the consultant, Seoul National University, is
+                            expected to facilitate the design, supervision, and bid document preparation of the ASTU-EDCF project.
+                            It is recalled that the government of South Korea has agreed to finance the establishment of five Centers of Excellence in
+                            ASTU with an outlay of one hundred million US Dollars. The agreement was signed between the governments of FDRE the Republic of Korea.
+                            T June 24, 2021
+                        </p>
 
-                        </div>
-                    </b-container>
-                </b-col>
-
-                <b-col cols="3">
-                    <b-container class="mt-3">
-                        <b-breadcrumb>
-                            <b-breadcrumb-item>
-                                <router-link to="/"><b-icon icon="house-fill" scale="1.25" shift-v="1.25" aria-hidden="true"></b-icon>
-                                Home</router-link>
-
-                            </b-breadcrumb-item>
-                            <b-breadcrumb-item>
-                                <router-link to="/info">Info</router-link>
-                            </b-breadcrumb-item>
-                            <b-breadcrumb-item to="/online">Online</b-breadcrumb-item>
-                        </b-breadcrumb>
-                        <b-card bg-variant="dark" header="Dark" text-variant="white" class="text-center">
-                            <b-card-text class="text-left">Lorem ipsum dolor sit amet, consectetur adipiscing elit alekj aoiejf lasdjfoew adsfj ewo.</b-card-text>
-                        </b-card>
-                    </b-container>
-                </b-col>
-            </b-row>
-
+                    </div>
+                </b-container>
+            </b-col>
+            <b-col cols="3">
+                <b-container>
+                    <b-card bg-variant="dark" header="Dark" text-variant="white" class="text-center">
+                        <b-card-text class="text-left">Lorem ipsum dolor sit amet, consectetur adipiscing elit alekj aoiejf lasdjfoew adsfj ewo.</b-card-text>
+                    </b-card>
+                </b-container>
+            </b-col>
+        </b-row>
       </div>
 </template>
 

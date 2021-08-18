@@ -1,26 +1,27 @@
 <template>
   <div>
-    <div class="container-fluid mt-5 mb-5 bv-example-row">
-      <b-row class="justify-content-md-center">
-        <b-col cols="" class="text-center">
-          <b-card class="content">
-            <b-dropdown
-              id="dropdown-right"
-              right
-              text="Edit"
-              variant="primary"
-              class="edit_button ml-5"
-            >
-              <b-dropdown-item v-b-modal.edit-account-modal
-                >Edit Profile</b-dropdown-item
+    <div class="container-fluid">
+      <b-row>
+        <b-col cols="" class="text-center d-flex justify-content-md-center">
+          <div class="card" style="width: 50%; padding: 2rem;">
+            <div style="display: flex; justify-content: flex-end;">
+              <b-dropdown
+                id="dropdown-right"
+                right
+                text="Edit"
+                variant="primary"
+                class="edit_button"
               >
-              <b-dropdown-item v-b-modal.change-password-modal
-                >Change Password</b-dropdown-item
-              >
-            </b-dropdown>
-            <br /><br />
-            <br /><br />
-            <a href="javascript:;">
+                <b-dropdown-item v-b-modal.edit-account-modal
+                  >Edit Profile</b-dropdown-item
+                >
+                <b-dropdown-item v-b-modal.change-password-modal
+                  >Change Password</b-dropdown-item
+                >
+              </b-dropdown>
+            </div>
+
+            <div>
               <b-img
                 src="/images/user.png"
                 fluid
@@ -28,7 +29,7 @@
                 class="img-right shadow shadow-lg--hover mb-4"
                 style="width: 15rem"
               />
-            </a>
+            </div>
             <h5 class="h3 title">
               <small class="h4 font-weight-light text-muted">{{
                 userProfile.user_name
@@ -267,7 +268,7 @@
                   </b-form-group>
 
                   <div class="form-group">
-                    <button class="submitButton">Submit</button>
+                    <b-button pill block class="submitButton">Submit</b-button>
                   </div>
                 </form>
               </b-modal>
@@ -279,6 +280,7 @@
                 centered
                 ref="modal"
                 title="Change Password"
+                body-class="p-4"
                 ok-only
                 ok-variant="secondary"
                 ok-title="Cancel"
@@ -308,11 +310,15 @@
                       </b-form-input>
 
                       <!-- Show and Hide password -->
-                        <b-input-group-append style="margin-left: 0px;">
-                          <b-button variant="light">
-                            <i @click="showCurrentPassword()" v-if="currentPasswordVisibility == 'password'" class="far fa-eye" id="hide"></i>
-                            <i @click="hideCurrentPassword()" v-if="currentPasswordVisibility == 'text'" class="far fa-eye-slash" id="show"></i>
-                          </b-button>
+                        <b-input-group-append style="padding: 7px; z-index: 111; position: absolute; margin-left: 24rem;"
+                        >
+                          <b-link
+                            @click="showPassword = !showPassword"
+                            style="color: black;"
+                          >
+                            <i @click="showCurrentPassword()" v-if="currentPasswordVisibility == 'password'" class="far fa-eye-slash" id="hide"></i>
+                            <i @click="hideCurrentPassword()" v-if="currentPasswordVisibility == 'text'" class="far fa-eye" id="show"></i>
+                          </b-link>
                         </b-input-group-append>
 
                       <!-- Displays Error Message for Password input -->
@@ -355,11 +361,15 @@
                       ></b-form-input>
 
                       <!-- Show and Hide password -->
-                      <b-input-group-append style="margin-left: 0px;">
-                        <b-button variant="light">
-                          <i @click="showNewPassword()" v-if="newPasswordVisibility == 'password'" class="far fa-eye" id="hide"></i>
-                          <i @click="hideNewPassword()" v-if="newPasswordVisibility == 'text'" class="far fa-eye-slash" id="show"></i>
-                        </b-button>
+                      <b-input-group-append style="padding: 7px; z-index: 111; position: absolute; margin-left: 24rem;"
+                      >
+                        <b-link
+                          @click="showPassword = !showPassword"
+                          style="color: black;"
+                        >
+                          <i @click="showNewPassword()" v-if="newPasswordVisibility == 'password'" class="far fa-eye-slash" id="hide"></i>
+                          <i @click="hideNewPassword()" v-if="newPasswordVisibility == 'text'" class="far fa-eye" id="show"></i>
+                        </b-link>
                       </b-input-group-append>
 
                       <!-- Displays Error Message for Password input -->
@@ -392,11 +402,15 @@
                       </b-form-input>
 
                       <!-- Show and Hide password -->
-                      <b-input-group-append style="margin-left: 0px;">
-                        <b-button variant="light">
-                          <i @click="showConfirmationPassword()" v-if="confirmationPasswordVisibility == 'password'" class="far fa-eye" id="hide"></i>
-                          <i @click="hideConfirmationPassword()" v-if="confirmationPasswordVisibility == 'text'" class="far fa-eye-slash" id="show"></i>
-                        </b-button>
+                      <b-input-group-append style="padding: 7px; z-index: 111; position: absolute; margin-left: 24rem;"
+                      >
+                        <b-link
+                          @click="showPassword = !showPassword"
+                          style="color: black;"
+                        >
+                          <i @click="showConfirmationPassword()" v-if="confirmationPasswordVisibility == 'password'" class="far fa-eye-slash" id="hide"></i>
+                          <i @click="hideConfirmationPassword()" v-if="confirmationPasswordVisibility == 'text'" class="far fa-eye" id="show"></i>
+                        </b-link>
                       </b-input-group-append>
 
                       <!-- Displays Error Message for Password input -->
@@ -415,12 +429,12 @@
                   </b-form-group>
 
                   <div class="form-group">
-                    <button class="submitButton">Submit</button>
+                    <b-button pill block class="submitButton">Submit</b-button>
                   </div>
                 </form>
               </b-modal>
             </div>
-          </b-card>
+          </div>
         </b-col>
       </b-row>
     </div>
@@ -607,10 +621,7 @@ export default {
   margin: 0;
 }
 .edit_button {
-  padding: 0.375rem 1.75rem;
-  font-size: 0.9rem;
   border-radius: 0.25rem;
-  float: right;
 }
 .submitButton {
   background-color: #227dc7;
