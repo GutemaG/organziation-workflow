@@ -1,7 +1,13 @@
 
 <template>
-  <div class="container">
+  <div class="container mt-2">
     <h1>Add Online Request</h1>
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero ut et ad explicabo tenetur recusandae alias molestias 
+      distinctio inventore repellat ducimus aliquid nulla debitis veritatis obcaecati reiciendis cumque, error officiis.
+      Iure explicabo saepe quia sed provident commodi nam eum enim totam atque laborum autem labore aspernatur, accusamus, 
+      cupiditate tempore corporis voluptates odio? Fugiat, accusantium. Incidunt nihil eaque quae est voluptatibus!
+    </p>
     <b-alert variant="danger" show v-if="missedStepNumbers"
       >Please Fille the step number correctly</b-alert
     >
@@ -11,7 +17,7 @@
         <b-col cols="4"> Edit </b-col>
       </b-row>
       <b-form @submit.stop.prevent="handleSubmit">
-        <div class="pl-lg-4">
+        <div>
           <b-form-group
             id="online-request-name"
             label="Name"
@@ -30,7 +36,6 @@
           </b-form-group>
           <b-form-group
             label="Request Type"
-            class="mb-1 mt-1"
             label-for="description-input"
           >
             <b-form-select
@@ -63,183 +68,188 @@
               required
             ></b-form-textarea>
           </b-form-group>
-          <hr class="my-4" />
         </div>
+        
         <div>
-          <base-card>
-            <b-col cols="8" slot="header"> Add Procedures</b-col>
-            <div
+          <b-card class="shadow">
+            <b-card-header header-text-variant="white" class="text-center" style="background-color:#8e5727 !important; border-radius: 2rem 2rem 0 0;">
+              <span style="font-size: 1.3rem"><strong>Add Procedures</strong></span>
+            </b-card-header>
+            <b-card-body
+              style="border-color: #8e5727 !important; border: 1px solid;"
+            >
+              
+              <div 
               v-for="(
                 procedure, procedure_index
               ) in affair.online_request_procedures"
-              :key="procedure_index"
-            >
-              <div>
+              :key="procedure_index">
                 <!-- !card for prorcedure bureau, user, step, desc-->
-                <base-card>
-                  <b-row align-v="center" slot="header">
-                    <b-col cols="8"> Procedure - {{ procedure_index }}</b-col>
-                    <b-col
-                      cols="4"
-                      v-if="affair.online_request_procedures.length > 1"
+                <div class="card" style="border: none; box-shadow: none;">
+                  <b-card-header header-bg-variant="secondary" class="text-center" style="border-radius: 2rem 2rem 0 0;">
+                    <span style="font-size: 1.3rem"><strong>Procedure - {{ procedure_index }}</strong></span>
+                    <b-button 
+                    v-if="affair.online_request_procedures.length > 1"
+                    @click="removeProcedure(procedure_index)" 
+                    class="float-right" 
+                    variant="danger">
+                      <i class="fa fa-trash"></i>
+                    </b-button>
+                  </b-card-header>
+                  <b-card-body style="border: 2px solid rgba(0, 0, 0, 0.251);">
+                    <b-form-group
+                      id="online-request-bureau"
+                      label-for="online-request-bureau-input"
+                      label="Responsible Bureau"
+                      invalid-feedback="required"
                     >
-                      <b-button @click="removeProcedure(procedure_index)">
-                        <i class="fa fa-trash"></i
-                      ></b-button>
-                    </b-col>
-                  </b-row>
-                  <b-row>
-                    <b-col cols="12">
-                      <b-form-group
-                        id="online-request-bureau"
-                        label-for="online-request-bureau-input"
-                        label="Responsible Bureau"
-                        invalid-feedback="required"
+                      <v-select
+                        v-model="procedure.responsible_bureau_id"
+                        label="text"
+                        :options="bureau_ids"
+                        :reduce="(bureau) => bureau.value"
+                        placeholder="Select bureau"
                       >
-                        <v-select
-                          v-model="procedure.responsible_bureau_id"
-                          label="text"
-                          :options="bureau_ids"
-                          :reduce="(bureau) => bureau.value"
-                          placeholder="Select bureau"
-                        >
-                          <template #search="{ attributes, events }">
-                            <input
-                              class="vs__search"
-                              :required="!procedure.responsible_bureau_id"
-                              v-bind="attributes"
-                              v-on="events"
-                            />
-                          </template>
-                        </v-select>
-                      </b-form-group>
-                      <!--TODO: from here I remove bureau from  -->
-                      <b-form-group
-                        invalid-feedback="required"
-                        id="online-request-user"
-                        label-for="online-request-user-input"
-                        label="Responsible User"
+                        <template #search="{ attributes, events }">
+                          <input
+                            class="vs__search"
+                            :required="!procedure.responsible_bureau_id"
+                            v-bind="attributes"
+                            v-on="events"
+                          />
+                        </template>
+                      </v-select>
+                    </b-form-group>
+                    <!--TODO: from here I remove bureau from  -->
+                    <b-form-group
+                      invalid-feedback="required"
+                      id="online-request-user"
+                      label-for="online-request-user-input"
+                      label="Responsible User"
+                    >
+                      <v-select
+                        v-model="procedure.responsible_user_id"
+                        label="text"
+                        :options="staff_ids"
+                        :reduce="(staff) => staff.value"
+                        placeholder="Select Responsible User"
+                        multiple
+                        :close-on-select="false"
                       >
-                        <v-select
-                          v-model="procedure.responsible_user_id"
-                          label="text"
-                          :options="staff_ids"
-                          :reduce="(staff) => staff.value"
-                          placeholder="Select Responsible User"
-                          multiple
-                          :close-on-select="false"
-                        >
-                          <template #search="{ attributes, events }">
-                            <input
-                              class="vs__search"
-                              :required="!procedure.responsible_user_id"
-                              v-bind="attributes"
-                              v-on="events"
-                            />
-                          </template>
-                        </v-select>
-                      </b-form-group>
+                        <template #search="{ attributes, events }">
+                          <input
+                            class="vs__search"
+                            :required="!procedure.responsible_user_id"
+                            v-bind="attributes"
+                            v-on="events"
+                          />
+                        </template>
+                      </v-select>
+                    </b-form-group>
 
-                      <b-form-group
-                        id="online-request-procedures-input"
-                        label="Step"
-                        label-for="online-request-proceudre-step-number-input"
+                    <b-form-group
+                      id="online-request-procedures-input"
+                      label="Step"
+                      label-for="online-request-proceudre-step-number-input"
+                    >
+                      <b-form-input
+                        placeholder="Enter Procedure step"
+                        id="online-request-proceudre-step-number-input"
+                        v-model="procedure.step_number"
+                        type="number"
+                        required
                       >
-                        <b-form-input
-                          placeholder="Enter Procedure step"
-                          id="online-request-proceudre-step-number-input"
-                          v-model="procedure.step_number"
-                          type="number"
-                          required
-                        >
-                        </b-form-input>
-                      </b-form-group>
-                      <b-form-group
-                        label="Procedures Description"
-                        id="online-request-procedures-description"
-                        label-for="online-request-procedures-description-input"
+                      </b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                      label="Procedures Description"
+                      id="online-request-procedures-description"
+                      label-for="online-request-procedures-description-input"
+                    >
+                      <b-form-textarea
+                        v-model="procedure.description"
+                        placeholder="Enter Description for Procedure"
+                        id="online-request-procedures-description-input"
                       >
-                        <b-form-textarea
-                          v-model="procedure.description"
-                          placeholder="Enter Description for Procedure"
-                          id="online-request-procedures-description-input"
-                        >
-                        </b-form-textarea>
-                      </b-form-group>
-                    </b-col>
-                    <hr />
-                  </b-row>
-                </base-card>
+                      </b-form-textarea>
+                    </b-form-group>
+                  </b-card-body>
+                </div>
                 <!-- /**end card for prorcedure bureau, user, step, desc */-->
               </div>
-            </div>
-            <b-button class="form-control" variant="dark" @click="addProcedure"
-              >+ Procedure</b-button
-            >
-          </base-card>
+              <b-button pill block class="form-control" variant="dark" @click="addProcedure">
+                + Procedure
+              </b-button>
+            </b-card-body>
+          </b-card>
         </div>
         <b-button
           v-if="!prerequisite"
           @click="prerequisite = true"
           variant="primary"
-          >add pre-request</b-button
-        >
-        <base-card v-if="prerequisite">
-          <b-row align-v="center" slot="header">
-            <b-col cols="8">Add Pre Request Labels</b-col>
-            <b-col cols="4"
-              ><b-button variant="danger" @click="removeLabel()"
-                ><i class="fa fa-trash"></i></b-button
-            ></b-col>
-          </b-row>
-          <b-form-group label="Label">
-            <b-form-tags
-              v-model="affair.prerequisite_labels"
-              no-outer-focus
-              class="mb-2"
-            >
-              <template
-                v-slot="{ tags, inputAttrs, inputHandlers, addTag, removeTag }"
+          >
+            Add Pre-request
+          </b-button>
+        <b-card v-if="prerequisite" style="width: 70%;">
+          <b-card-header header-bg-variant="secondary" class="text-left" style="border-radius: 2rem 0 0 0;">
+            <span style="font-size: 1.3rem;"><strong>Add Pre Request Labels</strong></span>
+            <b-button variant="danger" @click="removeLabel()" class="float-right">
+              <i class="fa fa-trash"></i>
+            </b-button>
+          </b-card-header>
+          <b-card-body style="border: 2px solid rgba(0, 0, 0, 0.251);">
+            <b-form-group label="Pre-request names: ">
+              <b-form-tags
+                v-model="affair.prerequisite_labels"
+                no-outer-focus
+                style="border:0px"
               >
-                <b-input-group class="mb-2">
-                  <b-form-input
-                    id="pre-request-lable-input"
-                    v-bind="inputAttrs"
-                    v-on="inputHandlers"
-                    placeholder="Enter pre request Label, use enter or click add button"
-                    class="form-control"
-                  ></b-form-input>
-                  <b-input-group-append>
-                    <b-button @click="addTag()" variant="primary">Add</b-button>
-                  </b-input-group-append>
-                </b-input-group>
-                <ul v-if="tags.length > 0" class="mb-0">
-                  <li
-                    v-for="tag in tags"
-                    :key="tag"
-                    :title="`Tag: ${tag}`"
-                    class="mt-2"
-                  >
-                    <span class="d-flex align-items-center">
-                      <span class="mr-2">{{ tag }}</span>
-                      <b-button
-                        size="sm"
-                        variant="outline-danger"
-                        @click="removeTag(tag)"
+                <template
+                  v-slot="{ tags, inputAttrs, inputHandlers, addTag, removeTag }"
+                >
+                  <b-input-group class="">
+                    <b-form-input
+                      id="pre-request-lable-input"
+                      v-bind="inputAttrs"
+                      v-on="inputHandlers"
+                      placeholder="Enter pre request Label, use enter or click add button"
+                      class="form-control"
+                    ></b-form-input>
+                    <b-input-group-append>
+                      <b-button @click="addTag()" variant="primary">Add</b-button>
+                    </b-input-group-append>
+                  </b-input-group>
+                  <b-container>
+                    <ul v-if="tags.length > 0" style="width: 90%">
+                      <li
+                        v-for="tag in tags"
+                        :key="tag"
+                        :title="`Tag: ${tag}`"
+                        class="mt-1"
                       >
-                        remove label
-                      </b-button>
-                    </span>
-                  </li>
-                </ul>
-              </template>
-            </b-form-tags>
-          </b-form-group>
-        </base-card>
-        <hr class="my-5" />
+                        <b-button variant="none" block class="d-flex align-items-center text-left" style="justify-content:space-between">
+                          <span>{{ tag }}</span>
+                          <b-button
+                            size="sm"
+                            variant="danger"
+                            class="float-right"
+                            @click="removeTag(tag)"
+                          >
+                            Remove label
+                          </b-button>
+                        </b-button>
+                      </li>
+                    </ul>
+                  </b-container>
+                </template>
+              </b-form-tags>
+            </b-form-group>
+          </b-card-body>
+        </b-card>
         <b-button
           type="submit"
-          class="form-control"
+          pill
+          class="form-control mt-4 mb-4 float-right" style="width: 8rem;" 
           variant="primary"
           :disabled="$v.$invalid || missedStepNumbers"
         >

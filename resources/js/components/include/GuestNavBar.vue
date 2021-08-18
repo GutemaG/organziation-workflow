@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+    <nav class="navbar navbar-expand-md navbar-light navbar-white shadow shadow-lg--hover">
       <div class="container">
         <router-link to="/" class="navbar-brand">
           <!-- src="/images/astu.jpg" -->
@@ -22,36 +22,27 @@
 
         <div class="collapse navbar-collapse order-3" id="navbarCollapse">
           <!-- Left navbar links -->
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <router-link to="/" class="nav-link">{{
-                tr("Home")
-              }}</router-link>
-            </li>
-            <!-- <li class="nav-item">
-            <a href="#" class="nav-link">Contact</a>
-          </li> -->
-
+          <ul class="navbar-nav navItems">
             <li v-if="username" class="nav-item">
               <router-link to="/dashboard" class="nav-link">{{
                 tr("Dashboard")
               }}</router-link>
             </li>
-            <li class="nav-item">
+            <li class="nav-item d-flex">
+              <router-link to="/" class="nav-link">{{
+                tr("Home")
+              }}</router-link>
+              
               <router-link to="/info" class="nav-link">{{
                 tr("Info")
               }}</router-link>
-            </li>
-            <li class="nav-item">
+
               <router-link to="/apply-online-affair" class="nav-link">{{
                 tr("Online Affair")
               }}</router-link>
-            </li>
-            <li class="nav-item">
+
               <router-link to="/check-request-progress" class="nav-link">
-                <b-button size="sm">
-                  {{ tr("Check Requst progress") }}
-                </b-button>
+                {{ tr("Check Requst progress") }}
               </router-link>
             </li>
           </ul>
@@ -237,3 +228,12 @@ export default {
   methods: {},
 };
 </script>
+
+<style scoped>
+.nav-item .nav-link:hover {
+  background-color: #1f4a79ce !important;
+  color: #fff !important;
+  border-radius: .5rem;
+  transform: scale(1.03) !important;
+}
+</style>

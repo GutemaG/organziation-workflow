@@ -24,7 +24,7 @@
           <i class="fas fa-search"></i>
         </a>
         <div class="navbar-search-block">
-          <form class="form-inline">
+          <form class="form-inline" style="justify-content: flex-end; margin-right: 12rem;">
             <div class="input-group input-group-sm">
               <input
                 class="form-control form-control-navbar"

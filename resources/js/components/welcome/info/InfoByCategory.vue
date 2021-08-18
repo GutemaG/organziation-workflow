@@ -32,18 +32,18 @@
         <div class="list-group" style="height: 3.8rem">
           <div
             class="list-group"
-            style="height: 3.8rem"
+            style="height: 4.8rem"
             v-for="(affair, index) in filteredAffairs"
             :key="affair.id"
           >
             <b-list-group-item
               @click="selectAffair(affair)"
               :active="selectedListIndex(affair.id)"
-              class="d-flex mb-1 mt-1 shadow shadow-lg--hover items"
+              class="mb-1 mt-1 align-items-baseline shadow shadow-lg--hover items"
               style="
                 cursor: pointer;
                 border: 2px solid rgba(0, 0, 0, 0.151);
-                align-items: baseline;
+                border-radius: 2rem;
                 overflow: hidden;
               "
             >
@@ -52,11 +52,9 @@
                 class="mr-2"
                 style="font-size: 14px"
                 variant="dark"
-                >{{ index + 1 }}</b-badge
-              >
-              <p>
-                <strong>{{ affair.name }}</strong>
-              </p>
+                >{{ index + 1 }}
+              </b-badge>
+              <strong>{{ affair.name }}</strong>
             </b-list-group-item>
           </div>
         </div>
@@ -86,14 +84,15 @@
                 border-radius: 1.25rem 1.25rem 0rem 0;
               "
             >
-              <div class="d-flex justify-content-md-center align-items-center">
+              <div class="justify-content-md-center align-items-center">
                 <b-icon
-                  icon="file-earmark-spreadsheet-fill"
+                  icon="info-circle-fill"
                   class="mr-3"
                   scale="2"
-                  variant="success"
+                  variant="info"
                 ></b-icon>
-                <h4 class="mb-0">{{ selectedAffair.name }}</h4>
+                <span style="font-size: 1rem;"><strong>{{ selectedAffair.name }}</strong></span>
+                
               </div>
             </div>
             <div
@@ -115,14 +114,16 @@
                 <div
                   v-for="(procedure, index) in selectedAffair.procedures"
                   :key="procedure.id"
-                  class="d-flex align-items-center"
+                  class="d-grid align-items-center"
                 >
                   <!-- style="overflow-y: scroll" -->
                   <i class="fas bg-blue">{{ index + 1 }}</i>
                   <div class="timeline-item">
                     <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
 
-                    <div class="timeline-body">
+                    <div class="timeline-body"
+                    v-b-toggle="'procedure'+procedure.id"
+                    :active="'procedure'+procedure.id">
                       {{ procedure.name }}
                       <!-- <div class="card collapsed-card">
                         <div class="card-header">
@@ -143,6 +144,45 @@
                       </div> -->
                     </div>
                   </div>
+                  <!-- Elements to collapse -->
+                  <b-collapse :id="'procedure'+procedure.id" 
+                  class="timeline-item mt-1">
+                      <div class="timeline-body" style="padding: 0;">
+                          <b-card style="border-radius: 0rem">
+                            <b-card-body class="p-1">
+                              <h3><strong>Description</strong></h3>
+                              <hr>
+                              <p>
+                                  {{ procedure.description }}
+                              </p>
+                              <div v-if="procedure.pre_requests.length > 0">
+                                  <strong>Pre-requests required: </strong>
+                                  <div class="mt-2 w-70">
+                                      <div class="list-group" style="border-radius: 2rem" v-for="(pre_request, index) in procedure.pre_requests" :key="pre_request.id">
+                                          <b-list-group-item href="#" variant="dark"
+                                          class="d-flex align-items-center mb-0 mt-2" v-b-toggle="'pre_request'+pre_request.id">
+                                              <b-badge pill class="mr-2" variant="dark">{{ index+1 }}</b-badge>
+                                              <span>{{ pre_request.name }}</span>
+                                          </b-list-group-item>
+                                          
+                                          <!-- Toggle pre_requests -->
+                                          <b-card-group>
+                                              <b-collapse :id="'pre_request'+pre_request.id">
+                                                  <b-card bg-variant="dark" text-variant="white" style="border-radius: 0rem 0rem 1.25rem 1.25rem; border: 1.8px solid rgba(0, 0, 0, 0.125);" 
+                                                  class="mt-0 mb-2 shadow">
+                                                      <h5><strong>Description</strong></h5>
+                                                      <hr>
+                                                      <p>{{ pre_request.description }}</p>
+                                                  </b-card>
+                                              </b-collapse>
+                                          </b-card-group>
+                                      </div>
+                                  </div>
+                              </div>
+                            </b-card-body>
+                          </b-card>
+                      </div>
+                  </b-collapse>
                 </div>
               </div>
               <!-- <div v-else>No Pre Request</div> -->
@@ -219,8 +259,8 @@ export default {
 </script>
 
 <style scoped>
-.timeline-header:hover {
-  background-color: #007bff;
+.items:hover {
+  background-color: #3490dc;
   color: #fff !important;
   transform: scale(1.03);
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <guest-nav-bar></guest-nav-bar>
-    <div class="container" style="margin-top: 5rem">
+    <div class="container" style="margin-top: 1.8rem">
       <router-view name="welcome"></router-view>
     </div>
 
