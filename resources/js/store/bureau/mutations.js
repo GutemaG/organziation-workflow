@@ -13,5 +13,5 @@ export default {
         if (index !== -1) {
             state.bureaus.splice(index, 1, bureau);
         }
-    }
+    },
 };

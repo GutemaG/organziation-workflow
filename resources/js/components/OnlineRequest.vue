@@ -1,5 +1,6 @@
 <template>
-  <b-container fluid
+  <b-container
+    fluid
     class="bg-light shadow mx-auto mt-2"
     style="max-height: 100%; border-radius: 21px 21px 0 0"
   >
@@ -116,10 +117,13 @@
       :per-page="perPage"
       :current-page="currentPage"
       :filter="filter"
+      :filter-included-fields="filterOn"
       foot-clone
       foot-variant="light"
       head-row-variant="dark"
       head-variant="dark"
+      :sort-desc.sync="sortDesc"
+      :sort-direction="sortDirection"
       no-footer-sorting
       show-empty
       small
@@ -133,8 +137,6 @@
           size="sm"
           :variant="!row.detailsShowing ? 'primary' : 'success'"
         >
-          <!-- :variant="!row.item._showDetails ? 'primary' : 'success'" -->
-          <!-- v-if="!row.item._showDetails" -->
           <i v-if="!row.detailsShowing" class="fas fa-angle-right small"></i>
           <i v-else class="fas fa-angle-up small"></i>
         </b-button>
@@ -150,8 +152,6 @@
           title="Description"
           style="cursor: pointer"
         >
-          <!-- v-b-tooltip.hover -->
-          <!-- :title="row.item.description" -->
           {{ row.item.description.substring(0, 20) }}...
         </p>
       </template>
@@ -183,12 +183,10 @@
             header="Description"
             :lead="row.item.description"
             header-level="5"
-            style="padding: 1rem 2rem; margin-botttom: 0.5rem"
+            style="padding: 1rem 2rem; margin-bottom: 0.5rem"
           >
           </b-jumbotron>
-          <!-- <p>{{ row.item }}</p> -->
         </div>
-
         <online-request-procedure-table
           :procedures="row.item.online_request_procedures"
           :index="row.index"
@@ -217,6 +215,11 @@ export default {
       filter: null,
       pageOptions: [20, 15, 10, 5],
       procedure_fields,
+
+      filterOn:[],
+      sortBy: "",
+      sortDesc: false,
+      sortDirection: "asc",
     };
   },
   methods: {

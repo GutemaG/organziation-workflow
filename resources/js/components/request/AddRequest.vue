@@ -21,10 +21,7 @@
           </b-form-input>
         </b-form-group>
 
-        <b-form-group
-          label="Affair Type"
-          label-for="description-input"
-        >
+        <b-form-group label="Affair Type" label-for="description-input">
           <b-form-select v-model="$v.affair.type.$model" id="affair-type-input">
             <b-form-select-option value=""
               >Selecte affair type
@@ -56,8 +53,14 @@
             :key="procedure_index"
           >
             <b-card class="shadow">
-              <b-card-header header-bg-variant="secondary" class="text-center" style="border-radius: 2rem 2rem 0 0;">
-                <span style="font-size: 1.3rem"><strong>Procedure - {{ procedure_index }}</strong></span> 
+              <b-card-header
+                header-bg-variant="secondary"
+                class="text-center"
+                style="border-radius: 2rem 2rem 0 0"
+              >
+                <span style="font-size: 1.3rem"
+                  ><strong>Procedure - {{ procedure_index }}</strong></span
+                >
                 <b-button
                   v-if="procedureLength > 1"
                   @click="removeProcedure(procedure_index)"
@@ -68,7 +71,7 @@
                 </b-button>
               </b-card-header>
 
-              <b-card-body style="border: 2px solid rgba(0, 0, 0, 0.251);">
+              <b-card-body style="border: 2px solid rgba(0, 0, 0, 0.251)">
                 <b-row>
                   <b-col cols="12" md="6">
                     <b-form-group
@@ -83,6 +86,29 @@
                         required
                       >
                       </b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                      id="request-responsible-bureau"
+                      label-for="request-responsible-bureau-input"
+                      label="Responsible Bureau"
+                      invalid-feedback="required"
+                    >
+                      <v-select
+                        v-model="procedure.responsible_bureau_id"
+                        label="text"
+                        :options="bureau_ids"
+                        :reduce="(bureau) => bureau.value"
+                        placeholder="Select bureau"
+                      >
+                        <template #search="{ attributes, events }">
+                          <input
+                            class="vs__search"
+                            :required="!procedure.responsible_bureau_id"
+                            v-bind="attributes"
+                            v-on="events"
+                          />
+                        </template>
+                      </v-select>
                     </b-form-group>
                     <b-form-group
                       label="Description"
@@ -124,23 +150,37 @@
                       ].pre_requests"
                       :key="pre_index"
                     >
-                      <b-card class="shadow shadow-lg--hover" border-variant="light">
+                      <b-card
+                        class="shadow shadow-lg--hover"
+                        border-variant="light"
+                      >
                         <b-card-header
-                          header-bg-variant="info" header-text-variant="dark"
+                          header-bg-variant="info"
+                          header-text-variant="dark"
                           class="text-center"
-                          style="border-radius: 2rem 2rem 0 0;"
+                          style="border-radius: 2rem 2rem 0 0"
                         >
-                          <span style="font-size: 1.3rem"><strong>Pre Request</strong></span>
+                          <span style="font-size: 1.3rem"
+                            ><strong>Pre Request</strong></span
+                          >
                           <b-button
-                            @click="removePreRequest(procedure_index, pre_index)"
+                            @click="
+                              removePreRequest(procedure_index, pre_index)
+                            "
                             class="float-right"
                             variant="danger"
                           >
                             <i class="fa fa-trash"></i>
                           </b-button>
                         </b-card-header>
-                        
-                        <b-card-body body-border-variant="info" style="border-radius: 0 0 2rem 2rem; border: 2px solid rgba(0, 0, 0, 0.151);">
+
+                        <b-card-body
+                          body-border-variant="info"
+                          style="
+                            border-radius: 0 0 2rem 2rem;
+                            border: 2px solid rgba(0, 0, 0, 0.151);
+                          "
+                        >
                           <b-form-group
                             label="Pre Request Name"
                             :label-for="
@@ -218,22 +258,26 @@
                               </slot>
                             </b-form-select>
                           </b-form-group>
-
                         </b-card-body>
                       </b-card>
                     </div>
                     <b-button
-                      pill block
+                      pill
+                      block
                       @click="addPreRequest(procedure_index)"
                       variant="primary"
                       class="mt-4 mb-4 shadow"
                     >
                       +Pre Request
                     </b-button>
-
                   </b-col>
                 </b-row>
-                <b-button pill @click="addProcedure" class="form-control mt-3 mb-3" variant="dark">
+                <b-button
+                  pill
+                  @click="addProcedure"
+                  class="form-control mt-3 mb-3"
+                  variant="dark"
+                >
                   +Procedure
                 </b-button>
               </b-card-body>
@@ -244,10 +288,12 @@
       <b-button
         type="submit"
         pill
-        class="form-control mt-4 mb-4 float-right" style="width: 8rem;" 
+        class="form-control mt-4 mb-4 float-right"
+        style="width: 8rem"
         variant="primary"
         :disabled="$v.$invalid || missedStepNumber"
-        > Submit
+      >
+        Submit
       </b-button>
     </b-form>
   </b-container>
@@ -311,7 +357,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["addAffair","fetchBureaus"]),
+    ...mapActions(["addAffair", "fetchBureaus"]),
     validateState(name) {
       const { $dirty, $error } = this.$v.affair[name];
       return $dirty ? !$error : null;
@@ -329,7 +375,7 @@ export default {
         description: "",
         step: this.procedureLength + 1,
         pre_requests: [],
-        responsible_bureau_id:null,
+        responsible_bureau_id: null,
       });
       console.log("add Procedure");
     },
@@ -377,8 +423,8 @@ export default {
       },
     },
   },
-  mounted(){
+  mounted() {
     this.fetchBureaus();
-  }
+  },
 };
 </script>

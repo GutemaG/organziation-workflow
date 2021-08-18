@@ -1,8 +1,9 @@
 <template>
-  <b-container fluid 
+  <b-container
+    fluid
     class="bg-light shadow mx-auto mt-2"
     style="max-height: 100%; border-radius: 21px 21px 0 0"
-    >
+  >
     <!-- User Interface controls -->
     <b-row>
       <b-col lg="6" class="my-1">
@@ -131,11 +132,12 @@
         </b-button>
       </template>
       <template #cell(description)="row">
-        <span v-b-tooltip.hover 
+        <span
+          v-b-tooltip.hover
           v-b-popover.hover.top="row.item.description"
-          title="Description">{{
-          row.item.description.substring(0, 30)
-        }}</span>
+          title="Description"
+          >{{ row.item.description.substring(0, 30) }}</span
+        >
       </template>
 
       <template #row-details="row">
@@ -195,7 +197,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["fetchBuildings"]),
+    ...mapActions(["fetchBuildings", "removeBuilding"]),
     info(item, index, button) {
       console.log("editttting");
       this.selectedBuilding = item;
@@ -204,8 +206,21 @@ export default {
     addBuilding() {
       this.$root.$emit("bv::show::modal", "add-building-modal");
     },
-    deleteBuilding() {
-      console.log("deleting Building ..");
+    deleteBuilding(item) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        // Send request to the server
+        if (result.value) {
+          this.removeBuilding(item.id);
+        }
+      });
+      // console.log("deleting Building ..");
     },
     editBuilding() {
       console.log("Editing Building ...");

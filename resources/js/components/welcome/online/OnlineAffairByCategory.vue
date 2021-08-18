@@ -48,7 +48,7 @@
             </div>
             <div class="card-body align-items-center p-3"
             style="border: 1px solid rgba(0, 0, 0, 0.228);
-            background-color: #ced5da;
+            background-color: #abdaff;
             border-radius: 0 0 1.25rem 1.25rem;">
               <h4><strong>Description</strong></h4>
               <hr />
@@ -59,7 +59,7 @@
                 v-if="selectedAffair.prerequisite_labels.length != 0"
               >
                 <div class="time-label">
-                  <span>Pre Requests</span>
+                  <span style="background-color: #abdaff;">Pre Requests: </span>
                 </div>
                 <div
                   v-for="(prerequisite, index) in selectedAffair.prerequisite_labels"
@@ -68,10 +68,11 @@
                 >
                   <!-- style="overflow-y: scroll" -->
                   <i class="fas bg-blue" >{{ index + 1 }}</i>
-                  <div class="timeline-item">
+                  <div class="timeline-item" 
+                    style="border-radius: .7rem;">
                     <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
 
-                    <div class="timeline-body">
+                    <div class="timeline-body shadow">
                       {{ prerequisite.label }}
                     </div>
                   </div>

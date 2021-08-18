@@ -15,7 +15,7 @@ export default {
         try {
             let resp = await axios.post("/api/online-requests", { ...data });
             if (resp.status === 200 || resp.status === 201) {
-                commit("ADD_ONLINE_REQUEST", resp.data.online_requests);
+                commit("ADD_ONLINE_REQUEST", resp.data.online_request);
             }
             // console.log(resp);
         } catch (error) {

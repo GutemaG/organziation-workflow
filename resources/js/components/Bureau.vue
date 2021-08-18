@@ -208,7 +208,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["fetchBureaus"]),
+    ...mapActions(["fetchBureaus","removeBureau"]),
     info(item, index, button) {
       // console.log(item)
       this.selectedBureau = item;
@@ -218,8 +218,20 @@ export default {
       this.$root.$emit("bv::show::modal", "add-bureau-modal");
       console.log("Creating bureau ...");
     },
-    deleteBureau() {
-      console.log("deleting bureau ..");
+    deleteBureau(item) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        // Send request to the server
+        if (result.value) {
+          this.removeBureau(item.id);
+        }
+      });
     },
     editBureau() {
       console.log("Editing user ...");

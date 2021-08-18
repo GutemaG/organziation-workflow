@@ -99,7 +99,7 @@
               class="card-body align-items-center p-4"
               style="
                 border: 1px solid rgba(0, 0, 0, 0.228);
-                background-color: #ced5da;
+                background-color: #abdaff;
                 border-radius: 0 0 1.25rem 1.25rem;
               "
             >
@@ -107,9 +107,9 @@
               <hr />
               <p>{{ selectedAffair.description }}</p>
 
-              <div class="timeline">
+              <div class="timeline" v-if="selectedAffair.procedures.length > 0">
                 <div class="time-label">
-                  <span>Procedures</span>
+                  <span style="background-color: #abdaff;">Procedures: </span>
                 </div>
                 <div
                   v-for="(procedure, index) in selectedAffair.procedures"
@@ -118,10 +118,11 @@
                 >
                   <!-- style="overflow-y: scroll" -->
                   <i class="fas bg-blue">{{ index + 1 }}</i>
-                  <div class="timeline-item">
+                  <div class="timeline-item" 
+                    style="border-radius: .7rem;">
                     <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
 
-                    <div class="timeline-body"
+                    <div class="timeline-body shadow procedureName"
                     v-b-toggle="'procedure'+procedure.id"
                     :active="'procedure'+procedure.id">
                       {{ procedure.name }}
@@ -146,9 +147,9 @@
                   </div>
                   <!-- Elements to collapse -->
                   <b-collapse :id="'procedure'+procedure.id" 
-                  class="timeline-item mt-1">
+                  class="timeline-item mt-2">
                       <div class="timeline-body" style="padding: 0;">
-                          <b-card style="border-radius: 0rem">
+                          <b-card style="border-radius: 0rem" class="shadow">
                             <b-card-body class="p-1">
                               <h3><strong>Description</strong></h3>
                               <hr>
@@ -263,5 +264,12 @@ export default {
   background-color: #3490dc;
   color: #fff !important;
   transform: scale(1.03);
+}
+.procedureName:hover{
+  background-color: #3490dc;
+  border-radius: .7rem;
+  color: #fff !important;
+  transform: scale(1.03);
+  cursor: pointer;
 }
 </style>

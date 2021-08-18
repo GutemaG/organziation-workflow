@@ -62,7 +62,8 @@
         <b-button
           variant="primary"
           size="sm"
-          @click="editProcedure(row.item.id)"
+          hidden
+          @click="editProcedure(row.item)"
         >
           <i class="fa fa-edit"></i>
           Edit</b-button
@@ -118,6 +119,7 @@
               <b-button
                 variant="primary"
                 size="sm"
+                hidden
                 @click="
                   editPreRequest(
                     row.item.id,
@@ -185,8 +187,8 @@ export default {
       }
       return "...";
     },
-    editProcedure(id) {
-      console.log("Editing", id);
+    editProcedure(item) {
+      console.log("Editing", item);
     },
     deleteProcedure(procedure_id, affair_id) {
       Swal.fire({

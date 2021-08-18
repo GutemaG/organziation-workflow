@@ -71,7 +71,8 @@ class AffairController extends Controller
                 $procedure = $affair->procedures()->create([
                     'name' => $pro['name'],
                     'description' => $pro['description'],
-                    'step' => $pro['step']
+                    'step' => $pro['step'],
+                    'responsible_bureau_id'=>$pro['responsible_bureau_id'],
                 ]);
                 if (array_key_exists('pre_requests', $pro)) {
                     $pre_requests = $pro['pre_requests'];
@@ -244,6 +245,12 @@ class AffairController extends Controller
         }
         return $validatedData;
     }
+    // public function updateProcedure(Request $request, $id){
+    //     /*
+    //         id,affair_id,name,description,step,responsible_bureau_id,pre_requests,
+    //     */
+
+    // }
     public function addPreRequest(Request $request)
     {
         if (!Gate::any(['is-admin', 'is-it-team-member'])) {

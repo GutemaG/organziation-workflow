@@ -19,7 +19,7 @@
           required
         ></b-form-input>
       </b-form-group>
-      <b-form-group
+      <!-- <b-form-group
         label-for="procedure-responsible-bureau-input"
         label="Responsible Bureau"
         invalid-feedback="required"
@@ -41,7 +41,7 @@
             />
           </template>
         </v-select>
-      </b-form-group>
+      </b-form-group> -->
       <b-form-group
         id="procedure-step"
         label="Step Number"

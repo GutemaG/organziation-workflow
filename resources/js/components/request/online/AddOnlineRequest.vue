@@ -319,18 +319,14 @@ export default {
       const { $dirty, $error } = this.$v.affair[value];
       return $dirty ? !$error : null;
     },
-    searchStaff(value) {
-      console.log;
-      return value + "somethign";
-    },
     handleSubmit() {
       let tempo = this.affair;
       if (tempo.prerequisite_labels.length == 0) {
         delete tempo["prerequisite_labels"];
       }
       this.addOnlineRequest(tempo);
-      this.$router.go(-1);
-      // this.$router.push('/online-requests')
+      // this.$router.go(-1);
+      this.$router.push('/online-requests')
       // console.log(JSON.stringify(tempo));
     },
 
@@ -366,7 +362,6 @@ export default {
           let index = this.online_requests.findIndex(
             (req) => req.name == value
           );
-          console.log(index);
           if (index === -1) return true;
           return false;
         },

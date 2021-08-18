@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-md navbar-light navbar-white shadow shadow-lg--hover">
+    <nav class="navbar navbar-expand-md navbar-light navbar-white shadow-sm shadow-lg--hover">
       <div class="container">
         <router-link to="/" class="navbar-brand">
           <!-- src="/images/astu.jpg" -->
@@ -42,7 +42,7 @@
               }}</router-link>
 
               <router-link to="/check-request-progress" class="nav-link">
-                {{ tr("Check Requst progress") }}
+                {{ tr("Check Request progress") }}
               </router-link>
             </li>
           </ul>

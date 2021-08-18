@@ -162,7 +162,7 @@
 </template>
 
 <script>
-import EditModal from "./user/EditModal.vue";
+import EditModal from "./user/EditUserModal.vue";
 import AddUserModal from "./user/AddUserModal.vue";
 import { user_fields } from "../table_fields";
 import { mapGetters, mapActions } from "vuex";

@@ -1,7 +1,7 @@
 export default {
     async fetchUsers({ commit }) {
         try {
-            let response = await axios.get("api/users");
+            let response = await axios.get("/api/users");
             commit("SET_USERS", response.data);
         } catch (error) {
             Swal.fire("Failed!", data.message, "warning");
@@ -9,10 +9,15 @@ export default {
     },
     async removeUser({ commit }, id) {
         try {
-            await axios.delete(`api/users/${id}`);
-            commit("DELETE_USER", id);
+            let resp = await axios.delete(`/api/users/${id}`);
+            if (resp.status == 200) {
+                commit("DELETE_USER", id);
+                Swal.fire("Success", "Deleted", "success");
+            } else {
+                Swal.fire("Failed!", "Something is wrong", "warning");
+            }
         } catch (error) {
-            Swal.fire("Failed!", data.message, "warning");
+            Swal.fire("Failed!", "Something is Wrong", "warning");
         }
     },
     async updateUser({ commit }, data) {
