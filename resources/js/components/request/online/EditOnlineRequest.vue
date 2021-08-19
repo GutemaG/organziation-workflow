@@ -4,8 +4,7 @@
     <p>{{ error }}</p>
     <base-card :shadow="true">
       <b-row align-v="center" slot="header">
-        <b-col cols="8"> Add Online Reqeust </b-col>
-        <b-col cols="4"> Edit </b-col>
+        <b-col cols="8"> Edit Online Request </b-col>
       </b-row>
       <b-form @submit.stop.prevent="handleSubmit">
         <div class="pl-lg-4">
@@ -285,7 +284,7 @@ export default {
   methods: {
     ...mapActions([
       "addOnlineRequest",
-      "fetchOnlinRequests",
+      "fetchOnlineRequests",
       "updateOnlineRequest",
     ]),
     validateState(value) {

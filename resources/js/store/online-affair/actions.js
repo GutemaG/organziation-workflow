@@ -15,7 +15,7 @@ export default {
         try {
             let resp = await axios.post("/api/online-requests", { ...data });
             if (resp.status === 200 || resp.status === 201) {
-                commit("ADD_ONLINE_REQUEST", resp.data.online_requests);
+                commit("ADD_ONLINE_REQUEST", resp.data.online_request);
             }
             // console.log(resp);
         } catch (error) {
@@ -123,5 +123,22 @@ export default {
                 }
             })
             .catch(err => console.log(err));
+    },
+    rejectRequest({ commit }, data) {
+        // Route::put('/online-request-applied/reject/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestReject']);
+        axios
+            .put(
+                `api/online-request-applied/reject/${data.notification_tracker_id}`,
+                { reason: data.reason }
+            )
+            .then(resp => {
+                if (resp.data.status === 200) {
+                    data["is_rejected"] = 1;
+                    commit("REJECT_REQUEST", data);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 };

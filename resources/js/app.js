@@ -57,10 +57,10 @@ import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
 Vue.use(BootstrapVue);
 
-import { BootstrapVueIcons } from 'bootstrap-vue'
-import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css'
+import { BootstrapVueIcons } from "bootstrap-vue";
+import "bootstrap-vue/dist/bootstrap-vue-icons.min.css";
 
-Vue.use(BootstrapVueIcons)
+Vue.use(BootstrapVueIcons);
 
 import Vuelidate from "vuelidate";
 Vue.use(Vuelidate);
@@ -79,9 +79,13 @@ const router = new VueRouter({
     mode: "history",
     routes
 });
-
 router.beforeEach((to, _, next) => {
     let current = window.user;
+    if ($("body").hasClass("sidebar-open")) {
+        $("body").addClass("sidebar-closed");
+        $("body").addClass("sidebar-collapse");
+        $("body").removeClass("sidebar-open");
+    }
     if (to.meta.requiresAuth) {
         if (!current) {
             next("/login");
@@ -106,12 +110,12 @@ Vue.mixin({
         change_language(language) {
             lang.lang_change(language);
         },
-        tr(word){
+        tr(word) {
             return lang.translate(word);
         },
-        se(identifier){
+        se(identifier) {
             return lang.sentence_translate(identifier);
-        },
+        }
     }
 });
 const app = new Vue({

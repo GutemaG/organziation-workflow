@@ -44,12 +44,14 @@
         >
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            <router-link to="/dashboard" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt blue"></i>
-              <p>Dashboard</p>
-            </router-link>
-          </li>
+          <div>
+            <li class="nav-item">
+              <router-link to="/dashboard" class="nav-link">
+                <i class="nav-icon fas fa-tachometer-alt blue"></i>
+                <p>{{ tr("Dashboard") }}</p>
+              </router-link>
+            </li>
+          </div>
           <div v-if="isAdmin">
             <li class="nav-item">
               <router-link to="/users" class="nav-link">
@@ -166,3 +168,21 @@ export default {
   methods: {},
 };
 </script>
+
+<style scoped>
+.nav-item .nav-link{
+  color: white;
+  text-align: left;
+  background-color: none;
+  padding: 5px 19px 5px;
+}
+.nav-item i{
+  margin-right: 0.5rem;
+}
+.nav-item .nav-link:hover{
+  background-color: #50575ec2;
+  border-radius: 2rem;
+  color: #fff;
+
+}
+</style>

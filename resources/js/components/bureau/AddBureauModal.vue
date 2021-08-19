@@ -13,7 +13,7 @@
       <!-- TODO: Validate the input before sending -->
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
-          label="* Name"
+          label="Name"
           label-for="bureau-name-input"
           :invalid-feedback="
             !$v.form.name.isUnique ? 'Name already exist' : 'Name is required'
@@ -56,18 +56,17 @@
             required
           ></b-form-input>
         </b-form-group>
-        <b-card bg-variant="light">
+        <div class="card p-4" bg-variant="">
           <b-form-group
             label-cols-lg="3"
             label="Location"
             label-size="lg"
-            label-class="font-weight-bold pt-0"
-            class="mb-0"
+            label-class="font-weight-bold"
           >
             <b-form-group
               label="Latitude:"
               label-for="latitude-input"
-              label-cols-sm="3"
+              label-cols-sm="4"
               label-align-sm="right"
             >
               <b-form-input
@@ -79,7 +78,7 @@
             <b-form-group
               label="Longitude:"
               label-for="longitude-input"
-              label-cols-sm="3"
+              label-cols-sm="4"
               label-align-sm="right"
               invalid-feedback="Enter the correct value"
             >
@@ -89,7 +88,7 @@
               ></b-form-input>
             </b-form-group>
           </b-form-group>
-        </b-card>
+        </div>
         <b-form-group
           id="description"
           label="Description"

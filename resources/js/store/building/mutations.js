@@ -15,5 +15,8 @@ export default {
         if (index !== -1) {
             state.buildings.splice(index, 1, building);
         }
+    },
+    DELETE_BUILDING(state, id) {
+        state.buildings = state.buildings.filter(building => building.id !== id);
     }
 };

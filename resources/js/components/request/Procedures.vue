@@ -31,11 +31,13 @@
         </b-row>
       </base-card>
     </div> -->
+    <h3>List Of procedures</h3>
     <b-table
       :items="list_of_procedures"
       :fields="procedure_fields"
       sort-by="step"
       head-variant="dark"
+      stacked="md"
       striped
       responsive
       hover
@@ -44,15 +46,24 @@
         {{ row.index + 1 }}
       </template>
       <template #cell(description)="row">
-        <span v-b-tooltip.hover :title="row.item.description">
-          {{ row.item.description.substring(0, 30) }}...</span
-        >
+        <p v-b-popover.hover.top="row.item.description" title="Description">
+          {{ row.item.description.substring(0, 30) }}...</p>
+      </template>
+
+      <template #cell(responsible_bureau_id)="row">
+        <!-- <span>{{row.item.bureau}}</span> -->
+        <p v-b-tooltip.hover title="office Number, building Number, Office Name">
+          <span>{{ row.item.bureau.office_number }}</span>,
+          <span>{{ row.item.bureau.building_number }}</span>,
+          <span>{{ row.item.bureau.name }}</span>
+        </p>
       </template>
       <template #cell(actions)="row">
         <b-button
           variant="primary"
           size="sm"
-          @click="editProcedure(row.item.id)"
+          hidden
+          @click="editProcedure(row.item)"
         >
           <i class="fa fa-edit"></i>
           Edit</b-button
@@ -70,7 +81,10 @@
 
       <template #cell(pre_requests)="row">
         <span v-if="row.item.pre_requests.length == 0">no pre request</span>
-        <span v-else @click="row.toggleDetails" style="cursor: pointer;display:block"
+        <span
+          v-else
+          @click="row.toggleDetails"
+          style="cursor: pointer; display: block"
           >{{ row.item.pre_requests.length }}
           <!-- <b-table :items="row.item.pre_requests"> </b-table> -->
         </span>
@@ -81,9 +95,9 @@
           <b-table
             :items="[...pre_row.item.pre_requests]"
             :fields="procedure_pre_request_fields"
-            fixed
             responsive
           >
+            <!-- fixed -->
             <template #cell(id)="row">{{ row.index + 1 }}</template>
             <template #cell(name)="row">
               <span v-if="row.item.name == ''">...</span>
@@ -91,7 +105,7 @@
             </template>
             <template #cell(description)="row">
               <span v-if="row.item.description == ''">...</span>
-              <span v-else>{{ row.item.description }}</span>
+              <span v-else v-b-popover.hover.top="row.item.description" title="Description">{{ row.item.description.substring(0,20) }}...</span>
             </template>
             <template #cell(affair_id)="row">
               <span v-if="row.item.affair_id == ''">...</span>
@@ -105,6 +119,7 @@
               <b-button
                 variant="primary"
                 size="sm"
+                hidden
                 @click="
                   editPreRequest(
                     row.item.id,
@@ -172,8 +187,8 @@ export default {
       }
       return "...";
     },
-    editProcedure(id) {
-      console.log("Editing", id);
+    editProcedure(item) {
+      console.log("Editing", item);
     },
     deleteProcedure(procedure_id, affair_id) {
       Swal.fire({

@@ -71,7 +71,8 @@ class AffairController extends Controller
                 $procedure = $affair->procedures()->create([
                     'name' => $pro['name'],
                     'description' => $pro['description'],
-                    'step' => $pro['step']
+                    'step' => $pro['step'],
+                    'responsible_bureau_id'=>$pro['responsible_bureau_id'],
                 ]);
                 if (array_key_exists('pre_requests', $pro)) {
                     $pre_requests = $pro['pre_requests'];
@@ -233,7 +234,8 @@ class AffairController extends Controller
             'affair_id' => 'required|numeric',
             'name' => 'required|string',
             'description' => 'nullable|string',
-            'step' => 'required|numeric'
+            'step' => 'required|numeric',
+            'responsible_bureau_id'=>'required|numeric'
         ]);
         $procedure = Procedure::create($validatedData);
         if ($procedure) {
@@ -243,6 +245,12 @@ class AffairController extends Controller
         }
         return $validatedData;
     }
+    // public function updateProcedure(Request $request, $id){
+    //     /*
+    //         id,affair_id,name,description,step,responsible_bureau_id,pre_requests,
+    //     */
+
+    // }
     public function addPreRequest(Request $request)
     {
         if (!Gate::any(['is-admin', 'is-it-team-member'])) {
@@ -296,6 +304,7 @@ class AffairController extends Controller
             'procedures.*.name' => 'required|string',
             'procedures.*.description' => 'nullable|string',
             'procedures.*.step' => 'required|integer',
+            'procedures.*.responsible_bureau_id' => 'required|integer',
             'procedures.*.pre_requests.*.name' => "nullable|string|required_if:pre_request.affair_id,'!null'",
             'procedures.*.pre_requests.*.description' => "nullable|string|",
             'procedures.*.pre_requests.*.affair_id' => "nullable|integer|required_if: procedures.*.pre_request.*.name, ''",
@@ -312,6 +321,7 @@ class AffairController extends Controller
             'procedures.*.id' => 'required|integer',
             'procedures.*.affair_id' => 'required|integer',
             'procedures.*.step' => 'required|integer',
+            'procedures.*.responsible_bureau_id' => 'required|integer',
             'procedures.*.pre_requests.*.id' => "required|integer",
             'procedures.*.pre_requests.*.name' => "nullable|string|required_if:pre_request.affair_id,'!null'",
             'procedures.*.pre_requests.*.description' => "nullable|string|",

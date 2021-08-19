@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from "moment";
 export default {
     SET_ONLINE_REQUESTS(state, data) {
         state.online_requests = data;
@@ -32,16 +32,25 @@ export default {
         }
     },
     COMPLETE_REQUEST(state, request) {
-        console.log('mutation: ', request)
+        console.log("mutation: ", request);
         let index = state.staff_all_accepted_request.findIndex(
             req =>
                 req.notification_tracker_id == request.notification_tracker_id
         );
         if (index != -1) {
-            request['ended_at']=moment.now()
-            request['is_completed']=1
-            request['is_rejected']=0
-            state.staff_all_accepted_request.splice(index, 1, request)
+            request["ended_at"] = moment.now();
+            request["is_completed"] = 1;
+            request["is_rejected"] = 0;
+            state.staff_all_accepted_request.splice(index, 1, request);
+        }
+    },
+    REJECT_REQUEST(state, request) {
+        let index = state.staff_all_accepted_request.findIndex(
+            req =>
+                req.notification_tracker_id == request.notification_tracker_id
+        );
+        if (index != -1) {
+            state.staff_all_accepted_request.splice(index, 1, request);
         }
     }
 };

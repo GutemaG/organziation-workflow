@@ -19,12 +19,12 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
-      <li class="nav-item">
+      <li class="nav-item" hidden>
         <a class="nav-link" data-widget="navbar-search" href="#" role="button">
           <i class="fas fa-search"></i>
         </a>
         <div class="navbar-search-block">
-          <form class="form-inline">
+          <form class="form-inline" style="justify-content: flex-end; margin-right: 12rem;">
             <div class="input-group input-group-sm">
               <input
                 class="form-control form-control-navbar"
@@ -50,7 +50,7 @@
       </li>
 
       <!-- Messages Dropdown Menu -->
-      <li class="nav-item dropdown">
+      <li class="nav-item dropdown" hidden>
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-comments"></i>
           <span class="badge badge-danger navbar-badge">3</span>
@@ -132,10 +132,10 @@
         </div>
       </li>
       <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
+      <li class="nav-item dropdown" v-show="user.type=='staff'">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">{{
+          <span class="badge badge-danger navbar-badge">{{
             notifications.length
           }}</span>
         </a>
@@ -296,15 +296,15 @@ export default {
     if (this.user.type == "staff") {
       this.fetchPendingRequests()
       // this.fetchAllPendingRequest();
-      /*
+      
       Echo.private(`${this.user.id}.online-request-applied`).listen(
         "NotifyUserEvent",
         (e) => {
-          this.notfications.unshift(e.onlineRequestStep);
+          this.notification.unshift(e.onlineRequestStep);
           console.log("from pusherrrr: ", e.onlineRequestStep);
         }
       );
-      */
+      
     }
   },
 };

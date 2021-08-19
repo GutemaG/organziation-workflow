@@ -19,13 +19,36 @@
           required
         ></b-form-input>
       </b-form-group>
+      <!-- <b-form-group
+        label-for="procedure-responsible-bureau-input"
+        label="Responsible Bureau"
+        invalid-feedback="required"
+      >
+        <v-select
+          v-model="procedure.responsible_bureau_id"
+          id="procedure-responsible-bureau-input"
+          label="text"
+          :options="bureau_ids"
+          :reduce="(bureau) => bureau.value"
+          placeholder="Select Responsible bureau"
+        >
+          <template #search="{ attributes, events }">
+            <input
+              class="vs__search"
+              :required="!procedure.responsible_bureau_id"
+              v-bind="attributes"
+              v-on="events"
+            />
+          </template>
+        </v-select>
+      </b-form-group> -->
       <b-form-group
         id="procedure-step"
-        label="First Name"
+        label="Step Number"
         label-for="procedure-step-input"
       >
         <b-form-input
-        type="number"
+          type="number"
           id="procedure-step-input"
           v-model="procedure.step"
           placeholder="Enter step Number"
@@ -51,9 +74,13 @@
   </b-modal>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
+import Vselect from "vue-select";
 export default {
+  components:{
+    'v-select':Vselect
+  },
   props: {
     affair_id: {
       type: Number,
@@ -66,11 +93,15 @@ export default {
         name: "",
         description: "",
         step: "",
+        responsible_bureau_id:null
       },
     };
   },
+  computed:{
+    ...mapGetters(["affair_ids","bureau_ids"]),
+  },
   methods: {
-    ...mapActions(["addProcedure"]),
+    ...mapActions(["addProcedure", "fetchBureaus"]),
     handleSubmit(event) {
       event.preventDefault();
       console.log(this.affair_id);
@@ -82,5 +113,8 @@ export default {
       this.$bvModal.hide("add-procedure");
     },
   },
+  mounted(){
+    this.fetchBureaus()
+  }
 };
 </script>

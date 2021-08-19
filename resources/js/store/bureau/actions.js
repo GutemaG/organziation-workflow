@@ -1,7 +1,7 @@
 export default {
     async fetchBureaus({ commit }) {
         try {
-            let response = await axios.get("api/bureaus");
+            let response = await axios.get("/api/bureaus");
             commit("SET_BUREAUS", response.data);
         } catch (error) {
             Swal.fire("Failed!", error.message, "warning");
@@ -47,5 +47,22 @@ export default {
     },
     resetBureau({ commit }, selectedBureau) {
         commit("UPDATE_BUREAU", selectedBureau, selectedBureau.id);
+    },
+
+    removeBureau({ commit }, id) {
+        axios
+            .delete(`/api/bureaus/${id}`)
+            .then(resp=>{
+                if (resp.status === 200) {
+                    Swal.fire("Success!","Deleted","success");
+                    commit("DELETE_BUREAU", id);
+                } else {
+                    console.log('remove bureau status errror');
+                }
+            })
+            .catch(function(error) {
+                console.log(error);
+                Swal.fire("Failed!", data.message, "warning");
+            });
     }
 };

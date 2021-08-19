@@ -44,5 +44,21 @@ export default {
                 console.log(error);
                 Swal.fire("Failed!", data.message, "warning");
             });
+    },
+    removeBuilding({ commit }, id) {
+        axios
+            .delete(`/api/buildings/${id}`)
+            .then(resp=>{
+                if (resp.status === 200) {
+                    Swal.fire("Success!","Deleted","success");
+                    commit("DELETE_BUILDING", id);
+                } else {
+                    console.log('remove building status errror');
+                }
+            })
+            .catch(function(error) {
+                console.log(error);
+                Swal.fire("Failed!", data.message, "warning");
+            });
     }
 };

@@ -100,7 +100,7 @@
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
-      stacked="md"
+      stacked="lg"
       show-empty
       small
       @filtered="onFiltered"
@@ -176,6 +176,7 @@ import AddBureauModal from "./bureau/AddBureauModal.vue";
 import EditBureauModal from "./bureau/EditBureauModal.vue";
 import { bureau_fields } from "../table_fields";
 export default {
+  name:"Bureaus",
   components: {
     "add-bureau-modal": AddBureauModal,
     "edit-bureau-modal": EditBureauModal,
@@ -199,7 +200,7 @@ export default {
     ...mapGetters(["bureaus"]),
     sortOptions() {
       // Create an options list from our fields
-      return this.fields
+      return this.bureau_fields
         .filter((f) => f.sortable)
         .map((f) => {
           return { text: f.label, value: f.key };
@@ -207,7 +208,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["fetchBureaus"]),
+    ...mapActions(["fetchBureaus","removeBureau"]),
     info(item, index, button) {
       // console.log(item)
       this.selectedBureau = item;
@@ -217,8 +218,20 @@ export default {
       this.$root.$emit("bv::show::modal", "add-bureau-modal");
       console.log("Creating bureau ...");
     },
-    deleteBureau() {
-      console.log("deleting bureau ..");
+    deleteBureau(item) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        // Send request to the server
+        if (result.value) {
+          this.removeBureau(item.id);
+        }
+      });
     },
     editBureau() {
       console.log("Editing user ...");

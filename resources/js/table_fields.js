@@ -136,6 +136,10 @@ const procedure_fields = [
         label: lang.translate("Description"),
     },
     {
+        key: "responsible_bureau_id",
+        label: lang.translate("Responsible Bureau"),
+    },
+    {
         key: "step",
         label: lang.translate("Step"),
         sortable: true
