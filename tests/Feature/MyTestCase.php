@@ -16,19 +16,19 @@ use Tests\TestCase;
 
 class MyTestCase extends TestCase
 {
-    use  ModelInstances;
+    use RefreshDatabase, ModelInstances;
 
-    protected $url = '';
-    protected $modelName = '';
-    protected $responseName = '';
-    protected $defaultTest = true;
+    protected string $url = '';
+    protected string $modelName = '';
+    protected string $responseName = '';
+    protected bool $defaultTest = true;
 
     public function setUp(): void
     {
         $this->responseName = Str::snake(str_replace('App\\Models\\', '', $this->modelName));
         parent::setUp();
-//        $this->artisan('migrate:refresh');
-//        MyDatabaseSeeder::seed();
+        $this->artisan('migrate:refresh');
+        MyDatabaseSeeder::seed();
     }
 
     public function testDefaultTest(): void

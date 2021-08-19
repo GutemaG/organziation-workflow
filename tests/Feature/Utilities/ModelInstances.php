@@ -16,11 +16,11 @@ trait ModelInstances
         return User::whereType($userType)->inRandomOrder()->first();
     }
 
-    protected function randomData(string $modelName): ?Model
+    protected function randomData(string $modelName, array $relation=[]): ?Model
     {
         switch ($modelName) {
             case OnlineRequest::class:
-                return OnlineRequest::inRandomOrder()->limit(1)->get()->first();
+                return OnlineRequest::with($relation)->inRandomOrder()->limit(1)->get()->first();
                 break;
             default:
                 return null;

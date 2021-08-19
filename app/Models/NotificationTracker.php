@@ -19,6 +19,11 @@ class NotificationTracker extends Model
         'online_request_step_id'
     ];
 
+    protected $hidden = [
+        'deleted_at',
+        'updated_at',
+    ];
+
     public function notifiedUsers(): HasMany
     {
         return $this->hasMany(NotifiedUser::class);

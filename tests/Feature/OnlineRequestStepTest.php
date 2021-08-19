@@ -12,9 +12,9 @@ use Tests\TestCase;
 class OnlineRequestStepTest extends MyTestCase
 {
 
-    protected $url = '/api/online-request-steps/';
-    protected $modelName = OnlineRequestStep::class;
-    protected $defaultTest = false;
+    protected string $url = '/api/online-request-steps/';
+    protected string $modelName = OnlineRequestStep::class;
+    protected bool $defaultTest = false;
 
     public function testUnauthenticatedGuestCanAccess(): void
     {

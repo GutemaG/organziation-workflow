@@ -44,11 +44,20 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
 
     Route::get('/online-request-steps', [\App\Http\Controllers\OnlineRequestStepController::class, 'index']);
 
-    Route::get('/online-request-applied/accept/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestAccept']);
+    Route::get('/online-request-applied/accept/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestAccept'])
+            ->missing(function (Request $request) {
+                throw new MissingModelException();
+            });
 
-    Route::get('/online-request-applied/complete/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestComplete']);
+    Route::get('/online-request-applied/complete/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestComplete'])
+        ->missing(function (Request $request) {
+            throw new MissingModelException();
+        });
 
-    Route::put('/online-request-applied/reject/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestReject']);
+    Route::put('/online-request-applied/reject/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestReject'])
+        ->missing(function (Request $request) {
+            throw new MissingModelException();
+        });
 
     Route::get('/online-request-applied', [\App\Http\Controllers\NotificationTrackerController::class, 'index']);
 
