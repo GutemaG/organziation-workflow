@@ -296,7 +296,7 @@ export default {
     if (this.user.type == "staff") {
       this.fetchPendingRequests()
       // this.fetchAllPendingRequest();
-      
+      /*
       Echo.private(`${this.user.id}.online-request-applied`).listen(
         "NotifyUserEvent",
         (e) => {
@@ -305,6 +305,7 @@ export default {
         }
       );
       
+     */ 
     }
   },
 };

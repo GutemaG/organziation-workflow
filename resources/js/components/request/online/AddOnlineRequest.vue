@@ -1,20 +1,14 @@
 
 <template>
-  <div class="container mt-2">
+  <div class="container">
     <h1>Add Online Request</h1>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero ut et ad explicabo tenetur recusandae alias molestias 
-      distinctio inventore repellat ducimus aliquid nulla debitis veritatis obcaecati reiciendis cumque, error officiis.
-      Iure explicabo saepe quia sed provident commodi nam eum enim totam atque laborum autem labore aspernatur, accusamus, 
-      cupiditate tempore corporis voluptates odio? Fugiat, accusantium. Incidunt nihil eaque quae est voluptatibus!
-    </p>
+    <p></p>
     <b-alert variant="danger" show v-if="missedStepNumbers"
       >Please Fille the step number correctly</b-alert
     >
-    <base-card :shadow="true">
+    <base-card >
       <b-row align-v="center" slot="header">
-        <b-col cols="8"> Add Online Reqeust </b-col>
-        <b-col cols="4"> Edit </b-col>
+        <b-col cols="8"> Add Online Request </b-col>
       </b-row>
       <b-form @submit.stop.prevent="handleSubmit">
         <div>
@@ -43,7 +37,7 @@
               id="online-request-type-input"
             >
               <b-form-select-option value=""
-                >Selecte affair type
+                >Select affair type
               </b-form-select-option>
               <b-form-select-option value="student"
                 >Student</b-form-select-option
@@ -71,12 +65,12 @@
         </div>
         
         <div>
-          <b-card class="shadow">
+          <b-card>
             <b-card-header header-text-variant="white" class="text-center" style="background-color:#8e5727 !important; border-radius: 2rem 2rem 0 0;">
-              <span style="font-size: 1.3rem"><strong>Add Procedures</strong></span>
+              <span style="font-size: 1rem"><strong>Add Procedures</strong></span>
             </b-card-header>
             <b-card-body
-              style="border-color: #8e5727 !important; border: 1px solid;"
+              style="border-color: #8e5727 !important;"
             >
               
               <div 
@@ -84,10 +78,9 @@
                 procedure, procedure_index
               ) in affair.online_request_procedures"
               :key="procedure_index">
-                <!-- !card for prorcedure bureau, user, step, desc-->
                 <div class="card" style="border: none; box-shadow: none;">
                   <b-card-header header-bg-variant="secondary" class="text-center" style="border-radius: 2rem 2rem 0 0;">
-                    <span style="font-size: 1.3rem"><strong>Procedure - {{ procedure_index }}</strong></span>
+                    <span style="font-size: 1rem"><strong>Procedure - {{ procedure_index }}</strong></span>
                     <b-button 
                     v-if="affair.online_request_procedures.length > 1"
                     @click="removeProcedure(procedure_index)" 
