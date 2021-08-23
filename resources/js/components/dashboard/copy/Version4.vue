@@ -1,20 +1,30 @@
 <template>
   <div>
     <div class="container">
+      <div class="row" style="background: "></div>
       <div class="row m-2" style="height: 70vh">
-        <div class="col-4" style="overflow-y: scroll">
+        <div class="col-4 left">
+          <div class="header">
+            <h3>List of Customer</h3>
+          </div>
           <ul class="chat_list" v-for="user in users" :key="user.userID">
-            <li @click="selectUser(user)" :class="[user==selectedUser?'active_chat':'']">
+            <li
+              @click="selectUser(user)"
+              :class="[user == selectedUser ? 'active_chat' : '']"
+            >
               <span class="">
                 <i class="fa fa-circlef"></i>
               </span>
               <div class="body mt-1">
-                <div class="header">
+                <div class="">
                   <span class="username">{{ user.username }}</span>
                   <small class="timestamp text-muted">
                     <b-badge v-if="user.hasNewMessages" variant="danger"
                       >new</b-badge
                     >
+                  </small>
+                  <small style="float: right; color:red " v-if="user.self">
+                    <b-badge variant="primary">you</b-badge>
                   </small>
                 </div>
                 <p></p>
@@ -22,7 +32,10 @@
             </li>
           </ul>
         </div>
-        <div class="col-8" v-if="selectedUser">
+        <div class="col-8 right" v-if="selectedUser">
+          <div class="header">
+            <h5>{{ selectedUser.username }}</h5>
+          </div>
           <div style="height: 65vh; overflow: auto">
             <ul
               class="message-list"
@@ -34,7 +47,7 @@
                   <div class="received_msg">
                     <div class="received_withd_msg">
                       <p>{{ msg.content }}</p>
-                      <!-- <span class="time_date">new</span> -->
+                      <span class="mute user_indication">customer</span>
                     </div>
                   </div>
                 </div>
@@ -43,7 +56,7 @@
                 <div class="outgoing_msg">
                   <div class="sent_msg">
                     <p>{{ msg.content }}</p>
-                    <span class="time_date">you</span>
+                    <span class="user_indication mute">you</span>
                   </div>
                 </div>
               </li>
@@ -208,27 +221,22 @@ img {
   overflow-y: scroll;
 }
 
-.active_chat {
-  background: #ebebeb;
-}
-
 .incoming_msg_img {
   display: inline-block;
   width: 6%;
 }
 .received_msg {
   display: inline-block;
-  padding: 0 0 0 10px;
   vertical-align: top;
   width: 92%;
 }
 .received_withd_msg p {
-  background: #ebebeb none repeat scroll 0 0;
-  border-radius: 3px;
-  color: #646464;
+  background: rgb(32, 32, 20) none repeat scroll 0 0;
+  border-radius: 10px;
+  color: #fff;
   font-size: 14px;
   margin: 0;
-  padding: 5px 10px 5px 12px;
+  padding: 10px;
   width: 100%;
   margin: 1px;
 }
@@ -241,26 +249,18 @@ img {
 .received_withd_msg {
   width: 57%;
 }
-.mesgs {
-  float: left;
-  padding: 30px 15px 0 25px;
-  width: 60%;
-  height: 550px;
-  overflow-y: scroll;
-}
-
 .sent_msg p {
   background: #05728f none repeat scroll 0 0;
-  border-radius: 3px;
+  border-radius: 10px;
   font-size: 14px;
   margin: 0;
   color: #fff;
-  padding: 5px 10px 5px 12px;
+  padding: 10px;
   width: 100%;
 }
 .outgoing_msg {
   overflow: hidden;
-  margin: 26px 0 26px;
+  /* margin: 26px 0 26px; */
 }
 .sent_msg {
   float: right;
@@ -317,19 +317,71 @@ li {
 .chat_list li {
   /* background-color:red */
   display: block;
-  /* padding: 20px 10px; */
+  padding: 10px 10px;
   clear: both;
   cursor: pointer;
   border-bottom: 1px solid #ddd;
   transition: all 0.2s ease-in-out;
   text-align: match-parent;
+  border-radius: 15px;
+}
 
+.active_chat {
+  background: #007bff;
+  border-color: #007bff;
+  color: white !important;
 }
-.chat_list li:hover{
-  background-color: #f4f4f4f4;
+.active_chat:hover {
+  cursor: unset;
+  background-color: #007bff !important;
 }
-.body{
+.chat_list li:hover {
+  /* background-color: #f4f4f4f4; */
+  color: #818182;
+  background-color: #ececf6;
+}
+.active_chat li:hover {
+  color: #000;
+  background-color: #2aa854;
+}
+.body {
   margin-top: 4px;
   margin-bottom: 4px;
+}
+
+.left {
+  height: 80vh;
+  overflow-y: auto;
+  /* background: black; */
+  border: 1px solid #808080a3;
+  /* margin-right: 2px; */
+  padding: 3px;
+}
+.right {
+  height: 80vh;
+  /* overflow-y:auto; */
+  border: 1px solid #808080a3;
+  /* margin-right: 2px; */
+  padding: 3px;
+}
+.header {
+  /* color:rgb(116, 115, 115) */
+  background-color: #eee;
+  padding: 15px;
+  margin: 0;
+}
+.message-list {
+  padding-left: 0;
+  padding: 1rem;
+  margin: 0;
+}
+.user_indication {
+  font-style: italic;
+  color: #747474;
+  display: block;
+  font-size: 12px;
+  /* margin: 8px 0 0; */
+}
+.username {
 }
 </style>
