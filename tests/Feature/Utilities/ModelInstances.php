@@ -4,6 +4,7 @@
 namespace Tests\Feature\Utilities;
 
 
+use App\Models\Affair;
 use App\Models\OnlineRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Support\Collection;
 
 trait ModelInstances
 {
-    protected function getUser(string $userType): User
+    protected function getUser(string $userType): ?User
     {
         return User::whereType($userType)->inRandomOrder()->first();
     }
@@ -21,6 +22,12 @@ trait ModelInstances
         switch ($modelName) {
             case OnlineRequest::class:
                 return OnlineRequest::with($relation)->inRandomOrder()->limit(1)->get()->first();
+                break;
+            case User::class:
+                return User::with($relation)->inRandomOrder()->limit(1)->get()->first();
+                break;
+            case Affair::class:
+                return Affair::with($relation)->inRandomOrder()->limit(1)->get()->first();
                 break;
             default:
                 return null;

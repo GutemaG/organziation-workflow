@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Affair;
 use App\Models\Building;
 use App\Models\Bureau;
 use App\Models\OnlineRequest;
@@ -29,6 +30,8 @@ trait MyDatabaseSeeder
         Building::factory(5)->create();
 
         Bureau::factory(5)->create();
+
+        Affair::factory(5)->create();
 
         OnlineRequest::factory(5)->create()->each(function ($onlineRequest) {
             PrerequisiteLabel::factory(rand(1, 3))->create(['online_request_id' => $onlineRequest->id]);

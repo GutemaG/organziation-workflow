@@ -6,32 +6,31 @@ use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\Feature\Utilities\FakeDataGenerator;
 use Tests\Feature\Utilities\Utility;
 use Tests\TestCase;
-
 use App\Http\Controllers\Utilities\Fields;
 use App\Http\Controllers\Utilities\UserType;
 use App\Models\User;
 
 
-class UserTest extends TestCase
+class UserTest extends MyTestCase
 {
-    private function printSuccessMessage($message){
-        print_r("<info>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n</info>");
-        print_r("<info>  $message --- success.  \n</info>");
-        print_r("<info>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n\n</info>");
+    protected string $url = 'api/users';
+    protected string $modelName = User::class;
+    protected string $responseName = 'users';
+    protected bool $defaultTest = true;
+
+    public function testDefaultTest(): void
+    {
+        $this->testGuestUserCantAccess();
     }
 
-    public function testUnauthenticatedUserCanAccess(){
-        $response = $this->get('/api/users');
-        $this->checkResponseOfUnauthenticatedUser($response);
-        $response = $this->get('/api/users');
-        $this->checkResponseOfUnauthenticatedUser($response);
-
-        $response = $this->get('/api/users');
-        $this->checkResponseOfUnauthenticatedUser($response);
-
-        $response = $this->get('/api/users');
-        $this->checkResponseOfUnauthenticatedUser($response);
-        $this->printSuccessMessage('unauthenticated user can access users or store user');
+    protected function testGuestUserCantAccess(){
+        $user = $this->randomData($this->modelName);
+        $this->getJson($this->url)->assertExactJson(['message' => 'Unauthenticated.']);
+        $this->postJson($this->url)->assertExactJson(['message' => 'Unauthenticated.']);
+        $this->putJson("$this->url/$user->id")->assertExactJson(['message' => 'Unauthenticated.']);
+        $this->getJson("$this->url/$user->id")->assertExactJson(['message' => 'Unauthenticated.']);
+        $this->deleteJson("$this->url/$user->id")->assertExactJson(['message' => 'Unauthenticated.']);
+        $this->printSuccessMessage('unauthenticated user can\t access users or store user');
     }
 
     private function checkResponseOfUnauthenticatedUser($response){
@@ -39,12 +38,12 @@ class UserTest extends TestCase
         $response->assertStatus(302);
     }
 
-    private function getUser($type){
-        if(! in_array($type, UserType::all()))
-            return null;
-        else
-            return User::where('type', $type)->first();
-    }
+//    private function getUser($type){
+//        if(! in_array($type, UserType::all()))
+//            return null;
+//        else
+//            return User::where('type', $type)->first();
+//    }
 
     private function assertUnauthorizedUser($response){
         $response->assertStatus(200);
@@ -78,8 +77,14 @@ class UserTest extends TestCase
     }
 
     public function testStaffCanAccessUsers(){
-        $this->assertAllUrlsForStaffAndReceptionUsers(UserType::staff());
-        $this->printSuccessMessage('authenticated staff can access any user or can store user');
+        $user = $this->getUser(UserType::staff());
+        $this->actingAs($user);
+        $this->getJson($this->url)->assertExactJson($this->unauthorizedResponse());
+        $this->postJson($this->url)->assertExactJson($this->unauthorizedResponse());
+        $this->putJson("$this->url/$user->id")->assertExactJson($this->unauthorizedResponse());
+        $this->getJson("$this->url/$user->id")->assertExactJson($this->unauthorizedResponse());
+        $this->deleteJson("$this->url/$user->id")->assertExactJson($this->unauthorizedResponse());
+        $this->printSuccessMessage('authenticated staff can\'t access any user or can store user');
 
     }
 
@@ -87,7 +92,7 @@ class UserTest extends TestCase
         $this->assertAllUrlsForStaffAndReceptionUsers(UserType::reception());
         $this->printSuccessMessage('authenticated reception can access any user or can store user');
     }
-
+/*
     public function testIndex(){
         $this->indexForAdminAndItTeamMember(UserType::admin());
         $this->printSuccessMessage('list all users; by logging with admin');
@@ -525,5 +530,5 @@ class UserTest extends TestCase
         User::withTrashed()->restore();
         $this->printSuccessMessage('all users deleted restored');
     }
-
+*/
 }

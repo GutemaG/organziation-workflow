@@ -47,7 +47,7 @@ class OnlineRequestEventListener
         NotifyUserAction::store($data);
         $onlineRequestStep = $event->getOnlineRequestStep();
         $onlineRequestStep['notification_tracker_id'] = $notificationTracker->id;
-//        NotifyUserEvent::dispatch($event->getUsers(), $onlineRequestStep);
+        NotifyUserEvent::dispatch($event->getUsers(), $onlineRequestStep);
     }
 
 //    /**

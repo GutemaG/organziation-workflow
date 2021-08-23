@@ -4,19 +4,26 @@ use App\Exceptions\MissingModelException;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\OnlineRequestController;
 use App\Http\Controllers\OnlineRequestTrackerController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 
-Route::get('/', function () {
-    return view('layouts.master');
-});
+Route::get('/', WelcomeController::class);
 
 require __DIR__.'/auth.php';
 
+// staff user routes
+require __DIR__.'/my_route/online_request.php';
+
+// frequently asked request routes
+require __DIR__.'/my_route/far.php';
+
+
 // private routes
 Route::middleware(['auth'])->prefix('api')->group(function () {
-    Route::resource('/users', \App\Http\Controllers\UserController::class);
+    Route::resource('/users', UserController::class);
 
     Route::post('/account', [\App\Http\Controllers\AccountController::class, 'update'])
         ->name('account.update');
@@ -43,23 +50,6 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
     Route::delete('/online-procedures/{procedure}', [\App\Http\Controllers\OnlineRequestProcedureController::class, 'destroy']);
 
     Route::get('/online-request-steps', [\App\Http\Controllers\OnlineRequestStepController::class, 'index']);
-
-    Route::get('/online-request-applied/accept/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestAccept'])
-            ->missing(function (Request $request) {
-                throw new MissingModelException();
-            });
-
-    Route::get('/online-request-applied/complete/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestComplete'])
-        ->missing(function (Request $request) {
-            throw new MissingModelException();
-        });
-
-    Route::put('/online-request-applied/reject/{notification_tracker}', [\App\Http\Controllers\NotificationTrackerController::class, 'onlineRequestReject'])
-        ->missing(function (Request $request) {
-            throw new MissingModelException();
-        });
-
-    Route::get('/online-request-applied', [\App\Http\Controllers\NotificationTrackerController::class, 'index']);
 
     //Birhanu
     Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
@@ -168,8 +158,7 @@ Route::get('/test', function () {
     });
 
 
-
-    Route::get('/{vue_capture?}', function () {
+Route::get('/{vue_capture?}', function () {
         return view('layouts.master');
     })->where('vue_capture', '[\/\w\.-]*');
 
