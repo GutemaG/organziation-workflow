@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\CheckIsAdminOrSupportiveStaffUser;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -62,6 +63,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'is.staff' => \App\Http\Middleware\CheckIsStaffUser::class,
+        'is.reception' => \App\Http\Middleware\CheckIsReceptionUser::class,
+        'is.admin.or.supportive.staff' => CheckIsAdminOrSupportiveStaffUser::class,
     ];
 }

@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\PrerequisiteLabel;
+use App\Models\OnlineRequestPrerequisiteNote;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PrerequisiteLabelFactory extends Factory
+class OnlineRequestPrerequisiteNoteFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = PrerequisiteLabel::class;
+    protected $model = OnlineRequestPrerequisiteNote::class;
 
     /**
      * Define the model's default state.
@@ -21,9 +21,9 @@ class PrerequisiteLabelFactory extends Factory
      */
     public function definition()
     {
+
         return [
-//            'online_request_id' => Utility::getOnlineRequestId(),
-            'label' => $this->faker->sentence(rand(8, 12)),
+            'note' => $this->faker->sentence(rand(5,9)),
         ];
     }
 }

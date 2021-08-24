@@ -19,6 +19,8 @@ class CreateOnlineRequestTrackersTable extends Migration
             $table->string('token',4)->unique();
             $table->dateTime('started_at')->nullable();
             $table->dateTime('ended_at')->nullable();
+            $table->string('full_name');
+            $table->string('phone');
             $table->softDeletes();
             $table->timestamps();
 

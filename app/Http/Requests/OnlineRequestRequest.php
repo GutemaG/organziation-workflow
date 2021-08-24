@@ -4,11 +4,13 @@ namespace App\Http\Requests;
 
 use App\Exceptions\FormRequestException;
 use App\Exceptions\UnauthorizedException;
+use App\Utilities\InputFieldType;
 use App\Utilities\RequestType;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rule as BaseRule;
 
 class OnlineRequestRequest extends FormRequest
@@ -21,6 +23,8 @@ class OnlineRequestRequest extends FormRequest
     private function defaultRules(): array
     {
         $id = $this->route()->parameter('online_request');
+        $checkInput = !empty($this->input('prerequisites.inputs'));
+        $checkNote = !empty($this->input('prerequisites.notes'));
         return [
             'type' => ['required', 'string', BaseRule::in(RequestType::all())],
             'name' => ['required', 'string', BaseRule::unique('online_requests')->ignore($id)],
@@ -30,6 +34,13 @@ class OnlineRequestRequest extends FormRequest
             'online_request_procedures.*.description' => 'nullable|string',
             'online_request_procedures.*.responsible_user_id' => 'required|array|distinct|min:1',
             'online_request_procedures.*.step_number' => 'required|integer',
+            'prerequisites' => 'sometimes|array|distinct|min:1',
+            'prerequisites.notes' => 'sometimes|array|distinct|min:1',
+            'prerequisites.inputs' => 'sometimes|array|distinct|min:1',
+            'prerequisites.notes.*' => $checkNote ? 'required|string' : '',
+            'prerequisites.inputs.*.name' => $checkInput ? 'required|string' : '',
+            'prerequisites.inputs.*.id' => $checkInput ? 'required|string' : '',
+            'prerequisites.inputs.*.type' => $checkInput ? ['required', 'string', Rule::in(InputFieldType::all())] : '',
         ];
     }
 
@@ -46,14 +57,11 @@ class OnlineRequestRequest extends FormRequest
 //            $rules['id'] = ['required', 'integer', BaseRule::exists('online_requests', 'id')];
             $rules['online_request_procedures.*.id'] = ['sometimes', 'integer', BaseRule::exists('online_request_procedures', 'id')];
             $rules['online_request_procedures.*.responsible_user_id.*'] = ['required', 'integer', BaseRule::exists('users', 'id')];
-            $rules['prerequisite_labels'] = 'sometimes|array|distinct|min:1';
-            $rules['prerequisite_labels.*.label'] = 'required|string';
+            $rules['prerequisites.notes'] = 'sometimes|array';
             $rules['prerequisite_labels.*.id'] = ['sometimes', 'integer', BaseRule::exists('prerequisite_labels', 'id')];
         }
         else {
             $rules['online_request_procedures.*.responsible_user_id.*'] = ['required', 'integer', BaseRule::exists('users', 'id')];
-            $rules['prerequisite_labels'] = 'sometimes|array|distinct|min:1';
-            $rules['prerequisite_labels.*'] = 'required|string';
         }
         return $rules;
     }

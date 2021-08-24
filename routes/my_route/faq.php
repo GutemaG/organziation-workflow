@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
     });
 
     // Private routes authorized only for staff authenticated user only.
-    Route::middleware(['auth', 'is.staff'])->prefix('api')->group(function () {
+    Route::middleware(['auth', 'is.reception'])->prefix('api')->group(function () {
         Route::delete('/faqs/{frequently_asked_question}', [FrequentlyAskedQuestionController::class, 'destroy'])
             ->missing(function (Request $request) {
                 throw new MissingModelException();

@@ -6,7 +6,9 @@ use App\Models\Affair;
 use App\Models\Building;
 use App\Models\Bureau;
 use App\Models\FrequentlyAskedQuestion;
+use App\Models\OnlineRequestPrerequisiteInput;
 use App\Models\OnlineRequest;
+use App\Models\OnlineRequestPrerequisiteNote;
 use App\Models\OnlineRequestProcedure;
 use App\Models\PrerequisiteLabel;
 use App\Models\User;
@@ -32,10 +34,14 @@ trait MyDatabaseSeeder
 
         Bureau::factory(5)->create();
 
-        Affair::factory(5)->create();
+//        Affair::factory(5)->create();
 
         OnlineRequest::factory(5)->create()->each(function ($onlineRequest) {
-            PrerequisiteLabel::factory(rand(1, 3))->create(['online_request_id' => $onlineRequest->id]);
+            OnlineRequestPrerequisiteNote::factory(rand(1, 5))->
+            create(['online_request_id' => $onlineRequest->id]);
+            OnlineRequestPrerequisiteInput::factory(rand(1,5))
+                ->create(['online_request_id'=> $onlineRequest->id]);
+
             $length = rand(2, 5);
             for ($i = 1; $i < $length; $i++) {
                 OnlineRequestProcedure::factory(1)
@@ -48,7 +54,7 @@ trait MyDatabaseSeeder
 
         });
 
-        FrequentlyAskedQuestion::factory(10)->create();
+//        FrequentlyAskedQuestion::factory(10)->create();
 
 //            ->has(PrerequisiteLabel::factory()->count(rand(1,5)))
 //            ->has(OnlineRequestProcedure::factory()->count(rand(3,6))
