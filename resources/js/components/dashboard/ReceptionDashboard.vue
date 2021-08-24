@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div class="container">
+    <div v-if="connection_error">
+      <h1>{{ connection_error }}</h1>
+    </div>
+    <div v-else class="container">
       <div class="row" style="background: "></div>
       <div class="row m-2" style="height: 70vh">
         <div class="col-4 left">
@@ -96,6 +99,7 @@ export default {
       selectedUser: null,
       users: [],
       message: "",
+      connection_error: null,
     };
   },
   computed: {
@@ -137,7 +141,7 @@ export default {
     let username = "reception";
     socket.auth = { username };
     socket.connect();
-    console.log('users: ', this.users)
+    console.log("users: ", this.users);
 
     socket.on("connect", () => {
       this.users.forEach((user) => {
@@ -154,7 +158,9 @@ export default {
       });
     });
     socket.on("connect_error", (err) => {
-      console.log("connection erorrr");
+      this.connection_error = "Sorry, the Server is Down";
+      // console.log("connection erorrr");
+      socket.disconnect();
     });
     const initReactiveProperties = (user) => {
       user.connected = true;
@@ -203,6 +209,14 @@ export default {
         }
       }
     });
+  },
+  destroyed() {
+    socket.off("connect");
+    socket.off("disconnect");
+    socket.off("users");
+    socket.off("user connected");
+    socket.off("user disconnected");
+    socket.off("private message");
   },
 };
 </script>

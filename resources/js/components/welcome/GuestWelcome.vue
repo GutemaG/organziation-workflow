@@ -17,8 +17,13 @@
               <div class="">
                 <div class="card">
                   <div class="card-header">
-                    <h4 class="card-title"><strong>Contact our Information center</strong></h4>
-                    <a class="btn btn-danger end" style="margin-right:0" @click="closeChat"
+                    <h4 class="card-title">
+                      <strong>Contact our Information center</strong>
+                    </h4>
+                    <a
+                      class="btn btn-danger end"
+                      style="margin-right: 0"
+                      @click="closeChat"
                       ><i class="fas fa-times"></i>
                     </a>
                   </div>
@@ -203,7 +208,7 @@ export default {
       users: [],
       message: "",
       customer: {},
-      start_chat:false,
+      start_chat: false,
     };
   },
   computed: {
@@ -226,19 +231,19 @@ export default {
     sendMessage() {
       // let current = this.users.find((user) => user.self);
       let reception = this.users.find((user) => user.username == "reception");
-      if(reception){
-      socket.emit("private message", {
-        content: this.message,
-        to: reception.userID,
-      });
-      reception.messages.push({
-        content: this.message,
-        fromSelf: true,
-      });
-      this.message = "";
-     }else{
-       console.log('sorry, reception are not available for now')
-     }
+      if (reception) {
+        socket.emit("private message", {
+          content: this.message,
+          to: reception.userID,
+        });
+        reception.messages.push({
+          content: this.message,
+          fromSelf: true,
+        });
+        this.message = "";
+      } else {
+        console.log("sorry, reception are not available for now");
+      }
     },
 
     closeChat() {
@@ -246,15 +251,15 @@ export default {
     },
     openChat() {
       this.showChat = !this.showChat;
-      this.start_chat = true
+      this.start_chat = true;
     },
   },
-  watch:{
-    start_chat(){
-    let username = `customer-${uuidv4()}`;
-    socket.auth = { username };
-    socket.connect();
-    }
+  watch: {
+    start_chat() {
+      let username = `customer-${uuidv4()}`;
+      socket.auth = { username };
+      socket.connect();
+    },
   },
   mounted() {
     // let username = `customer-${uuidv4()}`;
@@ -262,6 +267,7 @@ export default {
     // socket.connect();
   },
   created() {
+    if(this.start_chat){
     socket.on("connect", () => {
       this.users.forEach((user) => {
         if (user.self) {
@@ -292,7 +298,7 @@ export default {
       });
     });
     socket.on("private message", ({ content, from }) => {
-      console.log(from)
+      console.log(from);
       for (let i = 0; i < this.users.length; i++) {
         const user = this.users[i];
         // console.log(user.userID);
@@ -308,7 +314,9 @@ export default {
         }
       }
     });
+    }
   },
+
   destroyed() {
     socket.off("connect");
     socket.off("disconnect");
