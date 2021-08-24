@@ -1,10 +1,10 @@
 <template>
   <div>
     <guest-nav-bar></guest-nav-bar>
-    <div class="container" style="">
+    <div class="container mt-4" style="">
       <router-view name="welcome"></router-view>
-      <button @click="openChat" class="open-button">
-        <i class="fas fa-comment green"></i>
+      <button @click="openChat" class="open-button shadow-lg">
+        <i class="fas fa-comments fa-2x "></i>
       </button>
       <div>
         <div
@@ -242,6 +242,11 @@ export default {
         });
         this.message = "";
       } else {
+        // reception.messages.push({
+        //   content: this.message,
+        //   fromSelf: true,
+        // });
+        console.log(this.users);
         console.log("sorry, reception are not available for now");
       }
     },
@@ -267,54 +272,65 @@ export default {
     // socket.connect();
   },
   created() {
-    if(this.start_chat){
-    socket.on("connect", () => {
-      this.users.forEach((user) => {
-        if (user.self) {
-          user.connected = true;
-        }
-      });
-    });
-    socket.on("connect_error", (err) => {
-      console.log(err);
-    });
-    const initReactiveProperties = (user) => {
-      user.connected = true;
-      user.messages = [];
-      user.hasNewMessages = false;
-    };
-    socket.on("users", (users) => {
-      users.forEach((user) => {
-        user.self = user.userID === socket.id;
-        initReactiveProperties(user);
-      });
-      // console.log("users: ", users);
-      // put the current user first, and sort by username
-      this.users = users.sort((a, b) => {
-        if (a.self) return -1;
-        if (b.self) return 1;
-        if (a.username < b.username) return -1;
-        return a.username > b.username ? 1 : 0;
-      });
-    });
-    socket.on("private message", ({ content, from }) => {
-      console.log(from);
-      for (let i = 0; i < this.users.length; i++) {
-        const user = this.users[i];
-        // console.log(user.userID);
-        if (user.userID === from) {
-          user.messages.push({
-            content,
-            fromSelf: false,
-          });
-          if (user !== this.selectedUser) {
-            user.hasNewMessages = true;
+      socket.on("connect", () => {
+        this.users.forEach((user) => {
+          if (user.self) {
+            user.connected = true;
           }
-          break;
+        });
+      });
+      socket.on("connect_error", (err) => {
+        console.log(err);
+      });
+      const initReactiveProperties = (user) => {
+        user.connected = true;
+        user.messages = [];
+        user.hasNewMessages = false;
+      };
+      socket.on("users", (users) => {
+        users.forEach((user) => {
+          user.self = user.userID === socket.id;
+          initReactiveProperties(user);
+        });
+        // console.log("users: ", users);
+        // put the current user first, and sort by username
+        this.users = users.sort((a, b) => {
+          if (a.self) return -1;
+          if (b.self) return 1;
+          if (a.username < b.username) return -1;
+          return a.username > b.username ? 1 : 0;
+        });
+      });
+      socket.on("user connected", (user) => {
+        initReactiveProperties(user);
+        this.users.push(user);
+      });
+      socket.on("disconnect", () => {
+        this.users.forEach((user) => {
+          if (user.self) {
+            user.connected = false;
+          }
+        });
+      });
+
+      socket.on("private message", ({ content, from }) => {
+        console.log(from);
+        for (let i = 0; i < this.users.length; i++) {
+          const user = this.users[i];
+          // console.log(user.userID);
+          if (user.userID === from) {
+            user.messages.push({
+              content,
+              fromSelf: false,
+            });
+            if (user !== this.selectedUser) {
+              user.hasNewMessages = true;
+            }
+            break;
+          }
         }
-      }
-    });
-    }
+      });
+    
   },
 
   destroyed() {
@@ -332,7 +348,7 @@ export default {
 /* @import '../../../../public/css/welcomeChat.css' */
 
 .open-button {
-  background-color: #555;
+  background-color: #356ca3;
   color: white;
   padding: 16px 20px;
   border: none;

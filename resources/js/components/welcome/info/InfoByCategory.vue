@@ -28,7 +28,7 @@
         <h3 v-if="!filteredAffairs">Oops, No result found Please try other</h3>
         <div v-for="(affair, affair_id) in filteredAffairs" :key="affair_id">
           <div class="accordion" role="tablist">
-              <div class="card collapsed-card text-white affair_name">
+              <div class="card collapsed-card  affair_name">
                 <div class="card-header border-0 ui-sortable-handle" data-card-widget="collapse" style="cursor: move;">
                   <h3 class="card-title">
                     <b-icon icon="info-circle-fill" class="mr-3" scale="2" variant="info"></b-icon>
@@ -52,7 +52,7 @@
                   <div v-for="(procedure,procedure_id) in affair.procedures" :key="procedure_id">
                     <b-card no-body class="mb-2" style="background: rgb(42,104,90); background: linear-gradient(90deg, rgba(42,104,90,1) 75%, rgba(42,104,90,1) 100%);">
                       <b-card-header class="p-0" role="tab">
-                        <b-button block v-b-toggle="['procedure - '+ procedure_id+'-'+affair_id]" variant="transparent" class="p-2 text-left text-white procedure_name">
+                        <b-button block v-b-toggle="['procedure - '+ procedure_id+'-'+affair_id]" variant="transparent" class="p-2 text-left  procedure_name">
                           <small class="badge badge-dark">Step {{procedure.step}}</small>
                           {{procedure.name}}
                         </b-button>
@@ -61,7 +61,7 @@
                         <b-card-body>
                           <div class="d-grid">
                             <h4><b>Description</b></h4>
-                            <span>
+                            <span v-if="procedure.bureau">
                               Building No: {{procedure.bureau.building_number}}
                               <br>
                               Office No: {{procedure.bureau.office_number}} 
@@ -172,14 +172,22 @@ export default {
 </script>
 
 <style scoped>
-.affair_name{
+/* .affair_name{
   background: rgb(0,119,92);
   background: linear-gradient(0deg, rgba(0,119,92,1) 22%, rgba(0,119,92,1) 47%); 
+} */
+.affair_name{
+  background:#F5F5F5;
+  /* color:black; */
 }
 .affair_name:hover{
+  background:#F0F8FF;
+  /* color:black; */
+}
+/* .affair_name:hover{
    background: rgb(0,129,100);
 background: linear-gradient(0deg, rgba(0,129,100,1) 22%, rgba(0,129,100,1) 47%); 
-}
+} */
 .procedure_name{
   background: rgb(0,113,88);
   background: linear-gradient(0deg, rgba(0,113,88,1) 22%, rgba(0,113,88,1) 47%); 

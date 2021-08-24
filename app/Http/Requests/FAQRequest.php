@@ -18,7 +18,7 @@ class FAQRequest extends FormRequest
      */
     public function authorize()
     {
-        return Gate::check('is-staff');
+        return Gate::check('is-reception');
     }
 
     /**

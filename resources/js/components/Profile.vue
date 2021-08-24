@@ -268,7 +268,7 @@
                   </b-form-group>
 
                   <div class="form-group">
-                    <b-button pill block class="submitButton">Submit</b-button>
+                    <b-button type="submit" pill block class="submitButton">Submit</b-button>
                   </div>
                 </form>
               </b-modal>
@@ -429,7 +429,7 @@
                   </b-form-group>
 
                   <div class="form-group">
-                    <b-button pill block class="submitButton">Submit</b-button>
+                    <b-button type="submit" pill block class="submitButton">Submit</b-button>
                   </div>
                 </form>
               </b-modal>
@@ -444,7 +444,7 @@
 <script>
 import {
   required,
-  requiredIf,
+  // requiredIf,
   minLength,
   maxLength,
   email,
@@ -524,10 +524,8 @@ export default {
     },
   },
   methods: {
-    editProfile(e) {
-      e.preventDefault();
+    editProfile() {
       this.profileSubmitted = true;
-
       // stop here if form is invalid
       this.$v.userProfile.$touch();
       if (this.$v.userProfile.$invalid) {

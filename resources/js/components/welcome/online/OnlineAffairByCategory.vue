@@ -23,7 +23,7 @@
         <h3 v-if="!filteredAffairs">Oops, No result found Please try other</h3>
         <div v-for="affair in filteredAffairs" :key="affair.id">
           <div class="accordion" role="tablist">
-              <div class="card collapsed-card text-white online_affair_name">
+              <div class="card collapsed-card  online_affair_name">
                 <div class="card-header border-0 ui-sortable-handle" data-card-widget="collapse" style="cursor: move;">
                   <h3 class="card-title" block
                   @click="selectAffair(affair)">
@@ -53,11 +53,11 @@
                         <!-- style="overflow-y: scroll" -->
                         <div class="timeline-item" style="border-radius: .7rem;">
                           <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
-                          <div class="timeline-body shadow pre_request_name bg-dark" style="border-radius: .6rem .6rem 0 0;" v-b-toggle="['prerequisite_labels - '+prerequisite_labels_id+''+affair.id]">
+                          <div class="timeline-body shadow pre_request_name online_prerequest_name text-white" style="border-radius: .6rem .6rem 0 0;" v-b-toggle="['prerequisite_labels - '+prerequisite_labels_id+''+affair.id]">
                             {{ prerequisite_labels.label }}
                           </div>
                           <b-collapse :id="'prerequisite_labels - '+prerequisite_labels_id+''+affair.id">
-                            <b-card-body body-bg-variant="dark">
+                            <b-card-body class="online_prerequest_name text-white">
                               <h4><b>Description</b></h4>
                               <hr>
                               <p>{{prerequisite_labels.label}}</p>
@@ -151,17 +151,25 @@ export default {
 </script>
 
 <style scoped>
-.online_affair_name{
-  background: rgb(43,88,12);
-  background: linear-gradient(0deg, rgba(43,88,12,1) 22%, rgba(43,88,12,1) 47%);  
-}
-.online_affair_name:hover{
-  background: rgb(59,121,16);
-  background: linear-gradient(0deg, rgba(59,121,16,1) 22%, rgba(59,121,16,1) 47%);  
-}
-.pre_request_name:hover {
-  background: rgb(75,82,89);
-  background: linear-gradient(0deg, rgba(75,82,89,1) 22%, rgba(75,82,89,1) 47%); 
+
+ .online_affair_name{
+  background:#F5F5F5;
+  }
+ .online_affair_name:hover{
+  background:#F0F8FF;
+  }
+/* .online_affair_name{
+  background: rgb(69,99,130);
+background: linear-gradient(90deg, rgba(69,99,130,1) 0%, rgba(69,99,130,1) 35%); 
+} */
+/* .online_affair_name:hover{
+    background: rgb(87,124,162);
+background: linear-gradient(90deg, rgba(87,124,162,1) 0%, rgba(87,124,162,1) 35%); 
+} */
+
+.online_prerequest_name:hover {
+  background: rgb(70, 102, 134);
+background: linear-gradient(90deg, rgb(70, 102, 134) 33%, rgb(70, 102, 134) 65%);  
   color: #fff !important;
   transform: scale(1.01);
   border-radius: .7rem;
@@ -171,9 +179,9 @@ export default {
   color: #fff !important;
   transform: scale(1.02);
 }
-.procedure_name{
-  background: rgb(187,115,25);
-  background: linear-gradient(90deg, rgba(187,115,25,1) 75%, rgba(187,115,25,1) 100%);
+.online_prerequest_name{
+   background: rgb(61,88,115);
+background: linear-gradient(90deg, rgba(61,88,115,1) 33%, rgba(61,88,115,1) 65%); 
 }
 .procedure_name:hover{
   background: #3490dc !important;

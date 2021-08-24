@@ -4,7 +4,7 @@
     style="position: fixed; top: 0; bottom: 0"
   >
     <!-- Brand Logo -->
-    <a href="#" class="brand-link block">
+    <router-link to="/" class="brand-link block">
       <img
         src="/images/astu.jpg"
         alt="ASTU LOGO"
@@ -12,7 +12,7 @@
         style="opacity: 0.8"
       />
       <span class="brand-text font-weight-light">OWGS</span>
-    </a>
+    </router-link>
     <!-- <div style="margin: 1rem 0px 1rem 3rem">
           <b-avatar src="/images/astu.jpg" size="6rem"></b-avatar>
       </div> -->

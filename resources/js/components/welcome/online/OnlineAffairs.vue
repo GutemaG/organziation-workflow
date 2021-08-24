@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-row class="mt-3">
+    <b-row class="">
       <b-col>
         <div>
           <b-alert
