@@ -24,174 +24,86 @@
       <hr />
     </div>
     <b-row>
-      <h3 v-if="!filteredAffairs">Oops, No result found Please try other</h3>
-      <b-col
-        :cols="!selectedAffair ? '' : 5"
-        style="height: 80vh; overflow-y: scroll"
-      >
-        <div class="list-group" style="height: 3.8rem">
-          <div
-            class="list-group"
-            style="height: 4.8rem"
-            v-for="(affair, index) in filteredAffairs"
-            :key="affair.id"
-          >
-            <b-list-group-item
-              @click="selectAffair(affair)"
-              :active="selectedListIndex(affair.id)"
-              class="mb-1 mt-1 align-items-baseline shadow shadow-lg--hover items"
-              style="
-                cursor: pointer;
-                border: 2px solid rgba(0, 0, 0, 0.151);
-                border-radius: 2rem;
-                overflow: hidden;
-              "
-            >
-              <b-badge
-                pill
-                class="mr-2"
-                style="font-size: 14px"
-                variant="dark"
-                >{{ index + 1 }}
-              </b-badge>
-              <strong>{{ affair.name }}</strong>
-            </b-list-group-item>
-          </div>
-        </div>
-      </b-col>
-      <b-col v-if="selectedAffair" cols="7">
-        <div
-          class="
-            card
-            mb-2
-            mt-2
-            justify-content-md-center
-            shadow
-            shadow-lg--hover
-          "
-          style="
-            max-width: 100%;
-            border-radius: 1.36rem;
-            border: 1px solid rgba(0, 0, 0, 0.125);
-          "
-        >
-          <div class="card-body shadow" style="border-radius: 1.25rem">
-            <div
-              class="card-header text-center shadow"
-              style="
-                background-color: #343a40 !important;
-                color: white;
-                border-radius: 1.25rem 1.25rem 0rem 0;
-              "
-            >
-              <div class="justify-content-md-center align-items-center">
-                <b-icon
-                  icon="info-circle-fill"
-                  class="mr-3"
-                  scale="2"
-                  variant="info"
-                ></b-icon>
-                <span style="font-size: 1rem;"><strong>{{ selectedAffair.name }}</strong></span>
-                
-              </div>
-            </div>
-            <div
-              class="card-body align-items-center p-4"
-              style="
-                border: 1px solid rgba(0, 0, 0, 0.228);
-                background-color: #abdaff;
-                border-radius: 0 0 1.25rem 1.25rem;
-              "
-            >
-              <h4><strong>Description</strong></h4>
-              <hr />
-              <p>{{ selectedAffair.description }}</p>
-
-              <div class="timeline" v-if="selectedAffair.procedures.length > 0">
-                <div class="time-label">
-                  <span style="background-color: #abdaff;">Procedures: </span>
-                </div>
-                <div
-                  v-for="(procedure, index) in selectedAffair.procedures"
-                  :key="procedure.id"
-                  class="d-grid align-items-center"
-                >
-                  <!-- style="overflow-y: scroll" -->
-                  <i class="fas bg-blue">{{ index + 1 }}</i>
-                  <div class="timeline-item" 
-                    style="border-radius: .7rem;">
-                    <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
-
-                    <div class="timeline-body shadow procedureName"
-                    v-b-toggle="'procedure'+procedure.id"
-                    :active="'procedure'+procedure.id">
-                      {{ procedure.name }}
-                      <!-- <div class="card collapsed-card">
-                        <div class="card-header">
-                          <h3 class="card-title">{{ procedure.name }}</h3>
-                          <div class="card-tools">
-                            <button
-                              type="button"
-                              class="btn btn-tool"
-                              data-card-widget="collapse"
-                            >
-                              <i class="fas fa-plus"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div class="card-body" style="display: none">
-                          {{procedure}}
-                        </div>
-                      </div> -->
-                    </div>
+      <b-col style="height: 80vh; overflow-y: scroll">
+        <h3 v-if="!filteredAffairs">Oops, No result found Please try other</h3>
+        <div v-for="(affair, affair_id) in filteredAffairs" :key="affair_id">
+          <div class="accordion" role="tablist">
+              <div class="card collapsed-card text-white affair_name">
+                <div class="card-header border-0 ui-sortable-handle" data-card-widget="collapse" style="cursor: move;">
+                  <h3 class="card-title">
+                    <b-icon icon="info-circle-fill" class="mr-3" scale="2" variant="info"></b-icon>
+                    <b>{{ affair.name }}</b>
+                    <br><br>
+                    <span style="font-size: .8rem; ">{{affair.description.substring(0, 250)}}....</span>
+                  </h3>
+                  <div class="card-tools">
+                    <button type="button" class="btn text-white" data-card-widget="collapse" title="Collapse">
+                      <i class="fas fa-plus"></i>
+                    </button>
                   </div>
-                  <!-- Elements to collapse -->
-                  <b-collapse :id="'procedure'+procedure.id" 
-                  class="timeline-item mt-2">
-                      <div class="timeline-body" style="padding: 0;">
-                          <b-card style="border-radius: 0rem" class="shadow">
-                            <b-card-body class="p-1">
-                              <h3><strong>Description</strong></h3>
-                              <hr>
-                              <p>
-                                  {{ procedure.description }}
-                              </p>
-                              <div v-if="procedure.pre_requests.length > 0">
-                                  <strong>Pre-requests required: </strong>
-                                  <div class="mt-2 w-70">
-                                      <div class="list-group" style="border-radius: 2rem" v-for="(pre_request, index) in procedure.pre_requests" :key="pre_request.id">
-                                          <b-list-group-item href="#" variant="dark"
-                                          class="d-flex align-items-center mb-0 mt-2" v-b-toggle="'pre_request'+pre_request.id">
-                                              <b-badge pill class="mr-2" variant="dark">{{ index+1 }}</b-badge>
-                                              <span>{{ pre_request.name }}</span>
-                                          </b-list-group-item>
-                                          
-                                          <!-- Toggle pre_requests -->
-                                          <b-card-group>
-                                              <b-collapse :id="'pre_request'+pre_request.id">
-                                                  <b-card bg-variant="dark" text-variant="white" style="border-radius: 0rem 0rem 1.25rem 1.25rem; border: 1.8px solid rgba(0, 0, 0, 0.125);" 
-                                                  class="mt-0 mb-2 shadow">
-                                                      <h5><strong>Description</strong></h5>
-                                                      <hr>
-                                                      <p>{{ pre_request.description }}</p>
-                                                  </b-card>
-                                              </b-collapse>
-                                          </b-card-group>
-                                      </div>
-                                  </div>
-                              </div>
-                            </b-card-body>
-                          </b-card>
-                      </div>
-                  </b-collapse>
+                  <!-- card tools -->
+                  
+                  <!-- /.card-tools -->
                 </div>
+                <div class="card-body" style="display: none;">
+                  <h4><b>Description</b></h4>
+                  <hr>
+                  <p>{{affair.description}}</p>
+                  <div v-for="(procedure,procedure_id) in affair.procedures" :key="procedure_id">
+                    <b-card no-body class="mb-2" style="background: rgb(42,104,90); background: linear-gradient(90deg, rgba(42,104,90,1) 75%, rgba(42,104,90,1) 100%);">
+                      <b-card-header class="p-0" role="tab">
+                        <b-button block v-b-toggle="['procedure - '+ procedure_id+'-'+affair_id]" variant="transparent" class="p-2 text-left text-white procedure_name">
+                          <small class="badge badge-dark">Step {{procedure.step}}</small>
+                          {{procedure.name}}
+                        </b-button>
+                      </b-card-header>
+                      <b-collapse class="text-white" :id="'procedure - '+ procedure_id+'-'+affair_id" role="tabpanel">
+                        <b-card-body>
+                          <div class="d-grid">
+                            <h4><b>Description</b></h4>
+                            <span>
+                              Building No: {{procedure.bureau.building_number}}
+                              <br>
+                              Office No: {{procedure.bureau.office_number}} 
+                            </span>
+                          </div>
+                          <hr>
+                          <p>{{procedure.description}}</p>
+                          <p v-if="procedure.pre_requests.length != 0">The pre-request(s) required: </p>
+                          <!-- v-if="procedure.pre_request != null" -->
+                          <div v-for="(pre_request, pre_request_id) in procedure.pre_requests" :key="pre_request_id">
+                            <div class="timeline">
+                              <div class="d-flex align-items-center">
+                                <i class="fas bg-blue">{{ pre_request_id + 1 }}</i>
+                                <!-- style="overflow-y: scroll" -->
+                                <div class="timeline-item" style="border-radius: .7rem; width: 100%;">
+                                  <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
+                                  <div class="timeline-body shadow pre_request_name bg-dark" style="border-radius: .6rem .6rem 0 0;" v-b-toggle="['pre_request - '+pre_request_id+'-'+procedure_id+'-'+affair_id]">
+                                    {{pre_request.name}}
+                                  </div>
+                                  <b-collapse :id="'pre_request - '+pre_request_id+'-'+procedure_id+'-'+affair_id">
+                                    <b-card-body body-bg-variant="dark">
+                                      <h4><b>Description</b></h4>
+                                      <hr>
+                                      <p>{{pre_request.description}}</p>
+                                    </b-card-body>
+                                  </b-collapse>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </b-card-body>
+                      </b-collapse>
+                    </b-card>
+                  </div>
+                </div>
+                <!-- /.card-body-->
               </div>
-              <!-- <div v-else>No Pre Request</div> -->
-            </div>
           </div>
         </div>
       </b-col>
     </b-row>
+   
   </div>
 </template>
 <script>
@@ -260,16 +172,34 @@ export default {
 </script>
 
 <style scoped>
-.items:hover {
-  background-color: #3490dc;
-  color: #fff !important;
-  transform: scale(1.03);
+.affair_name{
+  background: rgb(0,119,92);
+  background: linear-gradient(0deg, rgba(0,119,92,1) 22%, rgba(0,119,92,1) 47%); 
 }
-.procedureName:hover{
-  background-color: #3490dc;
-  border-radius: .7rem;
+.affair_name:hover{
+   background: rgb(0,129,100);
+background: linear-gradient(0deg, rgba(0,129,100,1) 22%, rgba(0,129,100,1) 47%); 
+}
+.procedure_name{
+  background: rgb(0,113,88);
+  background: linear-gradient(0deg, rgba(0,113,88,1) 22%, rgba(0,113,88,1) 47%); 
+}
+.procedure_name:hover{
+  background: rgb(48,119,103);
+  background: linear-gradient(0deg, rgba(48,119,103,1) 22%, rgba(48,119,103,1) 47%); 
   color: #fff !important;
-  transform: scale(1.03);
   cursor: pointer;
+}
+.pre_request_name:hover {
+  background: rgb(75,82,89);
+  background: linear-gradient(0deg, rgba(75,82,89,1) 22%, rgba(75,82,89,1) 47%); 
+  color: #fff !important;
+  transform: scale(1.01);
+  border-radius: .7rem;
+}
+.items:hover {
+  background-color: #3490dc !important;
+  color: #fff !important;
+  transform: scale(1.02);
 }
 </style>

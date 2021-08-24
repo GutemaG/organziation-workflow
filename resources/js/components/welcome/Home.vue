@@ -2,7 +2,7 @@
     <div>
         <b-row>
             <b-col>
-                <b-container>
+                <b-container fluid>
                     <div class="mb-3">
                         <div style="z-index: 111; position: absolute; text-align: center; margin-bottom: 2rem;
                         top: 150px;
