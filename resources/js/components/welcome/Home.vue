@@ -12,7 +12,7 @@
                             <h2>Adama Science And Technology University</h2>
                             <h2>Guidance System</h2>
                         </div>
-                        
+
                         <b-carousel
                             id="carousel-fade"
                             style="text-shadow: 0px 0px 2px #000"
@@ -41,12 +41,12 @@
                             Office of Academic Affairs
                         </h3>
                         <p>
-                            
-                            Adama Science and Technology University, ASTU, is one of the two science and technology universities established to 
-                            support the industrial development of the nation by producing competent and leading graduates in science and technology fields. 
-                            The university is working aggressively to produce qualified, competent, and socially responsible professionals in the fields of science and 
-                            technology through promoting research oriented science and technology education. The academic wing has taken the leading role to ensure 
-                            quality education which helps to realize the goals and ultimately the mission of ASTU.  The academic affairs office was established under 
+
+                            Adama Science and Technology University, ASTU, is one of the two science and technology universities established to
+                            support the industrial development of the nation by producing competent and leading graduates in science and technology fields.
+                            The university is working aggressively to produce qualified, competent, and socially responsible professionals in the fields of science and
+                            technology through promoting research oriented science and technology education. The academic wing has taken the leading role to ensure
+                            quality education which helps to realize the goals and ultimately the mission of ASTU.  The academic affairs office was established under
                             the Vice President for Academic Affairs (VPA) to lead all academic and academic-related matters of the university.
                             Adama Science And Technology University Guidance System website
                             will help guide you through with any affairs you have with our

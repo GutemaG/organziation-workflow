@@ -52,6 +52,7 @@ class OnlineRequest extends Model
         'name',
         'description',
         'type',
+        'views',
     ];
 
     /**

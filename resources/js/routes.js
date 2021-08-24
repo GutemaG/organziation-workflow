@@ -200,7 +200,18 @@ export default [
                 meta: {
                     requiresAuth: true
                 }
-            }
+            },
+            {
+                path: "/faqs",
+                name:"faqs",
+                components: {
+                    dashboard: require("./components/request/FAQ.vue")
+                        .default
+                },
+                meta: {
+                    requiresAuth: true
+                }
+            },
         ]
     },
     {

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Actions;
 
 use App\Models\NotificationTracker;
 use App\Models\NotifiedUser;
+use Illuminate\Support\Collection;
 
 class NotifyUserAction
 {
@@ -45,7 +46,11 @@ class NotifyUserAction
     public static function usersId(NotificationTracker $notificationTracker): array
     {
         return $notificationTracker->notifiedUsers->map(function ($value){
-            return $value->user_id;
+            if (! $value->is_accepted)
+                return $value->user_id;
+            return null;
+        })->filter(function ($value){
+            return $value!= null;
         })->toArray();
     }
 }

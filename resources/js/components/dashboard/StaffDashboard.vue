@@ -5,6 +5,20 @@
       v-model="tabIndex"
       card
     > -->
+      <div class="container">
+      <form @submit.prevent="submitForm">
+          <b-form-group label="Channel">
+              <b-form-input v-model="henok.channel">
+
+              </b-form-input>
+          </b-form-group>
+          <b-form-group label="Message">
+              <b-form-input v-model="henok.message">
+              </b-form-input>
+          </b-form-group>
+          <b-button type="submit">Submit</b-button>
+      </form>
+      </div>
     <b-card class="shadow">
       <b-table :items="steps" :fields="fields" borderless stacked="md">
         <template #cell(id)="row">
@@ -179,6 +193,10 @@ export default {
         },
       ],
       reject_reason: "",
+        henok:{
+          message:'this is test',
+            channel:'ldkjfklsdjflksdjksl'
+        }
     };
   },
   computed: {
@@ -196,6 +214,11 @@ export default {
       "completeRequest",
       "rejectRequest",
     ]),
+      submitForm(){
+        axios.post('/api/sent-to-reception',{...this.henok}).then(resp=>{
+            console.log(resp)
+          })
+      },
     DateFormatter(value) {
       if (value) {
         let ago = moment(value).fromNow();

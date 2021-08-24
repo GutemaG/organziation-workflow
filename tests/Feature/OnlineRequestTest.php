@@ -10,9 +10,9 @@ use Database\Factories\Utility;
 
 class OnlineRequestTest extends MyTestCase
 {
-    protected $url = '/api/online-requests/';
-    protected $modelName = OnlineRequest::class;
-    protected $defaultTest = false;
+    protected string $url = '/api/online-requests/';
+    protected string $modelName = OnlineRequest::class;
+    protected bool $defaultTest = false;
 
     public function testAdminCanAccessIndex(): void
     {

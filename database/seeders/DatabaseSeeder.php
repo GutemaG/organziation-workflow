@@ -58,7 +58,20 @@ class DatabaseSeeder extends Seeder
          \App\Models\User::factory(50)->create();
          
          \App\Models\Affair::factory(50)->create();
+         
+
+         User::create([
+            'user_name' => 'supportiveTeam',
+            'first_name' =>'Henok',
+            'last_name' => 'Kebed',
+            'email' => 'supportiveTeam@astu.com',
+            'type' => 'it_team_member',
+            'password' => Hash::make('laravel1234'), // password
+            'remember_token' => Str::random(10),
+         ]
+         );
          */
+         return;
          Building::factory(100)->create();
 
          Bureau::factory(200)->create();
