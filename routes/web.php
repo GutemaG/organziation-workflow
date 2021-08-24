@@ -17,8 +17,11 @@ require __DIR__.'/auth.php';
 // staff user routes
 require __DIR__.'/my_route/online_request.php';
 
-// frequently asked request routes
-require __DIR__.'/my_route/far.php';
+// frequently viewed request routes
+require __DIR__ . '/my_route/frequently_viewed_request.php';
+
+// frequently asked question routes
+require __DIR__.'/my_route/faq.php';
 
 
 // private routes

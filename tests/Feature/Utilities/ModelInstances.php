@@ -5,6 +5,7 @@ namespace Tests\Feature\Utilities;
 
 
 use App\Models\Affair;
+use App\Models\FrequentlyAskedQuestion;
 use App\Models\OnlineRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -28,6 +29,9 @@ trait ModelInstances
                 break;
             case Affair::class:
                 return Affair::with($relation)->inRandomOrder()->limit(1)->get()->first();
+                break;
+            case FrequentlyAskedQuestion::class:
+                return FrequentlyAskedQuestion::with($relation)->inRandomOrder()->limit(1)->get()->first();
                 break;
             default:
                 return null;

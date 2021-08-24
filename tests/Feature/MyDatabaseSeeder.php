@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Affair;
 use App\Models\Building;
 use App\Models\Bureau;
+use App\Models\FrequentlyAskedQuestion;
 use App\Models\OnlineRequest;
 use App\Models\OnlineRequestProcedure;
 use App\Models\PrerequisiteLabel;
@@ -46,6 +47,9 @@ trait MyDatabaseSeeder
             }
 
         });
+
+        FrequentlyAskedQuestion::factory(10)->create();
+
 //            ->has(PrerequisiteLabel::factory()->count(rand(1,5)))
 //            ->has(OnlineRequestProcedure::factory()->count(rand(3,6))
 //                ->each(function ($onlineRequestProcedure) {

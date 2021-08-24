@@ -7,7 +7,7 @@ use App\Models\OnlineRequest;
 use App\Models\User;
 use App\Utilities\UserType;
 
-class FrequentlyAskedRequestTest extends MyTestCase
+class FrequentlyViewedRequestTest extends MyTestCase
 {
     protected bool $defaultTest = false;
 
@@ -76,6 +76,7 @@ class FrequentlyAskedRequestTest extends MyTestCase
     {
         $request = $this->randomData($modelName);
         $this->getJson("$url/$request->id")->assertExactJson(['status' => 200]);
+        $this->assertEquals($request->views + 1, $request->refresh()->views);
     }
 
     private function testWithUnexistRequest(string $modelName, string $url): void
