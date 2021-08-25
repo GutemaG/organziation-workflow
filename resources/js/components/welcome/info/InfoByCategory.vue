@@ -28,7 +28,7 @@
         <h3 v-if="!filteredAffairs">Oops, No result found Please try other</h3>
         <div v-for="(affair, affair_id) in filteredAffairs" :key="affair_id">
           <div class="accordion" role="tablist">
-              <div class="card collapsed-card  affair_name">
+              <div class="card collapsed-card affair_name">
                 <div class="card-header border-0 ui-sortable-handle" data-card-widget="collapse" style="cursor: move;">
                   <h3 class="card-title">
                     <b-icon icon="info-circle-fill" class="mr-3" scale="2" variant="info"></b-icon>
@@ -37,7 +37,7 @@
                     <span style="font-size: .8rem; ">{{affair.description.substring(0, 250)}}....</span>
                   </h3>
                   <div class="card-tools">
-                    <button type="button" class="btn text-white" data-card-widget="collapse" title="Collapse">
+                    <button type="button" class="btn text-primary" data-card-widget="collapse" title="Collapse">
                       <i class="fas fa-plus"></i>
                     </button>
                   </div>
@@ -50,14 +50,14 @@
                   <hr>
                   <p>{{affair.description}}</p>
                   <div v-for="(procedure,procedure_id) in affair.procedures" :key="procedure_id">
-                    <b-card no-body class="mb-2" style="background: rgb(42,104,90); background: linear-gradient(90deg, rgba(42,104,90,1) 75%, rgba(42,104,90,1) 100%);">
+                    <b-card no-body class="mb-2">
                       <b-card-header class="p-0" role="tab">
-                        <b-button block v-b-toggle="['procedure - '+ procedure_id+'-'+affair_id]" variant="transparent" class="p-2 text-left  procedure_name">
-                          <small class="badge badge-dark">Step {{procedure.step}}</small>
+                        <b-button block active v-b-toggle="['procedure - '+ procedure_id+'-'+affair_id]" variant="transparent" class="p-2 text-left  procedure_name">
+                          <small class="badge badge-primary">Step {{procedure.step}}</small>
                           {{procedure.name}}
                         </b-button>
                       </b-card-header>
-                      <b-collapse class="text-white" :id="'procedure - '+ procedure_id+'-'+affair_id" role="tabpanel">
+                      <b-collapse class="procedure_name_bg" :id="'procedure - '+ procedure_id+'-'+affair_id" role="tabpanel">
                         <b-card-body>
                           <div class="d-grid">
                             <h4><b>Description</b></h4>
@@ -172,31 +172,21 @@ export default {
 </script>
 
 <style scoped>
-/* .affair_name{
-  background: rgb(0,119,92);
-  background: linear-gradient(0deg, rgba(0,119,92,1) 22%, rgba(0,119,92,1) 47%); 
-} */
 .affair_name{
-  background:#F5F5F5;
-  /* color:black; */
+  background:#f4f4f4;
 }
 .affair_name:hover{
-  background:#F0F8FF;
-  /* color:black; */
+  background:#e4e4e4cc;
 }
-/* .affair_name:hover{
-   background: rgb(0,129,100);
-background: linear-gradient(0deg, rgba(0,129,100,1) 22%, rgba(0,129,100,1) 47%); 
-} */
 .procedure_name{
-  background: rgb(0,113,88);
-  background: linear-gradient(0deg, rgba(0,113,88,1) 22%, rgba(0,113,88,1) 47%); 
+  background:#d4d4d4;
 }
 .procedure_name:hover{
-  background: rgb(48,119,103);
-  background: linear-gradient(0deg, rgba(48,119,103,1) 22%, rgba(48,119,103,1) 47%); 
-  color: #fff !important;
+  background:#c7c4c4;
   cursor: pointer;
+}
+.procedure_name_bg{
+  background:#d4d4d4;
 }
 .pre_request_name:hover {
   background: rgb(75,82,89);
@@ -204,10 +194,5 @@ background: linear-gradient(0deg, rgba(0,129,100,1) 22%, rgba(0,129,100,1) 47%);
   color: #fff !important;
   transform: scale(1.01);
   border-radius: .7rem;
-}
-.items:hover {
-  background-color: #3490dc !important;
-  color: #fff !important;
-  transform: scale(1.02);
 }
 </style>

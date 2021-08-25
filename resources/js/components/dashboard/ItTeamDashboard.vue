@@ -1,3 +1,5 @@
 <template>
-    <h1>It team DAshboard</h1>
+    <div class="mt-3">
+        <h1>It team Dashboard</h1>
+    </div>
 </template>

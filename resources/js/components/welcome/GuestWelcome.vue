@@ -1,8 +1,8 @@
 <template>
   <div>
-    <guest-nav-bar></guest-nav-bar>
-    <div class="container mt-4" style="">
-      <router-view name="welcome"></router-view>
+    <guest-nav-bar class="welcome"></guest-nav-bar>
+    <div class="container mt-3">
+      <router-view name="welcome" class="welcome"></router-view>
       <button @click="openChat" class="open-button shadow-lg">
         <i class="fas fa-comments fa-2x "></i>
       </button>
@@ -77,17 +77,13 @@
         </div>
       </div>
     </div>
-
-    <footer class="main-footer" hidden>
-      <div class="float-right d-none d-sm-block"><b>Version</b> 3.1.0</div>
-      <strong
-        >Copyright © 2014-2021
-        <a href="https://adminlte.io">AdminLTE.io</a>.</strong
-      >
+    <footer class="main-footer mt-3 text-center" hidden>
+      <strong>Copyright © 2013-2021<a>OWGS</a>.</strong>
       All rights reserved.
     </footer>
-    <div class="footer" hidden>
-      <div style="left: 0; right: 0">
+
+    <div class="footer welcome mt-5" >
+      <div style="left: 0; right: 0; bottom: 0;">
         <!-- Footer -->
         <div class="page-footer font-small pt-0">
           <div style="backgroundcolor: #000">
@@ -142,21 +138,6 @@
                   </h1>
                   <p></p>
                 </b-col>
-
-                <b-col md="3" lg="4" xl="4" class="mb-4">
-                  <h6 class="text-uppercase font-weight-bold">
-                    <strong>Help Center</strong>
-                  </h6>
-                  <hr
-                    class="accent-2 mb-4 mt-0 d-inline-block mx-auto"
-                    style="width: 60px; background-color: #6a5acd"
-                  />
-                  <p>
-                    <b-link href="#" style="color: white; text-decoration: none"
-                      >Help</b-link
-                    >
-                  </p>
-                </b-col>
                 <b-col md="4" lg="3" xl="4" class="mb-0">
                   <h6 class="text-uppercase font-weight-bold">
                     <strong>Contact</strong>
@@ -166,14 +147,14 @@
                     style="width: 60px; background-color: #6a5acd"
                   />
                   <p>
-                    <i class="fas fa-home mr-3"></i> Addis Abeba, Ethiopia 2013
+                    <i class="fas fa-home mr-3"></i> Adama 1888 Oromia Ethiopia
                   </p>
                   <p>
                     <i class="fas fa-envelope mr-3"></i>
-                    info@astu.com
+                    adama221@astu.com
                   </p>
-                  <p><i class="fas fa-phone mr-3"></i> +251911223366</p>
-                  <p><i class="fas fa-print mr-3"></i> +251900000000</p>
+                  <p><i class="fas fa-phone mr-3"></i> +251 (221) 100 003</p>
+                  <p><i class="fas fa-print mr-3"></i> +251 (221) 100 003</p>
                 </b-col>
               </b-row>
             </b-container>
@@ -185,7 +166,9 @@
         class="footer-copyright text-center py-3 pt-2 pb-2"
         style="background-color: #161c27; color: white"
       >
-        <b-container fluid> &copy; 2021 Copyright </b-container>
+        <b-container fluid>Copyright © 2013-2021<a>OWGS</a></b-container>
+        <!-- &copy; 2021 Copyright -->
+        
       </div>
     </div>
   </div>
@@ -345,6 +328,11 @@ export default {
 </script>
 
 <style scoped>
+.welcome {
+  font-family: "Times"; 
+  font-weight: 400;
+  font-size: 16px;
+}
 /* @import '../../../../public/css/welcomeChat.css' */
 
 .open-button {

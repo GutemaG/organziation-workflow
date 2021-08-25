@@ -27,7 +27,7 @@
                 <div class="card-header border-0 ui-sortable-handle" data-card-widget="collapse" style="cursor: move;">
                   <h3 class="card-title" block
                   @click="selectAffair(affair)">
-                    <b-icon icon="file-earmark-spreadsheet-fill" class="mr-3" scale="2" variant="success"></b-icon>
+                    <b-icon icon="check2-circle" class="mr-3" scale="2" variant="primary"></b-icon>
                     <b>{{ affair.name }}</b>
                     <br><br>
                     <span style="font-size: .8rem; ">{{affair.description.substring(0, 250)}}....</span>
@@ -153,39 +153,19 @@ export default {
 <style scoped>
 
  .online_affair_name{
-  background:#F5F5F5;
+  background:#f4f4f4;
   }
  .online_affair_name:hover{
-  background:#F0F8FF;
+  background:#e4e4e4cc;
   }
-/* .online_affair_name{
-  background: rgb(69,99,130);
-background: linear-gradient(90deg, rgba(69,99,130,1) 0%, rgba(69,99,130,1) 35%); 
-} */
-/* .online_affair_name:hover{
-    background: rgb(87,124,162);
-background: linear-gradient(90deg, rgba(87,124,162,1) 0%, rgba(87,124,162,1) 35%); 
-} */
-
+.online_prerequest_name{
+  background:#d4d4d4;
+  background: linear-gradient(90deg, rgba(61,88,115,1) 33%, rgba(61,88,115,1) 65%); 
+}
 .online_prerequest_name:hover {
-  background: rgb(70, 102, 134);
-background: linear-gradient(90deg, rgb(70, 102, 134) 33%, rgb(70, 102, 134) 65%);  
-  color: #fff !important;
+  background:#c7c4c4;
+  cursor: pointer;
   transform: scale(1.01);
   border-radius: .7rem;
-}
-.items:hover {
-  background-color: #3490dc !important;
-  color: #fff !important;
-  transform: scale(1.02);
-}
-.online_prerequest_name{
-   background: rgb(61,88,115);
-background: linear-gradient(90deg, rgba(61,88,115,1) 33%, rgba(61,88,115,1) 65%); 
-}
-.procedure_name:hover{
-  background: #3490dc !important;
-  color: #fff !important;
-  cursor: pointer;
 }
 </style>

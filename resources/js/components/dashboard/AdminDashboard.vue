@@ -1,10 +1,10 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid mt-3">
     <div class="row">
       <div class="col-8">
+      <h3>Users</h3>
+      <p>Below is a table with the list of users with thier type of work they are placed.</p>
         <div class="leftside">
-          <b-table :items="items" :fields="fields" hover bordered responsive thead-class="text-white bg-dark"></b-table>
-          <b-table :items="items" :fields="fields" hover bordered responsive thead-class="text-white bg-dark"></b-table>
           <b-table :items="items" :fields="fields" hover bordered responsive thead-class="text-white bg-dark"></b-table>
         </div>
       </div>
@@ -36,28 +36,48 @@
         // Note 'isActive' is left out and will not appear in the rendered table
         fields: [
           {
-            key: 'first_name',
+            key: 'user_name',
             sortable: true,
           },
           {
-            key: 'last_name',
+            key: 'type',
             sortable: true,
           },
-          {
-            key: 'age',
-            label: 'Person age',
-            sortable: true,
-            // Variant applies to the whole column, including the header and footer
-            
-          }
         ],
         items: [
           { isActive: true, age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-          { isActive: false, age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-          { isActive: false, age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-          { isActive: true, age: 38, first_name: 'Jami', last_name: 'Carney' }
         ]
       }
+    },
+    computed: {
+      userslist() {
+        axios.get("/api/users")
+        .then((resp) => {
+          let username = resp.data.users[''].type;
+          console.log(resp1);
+        })
+        .catch((error) => console.log(error));
+        return 
+      }
+    },
+    methods: {
+      fetchUsers() {
+        axios.get("/api/users")
+        .then((resp) => {
+          let resp1 = resp.data.users;
+          console.log(resp1);
+        })
+        .catch((error) => console.log(error));
+      }
+    },
+    created(){
+      axios
+        .get("/api/users")
+        .then((resp) => {
+          let resp1 = resp.data.users[''].type;
+          console.log(resp1);
+        })
+        .catch((error) => console.log(error));
     }
   }
 </script>
