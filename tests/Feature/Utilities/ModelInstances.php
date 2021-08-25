@@ -40,11 +40,11 @@ trait ModelInstances
         }
     }
 
-    protected function getAllData(string $modelName): ?Collection
+    protected function getAllData(string $modelName, array $with=[]): ?Collection
     {
         switch ($modelName) {
             case OnlineRequest::class:
-                return OnlineRequest::orderBy('name', 'asc')->get();
+                return OnlineRequest::with($with)->orderBy('name', 'asc')->get();
                 break;
             default:
                 return null;

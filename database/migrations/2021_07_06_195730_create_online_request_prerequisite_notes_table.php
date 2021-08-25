@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrerequisiteLabelsTable extends Migration
+class CreateOnlineRequestPrerequisiteNotesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,16 @@ class CreatePrerequisiteLabelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('prerequisite_labels', function (Blueprint $table) {
+        Schema::create('online_request_prerequisite_notes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('online_request_id');
-            $table->mediumText('label');
+            $table->mediumText('note');
             $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('online_request_id')->references('id')->on('online_requests')
                 ->onUpdate('CASCADE')->onDelete('CASCADE');
+
         });
     }
 
@@ -32,6 +33,6 @@ class CreatePrerequisiteLabelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prerequisite_labels');
+        Schema::dropIfExists('online_request_prerequisite');
     }
 }

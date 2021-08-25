@@ -7,7 +7,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
-class CheckIsStaffUser
+class CheckIsAdminOrSupportiveStaffUser
 {
     /**
      * Handle an incoming request.
@@ -19,7 +19,7 @@ class CheckIsStaffUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! Gate::check('is-staff'))
+        if (! Gate::any(['is-admin', 'is-it-team-member']))
             throw new UnauthorizedException();
         return $next($request);
     }

@@ -8,6 +8,36 @@ use Exception;
 
 class OnlineRequestProcedureAction
 {
+    public static function store(array $data): void
+    {
+        $procedure = OnlineRequestProcedure::create($data);
+        self::attach($data['responsible_user_id'], $procedure, false);
+    }
+
+    public static function storeData(array $data, int $onlineRequestId): void
+    {
+        $creatableData = self::prepareForStoring($data['online_request_procedures'], $onlineRequestId);
+        foreach ($creatableData as $value)
+            self::store($value);
+    }
+
+    /**
+     * Prepare the incoming procedure data by adding the online_request_id to it,
+     * so that it can be stored properly.
+     * And also sort the procedures using step number in acceding order.
+     *
+     * @param array $creatableData
+     * @param int $onlineRequestId
+     * @return array
+     */
+    protected static function prepareForStoring(array $creatableData, int $onlineRequestId): array
+    {
+        return collect($creatableData)->map(function ($value) use ($onlineRequestId) {
+            $value['online_request_id'] = $onlineRequestId;
+            return $value;
+        })->sortBy('step_number')->toArray();
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -36,7 +66,7 @@ class OnlineRequestProcedureAction
      * @param OnlineRequestProcedure $procedure
      * @return bool
      */
-    private static function attach(array $data, OnlineRequestProcedure $procedure): bool
+    private static function attach(array $data, OnlineRequestProcedure $procedure, bool $update=false): bool
     {
         list($oldUserId, $newUserId) = self::getAttachedAndDetachedData($procedure, $data);
         try {

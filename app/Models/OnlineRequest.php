@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -66,16 +67,6 @@ class OnlineRequest extends Model
     ];
 
     /**
-     * The relation that should be fetched in each query.
-     *
-     * @var string[]
-     */
-//    protected $with = [
-//        'onlineRequestProcedures',
-//        'prerequisiteLabels',
-//    ];
-
-    /**
      * Get the procedures associated with the online request.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -89,8 +80,14 @@ class OnlineRequest extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function prerequisiteLabels() {
-        return $this->hasMany(PrerequisiteLabel::class);
+    public function onlineRequestPrerequisiteNotes(): HasMany
+    {
+        return $this->hasMany(OnlineRequestPrerequisiteNote::class);
+    }
+
+    public function onlineRequestPrerequisiteInputs(): HasMany
+    {
+        return $this->hasMany(OnlineRequestPrerequisiteInput::class);
     }
 
     /**

@@ -21,8 +21,6 @@ class BureauFactory extends Factory
      */
     public function definition()
     {
-        $latitude = $this->faker->latitude();
-        $longitude = $this->faker->longitude();
         $data = Utility::getBuildingNumberAndOfficeNumber();
         $buildingNumber = $data['building_number'];
         $officeNumber = $data['office_number'];
@@ -34,7 +32,6 @@ class BureauFactory extends Factory
             'name' => $this->faker->unique()->name(),
             'description' => $paragraph,
             'accountable_to' => Utility::getBureauId(),
-            'location' => Utility::getLocation($latitude, $longitude),
             'building_number' => $buildingNumber,
             'office_number' => "$officeNumber",
         ];

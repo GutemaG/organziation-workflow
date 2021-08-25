@@ -22,12 +22,13 @@ class MyTestCase extends TestCase
     protected string $modelName = '';
     protected string $responseName = '';
     protected bool $defaultTest = true;
+    protected array $with = [];
 
     public function setUp(): void
     {
         $this->responseName = Str::snake(str_replace('App\\Models\\', '', $this->modelName));
         parent::setUp();
-        $this->artisan('migrate:refresh');
+        $this->artisan('migrate:fresh');
         MyDatabaseSeeder::seed();
     }
 
@@ -57,12 +58,12 @@ class MyTestCase extends TestCase
         $response = $this->postJson($this->url, []);
         $this->assertUnauthenticatedRequestResponse($response);
 
-        $this->assertShow($id, $data);
+        $this->assertShow();
 
-        $response = $this->putJson($this->url . $id, []);
+        $response = $this->putJson("$this->url/$id", []);
         $this->assertUnauthenticatedRequestResponse($response);
 
-        $response = $this->deleteJson($this->url . $id);
+        $response = $this->deleteJson("$this->url/$id");
         $this->assertUnauthenticatedRequestResponse($response);
 
         $this->printSuccessMessage('Unauthenticated guest can\'t access online request passed ');
@@ -108,12 +109,12 @@ class MyTestCase extends TestCase
             $response = $this->postJson($this->url, []);
             $response->assertJson($this->unauthorizedResponse());
 
-            $this->assertShow($id, $data);
+            $this->assertShow();
 
-            $response = $this->putJson($this->url . $id, []);
+            $response = $this->putJson("$this->url/$id", []);
             $response->assertJson($this->unauthorizedResponse());
 
-            $response = $this->deleteJson($this->url . $id);
+            $response = $this->deleteJson("$this->url/$id");
             $response->assertJson($this->unauthorizedResponse());
 
         }
@@ -131,7 +132,7 @@ class MyTestCase extends TestCase
 
     protected function assertIndex(): void
     {
-        $data = $this->getAllData(OnlineRequest::class)->toArray();
+        $data = $this->getAllData($this->modelName, $this->with)->toArray();
         $response = $this->getJson($this->url);
         $response->assertExactJson([
             'status' => 200,
@@ -139,9 +140,11 @@ class MyTestCase extends TestCase
         ]);
     }
 
-    protected function assertShow($id, ?Model $data): void
+    protected function assertShow(): void
     {
-        $response = $this->getJson($this->url . $id);
+        $data = $this->randomData($this->modelName, $this->with);
+        $id = $data->id;
+        $response = $this->getJson("$this->url/$id");
         $response->assertJson([
             'status' => 200,
             $this->responseName => $data->toArray(),
