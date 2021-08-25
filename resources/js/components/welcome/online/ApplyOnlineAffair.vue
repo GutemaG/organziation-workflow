@@ -157,9 +157,6 @@ export default {
       full_name: {
         required,
       },
-      email: {
-        required,
-      },
       phone_number: {
         name: required,
       },

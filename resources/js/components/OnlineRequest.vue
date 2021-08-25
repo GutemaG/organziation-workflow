@@ -162,7 +162,7 @@
         <router-link
           :to="{
             name: 'edit-online-request',
-            params: { slug: row.item.name, request: row.item },
+            params: { slug: slug(row.item.name), request: row.item },
           }"
           >
         <!-- :to="'online-request/edit/' + row.item.id"> -->

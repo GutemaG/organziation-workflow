@@ -179,7 +179,7 @@ export default [
                 }
             },
             {
-                path: "/online-request/edit/:true",
+                path: "/online-request/edit/:slug",
                 name:'edit-online-request',
                 props: true,
                 components: {
