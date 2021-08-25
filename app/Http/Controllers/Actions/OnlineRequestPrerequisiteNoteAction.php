@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Actions;
 
 
+use App\Models\OnlineRequest;
 use App\Models\OnlineRequestPrerequisiteNote;
 
 class OnlineRequestPrerequisiteNoteAction
@@ -37,6 +38,8 @@ class OnlineRequestPrerequisiteNoteAction
         if (array_key_exists('prerequisites', $data))
             if (array_key_exists('notes', $data['prerequisites'])) {
                 list($updatable, $creatable) = self::getUpdatableAndCreatableData($data['prerequisites']['notes']);
+                $onlineRequest = OnlineRequest::with(['onlineRequestPrerequisiteInputs'])->find($onlineRequestId);
+                self::deleteUnexistData($onlineRequest, $updatable);
                 self::storeData(['prerequisites'=>['notes' => $creatable]], $onlineRequestId);
                 self::update($updatable);
             }
@@ -62,5 +65,22 @@ class OnlineRequestPrerequisiteNoteAction
 
             });
         return array($updatable, $creatable);
+    }
+
+    /**
+     * @param $onlineRequest
+     * @param array $updatable
+     */
+    private static function deleteUnexistData($onlineRequest, array $updatable): void
+    {
+        $newId = [];
+        $oldId = [];
+        foreach ($onlineRequest->onlineRequestPrerequisiteNotes as $input)
+            $oldId[] = $input->id;
+        foreach ($updatable as $value)
+            $newId[] = $value['id'];
+        foreach ($oldId as $id)
+            if (!in_array($id, $newId))
+                OnlineRequestPrerequisiteNote::find($id)->delete();
     }
 }

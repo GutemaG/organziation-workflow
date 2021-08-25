@@ -86,7 +86,7 @@ class NotificationTrackerAction
                 unset($nextOnlineRequestStep['online_request_procedure']);
                 $nextOnlineRequestStep['online_request'] = $onlineRequest;
                 $nextOnlineRequestStep['notification_tracker_id'] = $notificationTracker->id;
-//            NotifyUserEvent::dispatch($users, $nextOnlineRequestStep);
+           NotifyUserEvent::dispatch($users, $nextOnlineRequestStep);
                 return self::successResponse();
             }
             $onlineRequestStep->onlineRequestTracker->update(['ended_at' => now()]);

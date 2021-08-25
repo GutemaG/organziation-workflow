@@ -117,6 +117,7 @@ export default {
     // acceptPendingRequest({ commit }, data) {
     acceptRequest(request) {
       this.acceptPendingRequest(request)
+      this.$router.go(-1)
       // console.log("accepting: ", request);
     },
     rejectRequest(request) {

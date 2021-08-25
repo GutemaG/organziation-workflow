@@ -104,7 +104,7 @@ class OnlineRequest extends Model
      *
      * @return HasMany
      */
-    public function onlineRequestTracker(): HasMany
+    public function onlineRequestTrackers(): HasMany
     {
         return $this->hasMany(OnlineRequestTracker::class);
     }

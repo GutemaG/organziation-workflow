@@ -217,7 +217,7 @@
                       <label>type</label>
                       <b-select
                         v-model="input.type"
-                        :options="['text', 'description', 'number', 'file']"
+                        :options="['text', 'description', 'number']"
                       >
                       </b-select>
                       <!-- <input v-model="input.type" type="text" class="form-control"> -->
@@ -243,7 +243,7 @@
                   </div>
               </div>
                   <b-button
-                        @click="addPrerequisiteInput(index)"
+                        @click="addPrerequisiteInput"
                         variant="primary"
                         size="sm"
                       >

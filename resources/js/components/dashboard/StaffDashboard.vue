@@ -9,7 +9,7 @@
       <b-card-header>
         <h1>List of Request procedures</h1>
       </b-card-header>
-      <b-table :items="steps" :fields="fields" borderless stacked="md">
+      <b-table :items="steps" :fields="fields" borderless stacked="xl">
         <template #cell(id)="row">
           {{ row.index + 1 }}
         </template>

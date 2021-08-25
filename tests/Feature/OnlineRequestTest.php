@@ -13,9 +13,9 @@ class OnlineRequestTest extends MyTestCase
 {
     protected string $url = '/api/online-requests';
     protected string $modelName = OnlineRequest::class;
-    protected bool $defaultTest = true;
+    protected bool $defaultTest = false;
     protected array $with = ['onlineRequestProcedures.users', 'onlineRequestPrerequisiteNotes', 'onlineRequestPrerequisiteInputs'];
-
+/*
     public function testAdminCanAccessIndex(): void
     {
         $user = $this->getUser(UserType::admin());
@@ -137,7 +137,7 @@ class OnlineRequestTest extends MyTestCase
             ]
         ]);
     }
-
+*/
     protected function creatingOnlineRequest(User $user): void
     {
         $this->actingAs($user);
@@ -174,7 +174,7 @@ class OnlineRequestTest extends MyTestCase
             'online_request' => $onlineRequest,
         ]);
     }
-
+/*
     public function testAdminCanAccessShow(): void
     {
         $user = $this->getUser(UserType::admin());
@@ -199,28 +199,28 @@ class OnlineRequestTest extends MyTestCase
             'online_request' => $onlineRequest->toArray(),
         ]);
     }
-
+*/
     public function testAdminCanAccessUpdate(): void
     {
         $user = $this->getUser(UserType::admin());
-        $this->majorValidation($user, true);
-        $this->majorNestedValidation($user, true);
-        $this->additionalNestedValidation($user, true);
-        $this->assertPrerequisites($user, true);
+//        $this->majorValidation($user, true);
+//        $this->majorNestedValidation($user, true);
+//        $this->additionalNestedValidation($user, true);
+//        $this->assertPrerequisites($user, true);
         $this->update($user);
         $this->printSuccessMessage('Admin can create new online request procedure passed ');
     }
 
-    public function testItTeamCanAccessUpdate(): void
-    {
-        $user = $this->getUser(UserType::itTeam());
-        $this->majorValidation($user, true);
-        $this->majorNestedValidation($user, true);
-        $this->additionalNestedValidation($user, true);
-        $this->assertPrerequisites($user, true);
-        $this->update($user);
-        $this->printSuccessMessage('Admin can create new online request procedure passed ');
-    }
+//    public function testItTeamCanAccessUpdate(): void
+//    {
+//        $user = $this->getUser(UserType::itTeam());
+//        $this->majorValidation($user, true);
+//        $this->majorNestedValidation($user, true);
+//        $this->additionalNestedValidation($user, true);
+//        $this->assertPrerequisites($user, true);
+//        $this->update($user);
+//        $this->printSuccessMessage('Admin can create new online request procedure passed ');
+//    }
 
     protected function update(User $user): void
     {
@@ -275,7 +275,7 @@ class OnlineRequestTest extends MyTestCase
             'online_request' => $result,
         ]);
     }
-
+/*
     public function testAdminCanAccessDestroy(): void
     {
         $user = $this->getUser(UserType::admin());
@@ -383,5 +383,5 @@ class OnlineRequestTest extends MyTestCase
                 ]
         ]);
     }
-
+*/
 }

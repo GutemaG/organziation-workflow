@@ -33,8 +33,8 @@ class OnlineRequestRequest extends FormRequest
             'online_request_procedures.*.responsible_user_id' => 'required|array|distinct|min:1',
             'online_request_procedures.*.step_number' => 'required|integer',
             'prerequisites' => 'sometimes|array|distinct|min:1',
-            'prerequisites.notes' => 'sometimes|array|distinct|min:1',
-            'prerequisites.inputs' => 'sometimes|array|distinct|min:1',
+            'prerequisites.notes' => 'sometimes|array|distinct',
+            'prerequisites.inputs' => 'sometimes|array|distinct',
             'prerequisites.inputs.*.name' => $checkInput ? 'required|string' : '',
             'prerequisites.inputs.*.input_id' => $checkInput ? 'required|string' : '',
             'prerequisites.inputs.*.type' => $checkInput ? ['required', 'string', Rule::in(InputFieldType::all())] : '',
@@ -52,7 +52,7 @@ class OnlineRequestRequest extends FormRequest
         $rules = $this->defaultRules();
         $method = strtoupper($this->method());
         if (in_array($method, ['PUT', 'PATCH'])) {
-            $rules['prerequisites.notes.*'] = $checkNote ? 'sometimes|array|distinct|min:1' : '';
+            $rules['prerequisites.notes.*'] = $checkNote ? 'sometimes|array|distinct' : '';
             $rules['prerequisites.notes.*.id'] = $checkNote ? ['sometimes', 'integer', Rule::exists('online_request_prerequisite_notes', 'id')] : '';
             $rules['prerequisites.notes.*.note'] = $checkNote ? 'required|string' : '';
             $rules['online_request_procedures.*.id'] = ['sometimes', 'integer', Rule::exists('online_request_procedures', 'id')];
