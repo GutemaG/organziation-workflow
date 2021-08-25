@@ -1,7 +1,7 @@
 <template>
   <div>
     <body class="login-page" style="min-height: 296px; background: none;">
-      <div class="login-box" fluid>
+      <div class="login-box" style="width: 460px;" fluid>
         <!-- /.login-logo -->
         <div class="card card-outline card-primary" style="border-radius: 2rem; border-top-width: 9px;">
           <div class="card-header text-center" style="border-radius: 2rem 2rem 0 0;">
