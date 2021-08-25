@@ -1,20 +1,14 @@
 
 <template>
-  <div class="container mt-2">
+  <div class="container">
     <h1>Add Online Request</h1>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero ut et ad explicabo tenetur recusandae alias molestias 
-      distinctio inventore repellat ducimus aliquid nulla debitis veritatis obcaecati reiciendis cumque, error officiis.
-      Iure explicabo saepe quia sed provident commodi nam eum enim totam atque laborum autem labore aspernatur, accusamus, 
-      cupiditate tempore corporis voluptates odio? Fugiat, accusantium. Incidunt nihil eaque quae est voluptatibus!
-    </p>
+    <p></p>
     <b-alert variant="danger" show v-if="missedStepNumbers"
       >Please Fille the step number correctly</b-alert
     >
-    <base-card :shadow="true">
+    <base-card >
       <b-row align-v="center" slot="header">
-        <b-col cols="8"> Add Online Reqeust </b-col>
-        <b-col cols="4"> Edit </b-col>
+        <b-col cols="8"> Add Online Request </b-col>
       </b-row>
       <b-form @submit.stop.prevent="handleSubmit">
         <div>
@@ -43,7 +37,7 @@
               id="online-request-type-input"
             >
               <b-form-select-option value=""
-                >Selecte affair type
+                >Select affair type
               </b-form-select-option>
               <b-form-select-option value="student"
                 >Student</b-form-select-option
@@ -71,12 +65,12 @@
         </div>
         
         <div>
-          <b-card class="shadow">
+          <b-card>
             <b-card-header header-text-variant="white" class="text-center" style="background-color:#8e5727 !important; border-radius: 2rem 2rem 0 0;">
-              <span style="font-size: 1.3rem"><strong>Add Procedures</strong></span>
+              <span style="font-size: 1rem"><strong>Add Procedures</strong></span>
             </b-card-header>
             <b-card-body
-              style="border-color: #8e5727 !important; border: 1px solid;"
+              style="border-color: #8e5727 !important;"
             >
               
               <div 
@@ -84,10 +78,9 @@
                 procedure, procedure_index
               ) in affair.online_request_procedures"
               :key="procedure_index">
-                <!-- !card for prorcedure bureau, user, step, desc-->
                 <div class="card" style="border: none; box-shadow: none;">
                   <b-card-header header-bg-variant="secondary" class="text-center" style="border-radius: 2rem 2rem 0 0;">
-                    <span style="font-size: 1.3rem"><strong>Procedure - {{ procedure_index }}</strong></span>
+                    <span style="font-size: 1rem"><strong>Procedure - {{ procedure_index }}</strong></span>
                     <b-button 
                     v-if="affair.online_request_procedures.length > 1"
                     @click="removeProcedure(procedure_index)" 
@@ -184,66 +177,68 @@
           </b-card>
         </div>
         <b-button
-          v-if="!prerequisite"
-          @click="prerequisite = true"
+          v-if="!have_prerequisite"
+          @click="addPrerequisite"
           variant="primary"
           >
             Add Pre-request
           </b-button>
-        <b-card v-if="prerequisite" style="width: 70%;">
+        <b-card v-if="have_prerequisite" >
           <b-card-header header-bg-variant="secondary" class="text-left" style="border-radius: 2rem 0 0 0;">
-            <span style="font-size: 1.3rem;"><strong>Add Pre Request Labels</strong></span>
-            <b-button variant="danger" @click="removeLabel()" class="float-right">
+            <span style="font-size: 1.3rem;"><strong>Add Prerequisite</strong></span>
+            <b-button variant="danger" @click="deletePrerequisite()" class="float-right">
               <i class="fa fa-trash"></i>
             </b-button>
           </b-card-header>
           <b-card-body style="border: 2px solid rgba(0, 0, 0, 0.251);">
-            <b-form-group label="Pre-request names: ">
-              <b-form-tags
-                v-model="affair.prerequisite_labels"
-                no-outer-focus
-                style="border:0px"
-              >
-                <template
-                  v-slot="{ tags, inputAttrs, inputHandlers, addTag, removeTag }"
-                >
-                  <b-input-group class="">
-                    <b-form-input
-                      id="pre-request-lable-input"
-                      v-bind="inputAttrs"
-                      v-on="inputHandlers"
-                      placeholder="Enter pre request Label, use enter or click add button"
-                      class="form-control"
-                    ></b-form-input>
-                    <b-input-group-append>
-                      <b-button @click="addTag()" variant="primary">Add</b-button>
-                    </b-input-group-append>
-                  </b-input-group>
-                  <b-container>
-                    <ul v-if="tags.length > 0" style="width: 90%">
-                      <li
-                        v-for="tag in tags"
-                        :key="tag"
-                        :title="`Tag: ${tag}`"
-                        class="mt-1"
-                      >
-                        <b-button variant="none" block class="d-flex align-items-center text-left" style="justify-content:space-between">
-                          <span>{{ tag }}</span>
-                          <b-button
-                            size="sm"
-                            variant="danger"
-                            class="float-right"
-                            @click="removeTag(tag)"
-                          >
-                            Remove label
-                          </b-button>
-                        </b-button>
-                      </li>
-                    </ul>
-                  </b-container>
-                </template>
-              </b-form-tags>
-            </b-form-group>
+              <div>
+                <div>
+                  <label for="prerequisiteNote">Note</label>
+                  <input
+                    id="prerequisiteNote"
+                    type="text" class="form-control m-1"
+                    placeholder="Enter Important note for customer" 
+                    >
+                </div>
+              </div>
+              <hr>
+              <div style="background:#F3F3F3">
+                <div v-if="affair.prerequisite.input_fields.length!=0" class="m-1 p-3 container">
+                <h3>List of Inputs</h3>
+                  <div class="" v-for="(input,index) in affair.prerequisite.input_fields" :key="index">
+                    <div class="row">
+                    <div class="col-3">
+                      {{index + 1}} <label>Name</label>
+                      <input v-model="input.name" type="text" class="form-control" placeholder="enter prerequisite name">
+                    </div>
+                    <div class="col-3">
+                         <label>type</label>
+                        <b-select v-model="input.type" :options="['text','description', 'number','file']">
+
+                        </b-select>
+                        <!-- <input v-model="input.type" type="text" class="form-control"> -->
+                    </div>
+                    <div class="col-3">
+                      <label>Description</label>
+                      <textarea v-model="input.description" class="form-control" rows="2" placeholder="Enter description for prerequisite"></textarea>
+                    </div>
+                    <div class="col-1">
+                      <b-button @click="removePrerequisiteLabel(index)" variant="danger" size="sm">
+                        <i class="fa fa-minus"></i>
+                      </b-button>
+                    </div>
+                  </div>
+                    <hr>
+                    </div>
+                  
+                </div>
+
+                <b-button @click="addPrerequisiteInput" variant="primary" size="sm" class="m-1">
+                <i class="fa fa-plus"></i>
+                <span>Add Input</span>
+                </b-button>
+              </div>
+              
           </b-card-body>
         </b-card>
         <b-button
@@ -263,9 +258,10 @@
 import { mapActions, mapGetters } from "vuex";
 import { required } from "vuelidate/lib/validators";
 import Vselect from "vue-select";
-import Multiselect from "vue-multiselect";
+// import Multiselect from "vue-multiselect";
 export default {
-  components: { Multiselect, "v-select": Vselect },
+  name:'add-online-request',
+  components: {  "v-select": Vselect },
   data() {
     return {
       affair: {
@@ -281,8 +277,12 @@ export default {
           },
         ],
         prerequisite_labels: [],
+        prerequisite: { 
+           name:'',
+           input_fields:[] 
+         },
       },
-      prerequisite: false,
+      have_prerequisite: false,
     };
   },
   computed: {
@@ -349,10 +349,28 @@ export default {
       let procedures = this.affair.online_request_procedures;
       procedures.splice(index, 1);
     },
-    removeLabel(index) {
-      this.affair.prerequisite_labels = [];
-      this.prerequisite = false;
+    deletePrerequisite(index) {
+      this.affair.prerequisite = {};
+      this.have_prerequisite = false;
     },
+    addPrerequisite(){
+      this.affair.prerequisite.name=''
+      this.affair.prerequisite.input_fields=[]
+      this.have_prerequisite=true;
+    },
+    addPrerequisiteInput(){
+    let input = {
+      name:'',
+      type:'text',
+      required:true,
+      description:'',
+    }
+    this.affair.prerequisite.input_fields.push(input)
+    console.log('adding inputtt')
+  },
+  removePrerequisiteLabel(index){
+    this.affair.prerequisite.input_fields.splice(index, 1)
+  }
   },
   validations: {
     affair: {

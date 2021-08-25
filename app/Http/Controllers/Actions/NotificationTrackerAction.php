@@ -47,7 +47,7 @@ class NotificationTrackerAction
     public static function onlineRequestAccepted(NotificationTracker $notificationTracker): JsonResponse
     {
         $authorizedUsersId = NotifyUserAction::usersId($notificationTracker);
-        if (Gate::check('is-staff') && in_array(auth()->user()->id, $authorizedUsersId)) {
+        if (in_array(auth()->user()->id, $authorizedUsersId)) {
             $onlineRequestStep = $notificationTracker->onlineRequestStep;
             NotifyUserAction::accepted($notificationTracker);
             OnlineRequestStepAction::assignResponsibleUser($onlineRequestStep);
@@ -55,6 +55,8 @@ class NotificationTrackerAction
                 $onlineRequestStep->onlineRequestTracker->update(['started_at' => now()]);
             return self::successResponse();
         }
+        elseif (empty($authorizedUsersId))
+            return self::successResponse(['error' => ['Already accepted.']], 400);
         return self::unauthorizedResponse();
     }
 
@@ -68,34 +70,40 @@ class NotificationTrackerAction
     public static function onlineRequestCompleted(NotificationTracker $notificationTracker): JsonResponse
     {
         $onlineRequestStep = $notificationTracker->onlineRequestStep;
-        $nextOnlineRequestStep = $onlineRequestStep->nextStep;
-        OnlineRequestStepAction::complete($onlineRequestStep);
-        NotifyUserAction::delete($notificationTracker);
-        if ($nextOnlineRequestStep) {
-            $notificationTracker = self::store($nextOnlineRequestStep->id);
-            $users = $nextOnlineRequestStep->onlineRequestProcedure->users;
-            $data = $users->map(function ($value) use ($notificationTracker){
-                return ['user_id' => $value->id, 'notification_tracker_id' => $notificationTracker->id];
-            })->toArray();
-            NotifyUserAction::store($data);
-            $onlineRequest = $nextOnlineRequestStep->onlineRequestProcedure->onlineRequest->toArray();
-            $nextOnlineRequestStep = $nextOnlineRequestStep->toArray();
-            unset($nextOnlineRequestStep['online_request_procedure']);
-            $nextOnlineRequestStep['online_request'] = $onlineRequest;
-            $nextOnlineRequestStep['notification_tracker_id'] = $notificationTracker->id;
-            NotifyUserEvent::dispatch($users, $nextOnlineRequestStep);
-            return self::successResponse();
+        if ($onlineRequestStep->user_id == auth()->user()->id) {
+            $nextOnlineRequestStep = $onlineRequestStep->nextStep;
+            OnlineRequestStepAction::complete($onlineRequestStep);
+            NotifyUserAction::delete($notificationTracker);
+            if ($nextOnlineRequestStep) {
+                $notificationTracker = self::store($nextOnlineRequestStep->id);
+                $users = $nextOnlineRequestStep->onlineRequestProcedure->users;
+                $data = $users->map(function ($value) use ($notificationTracker){
+                    return ['user_id' => $value->id, 'notification_tracker_id' => $notificationTracker->id];
+                })->toArray();
+                NotifyUserAction::store($data);
+                $onlineRequest = $nextOnlineRequestStep->onlineRequestProcedure->onlineRequest->toArray();
+                $nextOnlineRequestStep = $nextOnlineRequestStep->toArray();
+                unset($nextOnlineRequestStep['online_request_procedure']);
+                $nextOnlineRequestStep['online_request'] = $onlineRequest;
+                $nextOnlineRequestStep['notification_tracker_id'] = $notificationTracker->id;
+//            NotifyUserEvent::dispatch($users, $nextOnlineRequestStep);
+                return self::successResponse();
+            }
+            $onlineRequestStep->onlineRequestTracker->update(['ended_at' => now()]);
+            return self::successResponse(['message' => 'Request completed successfully.']);
         }
-        $onlineRequestStep->onlineRequestTracker->update(['ended_at' => now()]);
-        return self::successResponse(['message' => 'Request completed successfully.']);
+        return self::unauthorizedResponse();
     }
 
     public static function onlineRequestReject(NotificationTracker $notificationTracker, string $reason): JsonResponse
     {
         $onlineRequestStep = $notificationTracker->onlineRequestStep;
-        OnlineRequestStepAction::reject($onlineRequestStep, $reason);
-        NotifyUserAction::delete($notificationTracker);
-        $onlineRequestStep->onlineRequestTracker->update(['ended_at' => now()]);
-        return self::successResponse(['message' => 'Request rejected successfully.']);
+        if ($onlineRequestStep->user_id == auth()->user()->id) {
+            OnlineRequestStepAction::reject($onlineRequestStep, $reason);
+            NotifyUserAction::delete($notificationTracker);
+            $onlineRequestStep->onlineRequestTracker->update(['ended_at' => now()]);
+            return self::successResponse(['message' => 'Request rejected successfully.']);
+        }
+        return self::unauthorizedResponse();
     }
 }

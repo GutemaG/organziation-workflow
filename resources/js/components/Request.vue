@@ -10,205 +10,195 @@
           <b-skeleton width="70%"></b-skeleton>
         </b-card>
       </template>
-      <b-card
-        class="shadow"
-        style="border-radius: 21px 21px 0 0; overflow-x: scroll"
-      >
-        <b-card-body>
-          <div>
-            <b-row>
-              <b-col lg="6" class="my-1">
-                <router-link to="/add-request" class="m-2">
-                  <b-button size="sm" class="mr-1" variant="primary">
-                    + {{ tr("Add") }}
-                  </b-button>
-                </router-link>
-              </b-col>
-              <b-col lg="6" class="my-1"> </b-col>
-              <b-col lg="6" class="my-1">
-                <b-form-group
-                  label="Search"
-                  label-for="filter-input"
-                  label-cols-sm="3"
-                  label-align-sm="right"
-                  label-size="sm"
-                  class="mb-0"
-                >
-                  <b-input-group size="sm">
-                    <b-form-input
-                      id="filter-input"
-                      v-model="filter"
-                      type="search"
-                      placeholder="Type to Search"
-                    ></b-form-input>
+      <div>
+        <b-row>
+          <b-col lg="6" class="my-1">
+            <router-link to="/add-request" class="m-2">
+              <b-button size="sm" class="mr-1" variant="primary">
+                + {{ tr("Add") }}
+              </b-button>
+            </router-link>
+          </b-col>
+          <b-col lg="6" class="my-1"> </b-col>
+          <b-col lg="6" class="my-1">
+            <b-form-group
+              label="Search"
+              label-for="filter-input"
+              label-cols-sm="3"
+              label-align-sm="right"
+              label-size="sm"
+              class="mb-0"
+            >
+              <b-input-group size="sm">
+                <b-form-input
+                  id="filter-input"
+                  v-model="filter"
+                  type="search"
+                  placeholder="Type to Search"
+                ></b-form-input>
 
-                    <b-input-group-append>
-                      <b-button :disabled="!filter" @click="filter = ''">{{
-                        tr("Clear")
-                      }}</b-button>
-                    </b-input-group-append>
-                  </b-input-group>
-                </b-form-group>
-              </b-col>
+                <b-input-group-append>
+                  <b-button :disabled="!filter" @click="filter = ''">{{
+                    tr("Clear")
+                  }}</b-button>
+                </b-input-group-append>
+              </b-input-group>
+            </b-form-group>
+          </b-col>
 
-              <b-col lg="6" class="my-1">
-                <b-form-group
-                  label="Filter"
-                  label-for="filter-input"
-                  label-cols-sm="3"
-                  label-align-sm="right"
-                  label-size="sm"
-                  class="mb-0"
-                >
-                  <b-input-group size="sm">
-                    <b-form-input
-                      id="filter-input"
-                      type="search"
-                      placeholder="Type to Search"
-                    ></b-form-input>
+          <b-col lg="6" class="my-1">
+            <b-form-group
+              label="Filter"
+              label-for="filter-input"
+              label-cols-sm="3"
+              label-align-sm="right"
+              label-size="sm"
+              class="mb-0"
+            >
+              <b-input-group size="sm">
+                <b-form-input
+                  id="filter-input"
+                  type="search"
+                  placeholder="Type to Search"
+                ></b-form-input>
 
-                    <b-input-group-append>
-                      <!-- <b-button :disabled="!filter" @click="filter = ''"
+                <b-input-group-append>
+                  <!-- <b-button :disabled="!filter" @click="filter = ''"
                       >Clear</b-button
                     > -->
-                      <b-button>{{ tr("hel") }}</b-button>
-                    </b-input-group-append>
-                  </b-input-group>
-                </b-form-group>
-              </b-col>
-              <b-col sm="5" md="6" class="my-1">
-                <b-form-group
-                  label="Per page"
-                  label-for="per-page-select"
-                  label-cols-sm="6"
-                  label-cols-md="4"
-                  label-cols-lg="3"
-                  label-align-sm="right"
-                  label-size="sm"
-                  class="mb-0"
-                >
-                  <b-form-select
-                    id="per-page-select"
-                    v-model="perPage"
-                    :options="pageOptions"
-                    size="sm"
-                  ></b-form-select>
-                </b-form-group>
-              </b-col>
-
-              <b-col md="6" class="my-1">
-                <b-pagination
-                  v-model="currentPage"
-                  :total-rows="totalAffairs"
-                  :per-page="perPage"
-                  size="sm"
-                  class="my-0"
-                  align="fill"
-                  :first-text="tr('First')"
-                  :prev-text="tr('Prev')"
-                  :next-text="tr('Next')"
-                  :last-text="tr('Last')"
-                ></b-pagination>
-              </b-col>
-
-              <b-col sm="5" md="6" class="my-1"> </b-col>
-            </b-row>
-
-            <b-table
-              :items="affairs"
-              :fields="request_fields"
-              :current-page="currentPage"
-              :per-page="perPage"
-              :filter="filter"
-              small
-              striped
-              :busy="isLoading"
-              show-empty
-              stacked="xl"
-              label-sort-clear
-              sticky-header
+                  <b-button>{{ tr("hel") }}</b-button>
+                </b-input-group-append>
+              </b-input-group>
+            </b-form-group>
+          </b-col>
+          <b-col sm="5" md="6" class="my-1">
+            <b-form-group
+              label="Per page"
+              label-for="per-page-select"
+              label-cols-sm="6"
+              label-cols-md="4"
+              label-cols-lg="3"
+              label-align-sm="right"
+              label-size="sm"
+              class="mb-0"
             >
-              <template #table-busy>
-                <div class="text-center text-danger my-2">
-                  <b-spinner class="align-middle"></b-spinner>
-                  <strong>{{ tr("Loading") }}...</strong>
-                </div>
-              </template>
-              <template #cell(#)="row">
-                <b-button
-                  @click="row.toggleDetails"
-                  size="sm"
-                  variant="primary"
-                >
-                  <i
-                    v-if="!row.item._showDetails"
-                    class="fas fa-angle-right small"
-                  ></i>
-                  <i v-else class="fas fa-angle-up small"></i>
-                </b-button>
-                {{ row.index + 1 }}
-              </template>
-              <template #cell(description)="row" @click="row.toggleDetails">
-                <p
-                  @click="row.toggleDetails"
-                  id="affair-description"
-                  v-b-popover.hover.top="row.item.description"
-                  title="Description"
-                >
-                  {{ row.item.description.substring(0, 20) }} ...
-                </p>
-              </template>
+              <b-form-select
+                id="per-page-select"
+                v-model="perPage"
+                :options="pageOptions"
+                size="sm"
+              ></b-form-select>
+            </b-form-group>
+          </b-col>
 
-              <template #cell(procedures)="row" @click="row.toggleDetails">
-                <span
-                  @click="row.toggleDetails"
-                  style="cursor: pointer; display: block"
-                  >{{ row.item.procedures.length }}</span
-                >
-              </template>
-              <template #cell(actions)="row">
-                <router-link :to="'/request/edit/' + row.item.id">
-                  <b-button size="sm" class="mr-1" variant="primary">
-                    <i class="fa fa-edit" style="color: white">
-                      <span style="color: white">{{ tr("Edit") }}</span>
-                    </i>
-                  </b-button>
-                </router-link>
-                <b-button
-                  size="sm"
-                  @click="deleteAffair(row.item.id)"
-                  variant="danger"
-                >
-                  <i class="fa fa-trash"></i>
-                </b-button>
-              </template>
-              <template #cell(created_at)="row">
-                {{ row.item.created_at | formatDate }}
-              </template>
-              <template #row-details="row">
-                <div>
-                  <b-jumbotron
-                    header="Description"
-                    :lead="row.item.description"
-                    header-level="5"
-                    style="padding: 1rem 2rem; margin-botttom: 0.5rem"
-                  >
-                  </b-jumbotron>
-                </div>
+          <b-col md="6" class="my-1">
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="totalAffairs"
+              :per-page="perPage"
+              size="sm"
+              class="my-0"
+              align="fill"
+              :first-text="tr('First')"
+              :prev-text="tr('Prev')"
+              :next-text="tr('Next')"
+              :last-text="tr('Last')"
+            ></b-pagination>
+          </b-col>
 
-                <procedures
-                  :procedures="row.item.procedures"
-                  v-on:removeProcedure="removeProcedure"
-                >
-                </procedures>
-                <!-- <b-card title="List Of procedures with their Pre request" no-body>
+          <b-col sm="5" md="6" class="my-1"> </b-col>
+        </b-row>
+
+        <b-table
+          :items="affairs"
+          :fields="request_fields"
+          :current-page="currentPage"
+          :per-page="perPage"
+          :filter="filter"
+          small
+          striped
+          :busy="isLoading"
+          show-empty
+          stacked="xl"
+          label-sort-clear
+          sticky-header
+        >
+          <template #table-busy>
+            <div class="text-center text-danger my-2">
+              <b-spinner class="align-middle"></b-spinner>
+              <strong>{{ tr("Loading") }}...</strong>
+            </div>
+          </template>
+          <template #cell(#)="row">
+            <b-button @click="row.toggleDetails" size="sm" variant="primary">
+              <i
+                v-if="!row.item._showDetails"
+                class="fas fa-angle-right small"
+              ></i>
+              <i v-else class="fas fa-angle-up small"></i>
+            </b-button>
+            {{ row.index + 1 }}
+          </template>
+          <template #cell(description)="row" @click="row.toggleDetails">
+            <p
+              @click="row.toggleDetails"
+              id="affair-description"
+              v-b-popover.hover.top="row.item.description"
+              title="Description"
+            >
+              {{ row.item.description.substring(0, 20) }} ...
+            </p>
+          </template>
+
+          <template #cell(procedures)="row" @click="row.toggleDetails">
+            <span
+              @click="row.toggleDetails"
+              style="cursor: pointer; display: block"
+              >{{ row.item.procedures.length }}</span
+            >
+          </template>
+          <template #cell(actions)="row">
+            <router-link :to="'/request/edit/' + row.item.id">
+              <b-button size="sm" class="mr-1" variant="primary">
+                <i class="fa fa-edit" style="color: white">
+                  <span style="color: white">{{ tr("Edit") }}</span>
+                </i>
+              </b-button>
+            </router-link>
+            <b-button
+              size="sm"
+              @click="deleteAffair(row.item.id)"
+              variant="danger"
+            >
+              <i class="fa fa-trash"></i>
+            </b-button>
+          </template>
+          <template #cell(created_at)="row">
+            {{ row.item.created_at | formatDate }}
+          </template>
+          <template #row-details="row">
+            <div>
+              <b-jumbotron
+                header="Description"
+                :lead="row.item.description"
+                header-level="5"
+                style="padding: 1rem 2rem; margin-botttom: 0.5rem"
+              >
+              </b-jumbotron>
+            </div>
+
+            <procedures
+              :procedures="row.item.procedures"
+              v-on:removeProcedure="removeProcedure"
+            >
+            </procedures>
+            <!-- <b-card title="List Of procedures with their Pre request" no-body>
                 <b-card-header>List of Procedures with their pre-request</b-card-header>
               </b-card> -->
-              </template>
-            </b-table>
-          </div>
-        </b-card-body>
-        <!-- <b-card-footer>
+          </template>
+        </b-table>
+      </div>
+      <!-- <b-card-footer>
           <div>
             <b-col sm="7" md="6" class="my-1">
               <b-pagination
@@ -226,7 +216,6 @@
             </b-col>
           </div>
         </b-card-footer> -->
-      </b-card>
     </b-skeleton-wrapper>
   </div>
 </template>

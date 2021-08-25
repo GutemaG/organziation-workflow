@@ -38,4 +38,13 @@ trait MyJsonResponse
         $response = $data ? array_merge($response, $data) : $response;
         return response()->json($response);
     }
+
+    protected static function badResponse(array $data, int $status=400): JsonResponse
+    {
+        $response = array();
+        $response['status'] = $status;
+
+        $response = $data ? array_merge($response, $data) : $response;
+        return response()->json($response);
+    }
 }

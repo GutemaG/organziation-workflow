@@ -52,8 +52,8 @@
               </router-link>
             </li>
           </div>
-          <div v-if="isAdmin">
-            <li class="nav-item">
+          <div v-if="isAdmin || isSupportiveStaff">
+            <li class="nav-item" v-if="isAdmin">
               <router-link to="/users" class="nav-link">
                 <!-- <router-link to="/"> Back to Home </router-link> -->
                 <i class="nav-icon fa fa-users blue"></i>
@@ -89,6 +89,12 @@
               </router-link>
             </li>
           </div>
+            <li class="nav-item" v-if="isReception">
+              <router-link to="/faqs" class="nav-link">
+                <i class="nav-icon fas fa-times blue"></i>
+                <p>{{ tr("FAQS") }}</p>
+              </router-link>
+            </li>
           <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-home blue"></i>
@@ -158,12 +164,15 @@ export default {
     isAdmin() {
       return this.currentUser.type === "admin";
     },
-    isItTeamMember() {
-      return this.currentUser.type === "it-team-member";
+    isSupportiveStaff() {
+      return this.currentUser.type === "it_team_member";
     },
-    isStaf() {
+    isStaff() {
       return this.currentUser.type === "staff";
     },
+    isReception(){
+      return this.currentUser.type === "reception";
+    }
   },
   methods: {},
 };

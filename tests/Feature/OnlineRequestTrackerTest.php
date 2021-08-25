@@ -7,9 +7,9 @@ use App\Models\OnlineRequestTracker;
 
 class OnlineRequestTrackerTest extends MyTestCase
 {
-    protected $url = '/api/apply-request/';
-    protected $modelName = OnlineRequestTracker::class;
-    protected $defaultTest = false;
+    protected string $url = '/api/apply-request/';
+    protected string $modelName = OnlineRequestTracker::class;
+    protected bool $defaultTest = false;
 
     public function testApplyRequestWithInvalidData(): void
     {

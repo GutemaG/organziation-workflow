@@ -37,8 +37,7 @@ class NotifyUserEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        $channels = $this->getChannels();
-        return $channels;
+        return $this->getChannels();
     }
 
     /**

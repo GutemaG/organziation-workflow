@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <div class="container">
     <b-form @submit="handleSubmit">
       <b-alert variant="danger" show v-if="missedStepNumber"
         >Please Fille the step number correctly</b-alert
@@ -24,7 +24,7 @@
         <b-form-group label="Affair Type" label-for="description-input">
           <b-form-select v-model="$v.affair.type.$model" id="affair-type-input">
             <b-form-select-option value=""
-              >Selecte affair type
+              >Select affair type
             </b-form-select-option>
             <b-form-select-option value="student">Student</b-form-select-option>
             <b-form-select-option value="staff">Staff</b-form-select-option>
@@ -35,14 +35,13 @@
 
         <b-form-group
           label="Description"
-          lableFor="affair-description"
           label-for="procedure-description-input"
           description=""
         >
           <b-form-textarea
             rows="3"
             v-model="affair.description"
-            id="'affair-description'"
+            id="affair-description-input"
             placeholder="description for current procedure(optional)"
           ></b-form-textarea>
         </b-form-group>
@@ -52,13 +51,13 @@
             v-for="(procedure, procedure_index) in affair.procedures"
             :key="procedure_index"
           >
-            <b-card class="shadow">
+            <b-card class="shadow-sm">
               <b-card-header
                 header-bg-variant="secondary"
                 class="text-center"
                 style="border-radius: 2rem 2rem 0 0"
               >
-                <span style="font-size: 1.3rem"
+                <span style="font-size: 1rem"
                   ><strong>Procedure - {{ procedure_index }}</strong></span
                 >
                 <b-button
@@ -296,7 +295,8 @@
         Submit
       </b-button>
     </b-form>
-  </b-container>
+    <!-- </b-container> -->
+  </div>
 </template>
 <script>
 import Vselect from "vue-select";

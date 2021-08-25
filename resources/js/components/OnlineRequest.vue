@@ -1,8 +1,8 @@
 <template>
   <b-container
     fluid
-    class="bg-light shadow mx-auto mt-2"
-    style="max-height: 100%; border-radius: 21px 21px 0 0"
+    class="bg-light  mx-auto mt-2"
+    style="max-height: 100%;"
   >
     <b-row>
       <b-col lg="6" class="my-1">

@@ -13,6 +13,9 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+/server/copy
+/server/node_modules
+
 
 
 test.py

@@ -3,8 +3,8 @@
     <!-- User Interface controls -->
     <h2></h2>
     <div
-      class="bg-light shadow mx-auto"
-      style="max-height: 100%; border-radius: 21px 21px 0 0"
+      class="bg-light  mx-auto"
+      style="max-height: 100%;"
     >
       <b-row>
         <b-col lg="6" class="my-1">
@@ -108,10 +108,7 @@
         :filter-debounce="500"
         :busy="isLoading"
       >
-        <template #table-busy>    hods: {
-        handleResize() {
-            this.window.width = window.innerWidth;
-            th
+        <template #table-busy>    
           <div class="text-center text-danger my-2">
             <b-spinner class="align-middle"></b-spinner>
             <strong>Loading...</strong>

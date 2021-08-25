@@ -11,17 +11,17 @@ class UserType
      *
      * @var string
      */
-    private static $admin = "admin";
-    private static $itTeam = "supportive-staff";
-    private static $staff = "staff";
-    private static $reception = "reception";
+    private static string $admin = "admin";
+    private static string $supportiveStaff = "supportive_staff";
+    private static string $staff = "staff";
+    private static string $reception = "reception";
 
     /**
      * Getter method for $admin variable.
      *
      * @return string
      */
-    public static function admin()
+    public static function admin(): string
     {
         return UserType::$admin;
     }
@@ -31,9 +31,9 @@ class UserType
      *
      * @return string
      */
-    public static function itTeam()
+    public static function supportiveStaff(): string
     {
-        return UserType::$itTeam;
+        return UserType::$supportiveStaff;
     }
 
     /**
@@ -41,7 +41,7 @@ class UserType
      *
      * @return string
      */
-    public static function staff()
+    public static function staff(): string
     {
         return UserType::$staff;
     }
@@ -51,7 +51,7 @@ class UserType
      *
      * @return string
      */
-    public static function reception()
+    public static function reception(): string
     {
         return UserType::$reception;
     }
@@ -61,10 +61,11 @@ class UserType
      *
      * @return array
      */
-    public static function all(){
+    public static function all(): array
+    {
         return [
             self::$admin,
-            self::$itTeam,
+            self::$supportiveStaff,
             self::$staff,
             self::$reception,
         ];
@@ -75,9 +76,10 @@ class UserType
      *
      * @return array
      */
-    public static function exceptAdmin(){
+    public static function exceptAdmin(): array
+    {
         return [
-            self::$itTeam,
+            self::$supportiveStaff,
             self::$staff,
             self::$reception,
         ];
@@ -88,10 +90,11 @@ class UserType
      *
      * @return array
      */
-    public static function majors(){
+    public static function majors(): array
+    {
         return [
             self::$admin,
-            self::$itTeam,
+            self::$supportiveStaff,
         ];
     }
 
@@ -100,7 +103,8 @@ class UserType
      *
      * @return array
      */
-    public static function minors(){
+    public static function minors(): array
+    {
         return [
             self::$staff,
             self::$reception,
