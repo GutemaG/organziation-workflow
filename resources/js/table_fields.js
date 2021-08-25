@@ -261,7 +261,7 @@ const bureau_fields = [
         sortable: true,
         sortDirection: "desc"
     },
-    {
+    /*{
         key: "location",
         label: lang.translate("Location"),
         sortable: true,
@@ -271,7 +271,7 @@ const bureau_fields = [
             return newVal;
         },
         sortDirection: "desc"
-    },
+    },*/
     {
         key: "created_at",
         label: lang.translate("Created At"),

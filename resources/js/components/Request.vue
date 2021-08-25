@@ -47,29 +47,7 @@
           </b-col>
 
           <b-col lg="6" class="my-1">
-            <b-form-group
-              label="Filter"
-              label-for="filter-input"
-              label-cols-sm="3"
-              label-align-sm="right"
-              label-size="sm"
-              class="mb-0"
-            >
-              <b-input-group size="sm">
-                <b-form-input
-                  id="filter-input"
-                  type="search"
-                  placeholder="Type to Search"
-                ></b-form-input>
-
-                <b-input-group-append>
-                  <!-- <b-button :disabled="!filter" @click="filter = ''"
-                      >Clear</b-button
-                    > -->
-                  <b-button>{{ tr("hel") }}</b-button>
-                </b-input-group-append>
-              </b-input-group>
-            </b-form-group>
+            
           </b-col>
           <b-col sm="5" md="6" class="my-1">
             <b-form-group

@@ -103,6 +103,24 @@ export default {
   },
   computed: {
     ...mapGetters(["findRequest"]),
+    arrangePrerequisites(){
+        let prerequisites = this.form.prerequisites.map(pre=> {
+            return {
+                name: pre.name,
+                value: pre.value
+            };
+        });
+        // return prerequisites
+        let mapped = {  }
+        for(let i =0;i<prerequisites.length;i++){
+            let di={}
+            let name = prerequisites[i].name
+            let value = prerequisites[i].value
+            mapped[name] = value
+            // mapped.push(di)
+        }
+        return mapped
+    }
   },
   methods: {
     validateState(value) {
@@ -112,9 +130,11 @@ export default {
     },
     handleSubmit() {
       this.isLoading = true;
+      let data = {...this.form}
+      data['prerequisites'] = this.arrangePrerequisites
       axios
         .post("/api/apply-request", {
-          ...this.form,
+          ...data,
           online_request_id: this.selected.id,
         })
         .then((resp) => {

@@ -5,11 +5,11 @@ const io = require("socket.io")(httpServer, {
   },
 });
 
-const crypto = require("crypto");
-const randomId = () => crypto.randomBytes(8).toString("hex");
+// const crypto = require("crypto");
+// const randomId = () => crypto.randomBytes(8).toString("hex");
 
-const { InMemorySessionStore } = require("./sessionStore");
-const sessionStore = new InMemorySessionStore();
+// const { InMemorySessionStore } = require("./sessionStore");
+// const sessionStore = new InMemorySessionStore();
 
 io.use((socket, next) => {
   const username = socket.handshake.auth.username;
