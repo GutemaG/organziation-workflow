@@ -21,7 +21,7 @@
             >Accept</b-button
           > -->
           <b-button
-            v-if="!row.item.ended_at"
+            v-if="!row.item.ended_at && row.item.is_rejected!=1"
             variant="primary"
             @click="complete_request(row.item)"
             >Complete</b-button

@@ -47,7 +47,7 @@ class InputFieldType
     {
         return [
           self::$email,
-          self::$file,
+//          self::$file,
           self::$number,
           self::$text,
         ];
