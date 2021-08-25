@@ -40,14 +40,18 @@ class OnlineRequestPrerequisiteInputAction
 
     public static function updateData(array $data, int $onlineRequestId): void
     {
-        if (array_key_exists('prerequisites', $data))
+        if (array_key_exists('prerequisites', $data)) {
             if (array_key_exists('inputs', $data['prerequisites'])) {
                 list($updatable, $creatable) = self::getUpdatableAndCreatableData($data['prerequisites']['inputs']);
                 $onlineRequest = OnlineRequest::with(['onlineRequestPrerequisiteInputs'])->find($onlineRequestId);
                 self::deleteUnexistData($onlineRequest, $updatable);
-                self::storeData(['prerequisites'=>['inputs' => $creatable]], $onlineRequestId);
+                self::storeData(['prerequisites' => ['inputs' => $creatable]], $onlineRequestId);
                 self::update($updatable);
+                return;
             }
+        }
+        $onlineRequest = OnlineRequest::with(['onlineRequestPrerequisiteInputs'])->find($onlineRequestId);
+        self::deleteUnexistData($onlineRequest, []);
     }
 
     /**

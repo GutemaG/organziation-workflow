@@ -16,7 +16,7 @@ class SmsNotifier
     private $auth_token;
     private $twilio_number;
     private $client;
-    private $token;
+    private $message;
 
     /**
      * SmsNotifier constructor.
@@ -24,10 +24,10 @@ class SmsNotifier
      * @param $token
      * @throws ConfigurationException
      */
-    public function __construct(string $to, string $token)
+    public function __construct(string $to, string $message)
     {
         $this->to = $to;
-        $this->token = $token;
+        $this->message = $message;
         $this->account_sid = config('twilio.account_sid');
         $this->auth_token = config('twilio.auth_token');
         $this->twilio_number = config('twilio.twilio_number');
@@ -43,7 +43,7 @@ class SmsNotifier
     {
         try {
             $this->client->messages->create($this->to,
-                ['from' => $this->twilio_number, 'body' => "Your token is:-  " . $this->token]
+                ['from' => $this->twilio_number, 'body' => $this->message]
             );
         } catch (TwilioException $e) {
             throw new Exception('The system can\'t send sms; may be your phone number is not registered!');

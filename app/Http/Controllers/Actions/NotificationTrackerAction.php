@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Actions;
 
 
 use App\Events\NotifyUserEvent;
+use App\Http\Controllers\Actions\Services\SmsNotifier;
 use App\Models\NotificationTracker;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
+use Twilio\Exceptions\ConfigurationException;
 
 class NotificationTrackerAction
 {
@@ -66,6 +68,7 @@ class NotificationTrackerAction
      *
      * @param NotificationTracker $notificationTracker
      * @return JsonResponse
+     * @throws ConfigurationException
      */
     public static function onlineRequestCompleted(NotificationTracker $notificationTracker): JsonResponse
     {
@@ -86,22 +89,48 @@ class NotificationTrackerAction
                 unset($nextOnlineRequestStep['online_request_procedure']);
                 $nextOnlineRequestStep['online_request'] = $onlineRequest;
                 $nextOnlineRequestStep['notification_tracker_id'] = $notificationTracker->id;
-           NotifyUserEvent::dispatch($users, $nextOnlineRequestStep);
+                NotifyUserEvent::dispatch($users, $nextOnlineRequestStep);
                 return self::successResponse();
             }
-            $onlineRequestStep->onlineRequestTracker->update(['ended_at' => now()]);
+            $onlineRequestTracker = $onlineRequestStep->onlineRequestTracker;
+            $onlineRequestTracker->update(['ended_at' => now()]);
+            $message = "Dear $onlineRequestTracker->full_name, your online request is completed.";
+            self::notifierCustomer($onlineRequestTracker->phone, $message);
             return self::successResponse(['message' => 'Request completed successfully.']);
         }
         return self::unauthorizedResponse();
     }
 
+    /**
+     * Send the token to the customer via sms.
+     *
+     * @param $phone_number
+     * @param $message
+     * @throws ConfigurationException
+     * @throws \Exception
+     */
+    protected static function notifierCustomer($phone_number, $message): void
+    {
+        $smsNotifier = new SmsNotifier($phone_number, $message);
+        $smsNotifier->sendSms();
+    }
+
+    /**
+     * @param NotificationTracker $notificationTracker
+     * @param string $reason
+     * @return JsonResponse
+     * @throws ConfigurationException
+     */
     public static function onlineRequestReject(NotificationTracker $notificationTracker, string $reason): JsonResponse
     {
         $onlineRequestStep = $notificationTracker->onlineRequestStep;
         if ($onlineRequestStep->user_id == auth()->user()->id) {
             OnlineRequestStepAction::reject($onlineRequestStep, $reason);
             NotifyUserAction::delete($notificationTracker);
-            $onlineRequestStep->onlineRequestTracker->update(['ended_at' => now()]);
+            $onlineRequestTracker = $onlineRequestStep->onlineRequestTracker;
+            $onlineRequestTracker->update(['ended_at' => now()]);
+            $message = "Dear $onlineRequestTracker->full_name, your online request is rejected because of $reason.";
+            self::notifierCustomer($onlineRequestTracker->phone, $message);
             return self::successResponse(['message' => 'Request rejected successfully.']);
         }
         return self::unauthorizedResponse();

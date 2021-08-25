@@ -39,11 +39,13 @@ class OnlineRequestTrackerAction
                     'full_name' => $data['full_name'],
                     'phone' => $data['phone_number'],
                 ]);
-                ClientInformationAction::store($data, $onlineRequestTracker);
                 $token = $onlineRequestTracker->token;
+                $full_name = $data['full_name'];
+                $message = "Dear $full_name, your token is:- $token.";
+                ClientInformationAction::store($data, $onlineRequestTracker);
                 $procedures = $onlineRequest->onlineRequestProcedures;
                 $onlineRequestStep = OnlineRequestStepAction::store($procedures, $onlineRequestTracker);
-                self::initiateNotification($data['phone_number'], $token, $onlineRequest, $procedures, $onlineRequestStep);
+                self::initiateNotification($data['phone_number'], $message, $onlineRequest, $procedures, $onlineRequestStep);
                 DB::commit();
                 return self::successResponse($token);
             }
@@ -57,15 +59,15 @@ class OnlineRequestTrackerAction
 
     /**
      * @param string $phone_number
-     * @param string $token
+     * @param string $message
      * @param Model $onlineRequest
      * @param Collection $procedures
      * @param Model $onlineRequestStep
      * @throws ConfigurationException
      */
-    protected static function initiateNotification(string $phone_number, string $token, Model $onlineRequest, Collection $procedures, Model $onlineRequestStep): void
+    protected static function initiateNotification(string $phone_number, string $message, Model $onlineRequest, Collection $procedures, Model $onlineRequestStep): void
     {
-       self::notifierCustomer($phone_number, $token);
+        self::notifierCustomer($phone_number, $message);
         $users = self::getUsers($procedures);
         $onlineRequestStep = $onlineRequestStep->toArray();
         $onlineRequest = $onlineRequest->toArray();
@@ -131,12 +133,13 @@ class OnlineRequestTrackerAction
      * Send the token to the customer via sms.
      *
      * @param $phone_number
-     * @param $token
+     * @param $message
      * @throws ConfigurationException
+     * @throws Exception
      */
-    protected static function notifierCustomer($phone_number, $token): void
+    protected static function notifierCustomer($phone_number, $message): void
     {
-        $smsNotifier = new SmsNotifier($phone_number, $token);
+        $smsNotifier = new SmsNotifier($phone_number, $message);
         $smsNotifier->sendSms();
     }
 
