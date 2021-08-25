@@ -21,7 +21,7 @@ class OnlineRequestPrerequisiteInputAction
                     $temp = [
                         'online_request_id' => $onlineRequestId,
                         'name' => $value['name'],
-                        'input_id' => $value['id'],
+                        'input_id' => $value['input_id'],
                         'type' => $value['type'],
                     ];
                     self::store($temp);

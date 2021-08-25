@@ -34,7 +34,7 @@
                   </h3>
                   <div class="card-tools">
                     <button type="button" class="btn text-white" data-card-widget="collapse" title="Collapse">
-                      <i class="fas fa-plus"></i>
+                      <i class="fas fa-plus blue"></i>
                     </button>
                   </div>
                   <!-- card tools -->

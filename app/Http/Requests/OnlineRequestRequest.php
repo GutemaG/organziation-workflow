@@ -39,7 +39,7 @@ class OnlineRequestRequest extends FormRequest
             'prerequisites.inputs' => 'sometimes|array|distinct|min:1',
             'prerequisites.notes.*' => $checkNote ? 'required|string' : '',
             'prerequisites.inputs.*.name' => $checkInput ? 'required|string' : '',
-            'prerequisites.inputs.*.id' => $checkInput ? 'required|string' : '',
+            'prerequisites.inputs.*.input_id' => $checkInput ? 'required|string' : '',
             'prerequisites.inputs.*.type' => $checkInput ? ['required', 'string', Rule::in(InputFieldType::all())] : '',
         ];
     }
