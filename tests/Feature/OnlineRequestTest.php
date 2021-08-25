@@ -15,7 +15,7 @@ class OnlineRequestTest extends MyTestCase
     protected string $modelName = OnlineRequest::class;
     protected bool $defaultTest = false;
     protected array $with = ['onlineRequestProcedures.users', 'onlineRequestPrerequisiteNotes', 'onlineRequestPrerequisiteInputs'];
-/*
+
     public function testAdminCanAccessIndex(): void
     {
         $user = $this->getUser(UserType::admin());
@@ -259,8 +259,7 @@ class OnlineRequestTest extends MyTestCase
             'online_request' => $result,
         ]);
     }
-    */
-/*
+
     public function testAdminCanAccessDestroy(): void
     {
         $user = $this->getUser(UserType::admin());
@@ -278,15 +277,23 @@ class OnlineRequestTest extends MyTestCase
     protected function destroy(User $user): void
     {
         $this->actingAs($user);
-        $onlineRequest = $this->randomData(OnlineRequest::class);
-        $response = $this->deleteJson($this->url . $onlineRequest->id);
+        $onlineRequest = $this->randomData(OnlineRequest::class, $this->with);
+        $response = $this->deleteJson("$this->url/$onlineRequest->id");
         $response->assertExactJson([
             'status' => 200,
         ]);
         $this->assertSoftDeleted($onlineRequest);
-        OnlineRequest::withTrashed()->restore();
+        foreach ($onlineRequest->onlineRequestProcedures as $procedure) {
+            $this->assertSoftDeleted($procedure);
+            foreach ($procedure->users as $user)
+                $this->assertSoftDeleted($user);
+        }
+        foreach ($onlineRequest->onlineRequestPrerequisiteInputs as $input)
+            $this->assertSoftDeleted($input);
+        foreach ($onlineRequest->onlineRequestPrerequisiteNotes as $note)
+            $this->assertSoftDeleted($note);
     }
-*/
+
     private function assertPrerequisites(User $user, bool $update=false): void
     {
         $this->actingAs($user);

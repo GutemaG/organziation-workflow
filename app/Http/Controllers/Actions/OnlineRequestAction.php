@@ -89,4 +89,16 @@ class OnlineRequestAction
         $onlineRequest = OnlineRequest::with(self::$with)->find($onlineRequest->id)->toArray();
         return self::successResponse(['online_request' => $onlineRequest]);
     }
+
+    public static function destroy(OnlineRequest $onlineRequest): JsonResponse
+    {
+        foreach ($onlineRequest->onlineRequestProcedures as $procedure){
+            $procedure->users()->delete();
+        }
+        $onlineRequest->onlineRequestProcedures()->delete();
+        $onlineRequest->onlineRequestPrerequisiteInputs()->delete();
+        $onlineRequest->onlineRequestPrerequisiteNotes()->delete();
+        $onlineRequest->delete();
+        return self::successResponse();
+    }
 }

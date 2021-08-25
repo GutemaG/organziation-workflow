@@ -67,9 +67,6 @@ class OnlineRequestController extends Controller
      */
     public function destroy(OnlineRequest $onlineRequest): JsonResponse
     {
-            $onlineRequest->delete();
-            return response()->json([
-                'status' => 200,
-            ]);
+        return OnlineRequestAction::destroy($onlineRequest);
     }
 }
