@@ -39,8 +39,9 @@ trait MyDatabaseSeeder
         OnlineRequest::factory(5)->create()->each(function ($onlineRequest) {
             OnlineRequestPrerequisiteNote::factory(rand(1, 5))->
             create(['online_request_id' => $onlineRequest->id]);
-            OnlineRequestPrerequisiteInput::factory(rand(1,5))
-                ->create(['online_request_id'=> $onlineRequest->id]);
+            for ($i=0;$i<5;$i++)
+                OnlineRequestPrerequisiteInput::factory(1)
+                    ->create(['online_request_id'=> $onlineRequest->id]);
 
             $length = rand(2, 5);
             for ($i = 1; $i < $length; $i++) {

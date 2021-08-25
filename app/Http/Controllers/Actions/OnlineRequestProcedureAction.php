@@ -16,7 +16,9 @@ class OnlineRequestProcedureAction
 
     public static function storeData(array $data, int $onlineRequestId): void
     {
-        $creatableData = self::prepareForStoring($data['online_request_procedures'], $onlineRequestId);
+        $creatableData = array_key_exists('online_request_procedures', $data)
+            ? self::prepareForStoring($data['online_request_procedures'], $onlineRequestId)
+            : self::prepareForStoring($data, $onlineRequestId);
         foreach ($creatableData as $value)
             self::store($value);
     }
@@ -44,18 +46,12 @@ class OnlineRequestProcedureAction
      * @param array $data
      * @return bool
      */
-    public static function update(array $data): bool
+    public static function update(array $data): void
     {
-        try {
-            foreach ($data as $value) {
-                $procedure = OnlineRequestProcedure::find($value['id']);
-                $procedure->update($value);
-                self::attach($value['responsible_user_id'], $procedure);
-            }
-            return true;
-        }
-        catch (Exception $e) {
-            return false;
+        foreach ($data as $value) {
+            $procedure = OnlineRequestProcedure::find($value['id']);
+            $procedure->update($value);
+            self::attach($value['responsible_user_id'], $procedure);
         }
     }
 
@@ -66,17 +62,11 @@ class OnlineRequestProcedureAction
      * @param OnlineRequestProcedure $procedure
      * @return bool
      */
-    private static function attach(array $data, OnlineRequestProcedure $procedure, bool $update=false): bool
+    private static function attach(array $data, OnlineRequestProcedure $procedure): void
     {
         list($oldUserId, $newUserId) = self::getAttachedAndDetachedData($procedure, $data);
-        try {
-            $procedure->users()->detach($oldUserId);
-            $procedure->users()->attach($newUserId);
-            return true;
-        }
-        catch (Exception $e) {
-            return false;
-        }
+        $procedure->users()->detach($oldUserId);
+        $procedure->users()->attach($newUserId);
     }
 
     /**
@@ -98,5 +88,44 @@ class OnlineRequestProcedureAction
         return array($oldUserId, $newUserId);
     }
 
+    /**
+     * Decide the incoming data should be updated or stored.
+     * And also during updating it will identify the existing and new procedure,
+     * so that it will update the existing procedure and store the new procedure.
+     *
+     * @param array $data
+     * @param int $onlineRequestId
+     * @param bool $update
+     * @return bool
+     */
+    public static function updateData(array $data, int $onlineRequestId): void
+    {
+        if (array_key_exists('online_request_procedures', $data)) {
+            list($updatableData, $creatableData) = self::getUpdatableAndCreatableData($data['online_request_procedures']);
+            self::storeData($creatableData, $onlineRequestId);
+            self::update($updatableData);
+        }
+    }
 
+    /**
+     * Categorize each value of incoming data to updatable and creatable.
+     * So that the new procedure added will be stored and the existing procedure will be updated.
+     *
+     * @param $prerequisite_labels
+     * @return array[]
+     */
+    protected static function getUpdatableAndCreatableData($prerequisite_labels): array
+    {
+        $updatable = [];
+        $creatable = [];
+
+        collect($prerequisite_labels)
+            ->filter(function ($value) use (&$updatable, &$creatable) {
+                array_key_exists('id', $value) ?
+                    $updatable[] = $value :
+                    $creatable[] = $value;
+
+            });
+        return array($updatable, $creatable);
+    }
 }

@@ -182,6 +182,74 @@
             >add pre-request</b-button
           >
           <base-card>
+            <div class="m-2">
+              <h4>List Of Notes</h4>
+              <div v-for="(note, index) in selectedRequest.online_request_prerequisite_notes" :key="index">
+                <span>{{index + 1}}</span>
+                <input type="text" v-model="note.note" class="form-control m-1" style="width:90%;display:inline">
+                <span> 
+                      <b-button
+                        @click="removePrerequisiteNote(index)"
+                        variant="danger"
+                        size="sm"
+                      >
+                        <i class="fa fa-minus"></i>
+                      </b-button>
+                </span>
+              </div>
+            </div>
+            <hr>
+            <div>
+              <h4>List of Inputs</h4>
+              <div v-for="(input, index) in selectedRequest.online_request_prerequisite_inputs" :key="index">
+                <!-- {{input}} -->
+              <div class="row">
+                    <div class="col-3">
+                      {{ index + 1 }} <label>Name</label>
+                      <input
+                        v-model="input.name"
+                        type="text"
+                        class="form-control"
+                        placeholder="enter prerequisite name"
+                      />
+                    </div>
+                    <div class="col-3">
+                      <label>type</label>
+                      <b-select
+                        v-model="input.type"
+                        :options="['text', 'description', 'number']"
+                      >
+                      </b-select>
+                      <!-- <input v-model="input.type" type="text" class="form-control"> -->
+                    </div>
+                    <div class="col-3">
+                      <label>Description</label>
+                      <textarea
+                        v-model="input.description"
+                        class="form-control"
+                        rows="2"
+                        placeholder="Enter description for prerequisite"
+                      ></textarea>
+                    </div>
+                    <div class="col-1">
+                      <b-button
+                        @click="removePrerequisiteLabel(index)"
+                        variant="danger"
+                        size="sm"
+                      >
+                        <i class="fa fa-minus"></i>
+                      </b-button>
+                    </div>
+                  </div>
+              </div>
+                  <b-button
+                        @click="addPrerequisiteInput"
+                        variant="primary"
+                        size="sm"
+                      >
+                        <i class="fa fa-plus"></i>Add input
+                      </b-button>
+            </div>
             <b-row align-v="center" slot="header">
               <b-col cols="8">
                 <span v-if="prerequisiteLength != 0">Request Labels</span>
@@ -261,6 +329,7 @@ import { mapGetters, mapActions } from "vuex";
 import { required } from "vuelidate/lib/validators";
 import axios from "axios";
 export default {
+  name:'edit-online-request',
   props: ["id"],
   data() {
     return {
@@ -292,11 +361,28 @@ export default {
       return $dirty ? !$error : null;
     },
     async handleSubmit() {
-      try {
-        if (this.selectedRequest.prerequisite_labels.length == 0) {
-          delete this.selectedRequest["prerequisite_labels"];
+        let data = {
+            id: this.selectedRequest.id,
+            name: this.selectedRequest.name,
+            description: this.selectedRequest.description,
+            type: this.selectedRequest.type,
+            online_request_procedures: this.selectedRequest.online_request_procedures,
+            prerequisites:{
+                notes: this.selectedRequest.online_request_prerequisite_notes,
+                inputs: this.selectedRequest.online_request_prerequisite_inputs,
+            }
         }
-        await this.updateOnlineRequest(this.selectedRequest);
+        if(this.selectedRequest.online_request_prerequisite_notes.length==0){
+            delete data["prerequisites"]['notes'];
+        }
+        if(this.selectedRequest.online_request_prerequisite_inputs.length==0){
+            delete data["prerequisites"]['inputs'];
+        }
+      try {
+        // if (this.selectedRequest.prerequisite_labels.length == 0) {
+        //   delete this.selectedRequest["prerequisite_labels"];
+        // }
+        await this.updateOnlineRequest(data);
         this.$router.push("/online-requests");
       } catch (err) {
         console.error(err);
@@ -368,6 +454,19 @@ export default {
         }
       });
     },
+   
+    addPrerequisiteInput(){
+      this.selectedRequest.online_request_prerequisite_inputs.push({
+            input_id:(Math.random() + 1).toString(36).substring(7),
+            name:"",
+            online_request_id:this.selectedRequest.id,
+            type:"text",
+            required:true
+      })
+    },
+    removePrerequisiteNote(index) {
+      this.selectedRequest.online_request_prerequisite_notes.splice(index, 1);
+    },
     emitEditPrerequesiteModel(label_id) {
       this.newUpdateLabel = this.selectedRequest.prerequisite_labels.filter(
         (pre) => pre.id == label_id
@@ -377,7 +476,6 @@ export default {
         `edit-online-request-label-${label_id}`
       );
     },
-
     updateLabel(label_id) {
       axios
         .put(`/api/online-prerequisites/${label_id}`, {
@@ -396,6 +494,10 @@ export default {
         });
     },
 
+    removePrerequisiteLabel(index) {
+      this.selectedRequest.online_request_prerequisite_inputs.splice(index,1)
+      // this.affair.prerequisites.inputs.splice(index, 1);
+    },
     addLabel(request_id) {
       console.log(request_id);
       axios
@@ -416,6 +518,8 @@ export default {
     if (this.online_requests.length == 0) {
       this.$router.push("/online-requests");
     } else {
+      this.selectedRequest = this.$route.params.request;
+      /*
       if (this.selectedRequest) {
         let request = this.online_requests.filter(
           (req) => req.id == this.request_id
@@ -434,6 +538,7 @@ export default {
         }
         this.selectedRequest = request;
       }
+      */
     }
   },
   validations: {

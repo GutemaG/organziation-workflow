@@ -9,9 +9,10 @@ use App\Http\Controllers\Utilities\UserType;
 use App\Models\User;
 use Tests\Feature\Utilities\FakeDataGenerator;
 
-class AccountTest extends TestCase
+class AccountTest extends MyTestCase
 {
-    private $url = '/api/account/';
+    protected string $url = '/api/account/';
+    protected bool $defaultTest = false;
 
     public function testCanUnauthenticatedUserCanUpdateAccount(){
         $response = $this->post('/api/account', FakeDataGenerator::userData());

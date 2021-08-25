@@ -17,6 +17,8 @@ class OnlineRequestTracker extends Model
 
     protected $fillable = [
         'online_request_id',
+        'full_name',
+        'phone',
         'started_at',
         'ended_at',
         'token',
@@ -35,5 +37,10 @@ class OnlineRequestTracker extends Model
     public function onlineRequestSteps(): HasMany
     {
         return $this->hasMany(OnlineRequestStep::class);
+    }
+
+    public function clientInformation(): HasMany
+    {
+        return $this->hasMany(ClientInformation::class);
     }
 }

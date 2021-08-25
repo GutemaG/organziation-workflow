@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 
-Route::get('/', WelcomeController::class);
+Route::get('/', WelcomeController::class)->name('welcome');
 
 require __DIR__.'/auth.php';
 
@@ -66,9 +66,6 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
 
 // public routes
 Route::prefix('api')->group(function (){
-    Route::get('/apply-request/{online_request_tracker:token}', [OnlineRequestTrackerController::class, 'appliedRequest']);
-    Route::post('/apply-request', [OnlineRequestTrackerController::class, 'applyRequest']);
-
     //Birhanu
     Route::get('/affairs', '\App\Http\Controllers\AffairController@index');
 });

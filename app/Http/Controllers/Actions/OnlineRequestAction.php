@@ -13,11 +13,12 @@ class OnlineRequestAction
 {
     use MyJsonResponse;
 
-    private static array $with = ['onlineRequestProcedures', 'onlineRequestPrerequisiteNotes', 'onlineRequestPrerequisiteInputs'];
+    private static array $with = ['onlineRequestProcedures.users', 'onlineRequestPrerequisiteNotes', 'onlineRequestPrerequisiteInputs'];
 
     public static function index(): JsonResponse
     {
-        $onlineRequests = OnlineRequest::with(self::$with)->orderBy('name', 'asc')->get();
+        $onlineRequests = OnlineRequest::with(self::$with)->orderBy('name', 'asc')->get()->toArray();
+        $onlineRequests = self::formatResponseData($onlineRequests);
         return self::successResponse(['online_requests' => $onlineRequests]);
     }
 
@@ -47,15 +48,74 @@ class OnlineRequestAction
         }
     }
 
+    public static function update(array $data, OnlineRequest $onlineRequest): JsonResponse
+    {
+        try {
+            DB::beginTransaction();
+            $onlineRequest->update([
+                'name' => $data['name'],
+                'type' => $data['type'],
+                'description' => $data['description'],
+            ]);
+            OnlineRequestProcedureAction::updateData($data, $onlineRequest->id);
+            OnlineRequestPrerequisiteInputAction::updateData($data, $onlineRequest->id);
+            OnlineRequestPrerequisiteNoteAction::updateData($data, $onlineRequest->id);
 
-
-
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'online_request' => OnlineRequest::with(self::$with)->find($onlineRequest->id),
+            ]);
+        }
+        catch (DatabaseException $exception){
+            DB::rollBack();
+            return $exception->render();
+        }
+        catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 400,
+                'error' => [
+                    'error' => ['Error occur while creating please retry again.',$e]
+                ]
+            ]);
+        }
+    }
 
     public static function show(OnlineRequest $onlineRequest): JsonResponse
     {
-        $onlineRequest->onlineRequestProcedures;
-        $onlineRequest->onlineRequestPrerequisiteInputs;
-        $onlineRequest->onlineRequestPrerequisiteNotes;
+        $onlineRequest = OnlineRequest::with(self::$with)->find($onlineRequest->id)->toArray();
         return self::successResponse(['online_request' => $onlineRequest]);
+    }
+
+    public static function destroy(OnlineRequest $onlineRequest): JsonResponse
+    {
+        foreach ($onlineRequest->onlineRequestProcedures as $procedure){
+            $procedure->users()->delete();
+        }
+        $onlineRequest->onlineRequestProcedures()->delete();
+        $onlineRequest->onlineRequestPrerequisiteInputs()->delete();
+        $onlineRequest->onlineRequestPrerequisiteNotes()->delete();
+        $onlineRequest->delete();
+        return self::successResponse();
+    }
+
+    /**
+     * @param array $onlineRequests
+     * @return array
+     */
+    private static function formatResponseData(array $onlineRequests): array
+    {
+        $requestLength = count($onlineRequests);
+        for ($i = 0; $i < $requestLength; $i++) {
+            $procedureLength = count($onlineRequests[$i]['online_request_procedures']);
+            for ($j = 0; $j < $procedureLength; $j++) {
+                $usersId = collect($onlineRequests[$i]['online_request_procedures'][$j]['users'])
+                    ->map(function ($value) { return $value['id']; })->toArray();
+                $onlineRequests[$i]['online_request_procedures'][$j]['responsible_user_id'] = $usersId;
+                unset($onlineRequests[$i]['online_request_procedures'][$j]['users']);
+            }
+        }
+        return $onlineRequests;
     }
 }

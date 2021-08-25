@@ -130,10 +130,17 @@ class MyTestCase extends TestCase
         ];
     }
 
+    protected function formatResponseData(array $data): array
+    {
+        return $data;
+    }
+
     protected function assertIndex(): void
     {
         $data = $this->getAllData($this->modelName, $this->with)->toArray();
         $response = $this->getJson($this->url);
+        if (method_exists($this, 'formatResponseData'))
+            $data = $this->formatResponseData($data);
         $response->assertExactJson([
             'status' => 200,
             Str::plural($this->responseName) => $data,

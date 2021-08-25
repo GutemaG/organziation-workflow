@@ -1,9 +1,5 @@
 <template>
-  <b-container
-    fluid
-    class="bg-light  mx-auto mt-2"
-    style="max-height: 100%;"
-  >
+  <b-container fluid class="bg-light mx-auto mt-2" style="max-height: 100%">
     <b-row>
       <b-col lg="6" class="my-1">
         <router-link to="/add-online-request" class="m-2">
@@ -40,29 +36,7 @@
       </b-col>
 
       <b-col lg="6" class="my-1">
-        <b-form-group
-          label="Filter"
-          label-for="filter-input"
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          class="mb-0"
-        >
-          <b-input-group size="sm">
-            <b-form-input
-              id="filter-input"
-              type="search"
-              placeholder="Type to Search"
-            ></b-form-input>
-
-            <b-input-group-append>
-              <!-- <b-button :disabled="!filter" @click="filter = ''"
-                      >Clear</b-button
-                    > -->
-              <b-button>hel</b-button>
-            </b-input-group-append>
-          </b-input-group>
-        </b-form-group>
+        
       </b-col>
       <b-col sm="5" md="6" class="my-1">
         <b-form-group
@@ -163,7 +137,13 @@
         >
       </template>
       <template #cell(actions)="row">
-        <router-link :to="'online-request/edit/' + row.item.id">
+        <router-link
+          :to="{
+            name: 'edit-online-request',
+            params: { slug: slug(row.item.name), request: row.item },
+          }"
+          >
+        <!-- :to="'online-request/edit/' + row.item.id"> -->
           <b-button variant="primary" size="sm">
             <i class="fa fa-edit"></i>
             {{ tr("Edit") }}</b-button
@@ -216,7 +196,7 @@ export default {
       pageOptions: [20, 15, 10, 5],
       procedure_fields,
 
-      filterOn:[],
+      filterOn: [],
       sortBy: "",
       sortDesc: false,
       sortDirection: "asc",
