@@ -74,7 +74,7 @@ export default [
                 path: "/frequesntly-asked-question",
                 name: "frequesntly-asked-question",
                 components: {
-                    welcome: require("./components/welcome/faq/FAQ.vue")
+                    welcome: require("./components/welcome/faq/GuestFAQ.vue")
                         .default
                 }
             }
