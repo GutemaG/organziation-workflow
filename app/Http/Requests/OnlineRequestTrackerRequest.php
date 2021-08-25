@@ -32,7 +32,7 @@ class OnlineRequestTrackerRequest extends FormRequest
         if (! empty($this->input('online_request_id'))) {
             $onlineRequest = OnlineRequest::with(['onlineRequestPrerequisiteInputs'])->find($this->input('online_request_id'));
             foreach ($onlineRequest->onlineRequestPrerequisiteInputs as $input) {
-                $rule[$input->name] = $this->getRule($input->type);
+                $rule["prerequisites.$input->name"] = $this->getRule($input->type);
             }
         }
         $rule['online_request_id'] = ['required', 'integer', Rule::exists('online_requests', 'id')];

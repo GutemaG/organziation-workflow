@@ -7,6 +7,8 @@ use App\Models\Bureau;
 use App\Models\OnlineRequest;
 use App\Models\OnlineRequestProcedure;
 use App\Models\PrerequisiteLabel;
+use App\Models\OnlineRequestPrerequisiteInput;
+use App\Models\OnlineRequestPrerequisiteNote;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -23,7 +25,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-    /*    
+      
           User::create([
             'user_name' => 'Staff',
             'first_name' =>'Israel',
@@ -58,24 +60,37 @@ class DatabaseSeeder extends Seeder
          \App\Models\User::factory(50)->create();
          
          \App\Models\Affair::factory(50)->create();
-         */
+         
+
+         User::create([
+            'user_name' => 'supportiveTeam',
+            'first_name' =>'Henok',
+            'last_name' => 'Kebed',
+            'email' => 'supportiveTeam@astu.com',
+            'type' => 'it_team_member',
+            'password' => Hash::make('laravel1234'), // password
+            'remember_token' => Str::random(10),
+         ]
+         );
+         
+
          Building::factory(100)->create();
 
          Bureau::factory(200)->create();
          \App\Models\Procedure::factory(100)->create();
          \App\Models\PreRequest::factory(200)->create();
 
-        \App\Models\PreRequest::factory()->create([
-            'affair_id'=>null,
-            'procedure_id'=>1,
-            'name' =>'go somewhere',
-            'description' =>' Description go somewhere'
-        ]);
+        // \App\Models\PreRequest::factory()->create([
+        //     'affair_id'=>null,
+        //     'procedure_id'=>1,
+        //     'name' =>'go somewhere',
+        //     'description' =>' Description go somewhere'
+        // ]);
         
 
 
 
-        OnlineRequest::factory(20);
+        // OnlineRequest::factory(20);
         
 
 
@@ -86,17 +101,35 @@ class DatabaseSeeder extends Seeder
         //                ->count(rand(3,6)))
         //            ->create();
 
-        OnlineRequest::factory()->count(20)->create()->each(function ($request) {
-            $stepNumber = 1;
-            $length = random_int(3, 6);
-            PrerequisiteLabel::factory()->count(random_int(1, 5))->create(['online_request_id' => $request->id]);
+        // OnlineRequest::factory()->count(20)->create()->each(function ($request) {
+        //     $stepNumber = 1;
+        //     $length = random_int(3, 6);
+        //     PrerequisiteLabel::factory()->count(random_int(1, 5))->create(['online_request_id' => $request->id]);
 
-            for ($i = 0; $i < $length; $i++) {
-                OnlineRequestProcedure::factory()
-                    ->hasAttached(\App\Models\User::inRandomOrder()->limit(rand(1, 5))->get())
-                    ->count(1)
-                    ->create(['step_number' => $stepNumber++, 'online_request_id' => $request->id]);
+        //     for ($i = 0; $i < $length; $i++) {
+        //         OnlineRequestProcedure::factory()
+        //             ->hasAttached(\App\Models\User::inRandomOrder()->limit(rand(1, 5))->get())
+        //             ->count(1)
+        //             ->create(['step_number' => $stepNumber++, 'online_request_id' => $request->id]);
+        //     }
+        // });
+        
+        OnlineRequest::factory(5)->create()->each(function ($onlineRequest) {
+            OnlineRequestPrerequisiteNote::factory(rand(1, 5))->
+            create(['online_request_id' => $onlineRequest->id]);
+            OnlineRequestPrerequisiteInput::factory(rand(1,5))
+                ->create(['online_request_id'=> $onlineRequest->id]);
+
+            $length = rand(2, 5);
+            for ($i = 1; $i < $length; $i++) {
+                OnlineRequestProcedure::factory(1)
+                    ->create(['online_request_id' => $onlineRequest->id, 'step_number' => $i])
+                    ->each(function ($onlineRequestProcedure) {
+                        $onlineRequestProcedure->users()
+                            ->attach(User::select('id')->Where('type', 'staff')->inRandomOrder()->limit(random_int(1,3))->get());
+                    });
             }
+
         });
         
        

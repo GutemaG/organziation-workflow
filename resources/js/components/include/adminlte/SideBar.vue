@@ -4,7 +4,7 @@
     style="position: fixed; top: 0; bottom: 0"
   >
     <!-- Brand Logo -->
-    <a href="#" class="brand-link block">
+    <router-link to="/" class="brand-link block">
       <img
         src="/images/astu.jpg"
         alt="ASTU LOGO"
@@ -12,7 +12,7 @@
         style="opacity: 0.8"
       />
       <span class="brand-text font-weight-light">OWGS</span>
-    </a>
+    </router-link>
     <!-- <div style="margin: 1rem 0px 1rem 3rem">
           <b-avatar src="/images/astu.jpg" size="6rem"></b-avatar>
       </div> -->
@@ -52,8 +52,8 @@
               </router-link>
             </li>
           </div>
-          <div v-if="isAdmin">
-            <li class="nav-item">
+          <div v-if="isAdmin || isSupportiveStaff">
+            <li class="nav-item" v-if="isAdmin">
               <router-link to="/users" class="nav-link">
                 <!-- <router-link to="/"> Back to Home </router-link> -->
                 <i class="nav-icon fa fa-users blue"></i>
@@ -89,6 +89,12 @@
               </router-link>
             </li>
           </div>
+            <li class="nav-item" v-if="isReception">
+              <router-link to="/faqs" class="nav-link">
+                <i class="nav-icon fas fa-times blue"></i>
+                <p>{{ tr("FAQS") }}</p>
+              </router-link>
+            </li>
           <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-home blue"></i>
@@ -158,12 +164,15 @@ export default {
     isAdmin() {
       return this.currentUser.type === "admin";
     },
-    isItTeamMember() {
-      return this.currentUser.type === "it-team-member";
+    isSupportiveStaff() {
+      return this.currentUser.type === "it_team_member";
     },
-    isStaf() {
+    isStaff() {
       return this.currentUser.type === "staff";
     },
+    isReception(){
+      return this.currentUser.type === "reception";
+    }
   },
   methods: {},
 };

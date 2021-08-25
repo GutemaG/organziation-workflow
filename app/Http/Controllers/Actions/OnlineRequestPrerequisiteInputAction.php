@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Actions;
 
 
+use App\Models\OnlineRequest;
 use App\Models\OnlineRequestPrerequisiteInput;
 
 class OnlineRequestPrerequisiteInputAction
@@ -42,6 +43,8 @@ class OnlineRequestPrerequisiteInputAction
         if (array_key_exists('prerequisites', $data))
             if (array_key_exists('inputs', $data['prerequisites'])) {
                 list($updatable, $creatable) = self::getUpdatableAndCreatableData($data['prerequisites']['inputs']);
+                $onlineRequest = OnlineRequest::with(['onlineRequestPrerequisiteInputs'])->find($onlineRequestId);
+                self::deleteUnexistData($onlineRequest, $updatable);
                 self::storeData(['prerequisites'=>['inputs' => $creatable]], $onlineRequestId);
                 self::update($updatable);
             }
@@ -67,5 +70,21 @@ class OnlineRequestPrerequisiteInputAction
 
             });
         return array($updatable, $creatable);
+    }
+
+    /**
+     * @param $onlineRequest
+     * @param array $updatable
+     */
+    private static function deleteUnexistData($onlineRequest, array $updatable): void
+    {
+        $oldId = [];
+        $trash = [];
+        foreach ($onlineRequest->onlineRequestPrerequisiteInputs as $input)
+            in_array($input->id, $oldId) ? null : $oldId[] = $input->id;
+        foreach ($updatable as $value)
+            in_array($value['id'], $oldId) ? null : $trash[] = $value['id'];
+        foreach ($trash as $value)
+            OnlineRequestPrerequisiteInput::find($value)->delete();
     }
 }

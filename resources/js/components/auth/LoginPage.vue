@@ -1,122 +1,89 @@
 <template>
   <div>
-    <!-- <guest-nav-bar></guest-nav-bar> -->
-    <b-container>
-      <b-row class="justify-content-md-center" style="margin-top: 5rem;">
-        <b-col cols="8">
-          <div
-            class="card shadow"
-            style="border-radius: 2rem; border: 2px solid rgba(0, 0, 0, 0.125);"
-          >
-            <b-card-header style="border-radius: 2rem 2rem 0 0;">
-              <span style="font-size: 1.2rem">Login</span> 
-            </b-card-header>
-
-            <b-card-body>
-              <b-form class="d-grid" ref="form" @submit.stop.prevent="attemptLogin">
-                <b-alert v-if="loggingUserErrorMessage" class="mb-4 mt-1" show variant="danger">{{
-                  loggingUserErrorMessage
-                }}</b-alert>
-                <b-alert v-if="!!error" class="text-center " style="border-radius: 1.25rem;" show variant="danger">{{ error }}</b-alert>
-                <b-form-group
-                  :label="tr('Email:')"
-                  class="mt-3"
-                  style="display: flex;
-                    justify-content: center;
-                    align-items: baseline;
-                    width: 100%;"
-                  label-for="email-input"
-                  :invalid-feedback="
-                    !$v.form.email.required
-                      ? 'Required'
-                      : 'Email is not valid, please enter valide email'
-                  "
-                >
-                  <b-input-group>
-                    <b-input-group-prepend is-text style="margin-left: 3.3rem">
-                      @
-                    </b-input-group-prepend>
-                    <b-form-input
-                      id="email-input"
-                      v-model="$v.form.email.$model"
-                      required
-                      type="email"
-                      style="width: 100%; inline-size: auto"
-                      :state="validateState('email')"
-                      placeholder="Email address"
-                    ></b-form-input>
-                  </b-input-group>
-                </b-form-group>
-
-                <b-form-group :label="tr('Password: ')" 
-                class="mt-3"
-                style="display: flex;
-                  justify-content: center;
-                  align-items: baseline;
-                  width: 100%;"
-                label-for="password-input">
-                  <b-input-group>
-                    <b-input-group-prepend is-text class="ml-4">
-                      <b-icon icon="key"></b-icon>
-                    </b-input-group-prepend>
-                    
-                    <b-form-input
-                      id="password-input"
-                      :type="showPassword ? 'text' : 'password'"
-                      required
-                      style=""
-                      :state="validateState('password')"
-                      v-model="$v.form.password.$model"
-                    >
-                    </b-form-input>
-
-                    <b-input-group-append 
-                    style="padding: 7px; z-index: 111; position: absolute;
-                    margin-left: 14.5rem;"
-                    >
-                      <b-link
-                        @click="showPassword = !showPassword"
-                        style="color: black;"
-                      >
-                        <i v-show="!showPassword" class="far fa-eye-slash" id="show"></i>
-                        <i v-show="showPassword" class="far fa-eye" id="show"></i>
-                      </b-link>
-                    </b-input-group-append>
-                  </b-input-group>
-                </b-form-group>
-
-                <b-form-group 
-                class="mt-3"
-                style="display: flex; justify-content: center; align-items: baseline;">
-                  <b-input-group>
-                    <b-form-checkbox
-                      id="rememberme"
-                      v-model="form.remember"
-                      class="mt-2"
-                      name="remeberme"
-                    >
-                      {{ tr("Remember me") }}
-                    </b-form-checkbox>
-                      <!-- class="form-control" -->
-                    <b-button
-                      class="mt-4 mb-3"
-                      type="submit"
-                      variant="primary"
-                      block
-                      :disabled="$v.$invalid || isLoading"
-                    >
-                      <span v-if="!isLoading">{{ tr("Login") }}</span>
-                      <b-spinner v-show="isLoading" label="Loading..."></b-spinner>
-                    </b-button>
-                  </b-input-group>
-                </b-form-group>
-              </b-form>
-
-            </b-card-body>
+    <body class="login-page" style="min-height: 296px; background: none;">
+      <div class="login-box" style="width:460px" fluid>
+        <!-- /.login-logo -->
+        <div class="card card-outline card-primary" style="border-radius: 2rem; border-top-width: 9px;">
+          <div class="card-header text-center" style="border-radius: 2rem 2rem 0 0;">
+            <h1><b>Login</b></h1>
           </div>
-        </b-col>
-      </b-row>
-    </b-container>
+          <div class="card-body" style="padding: 2.66rem;">
+            <p class="login-box-msg">Sign in to your account</p>
+
+            <form ref="form" @submit.stop.prevent="attemptLogin">
+              <b-alert v-if="loggingUserErrorMessage" class="mb-4 mt-1" show variant="danger">{{loggingUserErrorMessage}}</b-alert>
+              <b-alert v-if="!!error" class="text-center " style="border-radius: 1.25rem;" show variant="danger">{{ error }}</b-alert>
+              <div :label="tr('Email:')" 
+              label-for="email-input"
+              :invalid-feedback="
+                !$v.form.email.required
+                  ? 'Required'
+                  : 'Email is not valid, please enter valide email' "
+              class="input-group mb-3">
+                <input id="email-input"
+                v-model="$v.form.email.$model" 
+                required
+                type="email" 
+                :state="validateState('email')"
+                placeholder="Email address"
+                class="form-control">
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-envelope"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="input-group mb-3"
+              :label="tr('Password: ')" 
+              label-for="password-input">
+                <input id="password-input"
+                :type="showPassword ? 'text' : 'password'"
+                required
+                :state="validateState('password')"
+                v-model="$v.form.password.$model"
+                class="form-control" placeholder="Password">
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <b-link @click="showPassword = !showPassword" 
+                    style="color: black;">
+                      <i v-show="!showPassword" class="far fa-eye-slash" id="hide"></i>
+                      <i v-show="showPassword" class="far fa-eye" id="show"></i>
+                    </b-link>
+                    <span class="fas fa-lock ml-3"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-8">
+                  <div class="icheck-primary">
+                    <input type="checkbox" id="rememberme"
+                    v-model="form.remember"
+                    name="remeberme">
+                    <label for="remember">
+                      {{ tr("Remember me") }}
+                    </label>
+                  </div>
+                </div>
+                <!-- /.col -->
+              </div>
+              <div>
+                <b-button class="mt-4 mb-3"
+                type="submit"
+                variant="primary"
+                block
+                pill
+                :disabled="$v.$invalid || isLoading">
+                  <span v-if="!isLoading">{{ tr("Login") }}</span>
+                  <b-spinner v-show="isLoading" label="Loading..."></b-spinner>
+                </b-button>
+              </div>
+            </form>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+    </body>
   </div>
 </template>
 <script>
@@ -196,5 +163,4 @@ export default {
     },
   },
 };
-// var mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 </script>

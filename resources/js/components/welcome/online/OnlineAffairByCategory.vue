@@ -17,99 +17,69 @@
       <hr />
     </div>
     <b-row>
-      <h3 v-if="!filteredAffairs">Oops, No result found Please try other</h3>
       <b-col
-        :cols="!selectedAffair ? '' : 5"
         style="height: 80vh; overflow-y: scroll"
       >
-        <div class="list-group" style="height: 3.8rem;" v-for="affair,index in filteredAffairs" :key="affair.id">
-          <b-list-group-item
-            @click="selectAffair(affair)"
-            :active="selectedListIndex(affair.id)"
-            class="d-flex mb-1 mt-1 shadow shadow-lg--hover items" 
-            style="cursor: pointer; border: 2px solid rgba(0, 0, 0, 0.151); border-radius: 2rem; align-items:baseline; overflow: hidden"
-          >
-            <b-badge pill class="mr-2" style="font-size: 14px" variant="dark">{{ index+1 }}</b-badge>
-            <p><strong>{{ affair.name }}</strong></p>
-          </b-list-group-item>
-        </div>
-      </b-col>
-      <b-col v-if="selectedAffair" cols="7">
-        <div class="card mb-2 mt-2 justify-content-md-center shadow shadow-lg--hover"
-        style="max-width: 100%; border-radius: 1.36rem; border: 1px solid rgba(0, 0, 0, 0.125);">
-          <div class="card-body shadow" 
-          style="border-radius: 1.25rem;">
-            <div class="card-header text-center shadow d-flex justify-content-md-center align-items-center" 
-            style="background-color: #343a40 !important; 
-            color: white; border-radius: 1.25rem 1.25rem 0rem 0;"
-            >
-                <b-icon icon="file-earmark-spreadsheet-fill" class="mr-3" scale="2" variant="success"></b-icon>
-                <h4 class="mb-0">{{ selectedAffair.name }}</h4>
-            </div>
-            <div class="card-body align-items-center p-3"
-            style="border: 1px solid rgba(0, 0, 0, 0.228);
-            background-color: #abdaff;
-            border-radius: 0 0 1.25rem 1.25rem;">
-              <h4><strong>Description</strong></h4>
-              <hr />
-              <p>{{ selectedAffair.description }}</p>
-
-              <div
-                class="timeline"
-                v-if="selectedAffair.prerequisite_labels.length != 0"
-              >
-                <div class="time-label">
-                  <span style="background-color: #abdaff;">Pre Requests: </span>
+        <h3 v-if="!filteredAffairs">Oops, No result found Please try other</h3>
+        <div v-for="affair in filteredAffairs" :key="affair.id">
+          <div class="accordion" role="tablist">
+              <div class="card collapsed-card  online_affair_name">
+                <div class="card-header border-0 ui-sortable-handle" data-card-widget="collapse" style="cursor: move;">
+                  <h3 class="card-title" block
+                  @click="selectAffair(affair)">
+                    <b-icon icon="check2-circle" class="mr-3" scale="2" variant="primary"></b-icon>
+                    <b>{{ affair.name }}</b>
+                    <br><br>
+                    <span style="font-size: .8rem; ">{{affair.description.substring(0, 250)}}....</span>
+                  </h3>
+                  <div class="card-tools">
+                    <button type="button" class="btn text-white" data-card-widget="collapse" title="Collapse">
+                      <i class="fas fa-plus blue"></i>
+                    </button>
+                  </div>
+                  <!-- card tools -->
+                  
+                  <!-- /.card-tools -->
                 </div>
-                <div
-                  v-for="(prerequisite, index) in selectedAffair.prerequisite_labels"
-                  :key="prerequisite.id"
-                  class="d-flex align-items-center"
-                >
-                  <!-- style="overflow-y: scroll" -->
-                  <i class="fas bg-blue" >{{ index + 1 }}</i>
-                  <div class="timeline-item" 
-                    style="border-radius: .7rem;">
-                    <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
-
-                    <div class="timeline-body shadow">
-                      {{ prerequisite.label }}
+                <div v-if="affair.description.length != 0" class="card-body" style="display: none;">
+                  <h4><b>Description</b></h4>
+                  <hr>
+                  <p>{{affair.description}}</p>
+                  <p v-if="affair.prerequisite_labels !=0">Prerequisite required are: </p>
+                  <div v-for="(prerequisite_labels, prerequisite_labels_id) in affair.prerequisite_labels" :key="prerequisite_labels_id">
+                    <div class="timeline">
+                      <div class="d-flex align-items-center">
+                        <i class="fas bg-blue">{{ prerequisite_labels_id + 1 }}</i>
+                        <!-- style="overflow-y: scroll" -->
+                        <div class="timeline-item" style="border-radius: .7rem;">
+                          <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
+                          <div class="timeline-body shadow pre_request_name online_prerequest_name text-white" style="border-radius: .6rem .6rem 0 0;" v-b-toggle="['prerequisite_labels - '+prerequisite_labels_id+''+affair.id]">
+                            {{ prerequisite_labels.label }}
+                          </div>
+                          <b-collapse :id="'prerequisite_labels - '+prerequisite_labels_id+''+affair.id">
+                            <b-card-body class="online_prerequest_name text-white">
+                              <h4><b>Description</b></h4>
+                              <hr>
+                              <p>{{prerequisite_labels.label}}</p>
+                            </b-card-body>
+                          </b-collapse>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                  <div class="">
+                    <router-link
+                    :to="{
+                      name: 'apply-online-affair2',
+                      params: { slug: affair.name,request:affair }}"
+                    style="text-decoration: none;">
+                      <b-button pill block variant="primary" class="form-control"> Send Request </b-button>
+                    </router-link>
+                  </div>
                 </div>
+                <!-- /.card-body-->
               </div>
-              <div v-else>No Pre Request</div>
-
-              <!-- <h3>Pre Requests</h3>
-              <div v-if="selectedAffair.prerequisite_labels.length != 0">
-                <b-list-group
-                  v-for="prerequisite in selectedAffair.prerequisite_labels"
-                  :key="prerequisite.id"
-                  style="overflow-y: scroll"
-                >
-                  <b-list-group-item>
-                    {{ prerequisite.label }}
-                  </b-list-group-item>
-                </b-list-group>
-              </div>
-              <div v-else>
-                <h4>No Pre Request</h4>
-              </div> -->
-              <div class="d-flex justify-content-md-center">
-                <router-link
-                  :to="{
-                    name: 'apply-online-affair2',
-                    params: { slug: selectedAffair.name },
-                  }"
-                  style="text-decoration: none; width: 65%;"
-                >
-                  <b-button pill block variant="primary" class="form-control"> Send Request </b-button>
-                </router-link>
-              </div>
-            
-            </div>
           </div>
-
         </div>
       </b-col>
     </b-row>
@@ -181,9 +151,21 @@ export default {
 </script>
 
 <style scoped>
-.items:hover{
-  background-color: #3490dc;
-  color: white;
-  transform: scale(1.03);
+
+ .online_affair_name{
+  background:#f4f4f4;
+  }
+ .online_affair_name:hover{
+  background:#e4e4e4cc;
+  }
+.online_prerequest_name{
+  background:#d4d4d4;
+  background: linear-gradient(90deg, rgba(61,88,115,1) 33%, rgba(61,88,115,1) 65%); 
+}
+.online_prerequest_name:hover {
+  background:#c7c4c4;
+  cursor: pointer;
+  transform: scale(1.01);
+  border-radius: .7rem;
 }
 </style>

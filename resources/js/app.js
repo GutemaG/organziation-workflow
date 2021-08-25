@@ -115,6 +115,11 @@ Vue.mixin({
         },
         se(identifier) {
             return lang.sentence_translate(identifier);
+        },
+        slug(text) {
+            return text.toLowerCase()
+                .replace(/[^\w ]+/g, "")
+                .replace(/ +/g, "-");
         }
     }
 });

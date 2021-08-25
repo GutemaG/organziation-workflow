@@ -1,9 +1,5 @@
 <template>
-  <b-container
-    fluid
-    class="bg-light shadow mx-auto mt-2"
-    style="max-height: 100%; border-radius: 21px 21px 0 0"
-  >
+  <b-container fluid class="bg-light mx-auto mt-2" style="max-height: 100%">
     <b-row>
       <b-col lg="6" class="my-1">
         <router-link to="/add-online-request" class="m-2">
@@ -163,7 +159,13 @@
         >
       </template>
       <template #cell(actions)="row">
-        <router-link :to="'online-request/edit/' + row.item.id">
+        <router-link
+          :to="{
+            name: 'edit-online-request',
+            params: { slug: slug(row.item.name), request: row.item },
+          }"
+          >
+        <!-- :to="'online-request/edit/' + row.item.id"> -->
           <b-button variant="primary" size="sm">
             <i class="fa fa-edit"></i>
             {{ tr("Edit") }}</b-button
@@ -216,7 +218,7 @@ export default {
       pageOptions: [20, 15, 10, 5],
       procedure_fields,
 
-      filterOn:[],
+      filterOn: [],
       sortBy: "",
       sortDesc: false,
       sortDirection: "asc",

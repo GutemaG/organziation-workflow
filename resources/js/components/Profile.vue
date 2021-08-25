@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container-fluid">
+    <div class="container-fluid mt-3">
       <b-row>
         <b-col cols="" class="text-center d-flex justify-content-md-center">
           <div class="card" style="width: 50%; padding: 2rem;">
@@ -268,7 +268,7 @@
                   </b-form-group>
 
                   <div class="form-group">
-                    <b-button pill block class="submitButton">Submit</b-button>
+                    <b-button type="submit" pill block class="submitButton">Submit</b-button>
                   </div>
                 </form>
               </b-modal>
@@ -313,7 +313,6 @@
                         <b-input-group-append style="padding: 7px; z-index: 111; position: absolute; margin-left: 24rem;"
                         >
                           <b-link
-                            @click="showPassword = !showPassword"
                             style="color: black;"
                           >
                             <i @click="showCurrentPassword()" v-if="currentPasswordVisibility == 'password'" class="far fa-eye-slash" id="hide"></i>
@@ -364,7 +363,6 @@
                       <b-input-group-append style="padding: 7px; z-index: 111; position: absolute; margin-left: 24rem;"
                       >
                         <b-link
-                          @click="showPassword = !showPassword"
                           style="color: black;"
                         >
                           <i @click="showNewPassword()" v-if="newPasswordVisibility == 'password'" class="far fa-eye-slash" id="hide"></i>
@@ -405,7 +403,6 @@
                       <b-input-group-append style="padding: 7px; z-index: 111; position: absolute; margin-left: 24rem;"
                       >
                         <b-link
-                          @click="showPassword = !showPassword"
                           style="color: black;"
                         >
                           <i @click="showConfirmationPassword()" v-if="confirmationPasswordVisibility == 'password'" class="far fa-eye-slash" id="hide"></i>
@@ -429,7 +426,7 @@
                   </b-form-group>
 
                   <div class="form-group">
-                    <b-button pill block class="submitButton">Submit</b-button>
+                    <b-button type="submit" pill block class="submitButton">Submit</b-button>
                   </div>
                 </form>
               </b-modal>
@@ -444,7 +441,7 @@
 <script>
 import {
   required,
-  requiredIf,
+  // requiredIf,
   minLength,
   maxLength,
   email,
@@ -524,14 +521,12 @@ export default {
     },
   },
   methods: {
-    editProfile(e) {
-      e.preventDefault();
+    editProfile() {
       this.profileSubmitted = true;
-
       // stop here if form is invalid
       this.$v.userProfile.$touch();
       if (this.$v.userProfile.$invalid) {
-        Swal.fire("I am not understanding you!!", "", "error");
+        Swal.fire("Please fill all the forms correctly!!", "", "error");
         return;
       }
 
@@ -539,7 +534,6 @@ export default {
         .post("/api/account", { ...this.userProfile })
         .then((resp) => {
           Swal.fire("Profile successfully updated!", "", "success");
-          console.log(resp.data);
           let user = resp.data.user;
           window.user = user;
           this.setUser(user);
@@ -568,7 +562,6 @@ export default {
       axios
         .post("/api/account/change-password", { ...this.userPassword })
         .then((resp) => {
-          console.log(resp.data);
           let error = resp.data["error"];
           let er = error["current_password"][0];
           Swal.fire("Error!", er, "error");

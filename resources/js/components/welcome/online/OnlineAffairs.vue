@@ -1,8 +1,8 @@
 <template>
-  <b-container fluid>
-    <b-row class="mt-3">
+  <div>
+    <b-row class="">
       <b-col>
-        <b-container>
+        <div>
           <b-alert
             variant="success"
             :show="customerToken.length != 0 && dismissCountDown"
@@ -69,11 +69,11 @@
               </b-tabs>
             </div>
           </div>
-        </b-container>
+        </div>
       </b-col>
       
     </b-row>
-  </b-container>
+  </div>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";

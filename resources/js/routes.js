@@ -179,7 +179,8 @@ export default [
                 }
             },
             {
-                path: "/online-request/edit/:id",
+                path: "/online-request/edit/:slug",
+                name:'edit-online-request',
                 props: true,
                 components: {
                     dashboard: require("./components/request/online/EditOnlineRequest.vue")
@@ -200,7 +201,18 @@ export default [
                 meta: {
                     requiresAuth: true
                 }
-            }
+            },
+            {
+                path: "/faqs",
+                name:"faqs",
+                components: {
+                    dashboard: require("./components/request/FAQ.vue")
+                        .default
+                },
+                meta: {
+                    requiresAuth: true
+                }
+            },
         ]
     },
     {

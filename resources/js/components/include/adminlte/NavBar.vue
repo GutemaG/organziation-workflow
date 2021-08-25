@@ -296,6 +296,16 @@ export default {
     if (this.user.type == "staff") {
       this.fetchPendingRequests()
       // this.fetchAllPendingRequest();
+      /*
+      Echo.private(`${this.user.id}.online-request-applied`).listen(
+        "NotifyUserEvent",
+        (e) => {
+          this.notification.unshift(e.onlineRequestStep);
+          console.log("from pusherrrr: ", e.onlineRequestStep);
+        }
+      );
+      
+     */ 
 
       // Echo.private(`${this.user.id}.online-request-applied`).listen(
       //   "NotifyUserEvent",
@@ -304,13 +314,13 @@ export default {
       //     console.log("from pusherrrr: ", e.onlineRequestStep);
       //   }
       // );
-        Echo.private('ldkjfklsdjflksdjksl').listen(
-            ".message.sent",
-            (e) => {
-                // this.notification.unshift(e.onlineRequestStep);
-                console.log("from pusherrrr: ", e);
-            }
-        );
+        // Echo.private('ldkjfklsdjflksdjksl').listen(
+        //     ".message.sent",
+        //     (e) => {
+        //         // this.notification.unshift(e.onlineRequestStep);
+        //         console.log("from pusherrrr: ", e);
+        //     }
+        // );
 
     }
   },

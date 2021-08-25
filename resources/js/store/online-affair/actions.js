@@ -34,18 +34,22 @@ export default {
         }
     },
     async updateOnlineRequest({ commit }, data) {
-        let data2 = {
-            id: data.id,
-            name: data.name,
-            description: data.description,
-            type: data.type,
-            online_request_procedures: data.online_request_procedures,
-            prerequisite_labels: data.prerequisite_labels
-        };
+        // let data2 = {
+        //     id: data.id,
+        //     name: data.name,
+        //     description: data.description,
+        //     type: data.type,
+        //     online_request_procedures: data.online_request_procedures,
+        //     prerequisites:{
+        //         notes: data.online_request_prerequisite_notes,
+        //         inputs: data.online_request_prerequisite_inputs,
+        //     },
+            
+        // };
         try {
             let resp = await axios.put(
-                `/api/online-requests/${data2.id}`,
-                data2
+                `/api/online-requests/${data.id}`,
+                data
             );
             if (resp.data.status == 200 || resp.data.status == 201) {
                 console.log("success");

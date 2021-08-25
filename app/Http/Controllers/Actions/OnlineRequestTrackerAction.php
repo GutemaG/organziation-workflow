@@ -38,7 +38,7 @@ class OnlineRequestTrackerAction
                     'token' => Str::random(4),
                     'full_name' => $data['full_name'],
                     'phone' => $data['phone_number'],
-                ]);
+                ]);dd('it is done');
                 ClientInformationAction::store($data, $onlineRequestTracker);
                 $token = $onlineRequestTracker->token;
                 $procedures = $onlineRequest->onlineRequestProcedures;
