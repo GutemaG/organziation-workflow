@@ -179,7 +179,8 @@ export default [
                 }
             },
             {
-                path: "/online-request/edit/:id",
+                path: "/online-request/edit/:true",
+                name:'edit-online-request',
                 props: true,
                 components: {
                     dashboard: require("./components/request/online/EditOnlineRequest.vue")

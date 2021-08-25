@@ -182,6 +182,56 @@
             >add pre-request</b-button
           >
           <base-card>
+            <div>
+              <h4>List Of Notes</h4>
+              <div v-for="(note, index) in selectedRequest.online_request_prerequisite_notes" :key="index">
+                <span>{{index + 1}}</span><input type="text" v-model="note.note" class="form-control m-1" style="width:90%;display:inline">
+              </div>
+            </div>
+            <div>
+              <h4>List of Inputs</h4>
+              <div v-for="(input, index) in selectedRequest.online_request_prerequisite_inputs" :key="index">
+                {{input}}
+              <div class="row">
+                    <div class="col-3">
+                      {{ index + 1 }} <label>Name</label>
+                      <input
+                        v-model="input.name"
+                        type="text"
+                        class="form-control"
+                        placeholder="enter prerequisite name"
+                      />
+                    </div>
+                    <div class="col-3">
+                      <label>type</label>
+                      <b-select
+                        v-model="input.type"
+                        :options="['email','text', 'description', 'number', 'file']"
+                      >
+                      </b-select>
+                      <!-- <input v-model="input.type" type="text" class="form-control"> -->
+                    </div>
+                    <div class="col-3">
+                      <label>Description</label>
+                      <textarea
+                        v-model="input.description"
+                        class="form-control"
+                        rows="2"
+                        placeholder="Enter description for prerequisite"
+                      ></textarea>
+                    </div>
+                    <div class="col-1">
+                      <b-button
+                        @click="removePrerequisiteLabel(index)"
+                        variant="danger"
+                        size="sm"
+                      >
+                        <i class="fa fa-minus"></i>
+                      </b-button>
+                    </div>
+                  </div>
+              </div>
+            </div>
             <b-row align-v="center" slot="header">
               <b-col cols="8">
                 <span v-if="prerequisiteLength != 0">Request Labels</span>
@@ -261,6 +311,7 @@ import { mapGetters, mapActions } from "vuex";
 import { required } from "vuelidate/lib/validators";
 import axios from "axios";
 export default {
+  name:'edit-online-request',
   props: ["id"],
   data() {
     return {
@@ -416,6 +467,8 @@ export default {
     if (this.online_requests.length == 0) {
       this.$router.push("/online-requests");
     } else {
+      this.selectedRequest = this.$route.params.request;
+      /*
       if (this.selectedRequest) {
         let request = this.online_requests.filter(
           (req) => req.id == this.request_id
@@ -434,6 +487,7 @@ export default {
         }
         this.selectedRequest = request;
       }
+      */
     }
   },
   validations: {

@@ -13,7 +13,7 @@ class OnlineRequestAction
 {
     use MyJsonResponse;
 
-    private static array $with = ['onlineRequestProcedures', 'onlineRequestPrerequisiteNotes', 'onlineRequestPrerequisiteInputs'];
+    private static array $with = ['onlineRequestProcedures.users', 'onlineRequestPrerequisiteNotes', 'onlineRequestPrerequisiteInputs'];
 
     public static function index(): JsonResponse
     {
@@ -47,15 +47,46 @@ class OnlineRequestAction
         }
     }
 
+    public static function update(array $data, OnlineRequest $onlineRequest): JsonResponse
+    {
+        try {
+            DB::beginTransaction();
+            $onlineRequest->update([
+                'name' => $data['name'],
+                'type' => $data['type'],
+                'description' => $data['description'],
+            ]);
+            OnlineRequestProcedureAction::updateData($data, $onlineRequest->id);
+            OnlineRequestPrerequisiteInputAction::updateData($data, $onlineRequest->id);
+            OnlineRequestPrerequisiteNoteAction::updateData($data, $onlineRequest->id);
+//            dd('');
+//            if (! OnlinePrerequisiteController::storeOrUpdateData($data, $onlineRequest->id, true))
+//                throw new DatabaseException('Error occurred during prerequisite updating. Please retry again.');
 
-
-
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'online_request' => OnlineRequest::with(self::$with)->find($onlineRequest->id),
+            ]);
+        }
+        catch (DatabaseException $exception){
+            DB::rollBack();
+            return $exception->render();
+        }
+        catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 400,
+                'error' => [
+                    'error' => ['Error occur while creating please retry again.',$e]
+                ]
+            ]);
+        }
+    }
 
     public static function show(OnlineRequest $onlineRequest): JsonResponse
     {
-        $onlineRequest->onlineRequestProcedures;
-        $onlineRequest->onlineRequestPrerequisiteInputs;
-        $onlineRequest->onlineRequestPrerequisiteNotes;
+        $onlineRequest = OnlineRequest::with(self::$with)->find($onlineRequest->id)->toArray();
         return self::successResponse(['online_request' => $onlineRequest]);
     }
 }
