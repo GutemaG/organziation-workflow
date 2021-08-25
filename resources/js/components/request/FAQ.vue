@@ -112,23 +112,25 @@
         </b-button>
       </template>
     </b-table>
-    <edit-faq-modal></edit-faq-modal>
-    <add-faq-modal></add-faq-modal>
+    <!-- <edit-faq-modal></edit-faq-modal> -->
+        <edit-faq-modal :faq="selectedFAQ" @update_faq="updateFAQ"></edit-faq-modal>
+    <add-faq-modal @add_faq="pushFAQ"></add-faq-modal>
   </div>
 </template>
 
 <script>
-import EditFAQModal from './faq/EditFAQModal.vue'
-import AddFAQModal from './faq/AddFAQModal.vue'
+import EditFAQModal from "./faq/EditFAQModal.vue";
+import AddFAQModal from "./faq/AddFAQModal.vue";
 export default {
   name: "faq-page",
-  components:{
-      'edit-faq-modal':EditFAQModal,
-      'add-faq-modal':AddFAQModal
+  components: {
+    "edit-faq-modal": EditFAQModal,
+    "add-faq-modal": AddFAQModal,
   },
   data() {
     return {
       faqs: [],
+      selectedFAQ:{},
       fields: [
         {
           key: "id",
@@ -157,7 +159,6 @@ export default {
       pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
       filter: null,
       filterOn: [],
-      selectedUser: {},
     };
   },
   methods: {
@@ -170,15 +171,53 @@ export default {
       }
       //   .then((resp) => console.log(resp.data));
     },
-    deleteFAQ(item) {
-        console.log('deleting')
+    async deleteFAQ(item) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.value) {
+          axios
+            .delete(`/api/faqs/${item.id}`)
+            .then((resp) => {
+              if (resp.data.status == 200) {
+                let index = this.faqs.findIndex((faq) => faq.id == item.id);
+                if (index !== -1) {
+                  this.faqs.splice(index, 1);
+                }
+                Swal.fire("Deleted!", "User is removed", "success");
+              } else {
+                let err = resp.data.error;
+                Swal.fire("Failed!", "Failed to Delete", "warning");
+              }
+            })
+            .catch((err) => {
+              Swal.fire(err, "Failed", "warning");
+            });
+        }
+      });
     },
     addFAQ() {
       this.$root.$emit("bv::show::modal", "add-faq-modal");
     },
-    editFQA() {
+    editFQA(item) {
+      this.selectedFAQ=item
       this.$root.$emit("bv::show::modal", "edit-faq-modal");
-
+    },
+    pushFAQ(question) {
+      this.faqs.unshift(question);
+    },
+    updateFAQ(question) {
+      let index = this.faqs.findIndex(faq => faq.id == question.id);
+      if(index!=-1){
+        this.faqs.splice(index, 1, question)
+        this.selectedFAQ={}
+      }
+      this.faqs.unshift(question);
     },
   },
   created() {

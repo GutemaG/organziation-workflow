@@ -14,13 +14,16 @@ Route::get('/', WelcomeController::class);
 
 require __DIR__.'/auth.php';
 
-// staff user routes
+// online request manage routes
 require __DIR__.'/my_route/online_request.php';
+
+// staff user routes
+require __DIR__ . '/my_route/online_request_tracker.php';
 
 // frequently viewed request routes
 require __DIR__ . '/my_route/frequently_viewed_request.php';
 
-// frequently asked question routes
+// frequently asked question manage routes
 require __DIR__.'/my_route/faq.php';
 
 
@@ -37,12 +40,6 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
     Route::resource('/buildings', \App\Http\Controllers\BuildingController::class);
 
     Route::resource('/bureaus', \App\Http\Controllers\BureauController::class);
-
-    Route::apiResource('/online-requests', OnlineRequestController::class)
-        ->only(['store', 'update', 'destroy'])
-        ->missing(function (Request $request) {
-            throw new  MissingModelException();
-        });
 
     Route::put('/online-prerequisites/{prerequisite_label}', [\App\Http\Controllers\OnlinePrerequisiteController::class, 'update']);
 
@@ -69,11 +66,6 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
 
 // public routes
 Route::prefix('api')->group(function (){
-    Route::get('/online-requests', [OnlineRequestController::class, 'index']);
-    Route::get('/online-requests/{online_request}', [OnlineRequestController::class, 'show'])
-        ->missing(function (Request $request) {
-            throw new  MissingModelException();
-        });
     Route::get('/apply-request/{online_request_tracker:token}', [OnlineRequestTrackerController::class, 'appliedRequest']);
     Route::post('/apply-request', [OnlineRequestTrackerController::class, 'applyRequest']);
 

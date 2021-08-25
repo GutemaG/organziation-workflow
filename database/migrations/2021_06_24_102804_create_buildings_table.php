@@ -18,6 +18,7 @@ class CreateBuildingsTable extends Migration
             $table->string('name')->unique()->nullable();
             $table->string('number')->unique();
             $table->integer('number_of_offices');
+            $table->string('location')->nullable();
             $table->longText('description')->nullable();
             $table->softDeletes();
             $table->timestamps();

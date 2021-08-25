@@ -5,21 +5,10 @@
       v-model="tabIndex"
       card
     > -->
-      <div class="container">
-      <form @submit.prevent="submitForm">
-          <b-form-group label="Channel">
-              <b-form-input v-model="henok.channel">
-
-              </b-form-input>
-          </b-form-group>
-          <b-form-group label="Message">
-              <b-form-input v-model="henok.message">
-              </b-form-input>
-          </b-form-group>
-          <b-button type="submit">Submit</b-button>
-      </form>
-      </div>
-    <b-card class="shadow">
+    <b-card class="">
+      <b-card-header>
+        <h1>List of Request procedures</h1>
+      </b-card-header>
       <b-table :items="steps" :fields="fields" borderless stacked="md">
         <template #cell(id)="row">
           {{ row.index + 1 }}

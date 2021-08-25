@@ -4,15 +4,7 @@
             <b-col>
                 <b-container fluid>
                     <div class="mb-3">
-                        <div style="z-index: 111; position: absolute; text-align: center; margin-bottom: 2rem;
-                        top: 150px;
-                        width: 80%;
-                        background-color: #00000042;
-                        color: white;">
-                            <h2>Adama Science And Technology University</h2>
-                            <h2>Guidance System</h2>
-                        </div>
-
+                  
                         <b-carousel
                             id="carousel-fade"
                             style="text-shadow: 0px 0px 2px #000"
@@ -23,15 +15,15 @@
                         >
                             <b-carousel-slide
                             caption="First slide"
-                            img-src="https://picsum.photos/1024/480/?image=10"
+                            img-src="/images/astu gate.jpg"
                             ></b-carousel-slide>
                             <b-carousel-slide
                             caption="Second Slide"
-                            img-src="https://picsum.photos/1024/480/?image=12"
+                            img-src="/images/astu gate.jpg"
                             ></b-carousel-slide>
                             <b-carousel-slide
                             caption="Third Slide"
-                            img-src="https://picsum.photos/1024/480/?image=22"
+                            img-src="/images/astu gate.jpg"
                             ></b-carousel-slide>
                         </b-carousel>
                     </div>
@@ -68,13 +60,7 @@
                     </div>
                 </b-container>
             </b-col>
-            <b-col cols="3">
-                <b-container>
-                    <b-card bg-variant="dark" header="Dark" text-variant="white" class="text-center">
-                        <b-card-text class="text-left">Lorem ipsum dolor sit amet, consectetur adipiscing elit alekj aoiejf lasdjfoew adsfj ewo.</b-card-text>
-                    </b-card>
-                </b-container>
-            </b-col>
+            
         </b-row>
       </div>
 </template>

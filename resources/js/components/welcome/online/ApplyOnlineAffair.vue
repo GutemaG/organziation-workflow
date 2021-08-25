@@ -9,9 +9,16 @@
     >
       <h4>{{ error }}</h4>
     </b-alert>
-    <div class="container">
-      <div class="d-flex justify-content-md-center">
-        <b-card style="width: 60%;">
+    <div class="">
+      <div class="d-grid justify-content-md-center">
+      <div class="text-center" v-if="selected.online_request_prerequisite_notes.length!=0">
+        <h3 class="note font-italic">Important Note</h3>
+        <div v-for="(note, index) in selected.online_request_prerequisite_notes" :key="index">
+          <p class="text-danger">{{note.note}}</p>
+        </div>
+      </div>
+      <div class="d-flex  justify-content-center">
+        <b-card style="width: 80%;">
           <b-form @submit.prevent="handleSubmit">
             <b-form-group
               id="full-name-input-label"
@@ -26,19 +33,7 @@
                 required
               ></b-form-input>
             </b-form-group>
-            <b-form-group
-              id="email-address"
-              label="Email"
-              label-for="email-input"
-            >
-              <b-form-input
-                id="email-input"
-                type="email"
-                placeholder="Enter your Email"
-                v-model="$v.form.email.$model"
-                :state="validateState('email')"
-              ></b-form-input>
-            </b-form-group>
+            
             <b-form-group
               id="phone-number-label"
               label="Phone number"
@@ -52,6 +47,17 @@
                 required
               ></b-form-input>
             </b-form-group>
+            <div v-for="(input,index) in form.prerequisites" :key="index">
+              <div class="form-group">
+                <label :for="'perquisite_input-'+index">{{input.name}}</label>
+                <input :type="input.type" class="form-control"
+                  v-model="form.prerequisites[index].value"
+                   :id="'perquisite_input-'+index" 
+                   :placeholder="'Enter -'+input.name" 
+                   required>
+              </div>
+              
+            </div>
             <b-button
               type="submit"
               variant="primary"
@@ -63,6 +69,7 @@
           </b-form>
         </b-card>
       </div>
+      </div>
     </div>
   </div>
 </template>
@@ -72,6 +79,7 @@ import { mapGetters } from "vuex";
 import { required } from "vuelidate/lib/validators";
 // import store from "../../../store";
 export default {
+  name:'apply-online-affair',
   data() {
     return {
       selected: null,
@@ -79,11 +87,19 @@ export default {
         full_name: "",
         email: "",
         phone_number: "",
+        prerequisites:[]
       },
       token: "",
       isLoading: false,
       error: null,
     };
+  },
+  watch:{
+    selected(){
+      if(!this.selected){
+        this.$router.go(-1)
+      }
+    }
   },
   computed: {
     ...mapGetters(["findRequest"]),
@@ -116,7 +132,24 @@ export default {
   },
   created() {
     // let req = store.getters.findRequest(this.$route.params.slug);
-    this.selected = this.findRequest(this.$route.params.slug);
+    // this.selected = this.findRequest(this.$route.params.slug);
+    this.selected = this.$route.params.request;
+    let pre = this.selected.online_request_prerequisite_inputs
+    if(pre.length!=0){
+      for(let i=0;i<pre.length;i++){
+        this.form.prerequisites.push(
+           {
+             name:pre[i].name,
+             value:null,
+             type:pre[i].type,
+             input_id:pre[i].input_id,
+
+            }
+        )
+      }
+    }
+    console.log(this.selected)
+
     // this.selected = result;
   },
   validations: {
@@ -134,3 +167,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.note{
+  color:red
+}
+</style>

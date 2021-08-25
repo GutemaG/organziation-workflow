@@ -397,6 +397,5 @@ li {
   font-size: 12px;
   /* margin: 8px 0 0; */
 }
-.username {
-}
+
 </style>
