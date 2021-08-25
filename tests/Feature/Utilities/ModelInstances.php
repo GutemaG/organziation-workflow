@@ -7,6 +7,7 @@ namespace Tests\Feature\Utilities;
 use App\Models\Affair;
 use App\Models\FrequentlyAskedQuestion;
 use App\Models\OnlineRequest;
+use App\Models\OnlineRequestTracker;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -32,6 +33,9 @@ trait ModelInstances
                 break;
             case FrequentlyAskedQuestion::class:
                 return FrequentlyAskedQuestion::with($relation)->inRandomOrder()->limit(1)->get()->first();
+                break;
+            case OnlineRequestTracker::class:
+                return OnlineRequestTracker::with($relation)->inRandomOrder()->limit(1)->get()->first();
                 break;
             default:
                 return null;

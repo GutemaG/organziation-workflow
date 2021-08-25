@@ -25,17 +25,21 @@ class OnlineRequestTrackerAction
         return response()->json([
             'status' => 200,
             'applied_request' => $data,
-        ]);
+        ]);;
     }
 
     public static function applyRequest(array $data): JsonResponse
     {
-        $onlineRequest = OnlineRequest::with('onlineRequestProcedures')->find($data['online_request_id']);
+        $onlineRequest = OnlineRequest::with(['onlineRequestProcedures', 'onlineRequestPrerequisiteInputs'])->find($data['online_request_id']);
         if ($onlineRequest) {
             try {
                 DB::beginTransaction();
-                $onlineRequestTracker = $onlineRequest->onlineRequestTracker()
-                    ->create(['token' => Str::random(4)]);
+                $onlineRequestTracker = $onlineRequest->onlineRequestTrackers()->create([
+                    'token' => Str::random(4),
+                    'full_name' => $data['full_name'],
+                    'phone' => $data['phone_number'],
+                ]);
+                ClientInformationAction::store($data, $onlineRequestTracker);
                 $token = $onlineRequestTracker->token;
                 $procedures = $onlineRequest->onlineRequestProcedures;
                 $onlineRequestStep = OnlineRequestStepAction::store($procedures, $onlineRequestTracker);

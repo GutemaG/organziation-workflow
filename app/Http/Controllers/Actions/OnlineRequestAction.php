@@ -60,9 +60,6 @@ class OnlineRequestAction
             OnlineRequestProcedureAction::updateData($data, $onlineRequest->id);
             OnlineRequestPrerequisiteInputAction::updateData($data, $onlineRequest->id);
             OnlineRequestPrerequisiteNoteAction::updateData($data, $onlineRequest->id);
-//            dd('');
-//            if (! OnlinePrerequisiteController::storeOrUpdateData($data, $onlineRequest->id, true))
-//                throw new DatabaseException('Error occurred during prerequisite updating. Please retry again.');
 
             DB::commit();
             return response()->json([
