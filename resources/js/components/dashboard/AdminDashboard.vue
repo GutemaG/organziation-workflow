@@ -1,46 +1,48 @@
 <template>
   <div class="container-fluid mt-3">
-    <div class="row">
-      <div class="col-8">
-      <h3>Users</h3>
-      <p>Below is a table with the list of users with thier type of work they are placed.</p>
-        <div class="leftside">
-          <b-table :items="items" :fields="fields" hover bordered responsive thead-class="text-white bg-dark"></b-table>
-        </div>
-      </div>
-      <div class="col">
-        <div class="rightside">
-          <div>
-            <b-card-group deck>
-              <b-card title="Title" header-tag="header" footer-tag="footer">
-                <template #header>
-                  <h6 class="mb-0">Header Slot</h6>
-                </template>
-                <b-card-text>Header and footers using slots.</b-card-text>
-                <b-button href="#" variant="primary">Go somewhere</b-button>
-                <template #footer>
-                  <em>Footer Slot</em>
-                </template>
-              </b-card>
-            </b-card-group>
-          </div>
-        </div>
+    <div>
+      <div>
+        <h3>Users</h3>
+        <p>Below is a table with the list of users with thier type of work they are placed.</p>
+        <b-table :items="users.slice(0,6)" :fields="['user_name','type','created_at']" hover bordered responsive thead-class="text-white bg-dark"></b-table>
+        <router-link to="/users">More..</router-link>
+        <h3>Requests</h3>
+        <p>Below is a table with the list of Requests.</p>
+        <b-table :items="affairs.slice(0,6)" :fields="['name',{label:'Users',key:'user.user_name'},'created_at']" hover bordered responsive thead-class="text-white bg-dark"></b-table>
+        <router-link to="/requests">More..</router-link>
+        <h3>Online-Requests</h3>
+        <p>Below is a table with the list of Online-Requests.</p>
+        <b-table :items="online_requests.slice(0,6)" :fields="['name','type','created_at']" hover bordered responsive thead-class="text-white bg-dark"></b-table>
+        <router-link to="/online-requests">More..</router-link>
+        <h3>Bureau</h3>
+        <p>Below is a table with the list of Bureau.</p>
+        <b-table :items="bureaus.slice(0,6)" :fields="['name','office_number','building_number','created_at']" hover bordered responsive thead-class="text-white bg-dark"></b-table>
+        <router-link to="/bureaus">More..</router-link>
+        <h3>Buildings</h3>
+        <p>Below is a table with the list of Buildings.</p>
+        <b-table :items="buildings.slice(0,6)" :fields="['name',{label:'Building number',key:'number'},'number_of_offices','created_at']" hover bordered responsive thead-class="text-white bg-dark"></b-table>
+        <router-link to="/buildings">More..</router-link>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex';
     export default {
     data() {
       return {
         // Note 'isActive' is left out and will not appear in the rendered table
-        fields: [
+        user_fields: [
           {
             key: 'user_name',
             sortable: true,
           },
           {
             key: 'type',
+            sortable: true,
+          },
+          {
+            key: 'created_at',
             sortable: true,
           },
         ],
@@ -50,42 +52,33 @@
       }
     },
     computed: {
-      userslist() {
-        axios.get("/api/users")
-        .then((resp) => {
-          let username = resp.data.users[''].type;
-          console.log(resp1);
-        })
-        .catch((error) => console.log(error));
-        return 
-      }
+      ...mapGetters(['users','affairs','online_requests','bureaus','buildings']),
+      fetchlimit(){
+        return this.users.slice(0, 6);
+      },
+
     },
     methods: {
-      fetchUsers() {
+      ...mapActions(['fetchUsers', 'fetchAffairs', 'fetchOnlineRequests', 'fetchBureaus', 'fetchBuildings']),
+      usersList() {
         axios.get("/api/users")
         .then((resp) => {
-          let resp1 = resp.data.users;
-          console.log(resp1);
+          let user = resp.data.users;
+          this.users = user;
         })
-        .catch((error) => console.log(error));
       }
     },
     created(){
-      axios
-        .get("/api/users")
-        .then((resp) => {
-          let resp1 = resp.data.users[''].type;
-          console.log(resp1);
-        })
-        .catch((error) => console.log(error));
+      this.fetchUsers();
+      this.fetchAffairs();
+      this.fetchOnlineRequests();
+      this.fetchBureaus();
+      this.fetchBuildings();
     }
   }
 </script>
 
 <style scoped>
-.leftside, .rightside {
-  width: 100%;
-}
 .bg-dark {
   background-color: rgb(0, 0, 0) ;
   color: rgb(255, 255, 255) ;
