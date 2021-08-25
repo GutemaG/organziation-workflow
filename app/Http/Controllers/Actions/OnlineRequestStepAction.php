@@ -34,10 +34,14 @@ class OnlineRequestStepAction
         $onlineRequestSteps = OnlineRequestStep::with('notificationTracker')
             ->where('user_id', auth()->user()->id)
             ->with('onlineRequestTracker.onlineRequest')
+            ->with('onlineRequestTracker.clientInformation')
             ->orderByDesc('id')->get();
         $onlineRequestSteps = $onlineRequestSteps->map(function ($value) {
+            $client_data = $value->onlineRequestTracker->clientInformation->toArray();
+            $client_data['full_name'] = $value->onlineRequestTracker->full_name;
             $value = $value->toArray();
             $value['notification_tracker_id'] =  $value['notification_tracker']['id'] ?? null;
+            $value['client_data'] = $client_data;
             unset($value['notification_tracker']);
             return $value;
         })->toArray();
