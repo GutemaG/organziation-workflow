@@ -13,7 +13,7 @@ class OnlineRequestTest extends MyTestCase
 {
     protected string $url = '/api/online-requests';
     protected string $modelName = OnlineRequest::class;
-    protected bool $defaultTest = false;
+    protected bool $defaultTest = true;
     protected array $with = ['onlineRequestProcedures.users', 'onlineRequestPrerequisiteNotes', 'onlineRequestPrerequisiteInputs'];
 
     public function testAdminCanAccessIndex(): void
@@ -30,11 +30,27 @@ class OnlineRequestTest extends MyTestCase
         $this->printSuccessMessage('It team can access index passed ');
     }
 
+    protected function formatResponseData(array $onlineRequests): array
+    {
+        $requestLength = count($onlineRequests);
+        for ($i = 0; $i < $requestLength; $i++) {
+            $procedureLength = count($onlineRequests[$i]['online_request_procedures']);
+            for ($j = 0; $j < $procedureLength; $j++) {
+                $usersId = collect($onlineRequests[$i]['online_request_procedures'][$j]['users'])
+                    ->map(function ($value) { return $value['id']; })->toArray();
+                $onlineRequests[$i]['online_request_procedures'][$j]['responsible_user_id'] = $usersId;
+                unset($onlineRequests[$i]['online_request_procedures'][$j]['users']);
+            }
+        }
+        return $onlineRequests;
+    }
+
     protected function index(User $user): void
     {
         $this->actingAs($user);
         $response = $this->getJson($this->url);
         $data = OnlineRequest::with($this->with)->orderBy('name', 'asc')->get()->toArray();
+        $data = self::formatResponseData($data);
         $response->assertExactJson([
             'status' => 200,
             'online_requests' => $data,

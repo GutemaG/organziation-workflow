@@ -17,7 +17,8 @@ class OnlineRequestAction
 
     public static function index(): JsonResponse
     {
-        $onlineRequests = OnlineRequest::with(self::$with)->orderBy('name', 'asc')->get();
+        $onlineRequests = OnlineRequest::with(self::$with)->orderBy('name', 'asc')->get()->toArray();
+        $onlineRequests = self::formatResponseData($onlineRequests);
         return self::successResponse(['online_requests' => $onlineRequests]);
     }
 
@@ -100,5 +101,24 @@ class OnlineRequestAction
         $onlineRequest->onlineRequestPrerequisiteNotes()->delete();
         $onlineRequest->delete();
         return self::successResponse();
+    }
+
+    /**
+     * @param array $onlineRequests
+     * @return array
+     */
+    private static function formatResponseData(array $onlineRequests): array
+    {
+        $requestLength = count($onlineRequests);
+        for ($i = 0; $i < $requestLength; $i++) {
+            $procedureLength = count($onlineRequests[$i]['online_request_procedures']);
+            for ($j = 0; $j < $procedureLength; $j++) {
+                $usersId = collect($onlineRequests[$i]['online_request_procedures'][$j]['users'])
+                    ->map(function ($value) { return $value['id']; })->toArray();
+                $onlineRequests[$i]['online_request_procedures'][$j]['responsible_user_id'] = $usersId;
+                unset($onlineRequests[$i]['online_request_procedures'][$j]['users']);
+            }
+        }
+        return $onlineRequests;
     }
 }
