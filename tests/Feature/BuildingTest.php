@@ -11,13 +11,9 @@ use Tests\Feature\Utilities\FakeDataGenerator;
 use Tests\Feature\Utilities\Utility;
 use Tests\TestCase;
 
-class BuildingTest extends TestCase
+class BuildingTest extends MyTestCase
 {
-    private function printSuccessMessage($message){
-        print_r("<info>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n</info>");
-        print_r("<info>  $message --- success.  \n</info>");
-        print_r("<info>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n\n</info>");
-    }
+    protected bool $defaultTest = false;
 
     public function testUnauthenticatedUserCanAccess(){
         $response = $this->get('/api/buildings');
@@ -38,7 +34,7 @@ class BuildingTest extends TestCase
         $response->assertStatus(302);
     }
 
-    private function getUser($type){
+    private function getSingleUser(UserType $type){
         if(! in_array($type, UserType::all()))
             return null;
         else
@@ -54,7 +50,7 @@ class BuildingTest extends TestCase
     }
 
     private function assertAllUrlsForStaffAndReceptionUsers($type){
-        $this->actingAs($this->getUser($type));
+        $this->actingAs($this->getSingleUser($type));
         $response = $this->get('/api/buildings');
         $this->assertUnauthorizedUser($response);
 
@@ -96,7 +92,7 @@ class BuildingTest extends TestCase
     }
 
     private function indexForAdminAndItTeamMember($type){
-        $this->actingAs($this->getUser($type));
+        $this->actingAs($this->getSingleUser($type));
         $response = $this->get('/api/buildings/');
         $buildings = Building::orderBy('number', 'asc')->get();
         $length = $buildings->count();
@@ -128,9 +124,9 @@ class BuildingTest extends TestCase
 
     private function store($userType) {
         if ($userType == UserType::admin())
-            $this->actingAs($this->getUser(UserType::admin()));
+            $this->actingAs($this->getSingleUser(UserType::admin()));
         else
-            $this->actingAs($this->getUser(UserType::supportiveStaff()));
+            $this->actingAs($this->getSingleUser(UserType::supportiveStaff()));
 
         $building = FakeDataGenerator::buildingData();
         $response = $this->post('/api/buildings', $building);
@@ -185,7 +181,7 @@ class BuildingTest extends TestCase
     }
 
     public function testShowForAdmin(){
-        $this->actingAs($this->getUser(UserType::admin()));
+        $this->actingAs($this->getSingleUser(UserType::admin()));
         $buildings = Building::orderBy('number_of_offices', 'asc')->limit(30)->get();
 
         foreach ($buildings as $building){
@@ -200,7 +196,7 @@ class BuildingTest extends TestCase
     }
 
     public function testShowForItTeamMember(){
-        $this->actingAs($this->getUser(UserType::supportiveStaff()));
+        $this->actingAs($this->getSingleUser(UserType::supportiveStaff()));
         $buildings = Building::orderBy('number_of_offices', 'asc')->limit(30)->get();
 
         foreach ($buildings as $building){
@@ -261,9 +257,9 @@ class BuildingTest extends TestCase
 
     private function updateWithValidValues($building, $type){
         if($type == UserType::admin())
-            $this->actingAs($this->getUser(UserType::admin()));
+            $this->actingAs($this->getSingleUser(UserType::admin()));
         else
-            $this->actingAs($this->getUser(UserType::supportiveStaff()));
+            $this->actingAs($this->getSingleUser(UserType::supportiveStaff()));
 
         $data = FakeDataGenerator::buildingData();
 
@@ -277,9 +273,9 @@ class BuildingTest extends TestCase
 
     private function updateWithInvalidValues($building, $type){
         if($type == UserType::admin())
-            $this->actingAs($this->getUser(UserType::admin()));
+            $this->actingAs($this->getSingleUser(UserType::admin()));
         else
-            $this->actingAs($this->getUser(UserType::supportiveStaff()));
+            $this->actingAs($this->getSingleUser(UserType::supportiveStaff()));
 
         $response = $this->put('/api/buildings/' . $building->id, ['number' => '', 'number_of_offices' => '']);
         $this->assertUpdate(2, $response);
@@ -348,7 +344,7 @@ class BuildingTest extends TestCase
     }
 
     public function testDestroyForAdmin(){
-        $this->actingAs($this->getUser(UserType::admin()));
+        $this->actingAs($this->getSingleUser(UserType::admin()));
         $buildings = Building::orderBy('number_of_offices', 'asc')->limit(30)->get();
 
         foreach ($buildings as $building){
@@ -375,7 +371,7 @@ class BuildingTest extends TestCase
     }
 
     public function testDestroyForItTeamMember(){
-        $this->actingAs($this->getUser(UserType::supportiveStaff()));
+        $this->actingAs($this->getSingleUser(UserType::supportiveStaff()));
         $buildings = Building::orderBy('number_of_offices', 'asc')->limit(30)->get();
 
         foreach ($buildings as $building){
