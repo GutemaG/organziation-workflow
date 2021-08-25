@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-3">
     <div v-if="connection_error">
       <h1>{{ connection_error }}</h1>
     </div>
