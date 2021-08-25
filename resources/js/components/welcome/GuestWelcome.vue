@@ -3,7 +3,7 @@
     <div style="margin-bottom: 4.8rem;">
       <guest-nav-bar class="welcome"></guest-nav-bar>
     </div>
-    <div class="content-wrapper container mt-5">
+    <div class="content-wrapper container main_content" id="bootstrap-overrides">
       <router-view name="welcome" class="welcome"></router-view>
       <button @click="openChat" class="open-button shadow-lg">
         <i class="fas fa-comments fa-2x "></i>
@@ -321,6 +321,10 @@ export default {
 </script>
 
 <style scoped>
+.content-wrapper{
+  margin: 0 auto !important;
+  width: 90% !important;
+}
 .below_footer{
   left: 0; 
   right: 0; 
