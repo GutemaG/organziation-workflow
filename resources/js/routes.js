@@ -69,6 +69,14 @@ export default [
                     welcome: require("./components/welcome/online/CheckOnlineRequestProgress.vue")
                         .default
                 }
+            },
+            {
+                path: "/frequesntly-asked-question",
+                name: "frequesntly-asked-question",
+                components: {
+                    welcome: require("./components/welcome/faq/FAQ.vue")
+                        .default
+                }
             }
         ]
     },

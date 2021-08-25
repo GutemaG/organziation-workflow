@@ -76,7 +76,7 @@
                               <div class="d-flex align-items-center">
                                 <i class="fas bg-blue">{{ pre_request_id + 1 }}</i>
                                 <!-- style="overflow-y: scroll" -->
-                                <div class="timeline-item" style="border-radius: .7rem; width: 100%;">
+                                <div class="timeline-item" style="overflow: auto; border-radius: .7rem; width: 100%;">
                                   <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
                                   <div class="timeline-body shadow pre_request_name bg-dark" style="border-radius: .6rem .6rem 0 0;" v-b-toggle="['pre_request - '+pre_request_id+'-'+procedure_id+'-'+affair_id]">
                                     {{pre_request.name}}

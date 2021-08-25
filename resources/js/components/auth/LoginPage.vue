@@ -15,10 +15,7 @@
               <b-alert v-if="!!error" class="text-center " style="border-radius: 1.25rem;" show variant="danger">{{ error }}</b-alert>
               <div :label="tr('Email:')" 
               label-for="email-input"
-              :invalid-feedback="
-                !$v.form.email.required
-                  ? 'Required'
-                  : 'Email is not valid, please enter valide email' "
+              :invalid-feedback=" !$v.form.email.required ? 'Required' : 'Email is not valid, please enter valide email' "
               class="input-group mb-3">
                 <input id="email-input"
                 v-model="$v.form.email.$model" 

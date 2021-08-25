@@ -23,62 +23,62 @@
         <h3 v-if="!filteredAffairs">Oops, No result found Please try other</h3>
         <div v-for="affair in filteredAffairs" :key="affair.id">
           <div class="accordion" role="tablist">
-              <div class="card collapsed-card  online_affair_name">
-                <div class="card-header border-0 ui-sortable-handle" data-card-widget="collapse" style="cursor: move;">
-                  <h3 class="card-title" block
-                  @click="selectAffair(affair)">
-                    <b-icon icon="check2-circle" class="mr-3" scale="2" variant="primary"></b-icon>
-                    <b>{{ affair.name }}</b>
-                    <br><br>
-                    <span style="font-size: .8rem; ">{{affair.description.substring(0, 250)}}....</span>
-                  </h3>
-                  <div class="card-tools">
-                    <button type="button" class="btn text-white" data-card-widget="collapse" title="Collapse">
-                      <i class="fas fa-plus blue"></i>
-                    </button>
-                  </div>
-                  <!-- card tools -->
-                  
-                  <!-- /.card-tools -->
+            <div class="card collapsed-card  online_affair_name">
+              <div class="card-header border-0 ui-sortable-handle" data-card-widget="collapse" style="cursor: move;">
+                <h3 class="card-title" block
+                @click="selectAffair(affair)">
+                  <b-icon icon="check2-circle" class="mr-3" scale="2" variant="primary"></b-icon>
+                  <b>{{ affair.name }}</b>
+                  <br><br>
+                  <span style="font-size: .8rem; ">{{affair.description.substring(0, 250)}}....</span>
+                </h3>
+                <div class="card-tools">
+                  <button type="button" class="btn text-white" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-plus blue"></i>
+                  </button>
                 </div>
-                <div v-if="affair.description.length != 0" class="card-body" style="display: none;">
-                  <h4><b>Description</b></h4>
-                  <hr>
-                  <p>{{affair.description}}</p>
-                  <p v-if="affair.prerequisite_labels !=0">Prerequisite required are: </p>
-                  <div v-for="(prerequisite_labels, prerequisite_labels_id) in affair.prerequisite_labels" :key="prerequisite_labels_id">
-                    <div class="timeline">
-                      <div class="d-flex align-items-center">
-                        <i class="fas bg-blue">{{ prerequisite_labels_id + 1 }}</i>
-                        <!-- style="overflow-y: scroll" -->
-                        <div class="timeline-item" style="border-radius: .7rem;">
-                          <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
-                          <div class="timeline-body shadow pre_request_name online_prerequest_name text-white" style="border-radius: .6rem .6rem 0 0;" v-b-toggle="['prerequisite_labels - '+prerequisite_labels_id+''+affair.id]">
-                            {{ prerequisite_labels.label }}
-                          </div>
-                          <b-collapse :id="'prerequisite_labels - '+prerequisite_labels_id+''+affair.id">
-                            <b-card-body class="online_prerequest_name text-white">
-                              <h4><b>Description</b></h4>
-                              <hr>
-                              <p>{{prerequisite_labels.label}}</p>
-                            </b-card-body>
-                          </b-collapse>
+                <!-- card tools -->
+                
+                <!-- /.card-tools -->
+              </div>
+              <div v-if="affair.description.length != 0" class="card-body" style="display: none;">
+                <h4><b>Description</b></h4>
+                <hr>
+                <p>{{affair.description}}</p>
+                <p v-if="affair.prerequisite_labels !=0">Prerequisite required are: </p>
+                <div v-for="(prerequisite_labels, prerequisite_labels_id) in affair.prerequisite_labels" :key="prerequisite_labels_id">
+                  <div class="timeline">
+                    <div class="d-flex align-items-center">
+                      <i class="fas bg-blue">{{ prerequisite_labels_id + 1 }}</i>
+                      <!-- style="overflow-y: scroll" -->
+                      <div class="timeline-item" style="border-radius: .7rem;">
+                        <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
+                        <div class="timeline-body shadow pre_request_name online_prerequest_name text-white" style="border-radius: .6rem .6rem 0 0;" v-b-toggle="['prerequisite_labels - '+prerequisite_labels_id+''+affair.id]">
+                          {{ prerequisite_labels.label }}
                         </div>
+                        <b-collapse :id="'prerequisite_labels - '+prerequisite_labels_id+''+affair.id">
+                          <b-card-body class="online_prerequest_name text-white">
+                            <h4><b>Description</b></h4>
+                            <hr>
+                            <p>{{prerequisite_labels.label}}</p>
+                          </b-card-body>
+                        </b-collapse>
                       </div>
                     </div>
                   </div>
-                  <div class="">
-                    <router-link
-                    :to="{
-                      name: 'apply-online-affair2',
-                      params: { slug: affair.name,request:affair }}"
-                    style="text-decoration: none;">
-                      <b-button pill block variant="primary" class="form-control"> Send Request </b-button>
-                    </router-link>
-                  </div>
                 </div>
-                <!-- /.card-body-->
+                <div class="">
+                  <router-link
+                  :to="{
+                    name: 'apply-online-affair2',
+                    params: { slug: affair.name,request:affair }}"
+                  style="text-decoration: none;">
+                    <b-button pill block variant="primary" class="form-control"> Send Request </b-button>
+                  </router-link>
+                </div>
               </div>
+              <!-- /.card-body-->
+            </div>
           </div>
         </div>
       </b-col>

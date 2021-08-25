@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <guest-nav-bar class="welcome"></guest-nav-bar>
-    <div class="container mt-3">
+  <div class="wrapper">
+    <div style="margin-bottom: 4.8rem;">
+      <guest-nav-bar class="welcome"></guest-nav-bar>
+    </div>
+    <div class="content-wrapper container mt-5">
       <router-view name="welcome" class="welcome"></router-view>
       <button @click="openChat" class="open-button shadow-lg">
         <i class="fas fa-comments fa-2x "></i>
@@ -77,24 +79,17 @@
         </div>
       </div>
     </div>
-    <footer class="main-footer mt-3 text-center" hidden>
-      <strong>Copyright © 2013-2021<a>OWGS</a>.</strong>
-      All rights reserved.
-    </footer>
-
-    <div class="footer welcome mt-5" >
-      <div style="left: 0; right: 0; bottom: 0;">
+    <footer  class="footer welcome mt-5 below_footer">
+      <div>
         <!-- Footer -->
-        <div class="page-footer font-small pt-0">
-          <div style="backgroundcolor: #000">
+        <div class="page-footer font-small">
             <b-container class="text-left">
-              <b-row class="py-4 d-flex align-items-center" style="color: #000">
+              <b-row class="py-4 d-flex align-items-center">
                 <b-col
                   md="6"
                   lg="5"
-                  class="text-center text-md-left mb-4 mb-md-0"
-                >
-                  <h6 class="mb-0">
+                  class="text-center text-md-left">
+                  <h6>
                     Get connected with us on social networks!
                   </h6>
                 </b-col>
@@ -104,46 +99,44 @@
                   class="text-center text-md-right bLink"
                   style="font-size: 1.7rem"
                 >
-                  <b-link class="fb-ic ml-0"
+                  <b-link class="fb-ic" href="https://www.facebook.com/"
                     ><i class="fab fa-facebook white-text mr-lg-4"> </i
                   ></b-link>
-                  <b-link class="tw-ic"
+                  <b-link class="tw-ic" href="https://twitter.com/"
                     ><i class="fab fa-twitter white-text mr-lg-4"> </i
                   ></b-link>
-                  <b-link class="gplus-ic"
+                  <b-link class="gplus-ic" href="https://mail.google.com"
                     ><i class="fab fa-google-plus white-text mr-lg-4"> </i
                   ></b-link>
-                  <b-link class="li-ic"
+                  <b-link class="li-ic" href="https://www.linkedin.com/"
                     ><i class="fab fa-linkedin-in white-text mr-lg-4"> </i
                   ></b-link>
-                  <b-link class="ins-ic"
+                  <b-link class="ins-ic" href="https://www.instagram.com/"
                     ><i class="fab fa-instagram white-text mr-lg-4"> </i
                   ></b-link>
                 </b-col>
               </b-row>
             </b-container>
-          </div>
           <div
             class="pt-5 pb-5 text-center text-md-left"
             center
             style="background-color: #1c2331; color: white"
           >
             <b-container>
-              <b-row class="mt-0 py-3 pt-2 pb-2" style="margin: 0; left: 12rem">
-                <b-col md="3" lg="4" xl="4" class="mb-4">
+              <b-row class="mt-0 py-3 pt-2 pb-2">
+                <b-col>
                   <h1 class="text-uppercase font-weight-bold">
                     <strong>ASTU</strong>
                     <br />
                     <strong>Guidance</strong>
                   </h1>
-                  <p></p>
                 </b-col>
-                <b-col md="4" lg="3" xl="4" class="mb-0">
+                <b-col class="text-left mt-3">
                   <h6 class="text-uppercase font-weight-bold">
                     <strong>Contact</strong>
                   </h6>
                   <hr
-                    class="accent-2 mb-4 mt-0 d-inline-block mx-auto"
+                    class="accent-2 d-inline-block mx-auto"
                     style="width: 60px; background-color: #6a5acd"
                   />
                   <p>
@@ -170,7 +163,7 @@
         <!-- &copy; 2021 Copyright -->
         
       </div>
-    </div>
+    </footer>
   </div>
 </template>
 <script>
@@ -328,6 +321,11 @@ export default {
 </script>
 
 <style scoped>
+.below_footer{
+  left: 0; 
+  right: 0; 
+  bottom: 0;
+  }
 .welcome {
   font-family: "Times"; 
   font-weight: 400;
