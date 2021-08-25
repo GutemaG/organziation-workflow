@@ -83,8 +83,6 @@ class OnlineRequestTrackerRequest extends FormRequest
                 return 'required|integer';
                 break;
             case InputFieldType::getFile():
-                return 'required|file';
-                break;
             default:
                 return '';
                 break;

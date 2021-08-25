@@ -15,6 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Throwable;
 use Twilio\Exceptions\ConfigurationException;
 
 class OnlineRequestTrackerAction
@@ -25,9 +26,14 @@ class OnlineRequestTrackerAction
         return response()->json([
             'status' => 200,
             'applied_request' => $data,
-        ]);;
+        ]);
     }
 
+    /**
+     * @param array $data
+     * @return JsonResponse
+     * @throws Throwable
+     */
     public static function applyRequest(array $data): JsonResponse
     {
         $onlineRequest = OnlineRequest::with(['onlineRequestProcedures', 'onlineRequestPrerequisiteInputs'])->find($data['online_request_id']);
