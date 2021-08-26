@@ -23,7 +23,6 @@ class AffairFactory extends Factory
      */
     public function definition()
     {
-
         //Fields: [id,user_id, name, description, timestamp,]
         $users_id = User::where('type', 'admin')->orWhere('type', 'it_team_member')
                     ->pluck('id')->toArray();
