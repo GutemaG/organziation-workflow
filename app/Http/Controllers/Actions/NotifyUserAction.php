@@ -18,6 +18,9 @@ class NotifyUserAction
             $temp = $value->notificationTracker->onlineRequestStep->toArray();
             $temp['notification_tracker_id'] = $value->notificationTracker->id;
             $temp['online_request'] = $value->notificationTracker->onlineRequestStep->onlineRequestTracker->onlineRequest->toArray();
+            $client_data = $value->notificationTracker->onlineRequestStep->onlineRequestTracker->clientInformation;
+            $client_data['full_name'] = $value->notificationTracker->onlineRequestStep->onlineRequestTracker->full_name;
+            $temp['client_data'] = $client_data;
             unset($temp['online_request_tracker']);
             return $temp;
         });

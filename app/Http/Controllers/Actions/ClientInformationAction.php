@@ -21,12 +21,12 @@ class ClientInformationAction
                    'name' => $input->name, 'value' => $data['prerequisites'][$input->name],
                    'is_file' => false
                ]);
-            else
-                ClientInformation::create([
-                    'online_request_tracker_id' => $onlineRequestTracker->id,
-                    'name' => $input->name, 'value' => $data['prerequisites'][$input->name],
-                    'is_file' => true
-                ]);
+//            else
+//                ClientInformation::create([
+//                    'online_request_tracker_id' => $onlineRequestTracker->id,
+//                    'name' => $input->name, 'value' => $data['prerequisites'][$input->name],
+//                    'is_file' => true
+//                ]);
         }
     }
 }

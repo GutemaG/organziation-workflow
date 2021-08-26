@@ -26,7 +26,7 @@ class OnlineRequestTrackerAction
         return response()->json([
             'status' => 200,
             'applied_request' => $data,
-        ]);;
+        ]);
     }
 
     /**
