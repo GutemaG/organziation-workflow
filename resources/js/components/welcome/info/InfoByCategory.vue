@@ -31,7 +31,7 @@
               <div class="card collapsed-card affair_name">
                 <div class="card-header border-0 ui-sortable-handle" data-card-widget="collapse" style="cursor: move;">
                   <h3 class="card-title">
-                    <b-icon icon="info-circle-fill" class="mr-3" scale="2" variant="info"></b-icon>
+                    <b-icon icon="info-circle-fill" class="mr-2" scale="1.5" variant="info"></b-icon>
                     <b>{{ affair.name }}</b>
                     <br><br>
                     <span style="font-size: .8rem; ">{{affair.description.substring(0, 250)}}....</span>
@@ -72,24 +72,21 @@
                           <p v-if="procedure.pre_requests.length != 0">The pre-request(s) required: </p>
                           <!-- v-if="procedure.pre_request != null" -->
                           <div v-for="(pre_request, pre_request_id) in procedure.pre_requests" :key="pre_request_id">
-                            <div class="timeline">
-                              <div class="d-flex align-items-center">
-                                <i class="fas bg-blue">{{ pre_request_id + 1 }}</i>
-                                <!-- style="overflow-y: scroll" -->
-                                <div class="timeline-item" style="overflow: auto; border-radius: .7rem; width: 100%;">
-                                  <!-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> -->
-                                  <div class="timeline-body shadow pre_request_name bg-dark" style="border-radius: .6rem .6rem 0 0;" v-b-toggle="['pre_request - '+pre_request_id+'-'+procedure_id+'-'+affair_id]">
-                                    {{pre_request.name}}
-                                  </div>
-                                  <b-collapse :id="'pre_request - '+pre_request_id+'-'+procedure_id+'-'+affair_id">
-                                    <b-card-body body-bg-variant="dark">
-                                      <h4><b>Description</b></h4>
-                                      <hr>
-                                      <p>{{pre_request.description}}</p>
-                                    </b-card-body>
-                                  </b-collapse>
-                                </div>
+                            <div no-body class="card mb-2 text-white">
+                              <div class="card-header p-0" role="tab">
+                                <b-button block v-b-toggle="['pre_request - '+pre_request_id+'-'+procedure_id+'-'+affair_id]" variant="transparent" class="p-2 text-left pre_request_name">
+                                  <small class="badge badge-primary">No. {{ pre_request_id + 1 }}</small>
+                                  {{pre_request.name}}
+                                </b-button>
                               </div>
+                              <b-collapse class="pre_request_name_bg" :id="'pre_request - '+pre_request_id+'-'+procedure_id+'-'+affair_id">
+                                <b-card-body class="fs-6">
+                                  <h4><b>Description</b></h4>
+                                  <hr>
+                                  <p>{{pre_request.description}}</p>
+                                </b-card-body>
+                              </b-collapse>
+                            
                             </div>
                           </div>
                         </b-card-body>
@@ -188,11 +185,21 @@ export default {
 .procedure_name_bg{
   background:#d4d4d4;
 }
+.card{
+  border-radius: .7rem .7rem 0 0;
+}
+.pre_request_name{
+  background: #343a40;
+  border-radius: .7rem .7rem 0 0;
+  color: #fff;
+}
+.pre_request_name_bg{
+  background: #343a40;
+}
 .pre_request_name:hover {
-  background: rgb(75,82,89);
-  background: linear-gradient(0deg, rgba(75,82,89,1) 22%, rgba(75,82,89,1) 47%); 
+  background: #3e4449;
   color: #fff !important;
   transform: scale(1.01);
-  border-radius: .7rem;
+  border-radius: .7rem .7rem 0 0;
 }
 </style>

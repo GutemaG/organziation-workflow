@@ -168,8 +168,11 @@
                   }"
                 >
                 <i class="fas fa-dot-circle mr-2"></i>
-                  <p>
-                    {{ notification.online_request.name }}
+                  <p v-if="notification.request">
+                    {{ notification.request.name }}
+                  </p>
+                  <p v-else>
+                    {{notification.online_request.name}}
                   </p>
                 </router-link>
                 <span class="float-right text-muted">

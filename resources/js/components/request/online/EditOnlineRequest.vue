@@ -175,15 +175,14 @@
           </base-card>
           <!-- @click="prerequisite = true" -->
           <!-- v-if="prerequisiteLength == 0" -->
-          <b-button
+          <b-button hidden
             class="m-1"
-            v-b-modal.add-pre-request-label
             variant="primary"
             >add pre-request</b-button
           >
-          <base-card>
-            <div class="m-2">
-              <h4>List Of Notes</h4>
+          <base-card >
+            <div class="m-2" v-if="selectedRequest.online_request_prerequisite_inputs">
+              <h4>Notes</h4>
               <div v-for="(note, index) in selectedRequest.online_request_prerequisite_notes" :key="index">
                 <span>{{index + 1}}</span>
                 <input type="text" v-model="note.note" class="form-control m-1" style="width:90%;display:inline">
@@ -197,10 +196,17 @@
                       </b-button>
                 </span>
               </div>
+              <b-button
+                        @click="addPrerequisiteNote"
+                        variant="primary"
+                        size="sm"
+                      >
+                        <i class="fa fa-plus"></i>Add note
+                      </b-button>
             </div>
             <hr>
-            <div>
-              <h4>List of Inputs</h4>
+            <div v-if="selectedRequest.online_request_prerequisite_inputs">
+              <h4>Inputs</h4>
               <div v-for="(input, index) in selectedRequest.online_request_prerequisite_inputs" :key="index">
                 <!-- {{input}} -->
               <div class="row">
@@ -252,8 +258,8 @@
             </div>
             <b-row align-v="center" slot="header">
               <b-col cols="8">
-                <span v-if="prerequisiteLength != 0">Request Labels</span>
-                <span v-else>No Pre request</span>
+                <!-- <span v-if="prerequisiteLength != 0">Request Labels</span> -->
+                <span >List of Prerequisite</span>
               </b-col>
             </b-row>
             <div>
@@ -462,6 +468,11 @@ export default {
             online_request_id:this.selectedRequest.id,
             type:"text",
             required:true
+      })
+    },
+    addPrerequisiteNote(){
+      this.selectedRequest.online_request_prerequisite_notes.push({
+            note:"",
       })
     },
     removePrerequisiteNote(index) {

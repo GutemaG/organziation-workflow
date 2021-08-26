@@ -90,8 +90,20 @@
         </template>
         <template #row-details="row">
           <b-card>
-                <div class="col-6">
-                    <h1>{{row.item.client_data}}</h1>
+                <div class="">
+                    
+              <h5 class="mt-5 text-muted">Customer Information</h5>
+              <ul class="list-unstyled">
+                <li>
+                  <span class="m-1" style="font-siz:1rem;">Full Name:</span>
+                    <p style="display:inline;font-weight:bold" >{{row.item.client_data.full_name}}</p>
+                  <div v-for="(data,index) in row.item.client_data" :key="index">
+                    <span class="m-2" style="font-siz:1rem;">{{data.name}}</span>
+                     <p style="display:inline; font-weight:bold">{{data.value}}</p>
+                  </div>
+                  <!-- {{requests.}} -->
+                </li>
+              </ul>
                 </div>
           </b-card>
         </template>

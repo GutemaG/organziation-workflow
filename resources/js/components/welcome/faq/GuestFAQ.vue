@@ -1,6 +1,7 @@
 <template>
    <div>
-      <h2>Top Frequently Asked Questions</h2>
+      <h2>Top Frequently Asked Questions: </h2>
+      <hr class="accent-4 d-inline-block mx-auto" style="width: 80%; background-color: #1ca3de"/>
       <div v-for="(faq,index) in faqs" :key="index"> 
       <div class="card bg-gradient-light text-dark collapsed-card">
          <div class="card-header border-0 ui-sortable-handle" data-card-widget="collapse" style="cursor: move;">
