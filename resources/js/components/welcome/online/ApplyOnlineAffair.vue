@@ -33,7 +33,7 @@
                 required
               ></b-form-input>
             </b-form-group>
-            
+
             <b-form-group
               id="phone-number-label"
               label="Phone number"
@@ -52,11 +52,11 @@
                 <label :for="'perquisite_input-'+index">{{input.name}}</label>
                 <input :type="input.type" class="form-control"
                   v-model="form.prerequisites[index].value"
-                   :id="'perquisite_input-'+index" 
-                   :placeholder="'Enter -'+input.name" 
+                   :id="'perquisite_input-'+index"
+                   :placeholder="'Enter -'+input.name"
                    required>
               </div>
-              
+
             </div>
             <b-button
               type="submit"
@@ -103,6 +103,26 @@ export default {
   },
   computed: {
     ...mapGetters(["findRequest"]),
+      arrangePrerequisites(){
+          let prerequisites = this.form.prerequisites.map(pre=> {
+              return {
+                  name: pre.name,
+                  value: pre.value
+              };
+          });
+          // return prerequisites
+          let mapped = {}
+          for(let i =0;i<prerequisites.length;i++){
+              let di={}
+              let name = prerequisites[i].name
+              let value = prerequisites[i].value
+              mapped[name] = value;
+              // mapped[value] = value
+              // di[name] = value
+              // mapped.push(di)
+          }
+          return mapped
+      }
   },
   methods: {
     validateState(value) {
@@ -112,9 +132,11 @@ export default {
     },
     handleSubmit() {
       this.isLoading = true;
+        let data = {...this.form}
+        data['prerequisites'] = this.arrangePrerequisites
       axios
         .post("/api/apply-request", {
-          ...this.form,
+          ...data,
           online_request_id: this.selected.id,
         })
         .then((resp) => {

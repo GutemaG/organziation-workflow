@@ -78,13 +78,15 @@ class OnlineRequestPrerequisiteInputAction
      */
     private static function deleteUnexistData($onlineRequest, array $updatable): void
     {
+        $newId = [];
         $oldId = [];
-        $trash = [];
         foreach ($onlineRequest->onlineRequestPrerequisiteInputs as $input)
-            in_array($input->id, $oldId) ? null : $oldId[] = $input->id;
+            $oldId[] = $input->id;
         foreach ($updatable as $value)
-            in_array($value['id'], $oldId) ? null : $trash[] = $value['id'];
-        foreach ($trash as $value)
-            OnlineRequestPrerequisiteInput::find($value)->delete();
+            $newId[] = $value['id'];
+        foreach ($oldId as $id) {
+            if (!in_array($id, $newId))
+                OnlineRequestPrerequisiteInput::find($id)->delete();
+        }
     }
 }
