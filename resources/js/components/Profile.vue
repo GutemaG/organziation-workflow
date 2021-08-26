@@ -3,7 +3,7 @@
     <div class="container-fluid mt-3">
       <b-row>
         <b-col cols="" class="text-center d-flex justify-content-md-center">
-          <div class="card" style="width: 50%; padding: 2rem;">
+          <div class="card" style="padding: 2rem;">
             <div style="display: flex; justify-content: flex-end;">
               <b-dropdown
                 id="dropdown-right"
@@ -556,6 +556,7 @@ export default {
       // stop here if form is invalid
       this.$v.userPassword.$touch();
       if (this.$v.userPassword.$invalid) {
+        Swal.fire("Please fill all the forms correctly!!", "", "error");
         return;
       }
 
@@ -567,7 +568,6 @@ export default {
           Swal.fire("Error!", er, "error");
           this.passwordError = er;
         })
-        .catch((error) => console.log(error));
     },
     showCurrentPassword() {
       this.currentPasswordVisibility = "text";
