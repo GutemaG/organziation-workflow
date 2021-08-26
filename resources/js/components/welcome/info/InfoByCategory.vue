@@ -86,7 +86,6 @@
                                   <p>{{pre_request.description}}</p>
                                 </b-card-body>
                               </b-collapse>
-                            
                             </div>
                           </div>
                         </b-card-body>
