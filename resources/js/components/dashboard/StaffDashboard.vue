@@ -21,14 +21,16 @@
             >Accept</b-button
           > -->
           <b-button
-            v-if="!row.item.ended_at && row.item.is_rejected!=1"
+            v-if="!row.item.ended_at"
             variant="primary"
+            size="sm"
             @click="complete_request(row.item)"
             >Complete</b-button
           >
           <b-button
             v-if="!row.item.ended_at && !row.item.is_rejected==1"
             variant="danger"
+            size="sm"
             v-b-modal="'reject-reason-modal-' + row.item.id"
             >Reject</b-button
           >
@@ -75,10 +77,23 @@
                 :disabled="isRejectReasonEmpty"
                 class="form-control"
                 type="submit"
+                size=""
                 >Reject</b-button
               >
             </form>
           </b-modal>
+          
+          <b-button
+            size="sm"
+            @click="row.toggleDetails"
+            >show detail</b-button>
+        </template>
+        <template #row-details="row">
+          <b-card>
+                <div class="col-6">
+                    <h1>{{row.item.client_data}}</h1>
+                </div>
+          </b-card>
         </template>
       </b-table>
     </b-card>
@@ -182,10 +197,6 @@ export default {
         },
       ],
       reject_reason: "",
-        henok:{
-          message:'this is test',
-            channel:'ldkjfklsdjflksdjksl'
-        }
     };
   },
   computed: {

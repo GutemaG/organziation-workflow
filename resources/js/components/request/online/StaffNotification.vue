@@ -55,6 +55,7 @@
                   <a href="" class="btn-link text-secondary"
                     ><i class="far fa-fw fa-file-word"></i> Something</a
                   >
+                  {{requests.client_data}}
                 </li>
                 <li>
                   <a href="" class="btn-link text-secondary"
