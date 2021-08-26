@@ -35,14 +35,18 @@ class OnlineRequestPrerequisiteNoteAction
 
     public static function updateData(array $data, int $onlineRequestId): void
     {
-        if (array_key_exists('prerequisites', $data))
+        if (array_key_exists('prerequisites', $data)) {
             if (array_key_exists('notes', $data['prerequisites'])) {
                 list($updatable, $creatable) = self::getUpdatableAndCreatableData($data['prerequisites']['notes']);
-                $onlineRequest = OnlineRequest::with(['onlineRequestPrerequisiteInputs'])->find($onlineRequestId);
+                $onlineRequest = OnlineRequest::with(['onlineRequestPrerequisiteNotes'])->find($onlineRequestId);
                 self::deleteUnexistData($onlineRequest, $updatable);
-                self::storeData(['prerequisites'=>['notes' => $creatable]], $onlineRequestId);
+                self::storeData(['prerequisites' => ['notes' => $creatable]], $onlineRequestId);
                 self::update($updatable);
+                return;
             }
+        }
+        $onlineRequest = OnlineRequest::with(['onlineRequestPrerequisiteNotes'])->find($onlineRequestId);
+        self::deleteUnexistData($onlineRequest, []);
     }
 
     /**

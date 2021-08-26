@@ -32,7 +32,7 @@ class OnlineRequestRequest extends FormRequest
             'online_request_procedures.*.description' => 'nullable|string',
             'online_request_procedures.*.responsible_user_id' => 'required|array|distinct|min:1',
             'online_request_procedures.*.step_number' => 'required|integer',
-            'prerequisites' => 'sometimes|array|distinct|min:1',
+            'prerequisites' => 'sometimes|array|distinct',
             'prerequisites.notes' => 'sometimes|array|distinct|min:1',
             'prerequisites.inputs' => 'sometimes|array|distinct|min:1',
             'prerequisites.inputs.*.name' => $checkInput ? 'required|string' : '',
