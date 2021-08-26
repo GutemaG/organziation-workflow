@@ -12,12 +12,21 @@ class ClientInformationAction
 {
     public static function store(array $data, OnlineRequestTracker $onlineRequestTracker): void
     {
-        $temp = array();
         $onlineRequest = OnlineRequest::with(['onlineRequestPrerequisiteInputs'])->find($data['online_request_id']);
+
         foreach ($onlineRequest->onlineRequestPrerequisiteInputs as $input) {
-            $temp[$input->name] = $input->type != file
-                ? $onlineRequestTracker->clientInformation->create(['name' => $input->name, 'value' => $data[$input->name], 'is_file' => false])
-                : $onlineRequestTracker->clientInformation->create(['name' => $input->name, 'value' => $data[$input->name], 'is_file' => true]);
+            if ($input->type != 'file')
+               ClientInformation::create([
+                   'online_request_tracker_id' => $onlineRequestTracker->id,
+                   'name' => $input->name, 'value' => $data['prerequisites'][$input->name],
+                   'is_file' => false
+               ]);
+            else
+                ClientInformation::create([
+                    'online_request_tracker_id' => $onlineRequestTracker->id,
+                    'name' => $input->name, 'value' => $data['prerequisites'][$input->name],
+                    'is_file' => true
+                ]);
         }
     }
 }
